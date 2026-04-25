@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: chms-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: chms
+      POSTGRES_PASSWORD: chms_dev_password
+      POSTGRES_DB: chms_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - chms_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U chms -d chms_dev"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  chms_pg_data:
