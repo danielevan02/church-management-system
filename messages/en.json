@@ -44,7 +44,8 @@
     "prayerRequests": "Prayer requests",
     "myCheckIn": "Check-in",
     "myVolunteer": "My serving",
-    "myDiscipleship": "My journey"
+    "myDiscipleship": "My journey",
+    "prayerRequestsAdmin": "Prayer requests"
   },
   "auth": {
     "signIn": {
@@ -229,6 +230,41 @@
         "closed": "Check-in window is closed for this service.",
         "generic": "Could not check you in. Try again."
       }
+    },
+    "prayerRequests": {
+      "title": "Prayer requests",
+      "subtitle": "Submit prayer needs to the pastoral team.",
+      "newButton": "New request",
+      "empty": "You haven't submitted any prayer requests yet.",
+      "emptyCta": "Submit one now",
+      "untitled": "(no title)",
+      "anonymous": "Anonymous",
+      "public": "Public",
+      "edit": "Edit",
+      "cancel": "Cancel",
+      "cancelledToast": "Prayer request cancelled.",
+      "confirmCancel": "Cancel this prayer request?",
+      "errorToast": "Action failed.",
+      "back": "Back",
+      "newTitle": "Submit a prayer request",
+      "newSubtitle": "Share what is on your heart. Pastoral team prays for these privately unless you mark them public.",
+      "editTitle": "Edit prayer request",
+      "editSubmit": "Save changes",
+      "submit": "Submit",
+      "form": {
+        "fields": {
+          "title": "Title",
+          "titlePlaceholder": "Optional short summary",
+          "body": "Request",
+          "bodyPlaceholder": "Type your prayer request here…",
+          "isAnonymous": "Submit anonymously",
+          "isAnonymousHint": "Your name will not be shown to admins in the list.",
+          "isPublic": "Allow this to be shared on a prayer wall (future)",
+          "isPublicHint": "Optional. Stays private until the church enables sharing."
+        },
+        "savedToast": "Prayer request saved.",
+        "errorToast": "Save failed."
+      }
     }
   },
   "members": {
@@ -367,7 +403,7 @@
         "giving": "No giving recorded for this member yet.",
         "events": "Event RSVPs will appear after Phase 8 (Events).",
         "discipleship": "Discipleship milestones will appear after Phase 11.",
-        "pastoral": "Pastoral notes will appear after Phase 11. Visible to admin only."
+        "pastoral": "No pastoral visits recorded yet."
       },
       "giving": {
         "totalThisYear": "Total this year",
@@ -375,6 +411,10 @@
       },
       "discipleship": {
         "addMilestone": "Add milestone"
+      },
+      "pastoral": {
+        "addVisit": "Add visit",
+        "followUpLabel": "Follow-up"
       }
     },
     "delete": {
@@ -1260,5 +1300,98 @@
     "step2": "Simpan bukti transfer.",
     "step3": "Tunggu admin merekonsiliasi mutasi bank — riwayat akan muncul di profil Anda.",
     "step3WithWa": "Konfirmasi ke admin gereja via <a>WhatsApp</a> dengan mengirim bukti transfer."
+  },
+  "pastoral": {
+    "visitType": {
+      "hospital": "Hospital",
+      "home": "Home",
+      "office": "Office",
+      "phone": "Phone",
+      "other": "Other"
+    },
+    "list": {
+      "title": "Pastoral visits",
+      "subtitle": "{total} visit(s) recorded.",
+      "newButton": "New visit",
+      "empty": "No pastoral visits recorded yet.",
+      "colMember": "Member",
+      "colType": "Type",
+      "colVisitedAt": "Visited",
+      "colVisitedBy": "By",
+      "colFollowUp": "Follow-up",
+      "colActions": "Actions",
+      "edit": "Edit"
+    },
+    "new": {
+      "title": "Record a pastoral visit",
+      "subtitle": "Capture context and any follow-up needed.",
+      "submit": "Save visit"
+    },
+    "edit": {
+      "title": "Edit pastoral visit",
+      "submit": "Save changes",
+      "back": "Back to visits"
+    },
+    "detail": {
+      "delete": "Delete",
+      "confirmDelete": "Delete this visit?",
+      "deletedToast": "Visit deleted.",
+      "errorToast": "Action failed."
+    },
+    "form": {
+      "fields": {
+        "member": "Member",
+        "memberPlaceholder": "Search a member…",
+        "visitType": "Visit type",
+        "visitedAt": "Visited on",
+        "notes": "Notes",
+        "notesPlaceholder": "What was discussed, prayer points, observations…",
+        "followUp": "Follow-up plan",
+        "followUpPlaceholder": "What needs to happen next?",
+        "followUpDate": "Follow-up date"
+      },
+      "savedToast": "Visit saved.",
+      "errorToast": "Save failed."
+    }
+  },
+  "prayerRequests": {
+    "status": {
+      "open": "Open",
+      "praying": "Praying",
+      "answered": "Answered",
+      "archived": "Archived"
+    },
+    "list": {
+      "title": "Prayer requests",
+      "subtitle": "{total} request(s).",
+      "empty": "No prayer requests yet.",
+      "filterAll": "All",
+      "colMember": "From",
+      "colTitle": "Request",
+      "colVisibility": "Visibility",
+      "colCreatedAt": "Submitted",
+      "colStatus": "Status",
+      "colActions": "Actions",
+      "anonymous": "Anonymous",
+      "anon": "Anon",
+      "public": "Public",
+      "untitled": "(no title)",
+      "view": "View"
+    },
+    "detail": {
+      "back": "Back to prayer requests",
+      "body": "Request",
+      "meta": "Details",
+      "submittedBy": "Submitted by",
+      "createdAt": "Submitted at",
+      "status": "Status",
+      "visibility": "Visibility",
+      "privateOnly": "Visible to admins only",
+      "statusUpdatedToast": "Status updated.",
+      "delete": "Delete",
+      "confirmDelete": "Delete this prayer request? This cannot be undone.",
+      "deletedToast": "Prayer request deleted.",
+      "errorToast": "Action failed."
+    }
   }
 }

@@ -24,6 +24,7 @@ import { getMilestonesForMember } from "@/server/queries/discipleship";
 import { getRsvpsForMember } from "@/server/queries/events";
 import { getGivingForMember } from "@/server/queries/giving";
 import { getMember } from "@/server/queries/members";
+import { getVisitsForMember } from "@/server/queries/pastoral";
 
 function fmtDate(d: Date | null | undefined): string {
   return d ? format(d, "yyyy-MM-dd") : "—";
@@ -47,17 +48,22 @@ export default async function MemberDetailPage({
   const tMethod = await getTranslations("giving.method");
   const tRsvp = await getTranslations("events.rsvpStatus");
   const tMilestone = await getTranslations("discipleship.type");
-  const [attendanceHistory, givingHistory, rsvpHistory, milestones] =
+  const tVisitType = await getTranslations("pastoral.visitType");
+  const canPastoral =
+    session?.user.role === "SUPER_ADMIN" ||
+    session?.user.role === "ADMIN" ||
+    session?.user.role === "STAFF";
+  const [attendanceHistory, givingHistory, rsvpHistory, milestones, visits] =
     await Promise.all([
       getAttendanceForMember(id, 25),
       getGivingForMember(id, 25),
       getRsvpsForMember(id, 25),
       getMilestonesForMember(id),
+      canPastoral ? getVisitsForMember(id, 25) : Promise.resolve([]),
     ]);
 
-  const canPastoral =
+  const canDelete =
     session?.user.role === "SUPER_ADMIN" || session?.user.role === "ADMIN";
-  const canDelete = canPastoral;
 
   return (
     <div className="flex flex-col gap-6">
@@ -429,10 +435,67 @@ export default async function MemberDetailPage({
         </TabsContent>
         {canPastoral ? (
           <TabsContent value="pastoral" className="mt-6">
-            <PlaceholderCard
-              title={t("tabs.pastoral")}
-              description={t("placeholders.pastoral")}
-            />
+            {visits.length === 0 ? (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base">
+                    {t("tabs.pastoral")}
+                  </CardTitle>
+                  <CardDescription>{t("placeholders.pastoral")}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button asChild variant="outline" size="sm">
+                    <Link href={`/admin/pastoral/new?member=${id}`}>
+                      + {t("pastoral.addVisit")}
+                    </Link>
+                  </Button>
+                </CardContent>
+              </Card>
+            ) : (
+              <Card>
+                <CardContent className="pt-6">
+                  <ul className="flex flex-col gap-2 text-sm">
+                    {visits.map((v) => (
+                      <li
+                        key={v.id}
+                        className="flex flex-col gap-1 rounded-md border p-3"
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="flex items-center gap-2">
+                            <Badge variant="outline">
+                              {tVisitType(visitTypeKey(v.visitType))}
+                            </Badge>
+                            <span className="text-xs text-muted-foreground tabular-nums">
+                              {format(v.visitedAt, "dd MMM yyyy")}
+                            </span>
+                          </div>
+                          <span className="text-xs text-muted-foreground">
+                            {v.visitedBy}
+                          </span>
+                        </div>
+                        <p className="whitespace-pre-wrap text-sm">{v.notes}</p>
+                        {v.followUp ? (
+                          <div className="mt-1 rounded-md bg-muted px-2 py-1 text-xs">
+                            <span className="font-medium">
+                              {t("pastoral.followUpLabel")}:
+                            </span>{" "}
+                            {v.followUp}
+                            {v.followUpDate
+                              ? ` · ${format(v.followUpDate, "dd MMM yyyy")}`
+                              : ""}
+                          </div>
+                        ) : null}
+                      </li>
+                    ))}
+                  </ul>
+                  <Button asChild variant="outline" size="sm" className="mt-4">
+                    <Link href={`/admin/pastoral/new?member=${id}`}>
+                      + {t("pastoral.addVisit")}
+                    </Link>
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
           </TabsContent>
         ) : null}
       </Tabs>
@@ -526,6 +589,21 @@ function milestoneTypeKey(type: string): string {
       return "cellGroupLeader";
     case "MISSION_TRIP":
       return "missionTrip";
+    default:
+      return "other";
+  }
+}
+
+function visitTypeKey(type: string): string {
+  switch (type) {
+    case "HOSPITAL":
+      return "hospital";
+    case "HOME":
+      return "home";
+    case "OFFICE":
+      return "office";
+    case "PHONE":
+      return "phone";
     default:
       return "other";
   }
