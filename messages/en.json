@@ -137,6 +137,24 @@
       "download": "Download QR",
       "warning": "Don't share this QR with anyone — it's for your check-in only."
     },
+    "giving": {
+      "title": "My giving",
+      "subtitle": "Your giving history and totals.",
+      "giveNow": "Give now",
+      "totalThisYear": "Total {year}",
+      "totalAllTime": "Total all time",
+      "historyTitle": "History",
+      "historyDescription": "Your last 50 completed givings.",
+      "historyEmpty": "No giving recorded yet."
+    },
+    "giveNow": {
+      "title": "Beri Persembahan",
+      "subtitle": "Transfer to {church} via QRIS or bank.",
+      "backToHistory": "My giving",
+      "noteTitle": "After you transfer",
+      "noteDescription": "Your giving will show up in your history once an administrator records it.",
+      "noteBody": "Admins reconcile transfers against the bank statement and post each entry to your history. If you don't see it after a few days, you can ping the church admin via WhatsApp."
+    },
     "checkIn": {
       "title": "Check-in",
       "subtitle": "Mark your attendance for today's service.",
@@ -288,10 +306,14 @@
       "placeholders": {
         "noCellGroups": "Not in any cell group yet.",
         "attendance": "Attendance history will appear after Phase 4 (Attendance).",
-        "giving": "Giving history will appear after Phase 5 (Giving).",
+        "giving": "No giving recorded for this member yet.",
         "events": "Event RSVPs will appear after Phase 8 (Events).",
         "discipleship": "Discipleship milestones will appear after Phase 11.",
         "pastoral": "Pastoral notes will appear after Phase 11. Visible to admin only."
+      },
+      "giving": {
+        "totalThisYear": "Total this year",
+        "totalAllTime": "Total all time"
       }
     },
     "delete": {
@@ -526,5 +548,186 @@
         "visitors": "Visitors"
       }
     }
+  },
+  "giving": {
+    "method": {
+      "bankTransfer": "Bank transfer",
+      "qris": "QRIS",
+      "ewallet": "E-wallet",
+      "cash": "Cash",
+      "card": "Card",
+      "other": "Other"
+    },
+    "status": {
+      "completed": "Completed",
+      "pending": "Pending",
+      "failed": "Failed",
+      "refunded": "Refunded"
+    },
+    "filters": {
+      "fund": "Fund",
+      "anyFund": "Any fund",
+      "method": "Method",
+      "anyMethod": "Any method",
+      "status": "Status",
+      "anyStatus": "Any status",
+      "from": "From",
+      "to": "To"
+    },
+    "list": {
+      "title": "Giving",
+      "subtitle": "{total} entries · {sum} completed.",
+      "newButton": "Record giving",
+      "manageFunds": "Funds",
+      "reports": "Reports",
+      "empty": "No giving records yet.",
+      "colDate": "Date",
+      "colGiver": "Giver",
+      "colFund": "Fund",
+      "colMethod": "Method",
+      "colStatus": "Status",
+      "colAmount": "Amount",
+      "page": "Page {page} of {totalPages}",
+      "prev": "Previous",
+      "next": "Next"
+    },
+    "new": {
+      "title": "Record giving",
+      "subtitle": "Enter a giving you've verified on the bank statement.",
+      "submit": "Save"
+    },
+    "edit": {
+      "title": "Edit giving",
+      "submit": "Save changes"
+    },
+    "record": {
+      "form": {
+        "savedToast": "Giving saved.",
+        "errorToast": "Save failed. Check the form.",
+        "fields": {
+          "fund": "Fund",
+          "fundPlaceholder": "Pick a fund…",
+          "amount": "Amount (IDR)",
+          "amountHelp": "Enter the rupiah amount, e.g. 100000.",
+          "member": "Member",
+          "memberPlaceholder": "Search a member…",
+          "memberHelp": "Leave empty if the giver is not a registered member.",
+          "giverName": "Giver name (if not a member)",
+          "giverNamePlaceholder": "e.g. Anonim, John Smith",
+          "giverNameHelp": "Use this for visitors or anonymous givers.",
+          "giverPhone": "Phone",
+          "giverEmail": "Email",
+          "method": "Method",
+          "status": "Status",
+          "receivedAt": "Received at",
+          "externalRef": "External reference",
+          "externalRefHelp": "Optional — bank statement ID, etc.",
+          "notes": "Notes"
+        }
+      }
+    },
+    "detail": {
+      "backToList": "All giving",
+      "edit": "Edit",
+      "delete": "Delete",
+      "details": "Details",
+      "fields": {
+        "fund": "Fund",
+        "giver": "Giver",
+        "giverPhone": "Phone",
+        "giverEmail": "Email",
+        "amount": "Amount",
+        "method": "Method",
+        "status": "Status",
+        "receivedAt": "Received at",
+        "externalRef": "External reference",
+        "recordedBy": "Recorded by",
+        "notes": "Notes"
+      },
+      "confirmDelete": "Delete this giving record? This cannot be undone.",
+      "deletedToast": "Giving deleted.",
+      "errorToast": "Action failed."
+    },
+    "fund": {
+      "category": {
+        "general": "General",
+        "tithe": "Tithe",
+        "missions": "Missions",
+        "building": "Building",
+        "charity": "Charity",
+        "thanksgiving": "Thanksgiving",
+        "other": "Other"
+      },
+      "list": {
+        "title": "Funds",
+        "subtitle": "{total} funds.",
+        "newButton": "New fund",
+        "backToList": "Giving",
+        "empty": "No funds yet.",
+        "colName": "Name",
+        "colCategory": "Category",
+        "colRecords": "Records",
+        "colStatus": "Status",
+        "colActions": "Actions",
+        "statusActive": "Active",
+        "statusInactive": "Inactive",
+        "edit": "Edit"
+      },
+      "new": {
+        "title": "New fund",
+        "subtitle": "Funds bucket every giving record. Most churches need 3-5.",
+        "submit": "Save"
+      },
+      "edit": {
+        "title": "Edit fund",
+        "submit": "Save changes"
+      },
+      "form": {
+        "savedToast": "Fund saved.",
+        "errorToast": "Save failed.",
+        "fields": {
+          "name": "Name",
+          "category": "Category",
+          "description": "Description",
+          "isActive": "Active (accepts new giving)"
+        }
+      }
+    },
+    "reports": {
+      "backToList": "Giving",
+      "title": "Giving reports",
+      "subtitle": "Trends, fund breakdowns, and top givers.",
+      "trendTitle": "12-month trend",
+      "trendDescription": "Total: {total}",
+      "trendEmpty": "Not enough data yet.",
+      "breakdownTitle": "Fund breakdown (this month)",
+      "breakdownDescription": "Total: {total}",
+      "breakdownEmpty": "No giving recorded this month.",
+      "topGiversTitle": "Top givers (all time)",
+      "topGiversDescription": "Visible to admins only.",
+      "topGiversEmpty": "No giving recorded yet.",
+      "recordsAbbr": "records",
+      "chart": {
+        "total": "Total"
+      }
+    }
+  },
+  "publicGive": {
+    "title": "Beri Persembahan",
+    "subtitle": "Transfer ke {church} via QRIS atau rekening bank.",
+    "optionsTitle": "Pilihan transfer",
+    "optionsDescription": "Scan QRIS dengan aplikasi mobile banking, atau transfer manual ke rekening di bawah.",
+    "qrisLabel": "Scan QRIS",
+    "qrisAlt": "Kode QRIS {church}",
+    "bankAccount": "Rekening bank",
+    "accountHolder": "Atas nama",
+    "copyAccountNumber": "Copy",
+    "bankNotConfigured": "Informasi rekening belum dikonfigurasi.",
+    "howToTitle": "Cara konfirmasi",
+    "howToDescription": "Setelah transfer, lakukan langkah berikut.",
+    "step1": "Transfer melalui QRIS atau rekening bank di atas.",
+    "step2": "Simpan bukti transfer.",
+    "step3": "Tunggu admin merekonsiliasi mutasi bank — riwayat akan muncul di profil Anda.",
+    "step3WithWa": "Konfirmasi ke admin gereja via <a>WhatsApp</a> dengan mengirim bukti transfer."
   }
 }

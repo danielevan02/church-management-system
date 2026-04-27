@@ -80,7 +80,6 @@ export const adminNav: readonly AdminNavItem[] = [
     group: "main",
     roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
     feature: "giving",
-    comingSoon: true,
   },
   {
     href: "/admin/events",
@@ -218,7 +217,6 @@ export const memberNav: readonly MemberNavItem[] = [
     labelKey: "nav.myGiving",
     icon: HandCoins,
     feature: "giving",
-    comingSoon: true,
   },
   {
     href: "/me/events",

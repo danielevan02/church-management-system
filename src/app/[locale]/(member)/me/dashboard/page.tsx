@@ -81,7 +81,6 @@ export default async function MemberDashboardPage() {
           href="/me/giving"
           icon={HandCoins}
           label={tQuick("giveNow")}
-          disabled
         />
         <QuickAction
           href="/me/events"
