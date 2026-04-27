@@ -43,7 +43,8 @@
     "myCellGroup": "Komsel Saya",
     "prayerRequests": "Doa & Permohonan",
     "myCheckIn": "Check-in",
-    "myVolunteer": "Pelayanan Saya"
+    "myVolunteer": "Pelayanan Saya",
+    "myDiscipleship": "Perjalanan Saya"
   },
   "auth": {
     "signIn": {
@@ -155,6 +156,13 @@
       "noteTitle": "Setelah transfer",
       "noteDescription": "Persembahan Anda akan muncul di riwayat setelah admin mencatatnya.",
       "noteBody": "Admin merekonsiliasi mutasi bank dan mencatat setiap entri ke riwayat Anda. Jika setelah beberapa hari belum muncul, hubungi admin gereja via WhatsApp."
+    },
+    "discipleship": {
+      "title": "Perjalanan Saya",
+      "subtitle": "Milestone rohani yang dicatat oleh gereja.",
+      "journeyTitle": "Milestone",
+      "journeyDescription": "Dicatat oleh gembala atau admin.",
+      "empty": "Belum ada milestone yang tercatat."
     },
     "volunteer": {
       "title": "Pelayanan Saya",
@@ -364,6 +372,9 @@
       "giving": {
         "totalThisYear": "Total tahun ini",
         "totalAllTime": "Total sepanjang waktu"
+      },
+      "discipleship": {
+        "addMilestone": "Tambah Milestone"
       }
     },
     "delete": {
@@ -854,6 +865,58 @@
         "topic": "Topik",
         "notes": "Catatan"
       }
+    }
+  },
+  "discipleship": {
+    "type": {
+      "decisionToFollow": "Keputusan mengikut Kristus",
+      "baptism": "Baptisan",
+      "membership": "Keanggotaan",
+      "foundationsClass": "Kelas Dasar",
+      "discipleshipClass": "Kelas Pemuridan",
+      "leadershipTraining": "Pelatihan Pemimpin",
+      "cellGroupLeader": "Pemimpin Komsel",
+      "missionTrip": "Perjalanan Misi",
+      "other": "Lainnya"
+    },
+    "list": {
+      "title": "Pemuridan",
+      "subtitle": "{total} milestone tercatat.",
+      "newButton": "Catat Milestone",
+      "empty": "Belum ada milestone yang tercatat.",
+      "colMember": "Jemaat",
+      "colType": "Milestone",
+      "colAchievedAt": "Tanggal",
+      "colNotes": "Catatan",
+      "colActions": "Aksi",
+      "edit": "Ubah"
+    },
+    "new": {
+      "title": "Catat Milestone",
+      "subtitle": "Tandai langkah penting dalam perjalanan jemaat.",
+      "submit": "Simpan"
+    },
+    "edit": {
+      "title": "Ubah Milestone",
+      "submit": "Simpan Perubahan",
+      "back": "Daftar milestone"
+    },
+    "form": {
+      "savedToast": "Milestone tersimpan.",
+      "errorToast": "Gagal menyimpan.",
+      "fields": {
+        "member": "Jemaat",
+        "memberPlaceholder": "Cari jemaat…",
+        "type": "Milestone",
+        "achievedAt": "Tanggal pencapaian",
+        "notes": "Catatan"
+      }
+    },
+    "detail": {
+      "delete": "Hapus",
+      "confirmDelete": "Hapus milestone ini?",
+      "deletedToast": "Milestone dihapus.",
+      "errorToast": "Aksi gagal."
     }
   },
   "volunteers": {
