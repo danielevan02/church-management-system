@@ -72,7 +72,6 @@ export const adminNav: readonly AdminNavItem[] = [
     icon: UserCheck,
     group: "main",
     roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
-    comingSoon: true,
   },
   {
     href: "/admin/giving",
@@ -201,6 +200,12 @@ export const memberNav: readonly MemberNavItem[] = [
     href: "/me/qr",
     labelKey: "nav.myQr",
     icon: QrCode,
+  },
+  {
+    href: "/me/check-in",
+    labelKey: "nav.myCheckIn",
+    icon: UserCheck,
+    feature: "selfCheckIn",
   },
   {
     href: "/me/cell-group",

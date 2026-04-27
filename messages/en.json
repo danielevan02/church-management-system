@@ -41,7 +41,8 @@
     "myGiving": "My giving",
     "myEvents": "My events",
     "myCellGroup": "My cell group",
-    "prayerRequests": "Prayer requests"
+    "prayerRequests": "Prayer requests",
+    "myCheckIn": "Check-in"
   },
   "auth": {
     "signIn": {
@@ -135,6 +136,23 @@
       "alt": "QR for {name}",
       "download": "Download QR",
       "warning": "Don't share this QR with anyone — it's for your check-in only."
+    },
+    "checkIn": {
+      "title": "Check-in",
+      "subtitle": "Mark your attendance for today's service.",
+      "openNow": "Open now",
+      "openNowDescription": "Services accepting check-ins right now.",
+      "noOpen": "No service is open for check-in right now.",
+      "upcoming": "Upcoming",
+      "upcomingDescription": "Services scheduled in the next few days.",
+      "noUpcoming": "No upcoming services scheduled.",
+      "alreadyCheckedIn": "Checked in",
+      "button": "I'm here",
+      "checkedInToast": "Checked in. See you there!",
+      "errors": {
+        "closed": "Check-in window is closed for this service.",
+        "generic": "Could not check you in. Try again."
+      }
     }
   },
   "members": {
@@ -340,6 +358,172 @@
           "CHILD": "Child",
           "OTHER": "Other"
         }
+      }
+    }
+  },
+  "services": {
+    "type": {
+      "sundayMorning": "Sunday morning",
+      "sundayEvening": "Sunday evening",
+      "midweek": "Midweek",
+      "youth": "Youth",
+      "children": "Children",
+      "special": "Special",
+      "other": "Other"
+    },
+    "list": {
+      "title": "Services",
+      "subtitle": "{total} services scheduled.",
+      "newButton": "New service",
+      "recurringButton": "Bulk schedule",
+      "empty": "No services scheduled yet.",
+      "colName": "Name",
+      "colType": "Type",
+      "colStartsAt": "Starts at",
+      "colAttendance": "Check-ins",
+      "colStatus": "Status",
+      "statusActive": "Active",
+      "statusInactive": "Inactive"
+    },
+    "new": {
+      "title": "New service",
+      "subtitle": "Create a single service occurrence.",
+      "submit": "Save"
+    },
+    "edit": {
+      "title": "Edit service",
+      "submit": "Save changes"
+    },
+    "form": {
+      "savedToast": "Service saved.",
+      "errorToast": "Save failed. Check the form.",
+      "fields": {
+        "name": "Service name",
+        "namePlaceholder": "e.g. Sunday Morning Service",
+        "type": "Type",
+        "startsAt": "Starts at",
+        "durationMin": "Duration (minutes)",
+        "location": "Location",
+        "notes": "Notes"
+      }
+    },
+    "recurring": {
+      "title": "Schedule recurring services",
+      "subtitle": "Generate multiple service occurrences in one shot — handy for the next quarter of Sundays.",
+      "submit": "Generate",
+      "savedToast": "{count} services created.",
+      "errorToast": "Could not generate. Check the form.",
+      "fields": {
+        "name": "Series name",
+        "type": "Type",
+        "firstDate": "First date",
+        "firstDateHelp": "Date of the first occurrence to generate.",
+        "time": "Service time",
+        "count": "How many to generate",
+        "countHelp": "Up to 52 occurrences per run.",
+        "intervalDays": "Interval (days)",
+        "intervalDaysHelp": "7 = weekly, 14 = every other week.",
+        "durationMin": "Duration (minutes)",
+        "location": "Location",
+        "notes": "Notes"
+      }
+    },
+    "detail": {
+      "backToList": "All services",
+      "statusActive": "Active",
+      "statusInactive": "Inactive",
+      "edit": "Edit",
+      "deactivate": "Deactivate",
+      "activate": "Activate",
+      "deactivatedToast": "Service deactivated.",
+      "activatedToast": "Service activated.",
+      "errorToast": "Action failed.",
+      "openCheckIn": "Open check-in",
+      "checkInClosed": "Check-in closed",
+      "statTotal": "Total",
+      "statMembers": "Members",
+      "statVisitors": "Visitors",
+      "rosterTitle": "Attendance roster",
+      "rosterDescription": "Everyone who checked in to this service.",
+      "rosterEmpty": "No one has checked in yet.",
+      "colName": "Name",
+      "colSource": "Source",
+      "colCheckedInAt": "Checked in",
+      "colActions": "Actions",
+      "confirmDeleteRecord": "Remove this attendance record?",
+      "deletedToast": "Record removed.",
+      "visitorTag": "visitor"
+    }
+  },
+  "attendance": {
+    "home": {
+      "title": "Attendance",
+      "subtitle": "Manage services and check-ins.",
+      "manageServices": "Manage services",
+      "reports": "Reports",
+      "newService": "New service",
+      "openNow": "Open for check-in",
+      "openNowDescription": "Services currently accepting check-ins.",
+      "noOpenNow": "No service is open right now.",
+      "openCheckIn": "Open console",
+      "checkedInAbbr": "checked in",
+      "upcoming": "Upcoming",
+      "upcomingDescription": "Next few services on the calendar.",
+      "noUpcoming": "No upcoming services scheduled."
+    },
+    "checkIn": {
+      "pageTitle": "Check-in console",
+      "statusOpen": "Open",
+      "statusClosed": "Closed",
+      "closedNotice": "This service isn't accepting check-ins right now. Check-in opens 60 minutes before the start time and stays open until 60 minutes after the service ends.",
+      "title": "Check someone in",
+      "description": "Scan a member QR, search by name, or add a visitor.",
+      "tabQr": "QR",
+      "tabSearch": "Search",
+      "tabVisitor": "Visitor",
+      "qrHelp": "Hold the member's QR up to the camera. The check-in fires automatically when a code is detected.",
+      "searchPlaceholder": "Type a name, phone, or nickname…",
+      "searchMinChars": "Type at least 2 characters.",
+      "searchEmpty": "No matching members.",
+      "visitorNamePlaceholder": "Visitor name",
+      "visitorPhonePlaceholder": "Phone (optional)",
+      "visitorSubmit": "Add visitor",
+      "recentTitle": "Recent",
+      "recentDescription": "Your last 20 check-ins this session.",
+      "recentEmpty": "Nothing checked in yet on this device.",
+      "alreadyTag": "already checked in",
+      "checkedIn": "{name} checked in.",
+      "alreadyCheckedIn": "{name} was already checked in.",
+      "errors": {
+        "invalidQr": "Could not read that QR. Try again.",
+        "serviceNotFound": "Service not found.",
+        "serviceInactive": "This service is inactive.",
+        "checkInClosed": "Check-in window is closed.",
+        "memberNotFound": "Member not found.",
+        "forbidden": "You don't have permission.",
+        "validation": "Some fields are invalid.",
+        "generic": "Check-in failed. Try again."
+      }
+    },
+    "reports": {
+      "title": "Attendance reports",
+      "subtitle": "Trends over time and members to follow up with.",
+      "trendTitle": "Weekly trend",
+      "trendDescription": "Last 12 weeks of Sunday attendance, members vs visitors.",
+      "trendEmpty": "Not enough data yet.",
+      "recentServicesTitle": "Recent services",
+      "recentServicesDescription": "Latest 8 services and their check-in counts.",
+      "recentServicesEmpty": "No services scheduled yet.",
+      "inactiveTitle": "Inactive members ({weeks}+ weeks)",
+      "inactiveDescription": "Active members with no check-in in the past N weeks.",
+      "inactiveEmpty": "Everyone has been seen recently — nice work.",
+      "colName": "Name",
+      "colLastSeen": "Last seen",
+      "neverSeen": "Never",
+      "moreCount": "+ {count} more",
+      "chart": {
+        "members": "Members",
+        "visitors": "Visitors"
       }
     }
   }
