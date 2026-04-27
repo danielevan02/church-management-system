@@ -137,6 +137,24 @@
       "download": "Unduh QR",
       "warning": "Jangan bagikan QR ini ke orang lain — gunakan hanya untuk check-in pribadi."
     },
+    "giving": {
+      "title": "Persembahan Saya",
+      "subtitle": "Riwayat dan total persembahan Anda.",
+      "giveNow": "Beri Persembahan",
+      "totalThisYear": "Total {year}",
+      "totalAllTime": "Total Sepanjang Waktu",
+      "historyTitle": "Riwayat",
+      "historyDescription": "50 persembahan tercatat terakhir.",
+      "historyEmpty": "Belum ada riwayat persembahan."
+    },
+    "giveNow": {
+      "title": "Beri Persembahan",
+      "subtitle": "Transfer ke {church} via QRIS atau rekening bank.",
+      "backToHistory": "Persembahan Saya",
+      "noteTitle": "Setelah transfer",
+      "noteDescription": "Persembahan Anda akan muncul di riwayat setelah admin mencatatnya.",
+      "noteBody": "Admin merekonsiliasi mutasi bank dan mencatat setiap entri ke riwayat Anda. Jika setelah beberapa hari belum muncul, hubungi admin gereja via WhatsApp."
+    },
     "checkIn": {
       "title": "Check-in",
       "subtitle": "Tandai kehadiran Anda untuk ibadah hari ini.",
@@ -288,10 +306,14 @@
       "placeholders": {
         "noCellGroups": "Jemaat ini belum tergabung di komsel manapun.",
         "attendance": "Riwayat kehadiran muncul setelah Phase 4 (Attendance).",
-        "giving": "Riwayat persembahan muncul setelah Phase 5 (Giving).",
+        "giving": "Belum ada catatan persembahan untuk jemaat ini.",
         "events": "RSVP acara muncul setelah Phase 8 (Events).",
         "discipleship": "Milestone pemuridan muncul setelah Phase 11.",
         "pastoral": "Catatan penggembalaan muncul setelah Phase 11. Hanya admin yang bisa melihat."
+      },
+      "giving": {
+        "totalThisYear": "Total tahun ini",
+        "totalAllTime": "Total sepanjang waktu"
       }
     },
     "delete": {
@@ -526,5 +548,186 @@
         "visitors": "Tamu"
       }
     }
+  },
+  "giving": {
+    "method": {
+      "bankTransfer": "Transfer Bank",
+      "qris": "QRIS",
+      "ewallet": "E-wallet",
+      "cash": "Tunai",
+      "card": "Kartu",
+      "other": "Lainnya"
+    },
+    "status": {
+      "completed": "Selesai",
+      "pending": "Tertunda",
+      "failed": "Gagal",
+      "refunded": "Dikembalikan"
+    },
+    "filters": {
+      "fund": "Pos",
+      "anyFund": "Semua pos",
+      "method": "Metode",
+      "anyMethod": "Semua metode",
+      "status": "Status",
+      "anyStatus": "Semua status",
+      "from": "Dari",
+      "to": "Sampai"
+    },
+    "list": {
+      "title": "Persembahan",
+      "subtitle": "{total} entri · {sum} terkonfirmasi.",
+      "newButton": "Catat Persembahan",
+      "manageFunds": "Pos Persembahan",
+      "reports": "Laporan",
+      "empty": "Belum ada catatan persembahan.",
+      "colDate": "Tanggal",
+      "colGiver": "Pemberi",
+      "colFund": "Pos",
+      "colMethod": "Metode",
+      "colStatus": "Status",
+      "colAmount": "Jumlah",
+      "page": "Halaman {page} dari {totalPages}",
+      "prev": "Sebelumnya",
+      "next": "Berikutnya"
+    },
+    "new": {
+      "title": "Catat Persembahan",
+      "subtitle": "Catat persembahan setelah memverifikasi mutasi bank.",
+      "submit": "Simpan"
+    },
+    "edit": {
+      "title": "Ubah Persembahan",
+      "submit": "Simpan Perubahan"
+    },
+    "record": {
+      "form": {
+        "savedToast": "Persembahan tersimpan.",
+        "errorToast": "Gagal menyimpan. Cek isian form.",
+        "fields": {
+          "fund": "Pos",
+          "fundPlaceholder": "Pilih pos…",
+          "amount": "Jumlah (Rp)",
+          "amountHelp": "Masukkan jumlah dalam rupiah, mis. 100000.",
+          "member": "Jemaat",
+          "memberPlaceholder": "Cari jemaat…",
+          "memberHelp": "Kosongkan jika pemberi bukan jemaat terdaftar.",
+          "giverName": "Nama pemberi (jika bukan jemaat)",
+          "giverNamePlaceholder": "mis. Anonim, John Smith",
+          "giverNameHelp": "Gunakan ini untuk tamu atau pemberi anonim.",
+          "giverPhone": "Telepon",
+          "giverEmail": "Email",
+          "method": "Metode",
+          "status": "Status",
+          "receivedAt": "Tanggal diterima",
+          "externalRef": "Referensi eksternal",
+          "externalRefHelp": "Opsional — ID mutasi bank, dsb.",
+          "notes": "Catatan"
+        }
+      }
+    },
+    "detail": {
+      "backToList": "Daftar persembahan",
+      "edit": "Ubah",
+      "delete": "Hapus",
+      "details": "Detail",
+      "fields": {
+        "fund": "Pos",
+        "giver": "Pemberi",
+        "giverPhone": "Telepon",
+        "giverEmail": "Email",
+        "amount": "Jumlah",
+        "method": "Metode",
+        "status": "Status",
+        "receivedAt": "Tanggal diterima",
+        "externalRef": "Referensi eksternal",
+        "recordedBy": "Dicatat oleh",
+        "notes": "Catatan"
+      },
+      "confirmDelete": "Hapus catatan persembahan ini? Tidak bisa dibatalkan.",
+      "deletedToast": "Persembahan dihapus.",
+      "errorToast": "Aksi gagal."
+    },
+    "fund": {
+      "category": {
+        "general": "Umum",
+        "tithe": "Perpuluhan",
+        "missions": "Misi",
+        "building": "Pembangunan",
+        "charity": "Diakonia",
+        "thanksgiving": "Syukur",
+        "other": "Lainnya"
+      },
+      "list": {
+        "title": "Pos Persembahan",
+        "subtitle": "{total} pos.",
+        "newButton": "Tambah Pos",
+        "backToList": "Persembahan",
+        "empty": "Belum ada pos persembahan.",
+        "colName": "Nama",
+        "colCategory": "Kategori",
+        "colRecords": "Catatan",
+        "colStatus": "Status",
+        "colActions": "Aksi",
+        "statusActive": "Aktif",
+        "statusInactive": "Nonaktif",
+        "edit": "Ubah"
+      },
+      "new": {
+        "title": "Tambah Pos",
+        "subtitle": "Pos mengelompokkan setiap catatan persembahan. Umumnya 3-5 pos cukup.",
+        "submit": "Simpan"
+      },
+      "edit": {
+        "title": "Ubah Pos",
+        "submit": "Simpan Perubahan"
+      },
+      "form": {
+        "savedToast": "Pos tersimpan.",
+        "errorToast": "Gagal menyimpan.",
+        "fields": {
+          "name": "Nama",
+          "category": "Kategori",
+          "description": "Deskripsi",
+          "isActive": "Aktif (menerima persembahan baru)"
+        }
+      }
+    },
+    "reports": {
+      "backToList": "Persembahan",
+      "title": "Laporan Persembahan",
+      "subtitle": "Tren, breakdown per pos, dan top givers.",
+      "trendTitle": "Tren 12 bulan",
+      "trendDescription": "Total: {total}",
+      "trendEmpty": "Data belum cukup.",
+      "breakdownTitle": "Breakdown per pos (bulan ini)",
+      "breakdownDescription": "Total: {total}",
+      "breakdownEmpty": "Belum ada catatan persembahan bulan ini.",
+      "topGiversTitle": "Top Givers (sepanjang waktu)",
+      "topGiversDescription": "Hanya admin yang bisa melihat.",
+      "topGiversEmpty": "Belum ada catatan persembahan.",
+      "recordsAbbr": "catatan",
+      "chart": {
+        "total": "Total"
+      }
+    }
+  },
+  "publicGive": {
+    "title": "Beri Persembahan",
+    "subtitle": "Transfer ke {church} via QRIS atau rekening bank.",
+    "optionsTitle": "Pilihan Transfer",
+    "optionsDescription": "Scan QRIS dengan aplikasi mobile banking, atau transfer manual ke rekening di bawah.",
+    "qrisLabel": "Scan QRIS",
+    "qrisAlt": "Kode QRIS {church}",
+    "bankAccount": "Rekening Bank",
+    "accountHolder": "Atas nama",
+    "copyAccountNumber": "Salin",
+    "bankNotConfigured": "Informasi rekening belum dikonfigurasi.",
+    "howToTitle": "Cara Konfirmasi",
+    "howToDescription": "Setelah transfer, lakukan langkah berikut.",
+    "step1": "Transfer melalui QRIS atau rekening bank di atas.",
+    "step2": "Simpan bukti transfer.",
+    "step3": "Tunggu admin merekonsiliasi mutasi bank — riwayat akan muncul di profil Anda.",
+    "step3WithWa": "Konfirmasi ke admin gereja via <a>WhatsApp</a> dengan mengirim bukti transfer."
   }
 }
