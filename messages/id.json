@@ -95,6 +95,15 @@
       }
     }
   },
+  "landing": {
+    "hero": {
+      "badge": "Portal Jemaat",
+      "verse": "Aku bersukacita ketika dikatakan kepadaku: 'Mari kita pergi ke rumah TUHAN'.",
+      "verseRef": "Mazmur 122:1",
+      "primaryCta": "Masuk Jemaat",
+      "secondaryCta": "Masuk Pengurus"
+    }
+  },
   "dashboard": {
     "admin": {
       "title": "Dasbor Admin",
