@@ -7,11 +7,16 @@
     "submit": "Submit",
     "back": "Back",
     "next": "Next",
-    "signOut": "Sign out"
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirm": "Yes",
+    "signOut": "Sign out",
+    "soon": "Soon"
   },
   "nav": {
     "dashboard": "Dashboard",
     "members": "Members",
+    "households": "Households",
     "attendance": "Attendance",
     "giving": "Giving",
     "cellGroups": "Cell groups",
@@ -21,6 +26,7 @@
     "children": "Children",
     "pastoral": "Pastoral care",
     "discipleship": "Discipleship",
+    "reports": "Reports",
     "settings": "Settings",
     "myDashboard": "My dashboard",
     "myProfile": "My profile",
@@ -74,6 +80,212 @@
     "member": {
       "title": "My dashboard",
       "welcome": "Hi, {name}."
+    }
+  },
+  "members": {
+    "list": {
+      "title": "Members",
+      "subtitle": "{total} members registered.",
+      "newButton": "Add member"
+    },
+    "filters": {
+      "searchPlaceholder": "Search name, phone, or email…",
+      "search": "Search",
+      "status": "Status",
+      "anyStatus": "Any status",
+      "gender": "Gender",
+      "anyGender": "Any gender",
+      "male": "Male",
+      "female": "Female",
+      "sortNameAsc": "Name A → Z",
+      "sortNameDesc": "Name Z → A",
+      "sortJoinedDesc": "Joined newest",
+      "sortJoinedAsc": "Joined oldest",
+      "sortNewest": "Created newest"
+    },
+    "table": {
+      "colName": "Name",
+      "colContact": "Contact",
+      "colHousehold": "Household",
+      "colStatus": "Status",
+      "colJoined": "Joined",
+      "empty": "No members match your filters."
+    },
+    "pagination": {
+      "summary": "Page {page} of {totalPages} · {total} total",
+      "prev": "Previous",
+      "next": "Next"
+    },
+    "new": {
+      "title": "Add member",
+      "subtitle": "Fill in basic details. Fields marked * are required.",
+      "submit": "Save"
+    },
+    "edit": {
+      "title": "Edit member",
+      "submit": "Save changes"
+    },
+    "form": {
+      "savedToast": "Saved.",
+      "errorToast": "Save failed. Check the form.",
+      "sections": {
+        "identity": "Identity",
+        "contact": "Contact",
+        "address": "Address",
+        "church": "Church",
+        "preferences": "Preferences"
+      },
+      "fields": {
+        "firstName": "First name",
+        "lastName": "Last name",
+        "nickname": "Nickname",
+        "gender": "Gender",
+        "birthDate": "Date of birth",
+        "maritalStatus": "Marital status",
+        "status": "Member status",
+        "phone": "Phone (WhatsApp)",
+        "phoneHelp": "Indonesian (08xxx) or international (+62xxx) format.",
+        "email": "Email",
+        "address": "Address",
+        "city": "City",
+        "province": "Province",
+        "postalCode": "Postal code",
+        "country": "Country",
+        "joinedAt": "Joined date",
+        "baptismDate": "Baptism date",
+        "baptismChurch": "Baptism church",
+        "notes": "Notes",
+        "excludeFromBroadcasts": "Exclude from broadcasts",
+        "excludeFromBroadcastsHelp": "This member won't receive bulletins or mass announcements."
+      },
+      "gender": {
+        "male": "Male",
+        "female": "Female"
+      },
+      "marital": {
+        "single": "Single",
+        "married": "Married",
+        "divorced": "Divorced",
+        "widowed": "Widowed"
+      },
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive",
+        "transferred": "Transferred",
+        "deceased": "Deceased",
+        "visitor": "Visitor"
+      }
+    },
+    "detail": {
+      "edit": "Edit",
+      "tabs": {
+        "profile": "Profile",
+        "cellGroups": "Cell groups",
+        "attendance": "Attendance",
+        "giving": "Giving",
+        "events": "Events",
+        "discipleship": "Discipleship",
+        "pastoral": "Pastoral"
+      },
+      "profile": {
+        "identity": "Identity",
+        "contact": "Contact",
+        "church": "Church",
+        "household": "Household",
+        "noHousehold": "Not a member of any household.",
+        "notes": "Notes"
+      },
+      "fields": {
+        "firstName": "First name",
+        "lastName": "Last name",
+        "nickname": "Nickname",
+        "birthDate": "Date of birth",
+        "maritalStatus": "Marital status",
+        "phone": "Phone",
+        "email": "Email",
+        "address": "Address",
+        "city": "City",
+        "province": "Province",
+        "joinedAt": "Joined",
+        "baptismDate": "Baptism date",
+        "baptismChurch": "Baptism church",
+        "householdName": "Household name",
+        "householdRole": "Role"
+      },
+      "placeholders": {
+        "noCellGroups": "Not in any cell group yet.",
+        "attendance": "Attendance history will appear after Phase 4 (Attendance).",
+        "giving": "Giving history will appear after Phase 5 (Giving).",
+        "events": "Event RSVPs will appear after Phase 8 (Events).",
+        "discipleship": "Discipleship milestones will appear after Phase 11.",
+        "pastoral": "Pastoral notes will appear after Phase 11. Visible to admin only."
+      }
+    },
+    "delete": {
+      "button": "Delete",
+      "confirmTitle": "Delete this member?",
+      "confirmDescription": "Data is not lost permanently — the member is marked INACTIVE and can be restored by an admin.",
+      "deletedToast": "Member deleted.",
+      "errorToast": "Delete failed."
+    }
+  },
+  "households": {
+    "list": {
+      "title": "Households",
+      "subtitle": "{total} households registered.",
+      "newButton": "Add household",
+      "empty": "No households created yet.",
+      "colName": "Name",
+      "colAddress": "Address",
+      "colMembers": "Members"
+    },
+    "new": {
+      "title": "Add household",
+      "submit": "Save"
+    },
+    "edit": {
+      "title": "Edit household",
+      "submit": "Save changes"
+    },
+    "form": {
+      "savedToast": "Saved.",
+      "errorToast": "Save failed.",
+      "fields": {
+        "name": "Household name",
+        "address": "Address"
+      }
+    },
+    "detail": {
+      "backToList": "Households",
+      "edit": "Edit",
+      "noAddress": "No address.",
+      "members": {
+        "title": "Household members",
+        "subtitle": "{count} members.",
+        "empty": "No members in this household yet.",
+        "colName": "Name",
+        "colRole": "Role",
+        "colContact": "Contact",
+        "remove": "Remove from household",
+        "removedToast": "Removed from household.",
+        "errorToast": "Failed."
+      },
+      "assign": {
+        "title": "Add a member to this household",
+        "memberLabel": "Member",
+        "memberPlaceholder": "Pick a member…",
+        "roleLabel": "Role (optional)",
+        "submit": "Add",
+        "addedToast": "Added to household.",
+        "errorToast": "Failed to add.",
+        "noCandidates": "All members are already assigned to other households.",
+        "roles": {
+          "HEAD": "Head of household",
+          "SPOUSE": "Spouse",
+          "CHILD": "Child",
+          "OTHER": "Other"
+        }
+      }
     }
   }
 }

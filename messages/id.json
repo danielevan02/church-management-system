@@ -7,11 +7,16 @@
     "submit": "Kirim",
     "back": "Kembali",
     "next": "Lanjut",
-    "signOut": "Keluar"
+    "edit": "Ubah",
+    "delete": "Hapus",
+    "confirm": "Ya",
+    "signOut": "Keluar",
+    "soon": "Soon"
   },
   "nav": {
     "dashboard": "Dasbor",
     "members": "Jemaat",
+    "households": "Keluarga",
     "attendance": "Kehadiran",
     "giving": "Persembahan",
     "cellGroups": "Komsel",
@@ -21,6 +26,7 @@
     "children": "Anak",
     "pastoral": "Penggembalaan",
     "discipleship": "Pemuridan",
+    "reports": "Laporan",
     "settings": "Pengaturan",
     "myDashboard": "Dasbor Saya",
     "myProfile": "Profil Saya",
@@ -74,6 +80,212 @@
     "member": {
       "title": "Dasbor Saya",
       "welcome": "Halo, {name}."
+    }
+  },
+  "members": {
+    "list": {
+      "title": "Jemaat",
+      "subtitle": "{total} jemaat terdaftar.",
+      "newButton": "Tambah Jemaat"
+    },
+    "filters": {
+      "searchPlaceholder": "Cari nama, telepon, atau email…",
+      "search": "Cari",
+      "status": "Status",
+      "anyStatus": "Semua status",
+      "gender": "Gender",
+      "anyGender": "Semua gender",
+      "male": "Pria",
+      "female": "Wanita",
+      "sortNameAsc": "Nama A → Z",
+      "sortNameDesc": "Nama Z → A",
+      "sortJoinedDesc": "Bergabung terbaru",
+      "sortJoinedAsc": "Bergabung terlama",
+      "sortNewest": "Dibuat terbaru"
+    },
+    "table": {
+      "colName": "Nama",
+      "colContact": "Kontak",
+      "colHousehold": "Keluarga",
+      "colStatus": "Status",
+      "colJoined": "Bergabung",
+      "empty": "Belum ada jemaat yang cocok dengan filter."
+    },
+    "pagination": {
+      "summary": "Halaman {page} dari {totalPages} · {total} total",
+      "prev": "Sebelumnya",
+      "next": "Berikutnya"
+    },
+    "new": {
+      "title": "Tambah Jemaat",
+      "subtitle": "Lengkapi data dasar. Field bertanda * wajib diisi.",
+      "submit": "Simpan"
+    },
+    "edit": {
+      "title": "Ubah Jemaat",
+      "submit": "Simpan Perubahan"
+    },
+    "form": {
+      "savedToast": "Tersimpan.",
+      "errorToast": "Gagal menyimpan. Periksa form.",
+      "sections": {
+        "identity": "Identitas",
+        "contact": "Kontak",
+        "address": "Alamat",
+        "church": "Gereja",
+        "preferences": "Preferensi"
+      },
+      "fields": {
+        "firstName": "Nama depan",
+        "lastName": "Nama belakang",
+        "nickname": "Nama panggilan",
+        "gender": "Jenis kelamin",
+        "birthDate": "Tanggal lahir",
+        "maritalStatus": "Status pernikahan",
+        "status": "Status jemaat",
+        "phone": "Telepon (WhatsApp)",
+        "phoneHelp": "Format Indonesia (08xxx) atau internasional (+62xxx).",
+        "email": "Email",
+        "address": "Alamat",
+        "city": "Kota",
+        "province": "Provinsi",
+        "postalCode": "Kode pos",
+        "country": "Negara",
+        "joinedAt": "Tanggal bergabung",
+        "baptismDate": "Tanggal baptis",
+        "baptismChurch": "Gereja tempat baptis",
+        "notes": "Catatan",
+        "excludeFromBroadcasts": "Jangan kirim broadcast",
+        "excludeFromBroadcastsHelp": "Jemaat ini tidak akan menerima warta atau pengumuman massal."
+      },
+      "gender": {
+        "male": "Pria",
+        "female": "Wanita"
+      },
+      "marital": {
+        "single": "Lajang",
+        "married": "Menikah",
+        "divorced": "Cerai",
+        "widowed": "Janda/Duda"
+      },
+      "status": {
+        "active": "Aktif",
+        "inactive": "Non-aktif",
+        "transferred": "Pindah",
+        "deceased": "Meninggal",
+        "visitor": "Tamu"
+      }
+    },
+    "detail": {
+      "edit": "Ubah",
+      "tabs": {
+        "profile": "Profil",
+        "cellGroups": "Komsel",
+        "attendance": "Kehadiran",
+        "giving": "Persembahan",
+        "events": "Acara",
+        "discipleship": "Pemuridan",
+        "pastoral": "Penggembalaan"
+      },
+      "profile": {
+        "identity": "Identitas",
+        "contact": "Kontak",
+        "church": "Gereja",
+        "household": "Keluarga",
+        "noHousehold": "Belum tergabung di keluarga manapun.",
+        "notes": "Catatan"
+      },
+      "fields": {
+        "firstName": "Nama depan",
+        "lastName": "Nama belakang",
+        "nickname": "Panggilan",
+        "birthDate": "Tanggal lahir",
+        "maritalStatus": "Status pernikahan",
+        "phone": "Telepon",
+        "email": "Email",
+        "address": "Alamat",
+        "city": "Kota",
+        "province": "Provinsi",
+        "joinedAt": "Bergabung",
+        "baptismDate": "Tanggal baptis",
+        "baptismChurch": "Gereja baptis",
+        "householdName": "Nama keluarga",
+        "householdRole": "Peran"
+      },
+      "placeholders": {
+        "noCellGroups": "Jemaat ini belum tergabung di komsel manapun.",
+        "attendance": "Riwayat kehadiran muncul setelah Phase 4 (Attendance).",
+        "giving": "Riwayat persembahan muncul setelah Phase 5 (Giving).",
+        "events": "RSVP acara muncul setelah Phase 8 (Events).",
+        "discipleship": "Milestone pemuridan muncul setelah Phase 11.",
+        "pastoral": "Catatan penggembalaan muncul setelah Phase 11. Hanya admin yang bisa melihat."
+      }
+    },
+    "delete": {
+      "button": "Hapus",
+      "confirmTitle": "Hapus jemaat ini?",
+      "confirmDescription": "Data tidak hilang permanen — jemaat akan ditandai sebagai INACTIVE dan bisa dipulihkan oleh admin.",
+      "deletedToast": "Jemaat dihapus.",
+      "errorToast": "Gagal menghapus."
+    }
+  },
+  "households": {
+    "list": {
+      "title": "Keluarga",
+      "subtitle": "{total} keluarga terdaftar.",
+      "newButton": "Tambah Keluarga",
+      "empty": "Belum ada keluarga yang dibuat.",
+      "colName": "Nama",
+      "colAddress": "Alamat",
+      "colMembers": "Jumlah anggota"
+    },
+    "new": {
+      "title": "Tambah Keluarga",
+      "submit": "Simpan"
+    },
+    "edit": {
+      "title": "Ubah Keluarga",
+      "submit": "Simpan Perubahan"
+    },
+    "form": {
+      "savedToast": "Tersimpan.",
+      "errorToast": "Gagal menyimpan.",
+      "fields": {
+        "name": "Nama keluarga",
+        "address": "Alamat"
+      }
+    },
+    "detail": {
+      "backToList": "Daftar keluarga",
+      "edit": "Ubah",
+      "noAddress": "Alamat belum diisi.",
+      "members": {
+        "title": "Anggota Keluarga",
+        "subtitle": "{count} anggota.",
+        "empty": "Belum ada anggota di keluarga ini.",
+        "colName": "Nama",
+        "colRole": "Peran",
+        "colContact": "Kontak",
+        "remove": "Keluarkan dari keluarga",
+        "removedToast": "Dikeluarkan dari keluarga.",
+        "errorToast": "Gagal."
+      },
+      "assign": {
+        "title": "Tambahkan jemaat ke keluarga ini",
+        "memberLabel": "Jemaat",
+        "memberPlaceholder": "Pilih jemaat…",
+        "roleLabel": "Peran (opsional)",
+        "submit": "Tambahkan",
+        "addedToast": "Ditambahkan ke keluarga.",
+        "errorToast": "Gagal menambahkan.",
+        "noCandidates": "Semua jemaat sudah terdaftar di keluarga lain.",
+        "roles": {
+          "HEAD": "Kepala keluarga",
+          "SPOUSE": "Pasangan",
+          "CHILD": "Anak",
+          "OTHER": "Lainnya"
+        }
+      }
     }
   }
 }

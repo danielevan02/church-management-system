@@ -1,0 +1,137 @@
+import type { Role } from "@prisma/client";
+import type { LucideIcon } from "lucide-react";
+import {
+  BarChart3,
+  Calendar,
+  HandCoins,
+  HeartHandshake,
+  Heart,
+  Home,
+  LayoutDashboard,
+  MessageSquare,
+  Settings,
+  Sprout,
+  UserCheck,
+  Users,
+  UsersRound,
+} from "lucide-react";
+
+import type { FeatureFlag } from "@/config/features";
+
+export type AdminNavItem = {
+  href: string;
+  labelKey: string;
+  icon: LucideIcon;
+  roles: readonly Role[];
+  feature?: FeatureFlag;
+  /** Set to true while the destination route hasn't been built yet. */
+  comingSoon?: boolean;
+};
+
+export const adminNav: readonly AdminNavItem[] = [
+  {
+    href: "/admin/dashboard",
+    labelKey: "nav.dashboard",
+    icon: LayoutDashboard,
+    roles: ["SUPER_ADMIN", "ADMIN", "STAFF", "LEADER"],
+  },
+  {
+    href: "/admin/members",
+    labelKey: "nav.members",
+    icon: Users,
+    roles: ["SUPER_ADMIN", "ADMIN", "STAFF", "LEADER"],
+  },
+  {
+    href: "/admin/households",
+    labelKey: "nav.households",
+    icon: Home,
+    roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
+  },
+  {
+    href: "/admin/cell-groups",
+    labelKey: "nav.cellGroups",
+    icon: UsersRound,
+    roles: ["SUPER_ADMIN", "ADMIN", "STAFF", "LEADER"],
+    comingSoon: true,
+  },
+  {
+    href: "/admin/attendance",
+    labelKey: "nav.attendance",
+    icon: UserCheck,
+    roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
+    comingSoon: true,
+  },
+  {
+    href: "/admin/giving",
+    labelKey: "nav.giving",
+    icon: HandCoins,
+    roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
+    feature: "giving",
+    comingSoon: true,
+  },
+  {
+    href: "/admin/events",
+    labelKey: "nav.events",
+    icon: Calendar,
+    roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
+    comingSoon: true,
+  },
+  {
+    href: "/admin/communications",
+    labelKey: "nav.communications",
+    icon: MessageSquare,
+    roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
+    feature: "whatsappBroadcast",
+    comingSoon: true,
+  },
+  {
+    href: "/admin/volunteers",
+    labelKey: "nav.volunteers",
+    icon: HeartHandshake,
+    roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
+    feature: "volunteers",
+    comingSoon: true,
+  },
+  {
+    href: "/admin/children",
+    labelKey: "nav.children",
+    icon: Heart,
+    roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
+    feature: "childrensCheckIn",
+    comingSoon: true,
+  },
+  {
+    href: "/admin/pastoral",
+    labelKey: "nav.pastoral",
+    icon: HeartHandshake,
+    roles: ["SUPER_ADMIN", "ADMIN"],
+    feature: "pastoralCare",
+    comingSoon: true,
+  },
+  {
+    href: "/admin/discipleship",
+    labelKey: "nav.discipleship",
+    icon: Sprout,
+    roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
+    feature: "discipleship",
+    comingSoon: true,
+  },
+  {
+    href: "/admin/reports",
+    labelKey: "nav.reports",
+    icon: BarChart3,
+    roles: ["SUPER_ADMIN", "ADMIN"],
+    comingSoon: true,
+  },
+  {
+    href: "/admin/settings",
+    labelKey: "nav.settings",
+    icon: Settings,
+    roles: ["SUPER_ADMIN", "ADMIN"],
+    comingSoon: true,
+  },
+] as const;
+
+export function visibleAdminNav(role: Role): readonly AdminNavItem[] {
+  return adminNav.filter((item) => item.roles.includes(role));
+}
