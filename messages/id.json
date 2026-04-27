@@ -155,6 +155,31 @@
       "noteDescription": "Persembahan Anda akan muncul di riwayat setelah admin mencatatnya.",
       "noteBody": "Admin merekonsiliasi mutasi bank dan mencatat setiap entri ke riwayat Anda. Jika setelah beberapa hari belum muncul, hubungi admin gereja via WhatsApp."
     },
+    "events": {
+      "title": "Acara Saya",
+      "subtitle": "Acara akan datang yang bisa Anda RSVP.",
+      "empty": "Belum ada acara terbaru.",
+      "rsvpsAbbr": "hadir",
+      "going": "Hadir",
+      "maybe": "Mungkin",
+      "notGoing": "Tidak Hadir",
+      "waitlistLabel": "Waitlist",
+      "clearRsvp": "Batalkan RSVP",
+      "rsvpSavedToast": "RSVP tersimpan.",
+      "waitlistedToast": "Acara penuh — Anda masuk waitlist.",
+      "rsvpRemovedToast": "RSVP dibatalkan.",
+      "registrationClosed": "Pendaftaran tutup.",
+      "errorToast": "Aksi gagal.",
+      "detail": {
+        "backToList": "Daftar acara",
+        "statusPast": "Acara lampau",
+        "goingLabel": "hadir",
+        "feeLabel": "Biaya",
+        "rsvpTitle": "RSVP Anda",
+        "rsvpDescription": "Beritahu gereja apakah Anda akan hadir.",
+        "yourCurrentStatus": "Saat ini: {status}"
+      }
+    },
     "cellGroup": {
       "title": "Komsel Saya",
       "subtitle": "Jadwal dan anggota komsel Anda.",
@@ -814,6 +839,97 @@
         "visitorCount": "Jumlah tamu",
         "topic": "Topik",
         "notes": "Catatan"
+      }
+    }
+  },
+  "events": {
+    "rsvpStatus": {
+      "going": "Hadir",
+      "maybe": "Mungkin",
+      "notGoing": "Tidak Hadir",
+      "waitlist": "Waitlist"
+    },
+    "list": {
+      "title": "Acara",
+      "subtitle": "{total} acara.",
+      "newButton": "Buat Acara",
+      "empty": "Belum ada acara.",
+      "statusPublished": "Terbit",
+      "statusDraft": "Draft",
+      "statusPast": "Lampau",
+      "rsvpsAbbr": "hadir"
+    },
+    "new": {
+      "title": "Acara Baru",
+      "subtitle": "Buat acara. Simpan sebagai draft, terbitkan saat siap.",
+      "submit": "Simpan"
+    },
+    "edit": {
+      "title": "Ubah Acara",
+      "submit": "Simpan Perubahan"
+    },
+    "form": {
+      "savedToast": "Acara tersimpan.",
+      "errorToast": "Gagal menyimpan.",
+      "fields": {
+        "title": "Judul",
+        "description": "Deskripsi",
+        "startsAt": "Mulai",
+        "endsAt": "Selesai",
+        "location": "Lokasi",
+        "capacity": "Kapasitas",
+        "capacityHelp": "Kosongkan untuk tanpa batas.",
+        "fee": "Biaya (Rp)",
+        "feeHelp": "Kosongkan jika gratis.",
+        "coverImageUrl": "URL gambar cover",
+        "registrationOpen": "Pendaftaran buka",
+        "requiresRsvp": "Butuh RSVP",
+        "isPublished": "Terbit",
+        "isPublishedHelp": "Jemaat hanya bisa lihat acara yang sudah diterbitkan."
+      }
+    },
+    "detail": {
+      "backToList": "Daftar acara",
+      "edit": "Ubah",
+      "delete": "Hapus",
+      "publish": "Terbitkan",
+      "unpublish": "Tarik",
+      "publishedToast": "Acara diterbitkan.",
+      "unpublishedToast": "Acara ditarik.",
+      "deletedToast": "Acara dihapus.",
+      "errorToast": "Aksi gagal.",
+      "confirmDelete": "Hapus acara ini? Jemaat akan langsung kehilangan akses.",
+      "statusPublished": "Terbit",
+      "statusDraft": "Draft",
+      "statGoing": "Hadir",
+      "statWaitlist": "Waitlist",
+      "statMaybe": "Mungkin",
+      "statFee": "Biaya",
+      "addGuestTitle": "Tambah RSVP Tamu",
+      "addGuestDescription": "Untuk yang belum punya akun jemaat.",
+      "rosterTitle": "Daftar RSVP",
+      "rosterDescription": "{count} RSVP.",
+      "rosterEmpty": "Belum ada RSVP.",
+      "colName": "Nama",
+      "colStatus": "Status",
+      "colCount": "Jumlah",
+      "colNotes": "Catatan",
+      "colActions": "Aksi",
+      "guestTag": "tamu",
+      "confirmRemoveRsvp": "Hapus RSVP ini?",
+      "rsvpRemovedToast": "RSVP dihapus.",
+      "guestForm": {
+        "savedToast": "Tamu ditambahkan.",
+        "waitlistedToast": "Acara penuh — masuk waitlist.",
+        "errorToast": "Gagal menambahkan.",
+        "submit": "Tambah",
+        "fields": {
+          "name": "Nama",
+          "phone": "Telepon",
+          "count": "Jumlah orang",
+          "status": "Status",
+          "notes": "Catatan"
+        }
       }
     }
   },
