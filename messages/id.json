@@ -42,7 +42,8 @@
     "myEvents": "Acara Saya",
     "myCellGroup": "Komsel Saya",
     "prayerRequests": "Doa & Permohonan",
-    "myCheckIn": "Check-in"
+    "myCheckIn": "Check-in",
+    "myVolunteer": "Pelayanan Saya"
   },
   "auth": {
     "signIn": {
@@ -154,6 +155,19 @@
       "noteTitle": "Setelah transfer",
       "noteDescription": "Persembahan Anda akan muncul di riwayat setelah admin mencatatnya.",
       "noteBody": "Admin merekonsiliasi mutasi bank dan mencatat setiap entri ke riwayat Anda. Jika setelah beberapa hari belum muncul, hubungi admin gereja via WhatsApp."
+    },
+    "volunteer": {
+      "title": "Pelayanan Saya",
+      "subtitle": "Jadwal pelayanan Anda yang akan datang.",
+      "upcomingTitle": "Akan Datang",
+      "upcomingDescription": "Konfirmasi atau tolak supaya tim tahu kepastian Anda.",
+      "upcomingEmpty": "Belum ada jadwal pelayanan.",
+      "historyTitle": "Pelayanan Sebelumnya",
+      "accept": "Terima",
+      "decline": "Tolak",
+      "acceptedToast": "Diterima — sampai jumpa.",
+      "declinedToast": "Ditolak — admin akan mengganti.",
+      "errorToast": "Aksi gagal."
     },
     "events": {
       "title": "Acara Saya",
@@ -839,6 +853,102 @@
         "visitorCount": "Jumlah tamu",
         "topic": "Topik",
         "notes": "Catatan"
+      }
+    }
+  },
+  "volunteers": {
+    "assignmentStatus": {
+      "pending": "Menunggu",
+      "confirmed": "Terkonfirmasi",
+      "declined": "Ditolak",
+      "completed": "Selesai"
+    },
+    "schedule": {
+      "title": "Pelayanan",
+      "subtitle": "{total} jadwal pelayanan akan datang.",
+      "manageTeams": "Tim",
+      "newAssignment": "Jadwal Baru",
+      "empty": "Belum ada jadwal pelayanan.",
+      "colDate": "Tanggal",
+      "colTeam": "Tim",
+      "colPosition": "Posisi",
+      "colMember": "Pelayan",
+      "colStatus": "Status",
+      "colActions": "Aksi",
+      "statusUpdatedToast": "Status diperbarui.",
+      "deletedToast": "Jadwal dihapus.",
+      "errorToast": "Aksi gagal.",
+      "confirmDelete": "Hapus jadwal ini?"
+    },
+    "team": {
+      "list": {
+        "title": "Tim Pelayanan",
+        "subtitle": "{total} tim.",
+        "newButton": "Tambah Tim",
+        "backToList": "Pelayanan",
+        "empty": "Belum ada tim — buat satu untuk mulai membuat jadwal.",
+        "noPositions": "Belum ada posisi.",
+        "assignmentsAbbr": "jadwal total",
+        "statusActive": "Aktif",
+        "statusInactive": "Nonaktif"
+      },
+      "new": {
+        "title": "Tambah Tim",
+        "subtitle": "Kelompok pelayan (worship, usher, multimedia, dll).",
+        "submit": "Simpan"
+      },
+      "edit": {
+        "title": "Ubah Tim",
+        "submit": "Simpan Perubahan"
+      },
+      "form": {
+        "savedToast": "Tim tersimpan.",
+        "errorToast": "Gagal menyimpan.",
+        "fields": {
+          "name": "Nama",
+          "description": "Deskripsi",
+          "isActive": "Aktif"
+        }
+      },
+      "detail": {
+        "backToList": "Daftar tim",
+        "statusActive": "Aktif",
+        "statusInactive": "Nonaktif",
+        "edit": "Ubah",
+        "assign": "Buat Jadwal",
+        "positionsTitle": "Posisi",
+        "positionsDescription": "Peran dalam tim ini — usher, worship leader, dll.",
+        "positionsEmpty": "Belum ada posisi.",
+        "positionPlaceholder": "Nama posisi",
+        "positionAdd": "Tambah",
+        "positionAddedToast": "Posisi ditambahkan.",
+        "positionRemovedToast": "Posisi dihapus.",
+        "confirmRemovePosition": "Hapus posisi ini? Jadwal aktif tetap pakai, tapi yang baru tidak melihatnya.",
+        "errorToast": "Aksi gagal.",
+        "upcomingTitle": "Akan Datang",
+        "upcomingDescription": "20 jadwal mendatang untuk tim ini.",
+        "upcomingEmpty": "Belum ada jadwal mendatang."
+      }
+    },
+    "assignment": {
+      "new": {
+        "title": "Jadwal Pelayanan Baru",
+        "subtitle": "Atur jemaat untuk melayani di tanggal tertentu.",
+        "submit": "Simpan"
+      },
+      "form": {
+        "savedToast": "Jadwal tersimpan.",
+        "errorToast": "Gagal menyimpan.",
+        "fields": {
+          "team": "Tim",
+          "teamPlaceholder": "Pilih tim…",
+          "position": "Posisi",
+          "member": "Pelayan",
+          "memberPlaceholder": "Cari jemaat…",
+          "serviceDate": "Tanggal pelayanan",
+          "status": "Status",
+          "notes": "Catatan"
+        }
       }
     }
   },
