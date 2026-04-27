@@ -1,11 +1,695 @@
-// Church Management System — Prisma schema
-// Models are added in Phase 1 (Database & Auth Foundation).
+// Church Management System — Prisma schema.
+// Models grouped by domain. Conventions:
+//   - cuid IDs, snake_case table names, soft-delete via deletedAt where applicable.
+//   - Money in Decimal(14,2). Timestamps in UTC.
+//   - Foreign keys default to onDelete: Restrict; cascade is explicit.
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// =====================================================================
+// Auth & Users
+// =====================================================================
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  STAFF
+  LEADER
+  MEMBER
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String?   @unique
+  emailVerified DateTime?
+  passwordHash  String?
+  phone         String?   @unique
+  phoneVerified DateTime?
+  role          Role      @default(MEMBER)
+  member        Member?   @relation(fields: [memberId], references: [id])
+  memberId      String?   @unique
+  isActive      Boolean   @default(true)
+  lastLoginAt   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts  Account[]
+  sessions  Session[]
+  otpCodes  OtpCode[]
+  auditLogs AuditLog[]
+
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+model OtpCode {
+  id         String    @id @default(cuid())
+  userId     String?
+  phone      String
+  codeHash   String
+  purpose    String
+  attempts   Int       @default(0)
+  expiresAt  DateTime
+  consumedAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([phone, purpose])
+  @@map("otp_codes")
+}
+
+// =====================================================================
+// Members & Households
+// =====================================================================
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum MaritalStatus {
+  SINGLE
+  MARRIED
+  DIVORCED
+  WIDOWED
+}
+
+enum MemberStatus {
+  ACTIVE
+  INACTIVE
+  TRANSFERRED
+  DECEASED
+  VISITOR
+}
+
+model Member {
+  id            String         @id @default(cuid())
+  firstName     String
+  lastName      String?
+  fullName      String
+  nickname      String?
+  email         String?
+  phone         String?
+  gender        Gender
+  birthDate     DateTime?
+  maritalStatus MaritalStatus?
+  status        MemberStatus   @default(ACTIVE)
+  photoUrl      String?
+  address       String?
+  city          String?
+  province      String?
+  postalCode    String?
+  country       String?        @default("ID")
+
+  baptismDate   DateTime?
+  baptismChurch String?
+  joinedAt      DateTime?
+  notes         String?
+
+  excludeFromBroadcasts Boolean @default(false)
+
+  household     Household? @relation(fields: [householdId], references: [id])
+  householdId   String?
+  householdRole String?
+
+  user User?
+
+  cellGroupMembers       CellGroupMember[]
+  attendances            AttendanceRecord[]
+  givings                GivingRecord[]
+  eventRsvps             EventRsvp[]
+  childCheckIns          ChildCheckIn[]          @relation("Child")
+  guardianOf             ChildCheckIn[]          @relation("Guardian")
+  pickedUpChildren       ChildCheckIn[]          @relation("PickupGuardian")
+  pastoralVisits         PastoralVisit[]
+  prayerRequests         PrayerRequest[]
+  discipleshipMilestones DiscipleshipMilestone[]
+  volunteerAssignments   VolunteerAssignment[]
+  ledCellGroups          CellGroup[]             @relation("CellGroupLeader")
+
+  deletedAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([fullName])
+  @@index([phone])
+  @@index([status])
+  @@map("members")
+}
+
+model Household {
+  id        String    @id @default(cuid())
+  name      String
+  address   String?
+  members   Member[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("households")
+}
+
+// =====================================================================
+// Cell Groups (Komsel)
+// =====================================================================
+
+model CellGroup {
+  id              String  @id @default(cuid())
+  name            String
+  description     String?
+  leader          Member  @relation("CellGroupLeader", fields: [leaderId], references: [id])
+  leaderId        String
+  meetingDay      String?
+  meetingTime     String?
+  meetingLocation String?
+
+  parentGroup   CellGroup?  @relation("CellGroupHierarchy", fields: [parentGroupId], references: [id])
+  parentGroupId String?
+  childGroups   CellGroup[] @relation("CellGroupHierarchy")
+
+  isActive Boolean @default(true)
+
+  members CellGroupMember[]
+  reports CellGroupReport[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("cell_groups")
+}
+
+model CellGroupMember {
+  id          String    @id @default(cuid())
+  cellGroup   CellGroup @relation(fields: [cellGroupId], references: [id])
+  cellGroupId String
+  member      Member    @relation(fields: [memberId], references: [id])
+  memberId    String
+  joinedAt    DateTime  @default(now())
+  leftAt      DateTime?
+
+  @@unique([cellGroupId, memberId])
+  @@map("cell_group_members")
+}
+
+model CellGroupReport {
+  id            String    @id @default(cuid())
+  cellGroup     CellGroup @relation(fields: [cellGroupId], references: [id])
+  cellGroupId   String
+  meetingDate   DateTime
+  attendeeCount Int
+  visitorCount  Int       @default(0)
+  topic         String?
+  notes         String?
+  submittedBy   String
+  submittedAt   DateTime  @default(now())
+
+  @@index([cellGroupId, meetingDate])
+  @@map("cell_group_reports")
+}
+
+// =====================================================================
+// Attendance
+// =====================================================================
+
+enum ServiceType {
+  SUNDAY_MORNING
+  SUNDAY_EVENING
+  MIDWEEK
+  YOUTH
+  CHILDREN
+  SPECIAL
+  OTHER
+}
+
+model Service {
+  id          String      @id @default(cuid())
+  name        String
+  type        ServiceType
+  startsAt    DateTime
+  durationMin Int         @default(90)
+  location    String?
+  notes       String?
+  isActive    Boolean     @default(true)
+
+  attendances AttendanceRecord[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([startsAt])
+  @@map("services")
+}
+
+model AttendanceRecord {
+  id           String   @id @default(cuid())
+  service      Service  @relation(fields: [serviceId], references: [id])
+  serviceId    String
+  member       Member?  @relation(fields: [memberId], references: [id])
+  memberId     String?
+  visitorName  String?
+  visitorPhone String?
+  checkedInAt  DateTime @default(now())
+  checkedInBy  String?
+  source       String
+
+  @@index([serviceId, memberId])
+  @@map("attendance_records")
+}
+
+// =====================================================================
+// Giving / Persembahan
+// =====================================================================
+
+enum FundCategory {
+  GENERAL
+  TITHE
+  MISSIONS
+  BUILDING
+  CHARITY
+  THANKSGIVING
+  OTHER
+}
+
+enum GivingMethod {
+  QRIS
+  BANK_TRANSFER
+  EWALLET
+  CASH
+  CARD
+  OTHER
+}
+
+enum GivingStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+model Fund {
+  id          String       @id @default(cuid())
+  name        String
+  category    FundCategory @default(GENERAL)
+  description String?
+  isActive    Boolean      @default(true)
+
+  givings GivingRecord[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("funds")
+}
+
+model GivingRecord {
+  id             String       @id @default(cuid())
+  fund           Fund         @relation(fields: [fundId], references: [id])
+  fundId         String
+  member         Member?      @relation(fields: [memberId], references: [id])
+  memberId       String?
+  giverName      String?
+  giverPhone     String?
+  giverEmail     String?
+  amount         Decimal      @db.Decimal(14, 2)
+  currency       String       @default("IDR")
+  method         GivingMethod
+  status         GivingStatus @default(PENDING)
+  externalRef    String?      @unique
+  paymentDetails Json?
+  receivedAt     DateTime     @default(now())
+  notes          String?
+
+  recordedBy String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([memberId])
+  @@index([receivedAt])
+  @@index([status])
+  @@map("giving_records")
+}
+
+// =====================================================================
+// Events
+// =====================================================================
+
+model Event {
+  id               String   @id @default(cuid())
+  title            String
+  description      String?
+  startsAt         DateTime
+  endsAt           DateTime
+  location         String?
+  capacity         Int?
+  registrationOpen Boolean  @default(true)
+  requiresRsvp     Boolean  @default(true)
+  fee              Decimal? @db.Decimal(14, 2)
+  isPublished      Boolean  @default(false)
+  coverImageUrl    String?
+
+  rsvps EventRsvp[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@index([startsAt])
+  @@map("events")
+}
+
+enum RsvpStatus {
+  GOING
+  MAYBE
+  NOT_GOING
+  WAITLIST
+}
+
+model EventRsvp {
+  id         String     @id @default(cuid())
+  event      Event      @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  eventId    String
+  member     Member?    @relation(fields: [memberId], references: [id])
+  memberId   String?
+  guestName  String?
+  guestPhone String?
+  guestCount Int        @default(1)
+  status     RsvpStatus @default(GOING)
+  notes      String?
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  @@index([eventId])
+  @@map("event_rsvps")
+}
+
+// =====================================================================
+// Communications
+// =====================================================================
+
+enum MessageChannel {
+  WHATSAPP
+  EMAIL
+  SMS
+  PUSH
+}
+
+enum MessageStatus {
+  PENDING
+  SENT
+  DELIVERED
+  FAILED
+}
+
+model MessageTemplate {
+  id        String         @id @default(cuid())
+  name      String
+  channel   MessageChannel
+  subject   String?
+  body      String
+  isActive  Boolean        @default(true)
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  @@map("message_templates")
+}
+
+model BroadcastCampaign {
+  id           String         @id @default(cuid())
+  name         String
+  channel      MessageChannel
+  subject      String?
+  body         String
+  audienceJson Json
+  scheduledAt  DateTime?
+  sentAt       DateTime?
+  createdBy    String
+  status       String         @default("DRAFT")
+  totalCount   Int            @default(0)
+  successCount Int            @default(0)
+  failureCount Int            @default(0)
+
+  messages MessageDelivery[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("broadcast_campaigns")
+}
+
+model MessageDelivery {
+  id           String             @id @default(cuid())
+  campaign     BroadcastCampaign? @relation(fields: [campaignId], references: [id])
+  campaignId   String?
+  channel      MessageChannel
+  recipient    String
+  memberId     String?
+  body         String
+  status       MessageStatus      @default(PENDING)
+  externalRef  String?
+  errorMessage String?
+  sentAt       DateTime?
+  deliveredAt  DateTime?
+  createdAt    DateTime           @default(now())
+
+  @@index([campaignId])
+  @@index([recipient])
+  @@map("message_deliveries")
+}
+
+// =====================================================================
+// Volunteers
+// =====================================================================
+
+model VolunteerTeam {
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+  isActive    Boolean @default(true)
+
+  positions   VolunteerPosition[]
+  assignments VolunteerAssignment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("volunteer_teams")
+}
+
+model VolunteerPosition {
+  id       String        @id @default(cuid())
+  team     VolunteerTeam @relation(fields: [teamId], references: [id])
+  teamId   String
+  name     String
+  isActive Boolean       @default(true)
+
+  assignments VolunteerAssignment[]
+
+  createdAt DateTime @default(now())
+
+  @@map("volunteer_positions")
+}
+
+model VolunteerAssignment {
+  id          String             @id @default(cuid())
+  team        VolunteerTeam      @relation(fields: [teamId], references: [id])
+  teamId      String
+  position    VolunteerPosition? @relation(fields: [positionId], references: [id])
+  positionId  String?
+  member      Member             @relation(fields: [memberId], references: [id])
+  memberId    String
+  serviceDate DateTime
+  status      String             @default("PENDING")
+  notes       String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([memberId, serviceDate])
+  @@index([teamId, serviceDate])
+  @@map("volunteer_assignments")
+}
+
+// =====================================================================
+// Children's Ministry
+// =====================================================================
+
+model ChildClass {
+  id       String  @id @default(cuid())
+  name     String
+  ageMin   Int
+  ageMax   Int
+  isActive Boolean @default(true)
+
+  checkIns ChildCheckIn[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("child_classes")
+}
+
+model ChildCheckIn {
+  id               String     @id @default(cuid())
+  child            Member     @relation("Child", fields: [childId], references: [id])
+  childId          String
+  childClass       ChildClass @relation(fields: [classId], references: [id])
+  classId          String
+  guardian         Member     @relation("Guardian", fields: [guardianId], references: [id])
+  guardianId       String
+  pickupGuardian   Member?    @relation("PickupGuardian", fields: [pickupGuardianId], references: [id])
+  pickupGuardianId String?
+  securityCode     String
+  checkedInAt      DateTime   @default(now())
+  checkedOutAt     DateTime?
+  notes            String?
+
+  @@index([childId, checkedInAt])
+  @@map("child_check_ins")
+}
+
+// =====================================================================
+// Pastoral Care & Discipleship
+// =====================================================================
+
+enum VisitType {
+  HOSPITAL
+  HOME
+  OFFICE
+  PHONE
+  OTHER
+}
+
+model PastoralVisit {
+  id           String    @id @default(cuid())
+  member       Member    @relation(fields: [memberId], references: [id])
+  memberId     String
+  visitType    VisitType
+  visitedAt    DateTime
+  visitedBy    String
+  notes        String
+  followUp     String?
+  followUpDate DateTime?
+  createdAt    DateTime  @default(now())
+
+  @@index([memberId, visitedAt])
+  @@map("pastoral_visits")
+}
+
+enum PrayerStatus {
+  OPEN
+  PRAYING
+  ANSWERED
+  ARCHIVED
+}
+
+model PrayerRequest {
+  id          String       @id @default(cuid())
+  member      Member?      @relation(fields: [memberId], references: [id])
+  memberId    String?
+  submittedBy String?
+  title       String?
+  body        String
+  isAnonymous Boolean      @default(false)
+  isPublic    Boolean      @default(false)
+  status      PrayerStatus @default(OPEN)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([status])
+  @@map("prayer_requests")
+}
+
+model DiscipleshipMilestone {
+  id         String   @id @default(cuid())
+  member     Member   @relation(fields: [memberId], references: [id])
+  memberId   String
+  type       String
+  achievedAt DateTime
+  notes      String?
+  recordedBy String
+  createdAt  DateTime @default(now())
+
+  @@index([memberId])
+  @@index([type])
+  @@map("discipleship_milestones")
+}
+
+// =====================================================================
+// System
+// =====================================================================
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  user       User?    @relation(fields: [userId], references: [id])
+  userId     String?
+  action     String
+  entityType String?
+  entityId   String?
+  metadata   Json?
+  ipAddress  String?
+  userAgent  String?
+  createdAt  DateTime @default(now())
+
+  @@index([userId])
+  @@index([entityType, entityId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+model AppSetting {
+  key       String   @id
+  value     Json
+  updatedAt DateTime @updatedAt
+
+  @@map("app_settings")
 }

@@ -1,0 +1,79 @@
+{
+  "common": {
+    "appName": "Church Management System",
+    "loading": "Loading…",
+    "save": "Save",
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "back": "Back",
+    "next": "Next",
+    "signOut": "Sign out"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "members": "Members",
+    "attendance": "Attendance",
+    "giving": "Giving",
+    "cellGroups": "Cell groups",
+    "events": "Events",
+    "communications": "Communications",
+    "volunteers": "Volunteers",
+    "children": "Children",
+    "pastoral": "Pastoral care",
+    "discipleship": "Discipleship",
+    "settings": "Settings",
+    "myDashboard": "My dashboard",
+    "myProfile": "My profile",
+    "myQr": "My QR",
+    "myGiving": "My giving",
+    "myEvents": "My events",
+    "myCellGroup": "My cell group",
+    "prayerRequests": "Prayer requests"
+  },
+  "auth": {
+    "signIn": {
+      "title": "Staff sign in",
+      "subtitle": "Sign in with your staff/admin email and password.",
+      "emailLabel": "Email",
+      "passwordLabel": "Password",
+      "submit": "Sign in",
+      "switchToOtp": "I'm a member — sign in with WhatsApp OTP",
+      "errors": {
+        "invalidCredentials": "Wrong email or password.",
+        "accountInactive": "Your account is disabled. Contact an administrator.",
+        "internal": "Something went wrong. Please try again."
+      }
+    },
+    "otp": {
+      "requestTitle": "Member sign in",
+      "requestSubtitle": "Enter your WhatsApp number. We'll send you a 6-digit code.",
+      "phoneLabel": "WhatsApp number",
+      "phonePlaceholder": "08xxxxxxxxxx",
+      "requestSubmit": "Send code",
+      "verifyTitle": "Enter the code",
+      "verifySubtitle": "A 6-digit code was sent to {phone}. It expires in 5 minutes.",
+      "codeLabel": "OTP code",
+      "verifySubmit": "Verify",
+      "resend": "Change number / resend",
+      "switchToStaff": "I'm staff/admin — sign in with email",
+      "errors": {
+        "phoneNotFound": "Number not registered. Contact your church admin.",
+        "rateLimited": "Too many requests. Please try again later.",
+        "invalidCode": "Wrong code.",
+        "codeExpired": "Code expired. Request a new one.",
+        "tooManyAttempts": "Too many attempts. Request a new code.",
+        "internal": "Something went wrong. Please try again."
+      }
+    }
+  },
+  "dashboard": {
+    "admin": {
+      "title": "Admin dashboard",
+      "welcome": "Welcome, {name}."
+    },
+    "member": {
+      "title": "My dashboard",
+      "welcome": "Hi, {name}."
+    }
+  }
+}

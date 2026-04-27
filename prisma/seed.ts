@@ -1,0 +1,143 @@
+import { PrismaClient, ServiceType } from "@prisma/client";
+import bcrypt from "bcryptjs";
+
+const prisma = new PrismaClient();
+
+function nextSundayMorning(): Date {
+  const now = new Date();
+  const day = now.getUTCDay();
+  const daysUntilSunday = (7 - day) % 7 || 7;
+  const sunday = new Date(now);
+  sunday.setUTCDate(now.getUTCDate() + daysUntilSunday);
+  sunday.setUTCHours(2, 0, 0, 0); // 09:00 Asia/Jakarta = 02:00 UTC
+  return sunday;
+}
+
+async function main() {
+  const superAdminEmail = "superadmin@example.church";
+  const superAdminPassword = "ChangeMe!Super123";
+  const adminEmail = process.env.INITIAL_ADMIN_EMAIL ?? "admin@example.church";
+  const adminPassword =
+    process.env.INITIAL_ADMIN_PASSWORD ?? "ChangeMe!123";
+
+  const [superAdminHash, adminHash] = await Promise.all([
+    bcrypt.hash(superAdminPassword, 10),
+    bcrypt.hash(adminPassword, 10),
+  ]);
+
+  const superAdmin = await prisma.user.upsert({
+    where: { email: superAdminEmail },
+    update: {},
+    create: {
+      email: superAdminEmail,
+      passwordHash: superAdminHash,
+      emailVerified: new Date(),
+      role: "SUPER_ADMIN",
+      isActive: true,
+    },
+  });
+
+  const admin = await prisma.user.upsert({
+    where: { email: adminEmail },
+    update: {},
+    create: {
+      email: adminEmail,
+      passwordHash: adminHash,
+      emailVerified: new Date(),
+      role: "ADMIN",
+      isActive: true,
+    },
+  });
+
+  // Sample member with WhatsApp phone — for testing OTP login.
+  const samplePhone = "+628123456789";
+  const sampleMember = await prisma.member.upsert({
+    where: { id: "seed-member-budi" },
+    update: {},
+    create: {
+      id: "seed-member-budi",
+      firstName: "Budi",
+      lastName: "Santoso",
+      fullName: "Budi Santoso",
+      gender: "MALE",
+      phone: samplePhone,
+      status: "ACTIVE",
+      joinedAt: new Date(),
+    },
+  });
+
+  await prisma.user.upsert({
+    where: { phone: samplePhone },
+    update: {},
+    create: {
+      phone: samplePhone,
+      role: "MEMBER",
+      memberId: sampleMember.id,
+      isActive: true,
+    },
+  });
+
+  // Funds
+  const funds = [
+    { name: "Persembahan Umum", category: "GENERAL" as const },
+    { name: "Perpuluhan", category: "TITHE" as const },
+    { name: "Misi", category: "MISSIONS" as const },
+    { name: "Pembangunan", category: "BUILDING" as const },
+    { name: "Diakonia", category: "CHARITY" as const },
+    { name: "Syukur", category: "THANKSGIVING" as const },
+  ];
+
+  for (const fund of funds) {
+    await prisma.fund.upsert({
+      where: { id: `seed-fund-${fund.category.toLowerCase()}` },
+      update: {},
+      create: { id: `seed-fund-${fund.category.toLowerCase()}`, ...fund },
+    });
+  }
+
+  // Sample upcoming service
+  await prisma.service.upsert({
+    where: { id: "seed-service-sunday-morning" },
+    update: {},
+    create: {
+      id: "seed-service-sunday-morning",
+      name: "Ibadah Minggu Pagi",
+      type: ServiceType.SUNDAY_MORNING,
+      startsAt: nextSundayMorning(),
+      durationMin: 90,
+      location: "Gedung Utama",
+      isActive: true,
+    },
+  });
+
+  // Sample child class
+  await prisma.childClass.upsert({
+    where: { id: "seed-child-class-kecil" },
+    update: {},
+    create: {
+      id: "seed-child-class-kecil",
+      name: "Sekolah Minggu Kelas Kecil",
+      ageMin: 4,
+      ageMax: 7,
+      isActive: true,
+    },
+  });
+
+  console.log("Seed complete:");
+  console.log(`  SUPER_ADMIN: ${superAdmin.email} / ${superAdminPassword}`);
+  console.log(`  ADMIN:       ${admin.email} / ${adminPassword}`);
+  console.log(`  MEMBER:      phone=${samplePhone} (Budi Santoso) — login via OTP`);
+  console.log(`  Funds:       ${funds.length} entries`);
+  console.log(`  Service:     1 upcoming Sunday morning`);
+  console.log(`  Child class: 1 (Kelas Kecil)`);
+}
+
+main()
+  .then(async () => {
+    await prisma.$disconnect();
+  })
+  .catch(async (e) => {
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
+  });

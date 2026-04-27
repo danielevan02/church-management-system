@@ -1,0 +1,79 @@
+{
+  "common": {
+    "appName": "Church Management System",
+    "loading": "Memuat…",
+    "save": "Simpan",
+    "cancel": "Batal",
+    "submit": "Kirim",
+    "back": "Kembali",
+    "next": "Lanjut",
+    "signOut": "Keluar"
+  },
+  "nav": {
+    "dashboard": "Dasbor",
+    "members": "Jemaat",
+    "attendance": "Kehadiran",
+    "giving": "Persembahan",
+    "cellGroups": "Komsel",
+    "events": "Acara",
+    "communications": "Komunikasi",
+    "volunteers": "Pelayan",
+    "children": "Anak",
+    "pastoral": "Penggembalaan",
+    "discipleship": "Pemuridan",
+    "settings": "Pengaturan",
+    "myDashboard": "Dasbor Saya",
+    "myProfile": "Profil Saya",
+    "myQr": "QR Saya",
+    "myGiving": "Persembahan Saya",
+    "myEvents": "Acara Saya",
+    "myCellGroup": "Komsel Saya",
+    "prayerRequests": "Doa & Permohonan"
+  },
+  "auth": {
+    "signIn": {
+      "title": "Masuk Staff",
+      "subtitle": "Masuk dengan email & password staff/admin.",
+      "emailLabel": "Email",
+      "passwordLabel": "Password",
+      "submit": "Masuk",
+      "switchToOtp": "Saya jemaat — masuk pakai WhatsApp OTP",
+      "errors": {
+        "invalidCredentials": "Email atau password salah.",
+        "accountInactive": "Akun Anda dinonaktifkan. Hubungi pengurus.",
+        "internal": "Terjadi kesalahan. Coba lagi."
+      }
+    },
+    "otp": {
+      "requestTitle": "Masuk Jemaat",
+      "requestSubtitle": "Masukkan nomor WhatsApp Anda. Kami akan kirim kode 6 digit.",
+      "phoneLabel": "Nomor WhatsApp",
+      "phonePlaceholder": "08xxxxxxxxxx",
+      "requestSubmit": "Kirim Kode",
+      "verifyTitle": "Masukkan Kode",
+      "verifySubtitle": "Kode 6 digit telah dikirim ke {phone}. Berlaku 5 menit.",
+      "codeLabel": "Kode OTP",
+      "verifySubmit": "Verifikasi",
+      "resend": "Ganti nomor / kirim ulang",
+      "switchToStaff": "Saya staff/admin — masuk pakai email",
+      "errors": {
+        "phoneNotFound": "Nomor tidak terdaftar. Hubungi pengurus gereja.",
+        "rateLimited": "Terlalu banyak permintaan. Coba lagi nanti.",
+        "invalidCode": "Kode salah.",
+        "codeExpired": "Kode kedaluwarsa. Minta kode baru.",
+        "tooManyAttempts": "Terlalu banyak percobaan. Minta kode baru.",
+        "internal": "Terjadi kesalahan. Coba lagi."
+      }
+    }
+  },
+  "dashboard": {
+    "admin": {
+      "title": "Dasbor Admin",
+      "welcome": "Selamat datang, {name}."
+    },
+    "member": {
+      "title": "Dasbor Saya",
+      "welcome": "Halo, {name}."
+    }
+  }
+}
