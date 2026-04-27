@@ -102,9 +102,8 @@ export const adminNav: readonly AdminNavItem[] = [
     labelKey: "nav.volunteers",
     icon: HeartHandshake,
     group: "documents",
-    roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
+    roles: ["SUPER_ADMIN", "ADMIN", "STAFF", "LEADER"],
     feature: "volunteers",
-    comingSoon: true,
   },
   {
     href: "/admin/children",
@@ -218,6 +217,12 @@ export const memberNav: readonly MemberNavItem[] = [
     href: "/me/events",
     labelKey: "nav.myEvents",
     icon: Calendar,
+  },
+  {
+    href: "/me/volunteer",
+    labelKey: "nav.myVolunteer",
+    icon: HeartHandshake,
+    feature: "volunteers",
   },
   {
     href: "/me/prayer-requests",
