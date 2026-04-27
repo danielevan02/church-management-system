@@ -97,7 +97,6 @@ export const adminNav: readonly AdminNavItem[] = [
     group: "documents",
     roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
     feature: "whatsappBroadcast",
-    comingSoon: true,
   },
   {
     href: "/admin/volunteers",
