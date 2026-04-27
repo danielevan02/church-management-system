@@ -41,7 +41,8 @@
     "myGiving": "Persembahan Saya",
     "myEvents": "Acara Saya",
     "myCellGroup": "Komsel Saya",
-    "prayerRequests": "Doa & Permohonan"
+    "prayerRequests": "Doa & Permohonan",
+    "myCheckIn": "Check-in"
   },
   "auth": {
     "signIn": {
@@ -135,6 +136,23 @@
       "alt": "QR untuk {name}",
       "download": "Unduh QR",
       "warning": "Jangan bagikan QR ini ke orang lain — gunakan hanya untuk check-in pribadi."
+    },
+    "checkIn": {
+      "title": "Check-in",
+      "subtitle": "Tandai kehadiran Anda untuk ibadah hari ini.",
+      "openNow": "Sedang Buka",
+      "openNowDescription": "Ibadah yang sedang menerima check-in.",
+      "noOpen": "Belum ada ibadah yang dibuka untuk check-in saat ini.",
+      "upcoming": "Akan Datang",
+      "upcomingDescription": "Ibadah yang dijadwalkan dalam beberapa hari ke depan.",
+      "noUpcoming": "Belum ada jadwal ibadah berikutnya.",
+      "alreadyCheckedIn": "Sudah check-in",
+      "button": "Saya hadir",
+      "checkedInToast": "Check-in berhasil. Sampai jumpa!",
+      "errors": {
+        "closed": "Jendela check-in untuk ibadah ini sudah ditutup.",
+        "generic": "Gagal check-in. Coba lagi."
+      }
     }
   },
   "members": {
@@ -340,6 +358,172 @@
           "CHILD": "Anak",
           "OTHER": "Lainnya"
         }
+      }
+    }
+  },
+  "services": {
+    "type": {
+      "sundayMorning": "Minggu Pagi",
+      "sundayEvening": "Minggu Sore/Malam",
+      "midweek": "Tengah Pekan",
+      "youth": "Pemuda",
+      "children": "Sekolah Minggu",
+      "special": "Khusus",
+      "other": "Lainnya"
+    },
+    "list": {
+      "title": "Ibadah",
+      "subtitle": "{total} ibadah terjadwal.",
+      "newButton": "Tambah Ibadah",
+      "recurringButton": "Jadwal Berkala",
+      "empty": "Belum ada jadwal ibadah.",
+      "colName": "Nama",
+      "colType": "Jenis",
+      "colStartsAt": "Mulai",
+      "colAttendance": "Check-in",
+      "colStatus": "Status",
+      "statusActive": "Aktif",
+      "statusInactive": "Nonaktif"
+    },
+    "new": {
+      "title": "Tambah Ibadah",
+      "subtitle": "Buat satu jadwal ibadah.",
+      "submit": "Simpan"
+    },
+    "edit": {
+      "title": "Ubah Ibadah",
+      "submit": "Simpan Perubahan"
+    },
+    "form": {
+      "savedToast": "Ibadah tersimpan.",
+      "errorToast": "Gagal menyimpan. Cek isian form.",
+      "fields": {
+        "name": "Nama ibadah",
+        "namePlaceholder": "mis. Kebaktian Minggu Pagi",
+        "type": "Jenis",
+        "startsAt": "Waktu mulai",
+        "durationMin": "Durasi (menit)",
+        "location": "Lokasi",
+        "notes": "Catatan"
+      }
+    },
+    "recurring": {
+      "title": "Buat Jadwal Berkala",
+      "subtitle": "Generate banyak ibadah sekaligus — praktis untuk jadwal Minggu satu kuartal ke depan.",
+      "submit": "Buat",
+      "savedToast": "{count} ibadah dibuat.",
+      "errorToast": "Gagal membuat jadwal. Cek isian form.",
+      "fields": {
+        "name": "Nama series",
+        "type": "Jenis",
+        "firstDate": "Tanggal pertama",
+        "firstDateHelp": "Tanggal ibadah pertama yang akan dibuat.",
+        "time": "Jam ibadah",
+        "count": "Jumlah jadwal",
+        "countHelp": "Maksimal 52 jadwal per generator.",
+        "intervalDays": "Interval (hari)",
+        "intervalDaysHelp": "7 = mingguan, 14 = dua-mingguan.",
+        "durationMin": "Durasi (menit)",
+        "location": "Lokasi",
+        "notes": "Catatan"
+      }
+    },
+    "detail": {
+      "backToList": "Daftar ibadah",
+      "statusActive": "Aktif",
+      "statusInactive": "Nonaktif",
+      "edit": "Ubah",
+      "deactivate": "Nonaktifkan",
+      "activate": "Aktifkan",
+      "deactivatedToast": "Ibadah dinonaktifkan.",
+      "activatedToast": "Ibadah diaktifkan.",
+      "errorToast": "Aksi gagal.",
+      "openCheckIn": "Buka check-in",
+      "checkInClosed": "Check-in tutup",
+      "statTotal": "Total",
+      "statMembers": "Jemaat",
+      "statVisitors": "Tamu",
+      "rosterTitle": "Daftar Hadir",
+      "rosterDescription": "Semua yang sudah check-in untuk ibadah ini.",
+      "rosterEmpty": "Belum ada yang check-in.",
+      "colName": "Nama",
+      "colSource": "Sumber",
+      "colCheckedInAt": "Jam check-in",
+      "colActions": "Aksi",
+      "confirmDeleteRecord": "Hapus catatan kehadiran ini?",
+      "deletedToast": "Catatan dihapus.",
+      "visitorTag": "tamu"
+    }
+  },
+  "attendance": {
+    "home": {
+      "title": "Kehadiran",
+      "subtitle": "Kelola jadwal ibadah dan check-in.",
+      "manageServices": "Kelola Ibadah",
+      "reports": "Laporan",
+      "newService": "Tambah Ibadah",
+      "openNow": "Sedang Buka Check-in",
+      "openNowDescription": "Ibadah yang sedang menerima check-in.",
+      "noOpenNow": "Tidak ada ibadah yang sedang buka.",
+      "openCheckIn": "Buka Konsol",
+      "checkedInAbbr": "hadir",
+      "upcoming": "Akan Datang",
+      "upcomingDescription": "Ibadah berikutnya yang dijadwalkan.",
+      "noUpcoming": "Belum ada jadwal ibadah berikutnya."
+    },
+    "checkIn": {
+      "pageTitle": "Konsol Check-in",
+      "statusOpen": "Buka",
+      "statusClosed": "Tutup",
+      "closedNotice": "Ibadah ini sedang tidak menerima check-in. Check-in dibuka 60 menit sebelum dimulai sampai 60 menit setelah selesai.",
+      "title": "Check-in jemaat",
+      "description": "Scan QR jemaat, cari nama, atau tambah tamu.",
+      "tabQr": "QR",
+      "tabSearch": "Cari",
+      "tabVisitor": "Tamu",
+      "qrHelp": "Arahkan QR jemaat ke kamera. Check-in akan berjalan otomatis ketika kode terdeteksi.",
+      "searchPlaceholder": "Ketik nama, nomor, atau nama panggilan…",
+      "searchMinChars": "Ketik minimal 2 karakter.",
+      "searchEmpty": "Tidak ada jemaat yang cocok.",
+      "visitorNamePlaceholder": "Nama tamu",
+      "visitorPhonePlaceholder": "Telepon (opsional)",
+      "visitorSubmit": "Tambah Tamu",
+      "recentTitle": "Terbaru",
+      "recentDescription": "20 check-in terakhir di sesi ini.",
+      "recentEmpty": "Belum ada check-in di perangkat ini.",
+      "alreadyTag": "sudah check-in",
+      "checkedIn": "{name} berhasil check-in.",
+      "alreadyCheckedIn": "{name} sudah check-in sebelumnya.",
+      "errors": {
+        "invalidQr": "Tidak bisa baca QR. Coba lagi.",
+        "serviceNotFound": "Ibadah tidak ditemukan.",
+        "serviceInactive": "Ibadah ini nonaktif.",
+        "checkInClosed": "Jendela check-in sudah ditutup.",
+        "memberNotFound": "Jemaat tidak ditemukan.",
+        "forbidden": "Anda tidak memiliki akses.",
+        "validation": "Beberapa isian tidak valid.",
+        "generic": "Check-in gagal. Coba lagi."
+      }
+    },
+    "reports": {
+      "title": "Laporan Kehadiran",
+      "subtitle": "Tren per pekan dan jemaat yang perlu di-follow up.",
+      "trendTitle": "Tren Mingguan",
+      "trendDescription": "12 minggu terakhir kehadiran ibadah Minggu, jemaat vs tamu.",
+      "trendEmpty": "Data belum cukup.",
+      "recentServicesTitle": "Ibadah Terbaru",
+      "recentServicesDescription": "8 ibadah terbaru dan jumlah check-in.",
+      "recentServicesEmpty": "Belum ada jadwal ibadah.",
+      "inactiveTitle": "Jemaat Tidak Aktif ({weeks}+ minggu)",
+      "inactiveDescription": "Jemaat aktif yang belum check-in dalam N minggu terakhir.",
+      "inactiveEmpty": "Semua jemaat aktif sudah hadir baru-baru ini — bagus.",
+      "colName": "Nama",
+      "colLastSeen": "Terakhir Hadir",
+      "neverSeen": "Belum pernah",
+      "moreCount": "+ {count} lainnya",
+      "chart": {
+        "members": "Jemaat",
+        "visitors": "Tamu"
       }
     }
   }

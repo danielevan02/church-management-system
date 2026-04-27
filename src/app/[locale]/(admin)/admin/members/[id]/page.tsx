@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
@@ -18,6 +18,7 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { auth } from "@/lib/auth";
 import { Link } from "@/lib/i18n/navigation";
+import { getAttendanceForMember } from "@/server/queries/attendance";
 import { getMember } from "@/server/queries/members";
 
 function fmtDate(d: Date | null | undefined): string {
@@ -37,6 +38,8 @@ export default async function MemberDetailPage({
   const t = await getTranslations("members.detail");
   const tStatus = await getTranslations("members.form.status");
   const tMarital = await getTranslations("members.form.marital");
+  const tType = await getTranslations("services.type");
+  const attendanceHistory = await getAttendanceForMember(id, 25);
 
   const canPastoral =
     session?.user.role === "SUPER_ADMIN" || session?.user.role === "ADMIN";
@@ -235,10 +238,41 @@ export default async function MemberDetailPage({
         </TabsContent>
 
         <TabsContent value="attendance" className="mt-6">
-          <PlaceholderCard
-            title={t("tabs.attendance")}
-            description={t("placeholders.attendance")}
-          />
+          {attendanceHistory.length === 0 ? (
+            <PlaceholderCard
+              title={t("tabs.attendance")}
+              description={t("placeholders.attendance")}
+            />
+          ) : (
+            <Card>
+              <CardContent className="pt-6">
+                <ul className="flex flex-col gap-2 text-sm">
+                  {attendanceHistory.map((row) => (
+                    <li
+                      key={row.id}
+                      className="flex items-center justify-between gap-2 rounded-md border p-3"
+                    >
+                      <div className="flex flex-col">
+                        <Link
+                          href={`/admin/attendance/services/${row.service.id}`}
+                          className="font-medium hover:underline"
+                        >
+                          {row.service.name}
+                        </Link>
+                        <span className="text-xs text-muted-foreground">
+                          {tType(serviceTypeKey(row.service.type))} ·{" "}
+                          {format(row.service.startsAt, "EEE dd MMM yyyy, HH:mm")}
+                        </span>
+                      </div>
+                      <span className="text-xs text-muted-foreground tabular-nums">
+                        {format(row.checkedInAt, "HH:mm")}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          )}
         </TabsContent>
         <TabsContent value="giving" className="mt-6">
           <PlaceholderCard
@@ -301,4 +335,23 @@ function PlaceholderCard({
       </CardHeader>
     </Card>
   );
+}
+
+function serviceTypeKey(t: string): string {
+  switch (t) {
+    case "SUNDAY_MORNING":
+      return "sundayMorning";
+    case "SUNDAY_EVENING":
+      return "sundayEvening";
+    case "MIDWEEK":
+      return "midweek";
+    case "YOUTH":
+      return "youth";
+    case "CHILDREN":
+      return "children";
+    case "SPECIAL":
+      return "special";
+    default:
+      return "other";
+  }
 }

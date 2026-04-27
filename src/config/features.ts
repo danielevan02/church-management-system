@@ -5,6 +5,7 @@ export const features = {
   volunteers: true,
   giving: true,
   whatsappBroadcast: true,
+  selfCheckIn: true,
 } as const;
 
 export type FeatureFlag = keyof typeof features;
