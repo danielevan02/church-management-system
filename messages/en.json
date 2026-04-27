@@ -43,7 +43,8 @@
     "myCellGroup": "My cell group",
     "prayerRequests": "Prayer requests",
     "myCheckIn": "Check-in",
-    "myVolunteer": "My serving"
+    "myVolunteer": "My serving",
+    "myDiscipleship": "My journey"
   },
   "auth": {
     "signIn": {
@@ -155,6 +156,13 @@
       "noteTitle": "After you transfer",
       "noteDescription": "Your giving will show up in your history once an administrator records it.",
       "noteBody": "Admins reconcile transfers against the bank statement and post each entry to your history. If you don't see it after a few days, you can ping the church admin via WhatsApp."
+    },
+    "discipleship": {
+      "title": "My journey",
+      "subtitle": "Spiritual milestones recorded by the church.",
+      "journeyTitle": "Milestones",
+      "journeyDescription": "Recorded by your pastor or admin.",
+      "empty": "No milestones recorded yet."
     },
     "volunteer": {
       "title": "My serving",
@@ -364,6 +372,9 @@
       "giving": {
         "totalThisYear": "Total this year",
         "totalAllTime": "Total all time"
+      },
+      "discipleship": {
+        "addMilestone": "Add milestone"
       }
     },
     "delete": {
@@ -854,6 +865,58 @@
         "topic": "Topic",
         "notes": "Notes"
       }
+    }
+  },
+  "discipleship": {
+    "type": {
+      "decisionToFollow": "Decision to follow Christ",
+      "baptism": "Baptism",
+      "membership": "Church membership",
+      "foundationsClass": "Foundations class",
+      "discipleshipClass": "Discipleship class",
+      "leadershipTraining": "Leadership training",
+      "cellGroupLeader": "Cell group leader",
+      "missionTrip": "Mission trip",
+      "other": "Other"
+    },
+    "list": {
+      "title": "Discipleship",
+      "subtitle": "{total} milestones recorded.",
+      "newButton": "Record milestone",
+      "empty": "No milestones recorded yet.",
+      "colMember": "Member",
+      "colType": "Milestone",
+      "colAchievedAt": "Achieved",
+      "colNotes": "Notes",
+      "colActions": "Actions",
+      "edit": "Edit"
+    },
+    "new": {
+      "title": "Record milestone",
+      "subtitle": "Mark a significant step in a member's journey.",
+      "submit": "Save"
+    },
+    "edit": {
+      "title": "Edit milestone",
+      "submit": "Save changes",
+      "back": "All milestones"
+    },
+    "form": {
+      "savedToast": "Milestone saved.",
+      "errorToast": "Save failed.",
+      "fields": {
+        "member": "Member",
+        "memberPlaceholder": "Search a member…",
+        "type": "Milestone",
+        "achievedAt": "Achieved at",
+        "notes": "Notes"
+      }
+    },
+    "detail": {
+      "delete": "Delete",
+      "confirmDelete": "Delete this milestone?",
+      "deletedToast": "Milestone deleted.",
+      "errorToast": "Action failed."
     }
   },
   "volunteers": {

@@ -20,6 +20,7 @@ import { auth } from "@/lib/auth";
 import { formatRupiah } from "@/lib/format";
 import { Link } from "@/lib/i18n/navigation";
 import { getAttendanceForMember } from "@/server/queries/attendance";
+import { getMilestonesForMember } from "@/server/queries/discipleship";
 import { getRsvpsForMember } from "@/server/queries/events";
 import { getGivingForMember } from "@/server/queries/giving";
 import { getMember } from "@/server/queries/members";
@@ -45,11 +46,14 @@ export default async function MemberDetailPage({
   const tFundCategory = await getTranslations("giving.fund.category");
   const tMethod = await getTranslations("giving.method");
   const tRsvp = await getTranslations("events.rsvpStatus");
-  const [attendanceHistory, givingHistory, rsvpHistory] = await Promise.all([
-    getAttendanceForMember(id, 25),
-    getGivingForMember(id, 25),
-    getRsvpsForMember(id, 25),
-  ]);
+  const tMilestone = await getTranslations("discipleship.type");
+  const [attendanceHistory, givingHistory, rsvpHistory, milestones] =
+    await Promise.all([
+      getAttendanceForMember(id, 25),
+      getGivingForMember(id, 25),
+      getRsvpsForMember(id, 25),
+      getMilestonesForMember(id),
+    ]);
 
   const canPastoral =
     session?.user.role === "SUPER_ADMIN" || session?.user.role === "ADMIN";
@@ -384,10 +388,44 @@ export default async function MemberDetailPage({
           )}
         </TabsContent>
         <TabsContent value="discipleship" className="mt-6">
-          <PlaceholderCard
-            title={t("tabs.discipleship")}
-            description={t("placeholders.discipleship")}
-          />
+          {milestones.length === 0 ? (
+            <PlaceholderCard
+              title={t("tabs.discipleship")}
+              description={t("placeholders.discipleship")}
+            />
+          ) : (
+            <Card>
+              <CardContent className="pt-6">
+                <ul className="flex flex-col gap-2 text-sm">
+                  {milestones.map((m) => (
+                    <li
+                      key={m.id}
+                      className="flex items-center justify-between gap-2 rounded-md border p-3"
+                    >
+                      <div className="flex flex-col">
+                        <span className="font-medium">
+                          {tMilestone(milestoneTypeKey(m.type))}
+                        </span>
+                        {m.notes ? (
+                          <span className="text-xs text-muted-foreground">
+                            {m.notes}
+                          </span>
+                        ) : null}
+                      </div>
+                      <span className="text-xs tabular-nums text-muted-foreground">
+                        {format(m.achievedAt, "dd MMM yyyy")}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+                <Button asChild variant="outline" size="sm" className="mt-4">
+                  <Link href={`/admin/discipleship/new?member=${id}`}>
+                    + {t("discipleship.addMilestone")}
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+          )}
         </TabsContent>
         {canPastoral ? (
           <TabsContent value="pastoral" className="mt-6">
@@ -465,6 +503,29 @@ function givingMethodKey(m: string): string {
       return "cash";
     case "CARD":
       return "card";
+    default:
+      return "other";
+  }
+}
+
+function milestoneTypeKey(type: string): string {
+  switch (type) {
+    case "DECISION_TO_FOLLOW":
+      return "decisionToFollow";
+    case "BAPTISM":
+      return "baptism";
+    case "MEMBERSHIP":
+      return "membership";
+    case "FOUNDATIONS_CLASS":
+      return "foundationsClass";
+    case "DISCIPLESHIP_CLASS":
+      return "discipleshipClass";
+    case "LEADERSHIP_TRAINING":
+      return "leadershipTraining";
+    case "CELL_GROUP_LEADER":
+      return "cellGroupLeader";
+    case "MISSION_TRIP":
+      return "missionTrip";
     default:
       return "other";
   }
