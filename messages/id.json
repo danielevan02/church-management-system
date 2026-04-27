@@ -44,7 +44,8 @@
     "prayerRequests": "Doa & Permohonan",
     "myCheckIn": "Check-in",
     "myVolunteer": "Pelayanan Saya",
-    "myDiscipleship": "Perjalanan Saya"
+    "myDiscipleship": "Perjalanan Saya",
+    "prayerRequestsAdmin": "Permintaan Doa"
   },
   "auth": {
     "signIn": {
@@ -229,6 +230,41 @@
         "closed": "Jendela check-in untuk ibadah ini sudah ditutup.",
         "generic": "Gagal check-in. Coba lagi."
       }
+    },
+    "prayerRequests": {
+      "title": "Permintaan Doa",
+      "subtitle": "Kirim pokok doa kepada tim pastoral.",
+      "newButton": "Permintaan baru",
+      "empty": "Anda belum mengirim permintaan doa.",
+      "emptyCta": "Kirim sekarang",
+      "untitled": "(tanpa judul)",
+      "anonymous": "Anonim",
+      "public": "Publik",
+      "edit": "Ubah",
+      "cancel": "Batalkan",
+      "cancelledToast": "Permintaan doa dibatalkan.",
+      "confirmCancel": "Batalkan permintaan doa ini?",
+      "errorToast": "Aksi gagal.",
+      "back": "Kembali",
+      "newTitle": "Kirim permintaan doa",
+      "newSubtitle": "Bagikan apa yang ada di hati Anda. Tim pastoral akan mendoakan secara pribadi kecuali Anda menandai publik.",
+      "editTitle": "Ubah permintaan doa",
+      "editSubmit": "Simpan perubahan",
+      "submit": "Kirim",
+      "form": {
+        "fields": {
+          "title": "Judul",
+          "titlePlaceholder": "Ringkasan singkat (opsional)",
+          "body": "Permintaan",
+          "bodyPlaceholder": "Tulis permintaan doa Anda di sini…",
+          "isAnonymous": "Kirim secara anonim",
+          "isAnonymousHint": "Nama Anda tidak akan ditampilkan di daftar admin.",
+          "isPublic": "Boleh dibagikan ke prayer wall (rencana ke depan)",
+          "isPublicHint": "Opsional. Tetap pribadi sampai gereja mengaktifkan fitur ini."
+        },
+        "savedToast": "Permintaan doa tersimpan.",
+        "errorToast": "Gagal menyimpan."
+      }
     }
   },
   "members": {
@@ -367,7 +403,7 @@
         "giving": "Belum ada catatan persembahan untuk jemaat ini.",
         "events": "RSVP acara muncul setelah Phase 8 (Events).",
         "discipleship": "Milestone pemuridan muncul setelah Phase 11.",
-        "pastoral": "Catatan penggembalaan muncul setelah Phase 11. Hanya admin yang bisa melihat."
+        "pastoral": "Belum ada kunjungan pastoral."
       },
       "giving": {
         "totalThisYear": "Total tahun ini",
@@ -375,6 +411,10 @@
       },
       "discipleship": {
         "addMilestone": "Tambah Milestone"
+      },
+      "pastoral": {
+        "addVisit": "Tambah kunjungan",
+        "followUpLabel": "Tindak lanjut"
       }
     },
     "delete": {
@@ -1260,5 +1300,98 @@
     "step2": "Simpan bukti transfer.",
     "step3": "Tunggu admin merekonsiliasi mutasi bank — riwayat akan muncul di profil Anda.",
     "step3WithWa": "Konfirmasi ke admin gereja via <a>WhatsApp</a> dengan mengirim bukti transfer."
+  },
+  "pastoral": {
+    "visitType": {
+      "hospital": "Rumah sakit",
+      "home": "Rumah",
+      "office": "Kantor",
+      "phone": "Telepon",
+      "other": "Lainnya"
+    },
+    "list": {
+      "title": "Kunjungan Pastoral",
+      "subtitle": "{total} kunjungan tercatat.",
+      "newButton": "Kunjungan baru",
+      "empty": "Belum ada kunjungan pastoral.",
+      "colMember": "Jemaat",
+      "colType": "Jenis",
+      "colVisitedAt": "Tanggal",
+      "colVisitedBy": "Oleh",
+      "colFollowUp": "Tindak lanjut",
+      "colActions": "Aksi",
+      "edit": "Ubah"
+    },
+    "new": {
+      "title": "Catat kunjungan pastoral",
+      "subtitle": "Catat konteks dan tindak lanjut yang dibutuhkan.",
+      "submit": "Simpan kunjungan"
+    },
+    "edit": {
+      "title": "Ubah kunjungan pastoral",
+      "submit": "Simpan perubahan",
+      "back": "Kembali ke daftar"
+    },
+    "detail": {
+      "delete": "Hapus",
+      "confirmDelete": "Hapus kunjungan ini?",
+      "deletedToast": "Kunjungan dihapus.",
+      "errorToast": "Aksi gagal."
+    },
+    "form": {
+      "fields": {
+        "member": "Jemaat",
+        "memberPlaceholder": "Cari jemaat…",
+        "visitType": "Jenis kunjungan",
+        "visitedAt": "Tanggal kunjungan",
+        "notes": "Catatan",
+        "notesPlaceholder": "Apa yang dibahas, pokok doa, observasi…",
+        "followUp": "Rencana tindak lanjut",
+        "followUpPlaceholder": "Apa yang perlu dilakukan selanjutnya?",
+        "followUpDate": "Tanggal tindak lanjut"
+      },
+      "savedToast": "Kunjungan tersimpan.",
+      "errorToast": "Gagal menyimpan."
+    }
+  },
+  "prayerRequests": {
+    "status": {
+      "open": "Terbuka",
+      "praying": "Sedang didoakan",
+      "answered": "Dijawab",
+      "archived": "Diarsipkan"
+    },
+    "list": {
+      "title": "Permintaan Doa",
+      "subtitle": "{total} permintaan.",
+      "empty": "Belum ada permintaan doa.",
+      "filterAll": "Semua",
+      "colMember": "Dari",
+      "colTitle": "Permintaan",
+      "colVisibility": "Visibilitas",
+      "colCreatedAt": "Dikirim",
+      "colStatus": "Status",
+      "colActions": "Aksi",
+      "anonymous": "Anonim",
+      "anon": "Anon",
+      "public": "Publik",
+      "untitled": "(tanpa judul)",
+      "view": "Lihat"
+    },
+    "detail": {
+      "back": "Kembali ke permintaan doa",
+      "body": "Permintaan",
+      "meta": "Detail",
+      "submittedBy": "Dikirim oleh",
+      "createdAt": "Tanggal kirim",
+      "status": "Status",
+      "visibility": "Visibilitas",
+      "privateOnly": "Hanya terlihat oleh admin",
+      "statusUpdatedToast": "Status diperbarui.",
+      "delete": "Hapus",
+      "confirmDelete": "Hapus permintaan doa ini? Tidak bisa dikembalikan.",
+      "deletedToast": "Permintaan doa dihapus.",
+      "errorToast": "Aksi gagal."
+    }
   }
 }

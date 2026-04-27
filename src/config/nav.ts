@@ -119,9 +119,15 @@ export const adminNav: readonly AdminNavItem[] = [
     labelKey: "nav.pastoral",
     icon: HeartHandshake,
     group: "documents",
-    roles: ["SUPER_ADMIN", "ADMIN"],
+    roles: ["SUPER_ADMIN", "ADMIN", "STAFF", "LEADER"],
     feature: "pastoralCare",
-    comingSoon: true,
+  },
+  {
+    href: "/admin/prayer-requests",
+    labelKey: "nav.prayerRequestsAdmin",
+    icon: Heart,
+    group: "documents",
+    roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
   },
   {
     href: "/admin/discipleship",
@@ -233,6 +239,5 @@ export const memberNav: readonly MemberNavItem[] = [
     href: "/me/prayer-requests",
     labelKey: "nav.prayerRequests",
     icon: Heart,
-    comingSoon: true,
   },
 ] as const;
