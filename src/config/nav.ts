@@ -4,14 +4,16 @@ import {
   BarChart3,
   Calendar,
   HandCoins,
-  HeartHandshake,
   Heart,
+  HeartHandshake,
   Home,
   LayoutDashboard,
   MessageSquare,
+  QrCode,
   Settings,
   Sprout,
   UserCheck,
+  UserCircle,
   Users,
   UsersRound,
 } from "lucide-react";
@@ -27,6 +29,57 @@ export type AdminNavItem = {
   /** Set to true while the destination route hasn't been built yet. */
   comingSoon?: boolean;
 };
+
+export type MemberNavItem = {
+  href: string;
+  labelKey: string;
+  icon: LucideIcon;
+  feature?: FeatureFlag;
+  comingSoon?: boolean;
+};
+
+export const memberNav: readonly MemberNavItem[] = [
+  {
+    href: "/me/dashboard",
+    labelKey: "nav.myDashboard",
+    icon: LayoutDashboard,
+  },
+  {
+    href: "/me/profile",
+    labelKey: "nav.myProfile",
+    icon: UserCircle,
+  },
+  {
+    href: "/me/qr",
+    labelKey: "nav.myQr",
+    icon: QrCode,
+  },
+  {
+    href: "/me/cell-group",
+    labelKey: "nav.myCellGroup",
+    icon: UsersRound,
+    comingSoon: true,
+  },
+  {
+    href: "/me/giving",
+    labelKey: "nav.myGiving",
+    icon: HandCoins,
+    feature: "giving",
+    comingSoon: true,
+  },
+  {
+    href: "/me/events",
+    labelKey: "nav.myEvents",
+    icon: Calendar,
+    comingSoon: true,
+  },
+  {
+    href: "/me/prayer-requests",
+    labelKey: "nav.prayerRequests",
+    icon: Heart,
+    comingSoon: true,
+  },
+] as const;
 
 export const adminNav: readonly AdminNavItem[] = [
   {

@@ -79,7 +79,55 @@
     },
     "member": {
       "title": "My dashboard",
-      "welcome": "Hi, {name}."
+      "welcome": "Hi, {name}.",
+      "quickActions": {
+        "myQr": "My QR",
+        "myProfile": "Profile",
+        "giveNow": "Give now",
+        "events": "Events"
+      },
+      "nextService": "Next service",
+      "noNextService": "No upcoming services scheduled.",
+      "myCellGroup": "My cell group",
+      "noCellGroup": "You are not in any cell group yet.",
+      "phaseNote": {
+        "title": "Welcome to the member portal",
+        "description": "Your QR and profile are live. Giving history, event RSVPs, and full cell-group info will arrive in later phases."
+      }
+    }
+  },
+  "memberPortal": {
+    "profile": {
+      "title": "My profile",
+      "subtitle": "Some fields can only be changed by an administrator.",
+      "submit": "Save changes",
+      "savedToast": "Profile saved.",
+      "errorToast": "Save failed.",
+      "readonly": {
+        "title": "Identity",
+        "description": "Contact the administrator if anything needs to change."
+      },
+      "editable": {
+        "title": "Things you can edit",
+        "description": "Update your contact info, address, and communication preferences."
+      },
+      "fields": {
+        "fullName": "Full name",
+        "gender": "Gender",
+        "birthDate": "Date of birth",
+        "status": "Member status",
+        "joinedAt": "Joined",
+        "baptismDate": "Baptism date",
+        "baptismChurch": "Baptism church"
+      }
+    },
+    "qr": {
+      "title": "My QR",
+      "subtitle": "Show this code to an usher for quick check-in.",
+      "description": "This QR contains a signed token. Valid for 1 year.",
+      "alt": "QR for {name}",
+      "download": "Download QR",
+      "warning": "Don't share this QR with anyone — it's for your check-in only."
     }
   },
   "members": {

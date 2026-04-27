@@ -79,7 +79,55 @@
     },
     "member": {
       "title": "Dasbor Saya",
-      "welcome": "Halo, {name}."
+      "welcome": "Halo, {name}.",
+      "quickActions": {
+        "myQr": "QR Saya",
+        "myProfile": "Profil",
+        "giveNow": "Beri Persembahan",
+        "events": "Acara"
+      },
+      "nextService": "Ibadah Berikutnya",
+      "noNextService": "Belum ada jadwal ibadah aktif.",
+      "myCellGroup": "Komsel Saya",
+      "noCellGroup": "Anda belum tergabung di komsel manapun.",
+      "phaseNote": {
+        "title": "Selamat datang di portal jemaat",
+        "description": "QR pribadi & profil sudah aktif. History persembahan, RSVP acara, dan info komsel lengkap akan terisi di phase berikutnya."
+      }
+    }
+  },
+  "memberPortal": {
+    "profile": {
+      "title": "Profil Saya",
+      "subtitle": "Beberapa data hanya bisa diubah oleh pengurus.",
+      "submit": "Simpan Perubahan",
+      "savedToast": "Profil tersimpan.",
+      "errorToast": "Gagal menyimpan.",
+      "readonly": {
+        "title": "Data Identitas",
+        "description": "Hubungi pengurus jika ada yang perlu diubah."
+      },
+      "editable": {
+        "title": "Data yang Bisa Anda Ubah",
+        "description": "Update kontak, alamat, dan preferensi komunikasi."
+      },
+      "fields": {
+        "fullName": "Nama lengkap",
+        "gender": "Jenis kelamin",
+        "birthDate": "Tanggal lahir",
+        "status": "Status jemaat",
+        "joinedAt": "Bergabung",
+        "baptismDate": "Tanggal baptis",
+        "baptismChurch": "Gereja baptis"
+      }
+    },
+    "qr": {
+      "title": "QR Saya",
+      "subtitle": "Tunjukkan QR ini ke usher untuk check-in cepat.",
+      "description": "QR ini berisi token tertanda. Berlaku 1 tahun.",
+      "alt": "QR untuk {name}",
+      "download": "Unduh QR",
+      "warning": "Jangan bagikan QR ini ke orang lain — gunakan hanya untuk check-in pribadi."
     }
   },
   "members": {
