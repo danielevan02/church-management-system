@@ -83,20 +83,26 @@ export default async function MemberDetailPage({
         </div>
       </header>
 
-      <Tabs defaultValue="profile" className="w-full">
-        <TabsList className="grid grid-cols-3 lg:grid-cols-7">
-          <TabsTrigger value="profile">{t("tabs.profile")}</TabsTrigger>
-          <TabsTrigger value="cellGroups">{t("tabs.cellGroups")}</TabsTrigger>
-          <TabsTrigger value="attendance">{t("tabs.attendance")}</TabsTrigger>
-          <TabsTrigger value="giving">{t("tabs.giving")}</TabsTrigger>
-          <TabsTrigger value="events">{t("tabs.events")}</TabsTrigger>
-          <TabsTrigger value="discipleship">
-            {t("tabs.discipleship")}
-          </TabsTrigger>
-          {canPastoral ? (
-            <TabsTrigger value="pastoral">{t("tabs.pastoral")}</TabsTrigger>
-          ) : null}
-        </TabsList>
+      <Tabs defaultValue="profile" className="w-full min-w-0">
+        <div className="-mx-1 overflow-x-auto px-1 pb-1">
+          <TabsList>
+            <TabsTrigger value="profile">{t("tabs.profile")}</TabsTrigger>
+            <TabsTrigger value="cellGroups">
+              {t("tabs.cellGroups")}
+            </TabsTrigger>
+            <TabsTrigger value="attendance">
+              {t("tabs.attendance")}
+            </TabsTrigger>
+            <TabsTrigger value="giving">{t("tabs.giving")}</TabsTrigger>
+            <TabsTrigger value="events">{t("tabs.events")}</TabsTrigger>
+            <TabsTrigger value="discipleship">
+              {t("tabs.discipleship")}
+            </TabsTrigger>
+            {canPastoral ? (
+              <TabsTrigger value="pastoral">{t("tabs.pastoral")}</TabsTrigger>
+            ) : null}
+          </TabsList>
+        </div>
 
         <TabsContent value="profile" className="mt-6">
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">

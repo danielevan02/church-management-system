@@ -28,6 +28,13 @@
     "discipleship": "Pemuridan",
     "reports": "Laporan",
     "settings": "Pengaturan",
+    "help": "Bantuan",
+    "search": "Cari",
+    "modulesGroup": "Modul",
+    "quick": {
+      "create": "Tambah Cepat",
+      "inbox": "Kotak Masuk"
+    },
     "myDashboard": "Dasbor Saya",
     "myProfile": "Profil Saya",
     "myQr": "QR Saya",

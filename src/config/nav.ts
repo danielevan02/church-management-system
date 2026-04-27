@@ -6,10 +6,12 @@ import {
   HandCoins,
   Heart,
   HeartHandshake,
+  HelpCircle,
   Home,
   LayoutDashboard,
   MessageSquare,
   QrCode,
+  Search,
   Settings,
   Sprout,
   UserCheck,
@@ -20,15 +22,161 @@ import {
 
 import type { FeatureFlag } from "@/config/features";
 
+export type AdminNavGroup = "main" | "documents" | "secondary";
+
 export type AdminNavItem = {
   href: string;
   labelKey: string;
   icon: LucideIcon;
+  group: AdminNavGroup;
   roles: readonly Role[];
   feature?: FeatureFlag;
   /** Set to true while the destination route hasn't been built yet. */
   comingSoon?: boolean;
 };
+
+export const adminNav: readonly AdminNavItem[] = [
+  // === MAIN ===
+  {
+    href: "/admin/dashboard",
+    labelKey: "nav.dashboard",
+    icon: LayoutDashboard,
+    group: "main",
+    roles: ["SUPER_ADMIN", "ADMIN", "STAFF", "LEADER"],
+  },
+  {
+    href: "/admin/members",
+    labelKey: "nav.members",
+    icon: Users,
+    group: "main",
+    roles: ["SUPER_ADMIN", "ADMIN", "STAFF", "LEADER"],
+  },
+  {
+    href: "/admin/households",
+    labelKey: "nav.households",
+    icon: Home,
+    group: "main",
+    roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
+  },
+  {
+    href: "/admin/cell-groups",
+    labelKey: "nav.cellGroups",
+    icon: UsersRound,
+    group: "main",
+    roles: ["SUPER_ADMIN", "ADMIN", "STAFF", "LEADER"],
+    comingSoon: true,
+  },
+  {
+    href: "/admin/attendance",
+    labelKey: "nav.attendance",
+    icon: UserCheck,
+    group: "main",
+    roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
+    comingSoon: true,
+  },
+  {
+    href: "/admin/giving",
+    labelKey: "nav.giving",
+    icon: HandCoins,
+    group: "main",
+    roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
+    feature: "giving",
+    comingSoon: true,
+  },
+  {
+    href: "/admin/events",
+    labelKey: "nav.events",
+    icon: Calendar,
+    group: "main",
+    roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
+    comingSoon: true,
+  },
+
+  // === DOCUMENTS / MODUL ===
+  {
+    href: "/admin/communications",
+    labelKey: "nav.communications",
+    icon: MessageSquare,
+    group: "documents",
+    roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
+    feature: "whatsappBroadcast",
+    comingSoon: true,
+  },
+  {
+    href: "/admin/volunteers",
+    labelKey: "nav.volunteers",
+    icon: HeartHandshake,
+    group: "documents",
+    roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
+    feature: "volunteers",
+    comingSoon: true,
+  },
+  {
+    href: "/admin/children",
+    labelKey: "nav.children",
+    icon: Heart,
+    group: "documents",
+    roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
+    feature: "childrensCheckIn",
+    comingSoon: true,
+  },
+  {
+    href: "/admin/pastoral",
+    labelKey: "nav.pastoral",
+    icon: HeartHandshake,
+    group: "documents",
+    roles: ["SUPER_ADMIN", "ADMIN"],
+    feature: "pastoralCare",
+    comingSoon: true,
+  },
+  {
+    href: "/admin/discipleship",
+    labelKey: "nav.discipleship",
+    icon: Sprout,
+    group: "documents",
+    roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
+    feature: "discipleship",
+    comingSoon: true,
+  },
+  {
+    href: "/admin/reports",
+    labelKey: "nav.reports",
+    icon: BarChart3,
+    group: "documents",
+    roles: ["SUPER_ADMIN", "ADMIN"],
+    comingSoon: true,
+  },
+
+  // === SECONDARY ===
+  {
+    href: "/admin/settings",
+    labelKey: "nav.settings",
+    icon: Settings,
+    group: "secondary",
+    roles: ["SUPER_ADMIN", "ADMIN"],
+    comingSoon: true,
+  },
+  {
+    href: "/admin/help",
+    labelKey: "nav.help",
+    icon: HelpCircle,
+    group: "secondary",
+    roles: ["SUPER_ADMIN", "ADMIN", "STAFF", "LEADER"],
+    comingSoon: true,
+  },
+  {
+    href: "/admin/search",
+    labelKey: "nav.search",
+    icon: Search,
+    group: "secondary",
+    roles: ["SUPER_ADMIN", "ADMIN", "STAFF", "LEADER"],
+    comingSoon: true,
+  },
+] as const;
+
+export function visibleAdminNav(role: Role): readonly AdminNavItem[] {
+  return adminNav.filter((item) => item.roles.includes(role));
+}
 
 export type MemberNavItem = {
   href: string;
@@ -80,111 +228,3 @@ export const memberNav: readonly MemberNavItem[] = [
     comingSoon: true,
   },
 ] as const;
-
-export const adminNav: readonly AdminNavItem[] = [
-  {
-    href: "/admin/dashboard",
-    labelKey: "nav.dashboard",
-    icon: LayoutDashboard,
-    roles: ["SUPER_ADMIN", "ADMIN", "STAFF", "LEADER"],
-  },
-  {
-    href: "/admin/members",
-    labelKey: "nav.members",
-    icon: Users,
-    roles: ["SUPER_ADMIN", "ADMIN", "STAFF", "LEADER"],
-  },
-  {
-    href: "/admin/households",
-    labelKey: "nav.households",
-    icon: Home,
-    roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
-  },
-  {
-    href: "/admin/cell-groups",
-    labelKey: "nav.cellGroups",
-    icon: UsersRound,
-    roles: ["SUPER_ADMIN", "ADMIN", "STAFF", "LEADER"],
-    comingSoon: true,
-  },
-  {
-    href: "/admin/attendance",
-    labelKey: "nav.attendance",
-    icon: UserCheck,
-    roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
-    comingSoon: true,
-  },
-  {
-    href: "/admin/giving",
-    labelKey: "nav.giving",
-    icon: HandCoins,
-    roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
-    feature: "giving",
-    comingSoon: true,
-  },
-  {
-    href: "/admin/events",
-    labelKey: "nav.events",
-    icon: Calendar,
-    roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
-    comingSoon: true,
-  },
-  {
-    href: "/admin/communications",
-    labelKey: "nav.communications",
-    icon: MessageSquare,
-    roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
-    feature: "whatsappBroadcast",
-    comingSoon: true,
-  },
-  {
-    href: "/admin/volunteers",
-    labelKey: "nav.volunteers",
-    icon: HeartHandshake,
-    roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
-    feature: "volunteers",
-    comingSoon: true,
-  },
-  {
-    href: "/admin/children",
-    labelKey: "nav.children",
-    icon: Heart,
-    roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
-    feature: "childrensCheckIn",
-    comingSoon: true,
-  },
-  {
-    href: "/admin/pastoral",
-    labelKey: "nav.pastoral",
-    icon: HeartHandshake,
-    roles: ["SUPER_ADMIN", "ADMIN"],
-    feature: "pastoralCare",
-    comingSoon: true,
-  },
-  {
-    href: "/admin/discipleship",
-    labelKey: "nav.discipleship",
-    icon: Sprout,
-    roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
-    feature: "discipleship",
-    comingSoon: true,
-  },
-  {
-    href: "/admin/reports",
-    labelKey: "nav.reports",
-    icon: BarChart3,
-    roles: ["SUPER_ADMIN", "ADMIN"],
-    comingSoon: true,
-  },
-  {
-    href: "/admin/settings",
-    labelKey: "nav.settings",
-    icon: Settings,
-    roles: ["SUPER_ADMIN", "ADMIN"],
-    comingSoon: true,
-  },
-] as const;
-
-export function visibleAdminNav(role: Role): readonly AdminNavItem[] {
-  return adminNav.filter((item) => item.roles.includes(role));
-}

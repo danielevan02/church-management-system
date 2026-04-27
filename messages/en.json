@@ -28,6 +28,13 @@
     "discipleship": "Discipleship",
     "reports": "Reports",
     "settings": "Settings",
+    "help": "Help",
+    "search": "Search",
+    "modulesGroup": "Modules",
+    "quick": {
+      "create": "Quick Create",
+      "inbox": "Inbox"
+    },
     "myDashboard": "My dashboard",
     "myProfile": "My profile",
     "myQr": "My QR",
