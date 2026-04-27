@@ -155,6 +155,17 @@
       "noteDescription": "Your giving will show up in your history once an administrator records it.",
       "noteBody": "Admins reconcile transfers against the bank statement and post each entry to your history. If you don't see it after a few days, you can ping the church admin via WhatsApp."
     },
+    "cellGroup": {
+      "title": "My cell group",
+      "subtitle": "Schedule and members of your cell group.",
+      "empty": "You're not in any cell group yet. Talk to your leader if you'd like to join one.",
+      "dayLabel": "Day",
+      "timeLabel": "Time",
+      "locationLabel": "Location",
+      "leaderLabel": "Leader",
+      "memberSince": "Member since {date}",
+      "membersTitle": "Members ({count})"
+    },
     "checkIn": {
       "title": "Check-in",
       "subtitle": "Mark your attendance for today's service.",
@@ -709,6 +720,100 @@
       "recordsAbbr": "records",
       "chart": {
         "total": "Total"
+      }
+    }
+  },
+  "cellGroups": {
+    "day": {
+      "MON": "Monday",
+      "TUE": "Tuesday",
+      "WED": "Wednesday",
+      "THU": "Thursday",
+      "FRI": "Friday",
+      "SAT": "Saturday",
+      "SUN": "Sunday"
+    },
+    "list": {
+      "title": "Cell groups",
+      "subtitle": "{total} groups.",
+      "newButton": "New group",
+      "empty": "No cell groups yet.",
+      "leaderLabel": "Leader",
+      "membersAbbr": "members",
+      "statusActive": "Active",
+      "statusInactive": "Inactive"
+    },
+    "new": {
+      "title": "New cell group",
+      "subtitle": "Set up a new komsel with its leader and meeting schedule.",
+      "submit": "Save"
+    },
+    "edit": {
+      "title": "Edit cell group",
+      "submit": "Save changes"
+    },
+    "form": {
+      "savedToast": "Cell group saved.",
+      "errorToast": "Save failed.",
+      "fields": {
+        "name": "Name",
+        "description": "Description",
+        "leader": "Leader",
+        "leaderPlaceholder": "Pick a leader…",
+        "parentGroup": "Parent group",
+        "noParent": "— No parent —",
+        "meetingDay": "Meeting day",
+        "meetingTime": "Meeting time",
+        "meetingLocation": "Meeting location",
+        "isActive": "Active"
+      }
+    },
+    "detail": {
+      "backToList": "All groups",
+      "edit": "Edit",
+      "submitReport": "Submit report",
+      "statusActive": "Active",
+      "statusInactive": "Inactive",
+      "parentLabel": "Parent",
+      "scheduleTitle": "Schedule",
+      "leaderTitle": "Leader",
+      "childGroupsTitle": "Child groups",
+      "dayLabel": "Day",
+      "timeLabel": "Time",
+      "locationLabel": "Location",
+      "membersTitle": "Members",
+      "membersDescription": "{count} active members.",
+      "membersEmpty": "No members yet.",
+      "joinedOn": "Joined",
+      "remove": "Remove",
+      "removedToast": "Removed from group.",
+      "errorToast": "Action failed.",
+      "confirmRemove": "Remove this member from the group?",
+      "reportsTitle": "Recent reports",
+      "reportsDescription": "Last 10 meeting reports.",
+      "reportsEmpty": "No reports submitted yet.",
+      "attendeesAbbr": "attendees",
+      "visitorsAbbr": "visitors",
+      "assign": {
+        "memberPlaceholder": "Search a member to add…",
+        "submit": "Add",
+        "addedToast": "Added to group.",
+        "alreadyMember": "Already a member.",
+        "errorToast": "Failed to add."
+      }
+    },
+    "report": {
+      "title": "Submit meeting report",
+      "subtitle": "Record attendance, topic, and notes for a komsel meeting.",
+      "submit": "Save",
+      "savedToast": "Report saved.",
+      "errorToast": "Save failed.",
+      "fields": {
+        "meetingDate": "Meeting date",
+        "attendeeCount": "Attendees",
+        "visitorCount": "Visitors",
+        "topic": "Topic",
+        "notes": "Notes"
       }
     }
   },

@@ -64,7 +64,6 @@ export const adminNav: readonly AdminNavItem[] = [
     icon: UsersRound,
     group: "main",
     roles: ["SUPER_ADMIN", "ADMIN", "STAFF", "LEADER"],
-    comingSoon: true,
   },
   {
     href: "/admin/attendance",
@@ -210,7 +209,6 @@ export const memberNav: readonly MemberNavItem[] = [
     href: "/me/cell-group",
     labelKey: "nav.myCellGroup",
     icon: UsersRound,
-    comingSoon: true,
   },
   {
     href: "/me/giving",
