@@ -155,6 +155,17 @@
       "noteDescription": "Persembahan Anda akan muncul di riwayat setelah admin mencatatnya.",
       "noteBody": "Admin merekonsiliasi mutasi bank dan mencatat setiap entri ke riwayat Anda. Jika setelah beberapa hari belum muncul, hubungi admin gereja via WhatsApp."
     },
+    "cellGroup": {
+      "title": "Komsel Saya",
+      "subtitle": "Jadwal dan anggota komsel Anda.",
+      "empty": "Anda belum tergabung di komsel manapun. Hubungi pengurus jika ingin gabung.",
+      "dayLabel": "Hari",
+      "timeLabel": "Jam",
+      "locationLabel": "Lokasi",
+      "leaderLabel": "Pemimpin",
+      "memberSince": "Bergabung sejak {date}",
+      "membersTitle": "Anggota ({count})"
+    },
     "checkIn": {
       "title": "Check-in",
       "subtitle": "Tandai kehadiran Anda untuk ibadah hari ini.",
@@ -709,6 +720,100 @@
       "recordsAbbr": "catatan",
       "chart": {
         "total": "Total"
+      }
+    }
+  },
+  "cellGroups": {
+    "day": {
+      "MON": "Senin",
+      "TUE": "Selasa",
+      "WED": "Rabu",
+      "THU": "Kamis",
+      "FRI": "Jumat",
+      "SAT": "Sabtu",
+      "SUN": "Minggu"
+    },
+    "list": {
+      "title": "Komsel",
+      "subtitle": "{total} komsel.",
+      "newButton": "Tambah Komsel",
+      "empty": "Belum ada komsel.",
+      "leaderLabel": "Pemimpin",
+      "membersAbbr": "anggota",
+      "statusActive": "Aktif",
+      "statusInactive": "Nonaktif"
+    },
+    "new": {
+      "title": "Tambah Komsel",
+      "subtitle": "Set up komsel baru dengan pemimpin dan jadwal pertemuannya.",
+      "submit": "Simpan"
+    },
+    "edit": {
+      "title": "Ubah Komsel",
+      "submit": "Simpan Perubahan"
+    },
+    "form": {
+      "savedToast": "Komsel tersimpan.",
+      "errorToast": "Gagal menyimpan.",
+      "fields": {
+        "name": "Nama",
+        "description": "Deskripsi",
+        "leader": "Pemimpin",
+        "leaderPlaceholder": "Pilih pemimpin…",
+        "parentGroup": "Komsel induk",
+        "noParent": "— Tidak ada —",
+        "meetingDay": "Hari pertemuan",
+        "meetingTime": "Jam pertemuan",
+        "meetingLocation": "Lokasi pertemuan",
+        "isActive": "Aktif"
+      }
+    },
+    "detail": {
+      "backToList": "Daftar komsel",
+      "edit": "Ubah",
+      "submitReport": "Kirim Laporan",
+      "statusActive": "Aktif",
+      "statusInactive": "Nonaktif",
+      "parentLabel": "Induk",
+      "scheduleTitle": "Jadwal",
+      "leaderTitle": "Pemimpin",
+      "childGroupsTitle": "Komsel cabang",
+      "dayLabel": "Hari",
+      "timeLabel": "Jam",
+      "locationLabel": "Lokasi",
+      "membersTitle": "Anggota",
+      "membersDescription": "{count} anggota aktif.",
+      "membersEmpty": "Belum ada anggota.",
+      "joinedOn": "Bergabung",
+      "remove": "Keluarkan",
+      "removedToast": "Dikeluarkan dari komsel.",
+      "errorToast": "Aksi gagal.",
+      "confirmRemove": "Keluarkan anggota ini dari komsel?",
+      "reportsTitle": "Laporan Terbaru",
+      "reportsDescription": "10 laporan pertemuan terakhir.",
+      "reportsEmpty": "Belum ada laporan yang dikirim.",
+      "attendeesAbbr": "hadir",
+      "visitorsAbbr": "tamu",
+      "assign": {
+        "memberPlaceholder": "Cari jemaat untuk ditambah…",
+        "submit": "Tambah",
+        "addedToast": "Ditambahkan ke komsel.",
+        "alreadyMember": "Sudah jadi anggota.",
+        "errorToast": "Gagal menambahkan."
+      }
+    },
+    "report": {
+      "title": "Kirim Laporan Pertemuan",
+      "subtitle": "Catat kehadiran, topik, dan catatan dari pertemuan komsel.",
+      "submit": "Simpan",
+      "savedToast": "Laporan tersimpan.",
+      "errorToast": "Gagal menyimpan.",
+      "fields": {
+        "meetingDate": "Tanggal pertemuan",
+        "attendeeCount": "Jumlah hadir",
+        "visitorCount": "Jumlah tamu",
+        "topic": "Topik",
+        "notes": "Catatan"
       }
     }
   },
