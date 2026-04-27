@@ -20,6 +20,7 @@ import { auth } from "@/lib/auth";
 import { formatRupiah } from "@/lib/format";
 import { Link } from "@/lib/i18n/navigation";
 import { getAttendanceForMember } from "@/server/queries/attendance";
+import { getRsvpsForMember } from "@/server/queries/events";
 import { getGivingForMember } from "@/server/queries/giving";
 import { getMember } from "@/server/queries/members";
 
@@ -43,9 +44,11 @@ export default async function MemberDetailPage({
   const tType = await getTranslations("services.type");
   const tFundCategory = await getTranslations("giving.fund.category");
   const tMethod = await getTranslations("giving.method");
-  const [attendanceHistory, givingHistory] = await Promise.all([
+  const tRsvp = await getTranslations("events.rsvpStatus");
+  const [attendanceHistory, givingHistory, rsvpHistory] = await Promise.all([
     getAttendanceForMember(id, 25),
     getGivingForMember(id, 25),
+    getRsvpsForMember(id, 25),
   ]);
 
   const canPastoral =
@@ -346,10 +349,39 @@ export default async function MemberDetailPage({
           )}
         </TabsContent>
         <TabsContent value="events" className="mt-6">
-          <PlaceholderCard
-            title={t("tabs.events")}
-            description={t("placeholders.events")}
-          />
+          {rsvpHistory.length === 0 ? (
+            <PlaceholderCard
+              title={t("tabs.events")}
+              description={t("placeholders.events")}
+            />
+          ) : (
+            <Card>
+              <CardContent className="pt-6">
+                <ul className="flex flex-col gap-2 text-sm">
+                  {rsvpHistory.map((row) => (
+                    <li
+                      key={row.id}
+                      className="flex items-center justify-between gap-2 rounded-md border p-3"
+                    >
+                      <div className="flex flex-col">
+                        <Link
+                          href={`/admin/events/${row.event.id}`}
+                          className="font-medium hover:underline"
+                        >
+                          {row.event.title}
+                        </Link>
+                        <span className="text-xs text-muted-foreground">
+                          {format(row.event.startsAt, "EEE dd MMM yyyy, HH:mm")}
+                          {row.event.location ? ` · ${row.event.location}` : ""}
+                        </span>
+                      </div>
+                      <Badge>{tRsvp(rsvpStatusKey(row.status))}</Badge>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          )}
         </TabsContent>
         <TabsContent value="discipleship" className="mt-6">
           <PlaceholderCard
@@ -435,5 +467,20 @@ function givingMethodKey(m: string): string {
       return "card";
     default:
       return "other";
+  }
+}
+
+function rsvpStatusKey(s: string): string {
+  switch (s) {
+    case "GOING":
+      return "going";
+    case "MAYBE":
+      return "maybe";
+    case "NOT_GOING":
+      return "notGoing";
+    case "WAITLIST":
+      return "waitlist";
+    default:
+      return s.toLowerCase();
   }
 }

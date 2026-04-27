@@ -86,7 +86,6 @@ export default async function MemberDashboardPage() {
           href="/me/events"
           icon={Calendar}
           label={tQuick("events")}
-          disabled
         />
       </div>
 

@@ -155,6 +155,31 @@
       "noteDescription": "Your giving will show up in your history once an administrator records it.",
       "noteBody": "Admins reconcile transfers against the bank statement and post each entry to your history. If you don't see it after a few days, you can ping the church admin via WhatsApp."
     },
+    "events": {
+      "title": "My events",
+      "subtitle": "Upcoming events you can RSVP to.",
+      "empty": "No upcoming events right now.",
+      "rsvpsAbbr": "going",
+      "going": "Going",
+      "maybe": "Maybe",
+      "notGoing": "Not going",
+      "waitlistLabel": "Waitlisted",
+      "clearRsvp": "Clear RSVP",
+      "rsvpSavedToast": "RSVP saved.",
+      "waitlistedToast": "Event is full — added to waitlist.",
+      "rsvpRemovedToast": "RSVP removed.",
+      "registrationClosed": "Registration is closed.",
+      "errorToast": "Action failed.",
+      "detail": {
+        "backToList": "All events",
+        "statusPast": "Past event",
+        "goingLabel": "going",
+        "feeLabel": "Fee",
+        "rsvpTitle": "Your RSVP",
+        "rsvpDescription": "Let the church know if you're coming.",
+        "yourCurrentStatus": "Current: {status}"
+      }
+    },
     "cellGroup": {
       "title": "My cell group",
       "subtitle": "Schedule and members of your cell group.",
@@ -814,6 +839,97 @@
         "visitorCount": "Visitors",
         "topic": "Topic",
         "notes": "Notes"
+      }
+    }
+  },
+  "events": {
+    "rsvpStatus": {
+      "going": "Going",
+      "maybe": "Maybe",
+      "notGoing": "Not going",
+      "waitlist": "Waitlist"
+    },
+    "list": {
+      "title": "Events",
+      "subtitle": "{total} events.",
+      "newButton": "New event",
+      "empty": "No events yet.",
+      "statusPublished": "Published",
+      "statusDraft": "Draft",
+      "statusPast": "Past",
+      "rsvpsAbbr": "going"
+    },
+    "new": {
+      "title": "New event",
+      "subtitle": "Create an event. Save as draft, then publish when ready.",
+      "submit": "Save"
+    },
+    "edit": {
+      "title": "Edit event",
+      "submit": "Save changes"
+    },
+    "form": {
+      "savedToast": "Event saved.",
+      "errorToast": "Save failed.",
+      "fields": {
+        "title": "Title",
+        "description": "Description",
+        "startsAt": "Starts at",
+        "endsAt": "Ends at",
+        "location": "Location",
+        "capacity": "Capacity",
+        "capacityHelp": "Leave empty for unlimited.",
+        "fee": "Fee (IDR)",
+        "feeHelp": "Leave empty if free.",
+        "coverImageUrl": "Cover image URL",
+        "registrationOpen": "Registration open",
+        "requiresRsvp": "Requires RSVP",
+        "isPublished": "Published",
+        "isPublishedHelp": "Members only see published events."
+      }
+    },
+    "detail": {
+      "backToList": "All events",
+      "edit": "Edit",
+      "delete": "Delete",
+      "publish": "Publish",
+      "unpublish": "Unpublish",
+      "publishedToast": "Event published.",
+      "unpublishedToast": "Event unpublished.",
+      "deletedToast": "Event deleted.",
+      "errorToast": "Action failed.",
+      "confirmDelete": "Delete this event? Members will lose access immediately.",
+      "statusPublished": "Published",
+      "statusDraft": "Draft",
+      "statGoing": "Going",
+      "statWaitlist": "Waitlist",
+      "statMaybe": "Maybe",
+      "statFee": "Fee",
+      "addGuestTitle": "Add a guest RSVP",
+      "addGuestDescription": "For people without member accounts.",
+      "rosterTitle": "Roster",
+      "rosterDescription": "{count} RSVPs.",
+      "rosterEmpty": "No RSVPs yet.",
+      "colName": "Name",
+      "colStatus": "Status",
+      "colCount": "Count",
+      "colNotes": "Notes",
+      "colActions": "Actions",
+      "guestTag": "guest",
+      "confirmRemoveRsvp": "Remove this RSVP?",
+      "rsvpRemovedToast": "RSVP removed.",
+      "guestForm": {
+        "savedToast": "Guest added.",
+        "waitlistedToast": "Event full — added to waitlist.",
+        "errorToast": "Failed to add.",
+        "submit": "Add",
+        "fields": {
+          "name": "Name",
+          "phone": "Phone",
+          "count": "Headcount",
+          "status": "Status",
+          "notes": "Notes"
+        }
       }
     }
   },

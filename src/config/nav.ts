@@ -86,7 +86,6 @@ export const adminNav: readonly AdminNavItem[] = [
     icon: Calendar,
     group: "main",
     roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
-    comingSoon: true,
   },
 
   // === DOCUMENTS / MODUL ===
@@ -219,7 +218,6 @@ export const memberNav: readonly MemberNavItem[] = [
     href: "/me/events",
     labelKey: "nav.myEvents",
     icon: Calendar,
-    comingSoon: true,
   },
   {
     href: "/me/prayer-requests",
