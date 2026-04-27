@@ -48,12 +48,20 @@
     "prayerRequestsAdmin": "Permintaan Doa"
   },
   "auth": {
+    "shell": {
+      "verse": "Marilah kepada-Ku, semua yang letih lesu dan berbeban berat, Aku akan memberi kelegaan kepadamu.",
+      "verseRef": "Matius 11:28",
+      "tagline": "Satu portal untuk pelayanan dan persekutuan jemaat."
+    },
     "signIn": {
       "title": "Masuk Staff",
       "subtitle": "Masuk dengan email & password staff/admin.",
       "emailLabel": "Email",
       "passwordLabel": "Password",
       "submit": "Masuk",
+      "or": "atau",
+      "showPassword": "Tampilkan password",
+      "hidePassword": "Sembunyikan password",
       "switchToOtp": "Saya jemaat — masuk pakai WhatsApp OTP",
       "errors": {
         "invalidCredentials": "Email atau password salah.",
@@ -66,12 +74,16 @@
       "requestSubtitle": "Masukkan nomor WhatsApp Anda. Kami akan kirim kode 6 digit.",
       "phoneLabel": "Nomor WhatsApp",
       "phonePlaceholder": "08xxxxxxxxxx",
+      "phoneHint": "Pakai nomor yang terdaftar di gereja. Format 08xxx atau +62xxx.",
       "requestSubmit": "Kirim Kode",
       "verifyTitle": "Masukkan Kode",
       "verifySubtitle": "Kode 6 digit telah dikirim ke {phone}. Berlaku 5 menit.",
       "codeLabel": "Kode OTP",
       "verifySubmit": "Verifikasi",
-      "resend": "Ganti nomor / kirim ulang",
+      "resend": "Kirim ulang kode",
+      "resendIn": "Kirim ulang dalam {seconds} detik",
+      "changeNumber": "Ganti nomor",
+      "or": "atau",
       "switchToStaff": "Saya staff/admin — masuk pakai email",
       "errors": {
         "phoneNotFound": "Nomor tidak terdaftar. Hubungi pengurus gereja.",

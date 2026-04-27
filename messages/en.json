@@ -48,12 +48,20 @@
     "prayerRequestsAdmin": "Prayer requests"
   },
   "auth": {
+    "shell": {
+      "verse": "Come to me, all you who are weary and burdened, and I will give you rest.",
+      "verseRef": "Matthew 11:28",
+      "tagline": "One portal for serving and growing together."
+    },
     "signIn": {
       "title": "Staff sign in",
       "subtitle": "Sign in with your staff/admin email and password.",
       "emailLabel": "Email",
       "passwordLabel": "Password",
       "submit": "Sign in",
+      "or": "or",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password",
       "switchToOtp": "I'm a member — sign in with WhatsApp OTP",
       "errors": {
         "invalidCredentials": "Wrong email or password.",
@@ -66,12 +74,16 @@
       "requestSubtitle": "Enter your WhatsApp number. We'll send you a 6-digit code.",
       "phoneLabel": "WhatsApp number",
       "phonePlaceholder": "08xxxxxxxxxx",
+      "phoneHint": "Use the number registered with your church. Format 08xxx or +62xxx.",
       "requestSubmit": "Send code",
       "verifyTitle": "Enter the code",
       "verifySubtitle": "A 6-digit code was sent to {phone}. It expires in 5 minutes.",
       "codeLabel": "OTP code",
       "verifySubmit": "Verify",
-      "resend": "Change number / resend",
+      "resend": "Resend code",
+      "resendIn": "Resend in {seconds}s",
+      "changeNumber": "Change number",
+      "or": "or",
       "switchToStaff": "I'm staff/admin — sign in with email",
       "errors": {
         "phoneNotFound": "Number not registered. Contact your church admin.",
