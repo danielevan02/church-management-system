@@ -107,25 +107,108 @@
   },
   "dashboard": {
     "admin": {
-      "title": "Dasbor Admin",
-      "welcome": "Selamat datang, {name}."
+      "title": "Dasbor",
+      "welcome": "Selamat datang, {name}.",
+      "subtitle": "Ringkasan {date}.",
+      "kpi": {
+        "activeMembers": "Jemaat Aktif",
+        "activeMembersHint": "+{count} bulan ini",
+        "lastService": "Kehadiran Terakhir",
+        "lastServiceHint": "rata-rata 4 minggu: {avg}",
+        "noService": "Belum ada ibadah",
+        "thisMonthGiving": "Persembahan Bulan Ini",
+        "thisMonthGivingHint": "{count} transaksi",
+        "cellCoverage": "Coverage Komsel",
+        "cellCoverageHint": "{covered} dari {total} jemaat",
+        "openPrayer": "Doa Terbuka",
+        "openPrayerHint": "menunggu didoakan"
+      },
+      "today": {
+        "title": "Hari ini & mendatang",
+        "description": "Ibadah dan acara yang akan datang.",
+        "services": "Ibadah",
+        "events": "Acara",
+        "noServices": "Tidak ada ibadah terjadwal.",
+        "noEvents": "Tidak ada acara yang akan datang.",
+        "manageServices": "Kelola jadwal ibadah",
+        "manageEvents": "Kelola acara"
+      },
+      "attention": {
+        "title": "Perlu perhatian",
+        "description": "Tindak lanjut dan permintaan terbuka.",
+        "followUps": "Follow-up Penggembalaan",
+        "noFollowUps": "Tidak ada follow-up dijadwalkan.",
+        "viewFollowUps": "Lihat semua",
+        "openPrayer": "Doa Terbuka",
+        "noOpenPrayer": "Tidak ada permintaan doa terbuka.",
+        "viewPrayer": "Lihat semua"
+      },
+      "quickActions": {
+        "title": "Aksi Cepat",
+        "newMember": "Tambah Jemaat",
+        "checkIn": "Buka Check-in",
+        "newGiving": "Catat Persembahan",
+        "newCommunication": "Kirim Pesan",
+        "newEvent": "Tambah Acara",
+        "reports": "Laporan"
+      },
+      "activity": {
+        "title": "Aktivitas Terbaru",
+        "description": "10 entri audit log terakhir.",
+        "empty": "Belum ada aktivitas tercatat.",
+        "viewAll": "Lihat semua"
+      }
     },
     "member": {
       "title": "Dasbor Saya",
       "welcome": "Halo, {name}.",
+      "subtitle": "Ringkasan {date}.",
       "quickActions": {
+        "title": "Aksi Cepat",
         "myQr": "QR Saya",
         "myProfile": "Profil",
         "giveNow": "Beri Persembahan",
-        "events": "Acara"
+        "events": "Acara",
+        "checkIn": "Check-in",
+        "prayer": "Doa"
+      },
+      "upcoming": {
+        "title": "Mendatang",
+        "description": "Ibadah, acara, dan pelayanan Anda berikutnya."
       },
       "nextService": "Ibadah Berikutnya",
       "noNextService": "Belum ada jadwal ibadah aktif.",
+      "nextEvent": "Acara yang Anda RSVP",
+      "noNextEvent": "Belum ada RSVP acara mendatang.",
+      "viewEvents": "Lihat semua acara",
+      "nextVolunteer": "Pelayanan Berikutnya",
+      "noNextVolunteer": "Belum ada jadwal pelayanan.",
+      "viewVolunteer": "Lihat semua",
+      "about": {
+        "title": "Saya",
+        "description": "Komsel, persembahan, dan perjalanan rohani Anda."
+      },
       "myCellGroup": "Komsel Saya",
       "noCellGroup": "Anda belum tergabung di komsel manapun.",
-      "phaseNote": {
-        "title": "Selamat datang di portal jemaat",
-        "description": "QR pribadi & profil sudah aktif. History persembahan, RSVP acara, dan info komsel lengkap akan terisi di phase berikutnya."
+      "joinCellGroup": "Pelajari komsel",
+      "giving": {
+        "title": "Persembahan Saya",
+        "ytd": "Total tahun ini",
+        "lastGift": "Persembahan terakhir",
+        "noGiving": "Belum ada catatan persembahan tahun ini.",
+        "viewAll": "Lihat semua"
+      },
+      "discipleship": {
+        "title": "Perjalanan Rohani",
+        "completed": "{count} milestone tercatat",
+        "lastMilestone": "Terakhir",
+        "empty": "Belum ada milestone tercatat.",
+        "viewAll": "Lihat semua"
+      },
+      "children": {
+        "title": "Anak Saya",
+        "description": "Anak-anak di rumah tangga Anda yang bisa di-check-in.",
+        "viewAll": "Buka halaman anak"
       }
     }
   },

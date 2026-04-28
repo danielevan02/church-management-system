@@ -107,25 +107,108 @@
   },
   "dashboard": {
     "admin": {
-      "title": "Admin dashboard",
-      "welcome": "Welcome, {name}."
+      "title": "Dashboard",
+      "welcome": "Welcome back, {name}.",
+      "subtitle": "Snapshot for {date}.",
+      "kpi": {
+        "activeMembers": "Active Members",
+        "activeMembersHint": "+{count} this month",
+        "lastService": "Last Service",
+        "lastServiceHint": "4-week avg: {avg}",
+        "noService": "No service yet",
+        "thisMonthGiving": "Giving This Month",
+        "thisMonthGivingHint": "{count} transactions",
+        "cellCoverage": "Cell Group Coverage",
+        "cellCoverageHint": "{covered} of {total} members",
+        "openPrayer": "Open Prayer Requests",
+        "openPrayerHint": "waiting to be prayed for"
+      },
+      "today": {
+        "title": "Today & upcoming",
+        "description": "Services and events on the calendar.",
+        "services": "Services",
+        "events": "Events",
+        "noServices": "No services scheduled.",
+        "noEvents": "No upcoming events.",
+        "manageServices": "Manage services",
+        "manageEvents": "Manage events"
+      },
+      "attention": {
+        "title": "Needs attention",
+        "description": "Follow-ups and open requests.",
+        "followUps": "Pastoral Follow-ups",
+        "noFollowUps": "No follow-ups scheduled.",
+        "viewFollowUps": "View all",
+        "openPrayer": "Open Prayer Requests",
+        "noOpenPrayer": "No open prayer requests.",
+        "viewPrayer": "View all"
+      },
+      "quickActions": {
+        "title": "Quick Actions",
+        "newMember": "Add Member",
+        "checkIn": "Open Check-in",
+        "newGiving": "Record Giving",
+        "newCommunication": "Send Message",
+        "newEvent": "Add Event",
+        "reports": "Reports"
+      },
+      "activity": {
+        "title": "Recent Activity",
+        "description": "Last 10 audit log entries.",
+        "empty": "No activity recorded yet.",
+        "viewAll": "View all"
+      }
     },
     "member": {
       "title": "My dashboard",
       "welcome": "Hi, {name}.",
+      "subtitle": "Snapshot for {date}.",
       "quickActions": {
+        "title": "Quick Actions",
         "myQr": "My QR",
         "myProfile": "Profile",
         "giveNow": "Give now",
-        "events": "Events"
+        "events": "Events",
+        "checkIn": "Check-in",
+        "prayer": "Prayer"
+      },
+      "upcoming": {
+        "title": "Upcoming",
+        "description": "Your next service, event, and serving slot."
       },
       "nextService": "Next service",
       "noNextService": "No upcoming services scheduled.",
+      "nextEvent": "Your next event RSVP",
+      "noNextEvent": "No upcoming event RSVPs yet.",
+      "viewEvents": "View all events",
+      "nextVolunteer": "Next serving slot",
+      "noNextVolunteer": "No serving slots scheduled.",
+      "viewVolunteer": "View all",
+      "about": {
+        "title": "About me",
+        "description": "Your cell group, giving, and spiritual journey."
+      },
       "myCellGroup": "My cell group",
       "noCellGroup": "You are not in any cell group yet.",
-      "phaseNote": {
-        "title": "Welcome to the member portal",
-        "description": "Your QR and profile are live. Giving history, event RSVPs, and full cell-group info will arrive in later phases."
+      "joinCellGroup": "Learn about cell groups",
+      "giving": {
+        "title": "My Giving",
+        "ytd": "Year-to-date",
+        "lastGift": "Last gift",
+        "noGiving": "No giving recorded this year.",
+        "viewAll": "View all"
+      },
+      "discipleship": {
+        "title": "Spiritual Journey",
+        "completed": "{count} milestones recorded",
+        "lastMilestone": "Latest",
+        "empty": "No milestones recorded yet.",
+        "viewAll": "View all"
+      },
+      "children": {
+        "title": "My Children",
+        "description": "Children in your household eligible for check-in.",
+        "viewAll": "Open children page"
       }
     }
   },
