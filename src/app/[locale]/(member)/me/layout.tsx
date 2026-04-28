@@ -4,6 +4,7 @@ import { InstallPrompt } from "@/components/member/install-prompt";
 import { MemberHeader } from "@/components/member/member-header";
 import { MemberSidebar } from "@/components/member/member-sidebar";
 import { PwaRegister } from "@/components/member/pwa-register";
+import { SidebarAutoCloseMobile } from "@/components/shared/sidebar-autoclose-mobile";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { church } from "@/config/church";
 import { prisma } from "@/lib/prisma";
@@ -53,6 +54,7 @@ export default async function MemberLayout({
             {children}
           </div>
         </SidebarInset>
+        <SidebarAutoCloseMobile />
       </SidebarProvider>
       <PwaRegister />
     </>
