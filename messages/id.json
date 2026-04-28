@@ -45,7 +45,8 @@
     "myCheckIn": "Check-in",
     "myVolunteer": "Pelayanan Saya",
     "myDiscipleship": "Perjalanan Saya",
-    "prayerRequestsAdmin": "Permintaan Doa"
+    "prayerRequestsAdmin": "Permintaan Doa",
+    "myChildren": "Anak saya"
   },
   "auth": {
     "shell": {
@@ -286,6 +287,16 @@
         "savedToast": "Permintaan doa tersimpan.",
         "errorToast": "Gagal menyimpan."
       }
+    },
+    "children": {
+      "title": "Anak saya",
+      "subtitle": "Riwayat check-in anak-anak di rumah tangga Anda.",
+      "empty": "Belum ada anak yang ditautkan ke rumah tangga Anda.",
+      "emptyHint": "Mintakan admin gereja untuk menautkan anak Anda ke rumah tangga.",
+      "noHistory": "Belum ada check-in.",
+      "active": "Di kelas",
+      "age": "{age} tahun",
+      "noAge": "Usia belum diatur"
     }
   },
   "members": {
@@ -1639,6 +1650,139 @@
       "colEntity": "Entitas",
       "colMetadata": "Metadata",
       "system": "sistem"
+    }
+  },
+  "children": {
+    "title": "Check-in Anak",
+    "subtitle": "Kelola check-in sekolah Minggu, kelas, & riwayat.",
+    "stats": {
+      "activeNow": "Sedang check-in",
+      "activeClasses": "Kelas aktif"
+    },
+    "sections": {
+      "checkIn": {
+        "title": "Check-in / out",
+        "description": "Buka counter check-in langsung.",
+        "cta": "Buka"
+      },
+      "classes": {
+        "title": "Kelas",
+        "description": "Definisikan kelompok usia kelas anak.",
+        "cta": "Kelola"
+      },
+      "history": {
+        "title": "Riwayat",
+        "description": "Check-in lampau per kelas/tanggal.",
+        "cta": "Lihat"
+      }
+    },
+    "classes": {
+      "title": "Kelas Anak",
+      "subtitle": "{total} kelas.",
+      "empty": "Belum ada kelas. Buat kelas untuk mulai check-in.",
+      "newButton": "Kelas baru",
+      "back": "Kembali ke check-in anak",
+      "active": "Aktif",
+      "inactive": "Nonaktif",
+      "deactivate": "Nonaktifkan",
+      "activate": "Aktifkan",
+      "edit": "Ubah",
+      "ageRange": "{min}–{max} tahun",
+      "toggleSavedToast": "Kelas diperbarui.",
+      "errorToast": "Aksi gagal.",
+      "newTitle": "Kelas baru",
+      "editTitle": "Ubah kelas",
+      "submitCreate": "Buat kelas",
+      "submitUpdate": "Simpan perubahan",
+      "colName": "Nama",
+      "colAges": "Usia",
+      "colStatus": "Status",
+      "colActions": "Aksi"
+    },
+    "classForm": {
+      "fields": {
+        "name": "Nama",
+        "namePlaceholder": "mis. Balita",
+        "ageMin": "Usia minimum",
+        "ageMax": "Usia maksimum",
+        "isActive": "Aktif",
+        "isActiveHint": "Kelas nonaktif tidak muncul saat check-in."
+      },
+      "savedToast": "Kelas tersimpan.",
+      "errorToast": "Gagal menyimpan."
+    },
+    "checkIn": {
+      "title": "Counter Check-in",
+      "subtitle": "Berikan kode keamanan & proses penjemputan.",
+      "back": "Kembali ke check-in anak",
+      "formTitle": "Check-in anak",
+      "formDescription": "Pilih anak + pengantar + kelas.",
+      "checkOutTitle": "Check-out",
+      "checkOutDescription": "Verifikasi kode keamanan & penjemput.",
+      "noClasses": "Belum ada kelas aktif — buat dulu.",
+      "createClassCta": "Buat kelas",
+      "activeTitle": "Sedang check-in ({count})",
+      "activeDescription": "Anak yang menunggu dijemput.",
+      "activeEmpty": "Tidak ada check-in aktif.",
+      "activeCard": {
+        "code": "Kode",
+        "guardian": "Diantar oleh",
+        "checkedInAt": "Masuk pkl"
+      },
+      "form": {
+        "fields": {
+          "child": "Anak",
+          "childPlaceholder": "Cari anak…",
+          "guardian": "Pengantar",
+          "guardianPlaceholder": "Cari jemaat…",
+          "class": "Kelas",
+          "classPlaceholder": "Pilih kelas",
+          "notes": "Catatan",
+          "notesPlaceholder": "Alergi, mood, kebutuhan khusus…"
+        },
+        "savedToast": "Check-in berhasil.",
+        "errorToast": "Check-in gagal.",
+        "missingFields": "Pilih anak, pengantar, & kelas.",
+        "alreadyCheckedIn": "Anak ini sudah check-in.",
+        "ageMismatchWarning": "Usia {age} di luar rentang kelas ini.",
+        "autoSuggestHint": "Tip: pilih anak untuk saran kelas otomatis.",
+        "submit": "Check-in",
+        "issued": {
+          "title": "Kode untuk {name}",
+          "description": "Berikan satu tag ke orang tua, satu ke anak. Kode ini wajib untuk penjemputan.",
+          "dismiss": "Selesai"
+        }
+      }
+    },
+    "checkOut": {
+      "form": {
+        "fields": {
+          "code": "Kode keamanan",
+          "codePlaceholder": "ABCD",
+          "pickupGuardian": "Penjemput",
+          "pickupGuardianPlaceholder": "Cari jemaat…"
+        },
+        "savedToast": "Check-out berhasil.",
+        "errorToast": "Check-out gagal.",
+        "missingFields": "Kode & penjemput wajib diisi.",
+        "codeNotFound": "Kode tidak cocok dengan check-in aktif.",
+        "submit": "Check-out"
+      }
+    },
+    "history": {
+      "title": "Riwayat check-in",
+      "subtitle": "Menampilkan {total} check-in terakhir.",
+      "back": "Kembali ke check-in anak",
+      "empty": "Belum ada check-in.",
+      "active": "Aktif",
+      "filterAll": "Semua",
+      "colChild": "Anak",
+      "colClass": "Kelas",
+      "colCheckedIn": "Check-in",
+      "colCheckedOut": "Out",
+      "colGuardian": "Pengantar",
+      "colPickup": "Penjemput",
+      "colCode": "Kode"
     }
   }
 }
