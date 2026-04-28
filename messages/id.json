@@ -705,6 +705,11 @@
     }
   },
   "attendance": {
+    "scanner": {
+      "paused": "Scanner dijeda",
+      "cameraUnavailable": "Kamera tidak tersedia",
+      "startingCamera": "Memulai kamera…"
+    },
     "home": {
       "title": "Kehadiran",
       "subtitle": "Kelola jadwal ibadah dan check-in.",
