@@ -158,7 +158,6 @@ export const adminNav: readonly AdminNavItem[] = [
     icon: HelpCircle,
     group: "secondary",
     roles: ["SUPER_ADMIN", "ADMIN", "STAFF", "LEADER"],
-    comingSoon: true,
   },
   {
     href: "/admin/search",
@@ -166,7 +165,6 @@ export const adminNav: readonly AdminNavItem[] = [
     icon: Search,
     group: "secondary",
     roles: ["SUPER_ADMIN", "ADMIN", "STAFF", "LEADER"],
-    comingSoon: true,
   },
 ] as const;
 
