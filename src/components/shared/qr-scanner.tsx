@@ -108,10 +108,14 @@ export function QrScanner({ onScan, cooldownMs = 2000, paused = false }: Props) 
 
   return (
     <div className="overflow-hidden rounded-md border bg-black">
+      {/* Mirror the video preview. html5-qrcode renders its <video> inside
+          the container; we target it via id selector with !important to
+          beat any inline transform the library may set. */}
+      <style>{`#${elementId} video { transform: scaleX(-1) !important; }`}</style>
       <div
         id={elementId}
         ref={containerRef}
-        className="aspect-square w-full [&_video]:!scale-x-[-1]"
+        className="aspect-square w-full"
       />
       {starting ? (
         <p className="border-t bg-muted px-3 py-2 text-center text-xs text-muted-foreground">
