@@ -209,10 +209,21 @@
         "title": "Anak Saya",
         "description": "Anak-anak di rumah tangga Anda yang bisa di-check-in.",
         "viewAll": "Buka halaman anak"
+      },
+      "install": {
+        "title": "Install ke layar utama",
+        "description": "Akses cepat tanpa membuka browser.",
+        "install": "Install",
+        "dismiss": "Tutup"
       }
     }
   },
   "memberPortal": {
+    "offline": {
+      "title": "Anda sedang offline",
+      "description": "Tidak ada koneksi internet. Halaman ini di-cache untuk Anda. Coba lagi setelah koneksi pulih.",
+      "retry": "Coba lagi"
+    },
     "profile": {
       "title": "Profil Saya",
       "subtitle": "Beberapa data hanya bisa diubah oleh pengurus.",
