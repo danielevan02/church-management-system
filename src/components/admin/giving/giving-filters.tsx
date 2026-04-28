@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 
-import { Input } from "@/components/ui/input";
+import { DatePicker } from "@/components/shared/date-picker";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -104,18 +104,18 @@ export function GivingFilters({ funds, current }: Props) {
       </div>
       <div className="flex flex-col gap-1">
         <Label className="text-xs">{t("from")}</Label>
-        <Input
-          type="date"
-          defaultValue={current.from ?? ""}
-          onChange={(e) => setParam("from", e.target.value)}
+        <DatePicker
+          value={current.from ?? ""}
+          onChange={(v) => setParam("from", v || null)}
+          clearable
         />
       </div>
       <div className="flex flex-col gap-1">
         <Label className="text-xs">{t("to")}</Label>
-        <Input
-          type="date"
-          defaultValue={current.to ?? ""}
-          onChange={(e) => setParam("to", e.target.value)}
+        <DatePicker
+          value={current.to ?? ""}
+          onChange={(v) => setParam("to", v || null)}
+          clearable
         />
       </div>
     </div>

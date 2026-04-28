@@ -6,6 +6,7 @@ import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
+import { DatePicker } from "@/components/shared/date-picker";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -169,7 +170,11 @@ export function RecurringServiceForm() {
               <FormItem>
                 <FormLabel>{t("fields.firstDate")} *</FormLabel>
                 <FormControl>
-                  <Input type="date" {...field} />
+                  <DatePicker
+                    value={field.value}
+                    onChange={field.onChange}
+                    ariaLabel={t("fields.firstDate")}
+                  />
                 </FormControl>
                 <FormDescription>{t("fields.firstDateHelp")}</FormDescription>
                 <FormMessage />

@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { MemberPicker } from "@/components/admin/giving/member-picker";
+import { DatePicker } from "@/components/shared/date-picker";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -184,7 +185,11 @@ export function PastoralVisitForm({
               <FormItem>
                 <FormLabel>{t("fields.visitedAt")} *</FormLabel>
                 <FormControl>
-                  <Input type="date" {...field} />
+                  <DatePicker
+                    value={field.value}
+                    onChange={field.onChange}
+                    ariaLabel={t("fields.visitedAt")}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -231,7 +236,12 @@ export function PastoralVisitForm({
               <FormItem>
                 <FormLabel>{t("fields.followUpDate")}</FormLabel>
                 <FormControl>
-                  <Input type="date" {...field} />
+                  <DatePicker
+                    value={field.value ?? ""}
+                    onChange={field.onChange}
+                    clearable
+                    ariaLabel={t("fields.followUpDate")}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

@@ -6,6 +6,7 @@ import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
+import { DatePicker } from "@/components/shared/date-picker";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -95,7 +96,11 @@ export function CellGroupReportForm({ cellGroupId }: { cellGroupId: string }) {
               <FormItem>
                 <FormLabel>{t("fields.meetingDate")} *</FormLabel>
                 <FormControl>
-                  <Input type="date" {...field} />
+                  <DatePicker
+                    value={field.value}
+                    onChange={field.onChange}
+                    ariaLabel={t("fields.meetingDate")}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
