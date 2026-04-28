@@ -1471,5 +1471,174 @@
       "allTime": "Sepanjang waktu",
       "empty": "Belum ada milestone tahun ini."
     }
+  },
+  "settings": {
+    "title": "Pengaturan",
+    "subtitle": "Konfigurasi deployment gereja.",
+    "sections": {
+      "users": {
+        "title": "Pengguna & peran",
+        "description": "Buat akun, atur peran, nonaktifkan."
+      },
+      "features": {
+        "title": "Feature flags",
+        "description": "Lihat modul yang aktif."
+      },
+      "audit": {
+        "title": "Audit log",
+        "description": "Aktivitas admin terbaru."
+      }
+    },
+    "identity": {
+      "title": "Identitas gereja",
+      "description": "Nilai berikut bersumber dari environment variables. Edit .env.local & redeploy untuk mengubah.",
+      "fields": {
+        "name": "Nama lengkap",
+        "shortName": "Nama singkat",
+        "domain": "Domain",
+        "defaultLocale": "Bahasa default",
+        "primaryColor": "Warna utama",
+        "timezone": "Zona waktu"
+      },
+      "envHint": "Untuk mengubah, edit .env.local (NEXT_PUBLIC_CHURCH_*) lalu redeploy."
+    },
+    "operational": {
+      "title": "Pengaturan operasional",
+      "description": "Pengaturan runtime untuk persembahan & konfirmasi. Nilai ini menggantikan default env.",
+      "savedToast": "Pengaturan tersimpan.",
+      "errorToast": "Gagal menyimpan.",
+      "submit": "Simpan perubahan",
+      "envFallback": "Default: {value}",
+      "fields": {
+        "bankAccountHolder": "Atas nama rekening",
+        "bankAccountHolderHint": "Ditampilkan di halaman persembahan.",
+        "bankAccountNumber": "Nomor rekening",
+        "qrisImagePath": "Path gambar QRIS",
+        "qrisImagePathHint": "Path di /public ke file PNG QRIS.",
+        "confirmationWhatsApp": "WhatsApp konfirmasi",
+        "confirmationWhatsAppHint": "Nomor yang bisa dihubungi jemaat setelah transfer."
+      }
+    },
+    "users": {
+      "title": "Pengguna",
+      "subtitle": "{total} pengguna.",
+      "empty": "Belum ada pengguna.",
+      "newButton": "Pengguna baru",
+      "back": "Kembali ke pengaturan",
+      "active": "Aktif",
+      "inactive": "Nonaktif",
+      "edit": "Ubah",
+      "deactivate": "Nonaktifkan",
+      "activate": "Aktifkan",
+      "confirmDeactivate": "Nonaktifkan pengguna ini? Mereka tidak bisa login lagi.",
+      "confirmActivate": "Aktifkan kembali pengguna ini?",
+      "toggleSavedToast": "Pengguna diperbarui.",
+      "errorToast": "Aksi gagal.",
+      "newTitle": "Pengguna baru",
+      "newSubtitle": "Buat akun staff atau admin.",
+      "editTitle": "Ubah pengguna",
+      "editSubtitle": "Perbarui peran, status, atau tautan anggota.",
+      "editFormTitle": "Akun",
+      "editFormDescription": "Kelola peran dan status aktif.",
+      "submitCreate": "Buat pengguna",
+      "submitUpdate": "Simpan perubahan",
+      "colUser": "Pengguna",
+      "colRole": "Peran",
+      "colMember": "Anggota",
+      "colLastLogin": "Login terakhir",
+      "colStatus": "Status",
+      "colActions": "Aksi",
+      "roles": {
+        "superAdmin": "Super admin",
+        "admin": "Admin",
+        "staff": "Staff",
+        "leader": "Pemimpin",
+        "member": "Jemaat"
+      },
+      "passwordReset": {
+        "title": "Reset password",
+        "description": "Set password baru untuk pengguna ini. Mereka harus pakai password baru ini saat login.",
+        "label": "Password baru",
+        "submit": "Reset password",
+        "savedToast": "Password direset.",
+        "errorToast": "Reset gagal."
+      },
+      "form": {
+        "fields": {
+          "email": "Email",
+          "password": "Password",
+          "passwordHint": "Minimal 8 karakter.",
+          "role": "Peran",
+          "roleSelfHint": "Anda tidak bisa menurunkan peran admin sendiri.",
+          "isActive": "Aktif",
+          "isActiveHint": "Pengguna nonaktif tidak bisa login.",
+          "linkMember": "Tautkan anggota",
+          "linkMemberPlaceholder": "Cari anggota…",
+          "linkMemberHint": "Opsional. Tautkan ke record anggota."
+        },
+        "createdToast": "Pengguna dibuat.",
+        "updatedToast": "Pengguna diperbarui.",
+        "errorToast": "Gagal menyimpan.",
+        "errors": {
+          "CANNOT_DEMOTE_SELF": "Anda tidak bisa menurunkan peran admin sendiri.",
+          "CANNOT_DEACTIVATE_SELF": "Anda tidak bisa menonaktifkan diri sendiri.",
+          "FORBIDDEN": "Anda tidak diizinkan melakukan ini."
+        }
+      }
+    },
+    "features": {
+      "title": "Feature flags",
+      "subtitle": "Modul yang aktif di deployment ini.",
+      "back": "Kembali ke pengaturan",
+      "statusTitle": "Status",
+      "statusDescription": "Tampilan read-only feature flag.",
+      "enabled": "Aktif",
+      "disabled": "Nonaktif",
+      "howToTitle": "Cara mengubah",
+      "howToDescription": "Feature flags didefinisikan di kode untuk single-tenant.",
+      "howToBody": "Edit src/config/features.ts, commit, lalu redeploy. Konfigurasi tetap auditable di git.",
+      "flags": {
+        "childrensCheckIn": {
+          "label": "Check-in anak",
+          "description": "Check-in anak dengan safety tag dan verifikasi penjemput."
+        },
+        "pastoralCare": {
+          "label": "Pastoral care",
+          "description": "Catat kunjungan & tindak lanjut untuk jemaat."
+        },
+        "discipleship": {
+          "label": "Pemuridan",
+          "description": "Tonggak rohani & tracking perjalanan."
+        },
+        "volunteers": {
+          "label": "Pelayan",
+          "description": "Tim, posisi, dan jadwal pelayanan."
+        },
+        "giving": {
+          "label": "Persembahan",
+          "description": "Persembahan & tracking dana."
+        },
+        "whatsappBroadcast": {
+          "label": "Broadcast WhatsApp",
+          "description": "Pesan massal via template WhatsApp."
+        },
+        "selfCheckIn": {
+          "label": "Self check-in",
+          "description": "Jemaat check-in sendiri via member portal."
+        }
+      }
+    },
+    "audit": {
+      "title": "Audit log",
+      "subtitle": "Menampilkan {total} entri terakhir.",
+      "back": "Kembali ke pengaturan",
+      "empty": "Belum ada entri audit.",
+      "colWhen": "Waktu",
+      "colActor": "Pelaku",
+      "colAction": "Aksi",
+      "colEntity": "Entitas",
+      "colMetadata": "Metadata",
+      "system": "sistem"
+    }
   }
 }

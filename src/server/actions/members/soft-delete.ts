@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { auth } from "@/lib/auth";
 import { requireRole } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
+import { writeAudit } from "@/server/audit";
 
 export type SoftDeleteResult = { ok: true } | { ok: false; error: string };
 
@@ -23,6 +24,12 @@ export async function softDeleteMemberAction(
     await prisma.member.update({
       where: { id, deletedAt: null },
       data: { deletedAt: new Date(), status: "INACTIVE" },
+    });
+    await writeAudit({
+      userId: session.user.id,
+      action: "member.delete",
+      entityType: "Member",
+      entityId: id,
     });
     revalidatePath("/admin/members");
     revalidatePath(`/admin/members/${id}`);
@@ -48,6 +55,12 @@ export async function restoreMemberAction(
     await prisma.member.update({
       where: { id },
       data: { deletedAt: null, status: "ACTIVE" },
+    });
+    await writeAudit({
+      userId: session.user.id,
+      action: "member.restore",
+      entityType: "Member",
+      entityId: id,
     });
     revalidatePath("/admin/members");
     revalidatePath(`/admin/members/${id}`);

@@ -152,7 +152,6 @@ export const adminNav: readonly AdminNavItem[] = [
     icon: Settings,
     group: "secondary",
     roles: ["SUPER_ADMIN", "ADMIN"],
-    comingSoon: true,
   },
   {
     href: "/admin/help",

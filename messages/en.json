@@ -1471,5 +1471,174 @@
       "allTime": "All time",
       "empty": "No milestones yet this year."
     }
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Configure your church deployment.",
+    "sections": {
+      "users": {
+        "title": "Users & roles",
+        "description": "Create accounts, assign roles, deactivate."
+      },
+      "features": {
+        "title": "Feature flags",
+        "description": "See which modules are enabled."
+      },
+      "audit": {
+        "title": "Audit log",
+        "description": "Recent admin activity and changes."
+      }
+    },
+    "identity": {
+      "title": "Church identity",
+      "description": "These values come from environment variables. Edit .env.local and redeploy to change.",
+      "fields": {
+        "name": "Full name",
+        "shortName": "Short name",
+        "domain": "Domain",
+        "defaultLocale": "Default locale",
+        "primaryColor": "Primary color",
+        "timezone": "Timezone"
+      },
+      "envHint": "To change these, edit .env.local (NEXT_PUBLIC_CHURCH_*) and redeploy."
+    },
+    "operational": {
+      "title": "Operational settings",
+      "description": "Editable runtime settings for giving and confirmations. These override env defaults.",
+      "savedToast": "Settings saved.",
+      "errorToast": "Save failed.",
+      "submit": "Save changes",
+      "envFallback": "Default: {value}",
+      "fields": {
+        "bankAccountHolder": "Bank account holder",
+        "bankAccountHolderHint": "Shown on the giving page.",
+        "bankAccountNumber": "Bank account number",
+        "qrisImagePath": "QRIS image path",
+        "qrisImagePathHint": "Path under /public to the QRIS PNG.",
+        "confirmationWhatsApp": "Confirmation WhatsApp",
+        "confirmationWhatsAppHint": "Number members can ping after transferring."
+      }
+    },
+    "users": {
+      "title": "Users",
+      "subtitle": "{total} user(s).",
+      "empty": "No users yet.",
+      "newButton": "New user",
+      "back": "Back to settings",
+      "active": "Active",
+      "inactive": "Inactive",
+      "edit": "Edit",
+      "deactivate": "Deactivate",
+      "activate": "Activate",
+      "confirmDeactivate": "Deactivate this user? They will not be able to sign in.",
+      "confirmActivate": "Re-activate this user?",
+      "toggleSavedToast": "User updated.",
+      "errorToast": "Action failed.",
+      "newTitle": "New user",
+      "newSubtitle": "Create a staff or admin account.",
+      "editTitle": "Edit user",
+      "editSubtitle": "Update role, status, or member link.",
+      "editFormTitle": "Account",
+      "editFormDescription": "Manage role and active status.",
+      "submitCreate": "Create user",
+      "submitUpdate": "Save changes",
+      "colUser": "User",
+      "colRole": "Role",
+      "colMember": "Member",
+      "colLastLogin": "Last login",
+      "colStatus": "Status",
+      "colActions": "Actions",
+      "roles": {
+        "superAdmin": "Super admin",
+        "admin": "Admin",
+        "staff": "Staff",
+        "leader": "Leader",
+        "member": "Member"
+      },
+      "passwordReset": {
+        "title": "Reset password",
+        "description": "Set a new password for this user. They will need to use the new one to sign in.",
+        "label": "New password",
+        "submit": "Reset password",
+        "savedToast": "Password reset.",
+        "errorToast": "Reset failed."
+      },
+      "form": {
+        "fields": {
+          "email": "Email",
+          "password": "Password",
+          "passwordHint": "Minimum 8 characters.",
+          "role": "Role",
+          "roleSelfHint": "You cannot demote your own admin role.",
+          "isActive": "Active",
+          "isActiveHint": "Inactive users cannot sign in.",
+          "linkMember": "Linked member",
+          "linkMemberPlaceholder": "Search a member…",
+          "linkMemberHint": "Optional. Link to a member record so this user appears in directories."
+        },
+        "createdToast": "User created.",
+        "updatedToast": "User updated.",
+        "errorToast": "Save failed.",
+        "errors": {
+          "CANNOT_DEMOTE_SELF": "You cannot demote your own admin role.",
+          "CANNOT_DEACTIVATE_SELF": "You cannot deactivate yourself.",
+          "FORBIDDEN": "You are not allowed to perform this action."
+        }
+      }
+    },
+    "features": {
+      "title": "Feature flags",
+      "subtitle": "Modules enabled in this deployment.",
+      "back": "Back to settings",
+      "statusTitle": "Status",
+      "statusDescription": "Read-only view of feature flags.",
+      "enabled": "Enabled",
+      "disabled": "Disabled",
+      "howToTitle": "How to change",
+      "howToDescription": "Feature flags are code-defined for single-tenant deployments.",
+      "howToBody": "Edit src/config/features.ts, commit, and redeploy. This keeps configuration auditable in git.",
+      "flags": {
+        "childrensCheckIn": {
+          "label": "Children check-in",
+          "description": "Kids check-in with safety tag and pickup verification."
+        },
+        "pastoralCare": {
+          "label": "Pastoral care",
+          "description": "Track visits and follow-ups for members."
+        },
+        "discipleship": {
+          "label": "Discipleship",
+          "description": "Spiritual milestones and journey tracking."
+        },
+        "volunteers": {
+          "label": "Volunteers",
+          "description": "Teams, positions, and serving assignments."
+        },
+        "giving": {
+          "label": "Giving",
+          "description": "Tithes, offerings, and fund tracking."
+        },
+        "whatsappBroadcast": {
+          "label": "WhatsApp broadcast",
+          "description": "Bulk messaging via WhatsApp templates."
+        },
+        "selfCheckIn": {
+          "label": "Self check-in",
+          "description": "Members check themselves in via the member portal."
+        }
+      }
+    },
+    "audit": {
+      "title": "Audit log",
+      "subtitle": "Showing the last {total} entries.",
+      "back": "Back to settings",
+      "empty": "No audit entries yet.",
+      "colWhen": "When",
+      "colActor": "Actor",
+      "colAction": "Action",
+      "colEntity": "Entity",
+      "colMetadata": "Metadata",
+      "system": "system"
+    }
   }
 }
