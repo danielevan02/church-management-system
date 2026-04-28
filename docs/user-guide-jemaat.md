@@ -197,15 +197,21 @@ Daripada antri di pintu untuk di-scan usher, kamu bisa **check-in sendiri** dari
 
 ### Cara A: Scan QR ibadah di pintu (paling cepat — 1 detik)
 
-Gereja biasanya **menempel banner besar** dengan QR di pintu masuk untuk tiap ibadah. Cukup:
+Gereja biasanya **menempel banner besar** dengan QR di pintu masuk untuk tiap ibadah. Ada 2 sub-cara scan:
 
-1. Pastikan kamu sudah **login ke portal jemaat** sebelumnya (sekali login, sesi bertahan 30 hari)
-2. Saat tiba di gereja, **buka aplikasi Kamera bawaan HP** (sama seperti scan QRIS untuk pembayaran)
+**A1. Pakai aplikasi Kamera bawaan HP** (kalau HP kamu support — kebanyakan iPhone & Android baru):
+1. Pastikan sudah **login ke portal jemaat** sebelumnya (sesi bertahan 30 hari)
+2. Buka aplikasi **Kamera** di HP (sama seperti scan QRIS untuk pembayaran)
 3. Arahkan ke QR di banner → muncul notifikasi/link kuning di atas → tap
 4. Browser/PWA terbuka → otomatis masuk ke check-in → notifikasi hijau **"Berhasil hadir!"**
-5. Selesai — silakan masuk
 
-> Tidak perlu install app khusus, tidak perlu klik tombol apapun. Login sekali, scan, masuk.
+**A2. Pakai scanner di dalam app** (kalau kamera HP gak deteksi QR otomatis — terutama Android lama / merek lokal):
+1. Buka portal jemaat → menu **Check-in**
+2. Tap tombol **Scan QR Banner** di kanan atas
+3. Izinkan akses kamera (sekali saja, browser ingat)
+4. Arahkan ke QR banner → otomatis check-in → toast hijau "Berhasil hadir!"
+
+Kedua cara hasilnya sama. **A1 lebih cepat** karena gak perlu buka app dulu. **A2 lebih reliable** karena pakai scanner kustom yang dijamin support semua HP.
 
 ### Cara B: Buka menu Check-in manual
 

@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 
 import { AutoCheckIn } from "./auto-check-in";
+import { ScanBannerButton } from "./scan-banner-button";
 import { SelfCheckInButton } from "./self-check-in-button";
 import {
   Card,
@@ -61,9 +62,12 @@ export default async function MemberCheckInPage({
 
   return (
     <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1">
-        <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="text-muted-foreground">{t("subtitle")}</p>
+      <header className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div className="flex flex-col gap-1">
+          <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
+          <p className="text-muted-foreground">{t("subtitle")}</p>
+        </div>
+        <ScanBannerButton memberId={memberId} />
       </header>
 
       {autoCheckInTarget ? (

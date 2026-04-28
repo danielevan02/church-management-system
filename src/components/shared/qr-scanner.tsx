@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 
 type Props = {
   onScan: (decodedText: string) => void;
@@ -28,6 +28,9 @@ const STATE_PAUSED = 3;
 
 export function QrScanner({ onScan, cooldownMs = 2000, paused = false }: Props) {
   const t = useTranslations("attendance.scanner");
+  const reactId = useId();
+  // html5-qrcode requires a CSS-id-safe string (no colons that React adds).
+  const elementId = `qr-scanner-${reactId.replace(/[^a-z0-9_-]/gi, "")}`;
   const containerRef = useRef<HTMLDivElement | null>(null);
   const scannerRef = useRef<Html5QrcodeInstance | null>(null);
   const lastScanRef = useRef<{ text: string; at: number } | null>(null);
@@ -48,7 +51,7 @@ export function QrScanner({ onScan, cooldownMs = 2000, paused = false }: Props) 
       try {
         const mod = await import("html5-qrcode");
         if (cancelled || !containerRef.current) return;
-        scanner = new mod.Html5Qrcode("chms-qr-scanner") as unknown as Html5QrcodeInstance;
+        scanner = new mod.Html5Qrcode(elementId) as unknown as Html5QrcodeInstance;
         scannerRef.current = scanner;
 
         await scanner.start(
@@ -84,7 +87,7 @@ export function QrScanner({ onScan, cooldownMs = 2000, paused = false }: Props) 
       const s = scannerRef.current;
       if (s) void safeStop(s);
     };
-  }, [cooldownMs, paused]);
+  }, [cooldownMs, paused, elementId]);
 
   if (paused) {
     return (
@@ -106,7 +109,7 @@ export function QrScanner({ onScan, cooldownMs = 2000, paused = false }: Props) 
   return (
     <div className="overflow-hidden rounded-md border bg-black">
       <div
-        id="chms-qr-scanner"
+        id={elementId}
         ref={containerRef}
         className="aspect-square w-full [&_video]:!scale-x-[-1]"
       />

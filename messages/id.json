@@ -350,6 +350,15 @@
       "autoAlreadyTitle": "Sudah hadir",
       "autoAlreadyToast": "Anda sudah tercatat hadir di {name}.",
       "autoErrorTitle": "Gagal check-in",
+      "scan": {
+        "button": "Scan QR Banner",
+        "dialogTitle": "Scan QR Banner Ibadah",
+        "dialogDescription": "Arahkan kamera ke QR yang tertempel di pintu masuk gereja.",
+        "invalid": "QR tidak dikenali. Pastikan kamu scan QR ibadah, bukan QR lain.",
+        "notFound": "Ibadah tidak ditemukan. Hubungi pengurus.",
+        "successToast": "Berhasil hadir!",
+        "alreadyToast": "Anda sudah tercatat hadir."
+      },
       "errors": {
         "closed": "Jendela check-in untuk ibadah ini sudah ditutup.",
         "generic": "Gagal check-in. Coba lagi."

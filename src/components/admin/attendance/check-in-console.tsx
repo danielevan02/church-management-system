@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
 
-import { QrScanner } from "./qr-scanner";
+import { QrScanner } from "@/components/shared/qr-scanner";
 import { Button } from "@/components/ui/button";
 import {
   Card,
