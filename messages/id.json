@@ -1393,5 +1393,62 @@
       "deletedToast": "Permintaan doa dihapus.",
       "errorToast": "Aksi gagal."
     }
+  },
+  "reports": {
+    "title": "Laporan",
+    "subtitle": "Ringkasan lintas fitur — dibuat {date}.",
+    "membership": {
+      "title": "Keanggotaan",
+      "subtitle": "Anggota aktif, pertumbuhan, dan distribusi.",
+      "totalActive": "Anggota aktif",
+      "joinedThisYear": "Bergabung tahun ini",
+      "joinedThisMonth": "Bergabung bulan ini",
+      "cellGroupCoverage": "Tergabung di komsel",
+      "growthTitle": "Pertumbuhan — 12 bulan terakhir",
+      "empty": "Belum ada data keanggotaan.",
+      "byStatusTitle": "Berdasarkan status",
+      "topCitiesTitle": "Kota terbanyak",
+      "noCities": "Belum ada data kota.",
+      "chart": {
+        "joined": "Bergabung",
+        "cumulative": "Total anggota"
+      }
+    },
+    "attendance": {
+      "title": "Kehadiran",
+      "subtitle": "Tren ibadah Minggu.",
+      "lastService": "Ibadah terakhir",
+      "avgLast4Weeks": "Rata-rata 4 minggu terakhir",
+      "uniqueThisMonth": "Anggota unik bulan ini",
+      "trendTitle": "Tren mingguan — 12 minggu terakhir",
+      "empty": "Belum ada data kehadiran."
+    },
+    "giving": {
+      "title": "Persembahan",
+      "subtitle": "Total YTD dan tren.",
+      "ytd": "Total YTD",
+      "lastYear": "Tahun lalu (penuh)",
+      "thisMonth": "Bulan ini",
+      "thisMonthHint": "{count} catatan",
+      "trendTitle": "Tren bulanan — 12 bulan terakhir",
+      "empty": "Belum ada catatan persembahan.",
+      "fundBreakdownTitle": "Berdasarkan fund (bulan ini)"
+    },
+    "cellGroups": {
+      "title": "Komsel",
+      "subtitle": "Aktivitas grup dan cakupan anggota.",
+      "activeCount": "Grup aktif",
+      "leaders": "Dengan pemimpin",
+      "coverage": "Cakupan",
+      "coverageHint": "{covered} dari {total} anggota aktif",
+      "avgGroupSize": "Rata-rata anggota/grup"
+    },
+    "discipleship": {
+      "title": "Pemuridan",
+      "subtitle": "Tonggak rohani tercapai tahun ini.",
+      "thisYear": "Tahun ini",
+      "allTime": "Sepanjang waktu",
+      "empty": "Belum ada milestone tahun ini."
+    }
   }
 }

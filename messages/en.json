@@ -1393,5 +1393,62 @@
       "deletedToast": "Prayer request deleted.",
       "errorToast": "Action failed."
     }
+  },
+  "reports": {
+    "title": "Reports",
+    "subtitle": "Cross-feature snapshot — generated {date}.",
+    "membership": {
+      "title": "Membership",
+      "subtitle": "Active members, growth, and distribution.",
+      "totalActive": "Active members",
+      "joinedThisYear": "Joined this year",
+      "joinedThisMonth": "Joined this month",
+      "cellGroupCoverage": "In a cell group",
+      "growthTitle": "Growth — last 12 months",
+      "empty": "No membership data yet.",
+      "byStatusTitle": "By status",
+      "topCitiesTitle": "Top cities",
+      "noCities": "No city data yet.",
+      "chart": {
+        "joined": "Joined",
+        "cumulative": "Total members"
+      }
+    },
+    "attendance": {
+      "title": "Attendance",
+      "subtitle": "Sunday-service trends.",
+      "lastService": "Last service",
+      "avgLast4Weeks": "Avg. last 4 weeks",
+      "uniqueThisMonth": "Unique attendees this month",
+      "trendTitle": "Weekly trend — last 12 weeks",
+      "empty": "No attendance data yet."
+    },
+    "giving": {
+      "title": "Giving",
+      "subtitle": "Year-to-date totals and trends.",
+      "ytd": "YTD total",
+      "lastYear": "Last year (full)",
+      "thisMonth": "This month",
+      "thisMonthHint": "{count} record(s)",
+      "trendTitle": "Monthly trend — last 12 months",
+      "empty": "No giving recorded yet.",
+      "fundBreakdownTitle": "By fund (this month)"
+    },
+    "cellGroups": {
+      "title": "Cell groups",
+      "subtitle": "Group activity and member coverage.",
+      "activeCount": "Active groups",
+      "leaders": "With assigned leader",
+      "coverage": "Coverage",
+      "coverageHint": "{covered} of {total} active members",
+      "avgGroupSize": "Avg. group size"
+    },
+    "discipleship": {
+      "title": "Discipleship",
+      "subtitle": "Spiritual milestones reached this year.",
+      "thisYear": "This year",
+      "allTime": "All time",
+      "empty": "No milestones yet this year."
+    }
   }
 }
