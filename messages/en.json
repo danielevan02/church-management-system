@@ -350,6 +350,15 @@
       "autoAlreadyTitle": "Already checked in",
       "autoAlreadyToast": "You were already checked in to {name}.",
       "autoErrorTitle": "Check-in failed",
+      "scan": {
+        "button": "Scan QR Banner",
+        "dialogTitle": "Scan service QR banner",
+        "dialogDescription": "Point your camera at the QR taped at the church entrance.",
+        "invalid": "QR not recognized. Make sure it's the service banner QR, not a different one.",
+        "notFound": "Service not found. Contact the church admin.",
+        "successToast": "Checked in!",
+        "alreadyToast": "You were already checked in."
+      },
       "errors": {
         "closed": "Check-in window is closed for this service.",
         "generic": "Could not check you in. Try again."
