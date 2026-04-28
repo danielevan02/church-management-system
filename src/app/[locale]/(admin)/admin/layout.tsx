@@ -1,5 +1,6 @@
 import { AdminHeader } from "@/components/admin/admin-header";
 import { AdminSidebar } from "@/components/admin/admin-sidebar";
+import { SidebarAutoCloseMobile } from "@/components/shared/sidebar-autoclose-mobile";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { requireAdminSession } from "@/lib/session";
 
@@ -29,6 +30,7 @@ export default async function AdminLayout({
           {children}
         </div>
       </SidebarInset>
+      <SidebarAutoCloseMobile />
     </SidebarProvider>
   );
 }
