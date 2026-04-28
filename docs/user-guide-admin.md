@@ -282,6 +282,24 @@ Buka detail ibadah → list catatan → klik baris → **Hapus** atau **Edit**.
 
 Default: check-in terbuka **60 menit sebelum** sampai **60 menit setelah** ibadah berakhir. Bisa diubah developer di `src/server/queries/services.ts`.
 
+### Cetak QR Banner untuk self check-in jemaat
+
+Setiap ibadah punya **QR unik** yang bisa di-print besar dan di-tempel di pintu masuk. Jemaat tinggal scan dengan kamera HP biasa → otomatis check-in. Tidak butuh usher khusus untuk jemaat aktif.
+
+**Cara cetak banner:**
+1. Buka detail ibadah: **Kehadiran → Kelola Ibadah → [pilih ibadah]**
+2. Klik tombol **Cetak QR** (kanan atas)
+3. Halaman banner terbuka — ada nama gereja, nama ibadah, tanggal, QR besar
+4. Klik **Cetak** atau **Ctrl+P** → save sebagai PDF / langsung print
+5. Tempel di pintu masuk gereja sebelum ibadah dimulai
+
+**Cara kerja saat ibadah:**
+- Jemaat scan QR pakai kamera bawaan HP (sama seperti QRIS untuk pembayaran)
+- Browser terbuka → kalau jemaat sudah login portal, **otomatis check-in** dalam 1 detik
+- Kalau jemaat belum login, halaman pengajaran login muncul dulu
+
+> Banner ini per-ibadah. Untuk Ibadah Minggu yang berulang setiap minggu, cetak ulang setiap kali ada ibadah baru (atau setiap minggu).
+
 ---
 
 ## 7. Modul Persembahan (Giving)

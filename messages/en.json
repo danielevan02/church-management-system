@@ -342,6 +342,14 @@
       "alreadyCheckedIn": "Checked in",
       "button": "I'm here",
       "checkedInToast": "Checked in. See you there!",
+      "autoPendingTitle": "Processing check-in…",
+      "autoPendingDescription": "Recording your attendance for {name}.",
+      "autoSuccessTitle": "Checked in!",
+      "autoSuccessDescription": "You're checked in to {name}. Enjoy the service.",
+      "autoCheckedInToast": "Checked in to {name}.",
+      "autoAlreadyTitle": "Already checked in",
+      "autoAlreadyToast": "You were already checked in to {name}.",
+      "autoErrorTitle": "Check-in failed",
       "errors": {
         "closed": "Check-in window is closed for this service.",
         "generic": "Could not check you in. Try again."
@@ -689,6 +697,7 @@
       "errorToast": "Action failed.",
       "openCheckIn": "Open check-in",
       "checkInClosed": "Check-in closed",
+      "printQrBanner": "Print QR",
       "statTotal": "Total",
       "statMembers": "Members",
       "statVisitors": "Visitors",
@@ -709,6 +718,13 @@
       "paused": "Scanner paused",
       "cameraUnavailable": "Camera unavailable",
       "startingCamera": "Starting camera…"
+    },
+    "qrBanner": {
+      "back": "Back",
+      "print": "Print",
+      "qrAlt": "Check-in QR for {name}",
+      "instruction": "Scan to check in",
+      "howTo": "Open your phone camera, point it at this QR. Make sure you are signed in to the member portal."
     },
     "home": {
       "title": "Attendance",
