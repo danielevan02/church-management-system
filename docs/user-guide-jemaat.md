@@ -195,7 +195,19 @@ Menu: **Check-in** (`/me/check-in`). Hanya muncul kalau fitur ini diaktifkan ole
 
 Daripada antri di pintu untuk di-scan usher, kamu bisa **check-in sendiri** dari HP saat tiba di gereja. Lebih cepat & mengurangi antrian.
 
-### Cara pakai
+### Cara A: Scan QR ibadah di pintu (paling cepat — 1 detik)
+
+Gereja biasanya **menempel banner besar** dengan QR di pintu masuk untuk tiap ibadah. Cukup:
+
+1. Pastikan kamu sudah **login ke portal jemaat** sebelumnya (sekali login, sesi bertahan 30 hari)
+2. Saat tiba di gereja, **buka aplikasi Kamera bawaan HP** (sama seperti scan QRIS untuk pembayaran)
+3. Arahkan ke QR di banner → muncul notifikasi/link kuning di atas → tap
+4. Browser/PWA terbuka → otomatis masuk ke check-in → notifikasi hijau **"Berhasil hadir!"**
+5. Selesai — silakan masuk
+
+> Tidak perlu install app khusus, tidak perlu klik tombol apapun. Login sekali, scan, masuk.
+
+### Cara B: Buka menu Check-in manual
 
 1. Saat sudah ada di area gereja, buka **Check-in**
 2. Sistem otomatis tampilkan ibadah yang sedang berlangsung (di window 1 jam sebelum-sesudah)

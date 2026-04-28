@@ -342,6 +342,14 @@
       "alreadyCheckedIn": "Sudah check-in",
       "button": "Saya hadir",
       "checkedInToast": "Check-in berhasil. Sampai jumpa!",
+      "autoPendingTitle": "Memproses check-in…",
+      "autoPendingDescription": "Mencatat kehadiran Anda untuk {name}.",
+      "autoSuccessTitle": "Berhasil hadir!",
+      "autoSuccessDescription": "Anda tercatat hadir di {name}. Selamat beribadah.",
+      "autoCheckedInToast": "Hadir tercatat di {name}.",
+      "autoAlreadyTitle": "Sudah hadir",
+      "autoAlreadyToast": "Anda sudah tercatat hadir di {name}.",
+      "autoErrorTitle": "Gagal check-in",
       "errors": {
         "closed": "Jendela check-in untuk ibadah ini sudah ditutup.",
         "generic": "Gagal check-in. Coba lagi."
@@ -689,6 +697,7 @@
       "errorToast": "Aksi gagal.",
       "openCheckIn": "Buka check-in",
       "checkInClosed": "Check-in tutup",
+      "printQrBanner": "Cetak QR",
       "statTotal": "Total",
       "statMembers": "Jemaat",
       "statVisitors": "Tamu",
@@ -709,6 +718,13 @@
       "paused": "Scanner dijeda",
       "cameraUnavailable": "Kamera tidak tersedia",
       "startingCamera": "Memulai kamera…"
+    },
+    "qrBanner": {
+      "back": "Kembali",
+      "print": "Cetak",
+      "qrAlt": "QR check-in untuk {name}",
+      "instruction": "Scan untuk check-in",
+      "howTo": "Buka kamera HP, arahkan ke QR ini. Pastikan sudah login di portal jemaat."
     },
     "home": {
       "title": "Kehadiran",

@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { ArrowLeft, Pencil, ScanLine } from "lucide-react";
+import { ArrowLeft, Pencil, QrCode, ScanLine } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
@@ -83,6 +83,12 @@ export default async function ServiceDetailPage({
               <Link href={`/admin/attendance/services/${id}/edit`}>
                 <Pencil className="h-4 w-4" />
                 {t("edit")}
+              </Link>
+            </Button>
+            <Button asChild variant="outline">
+              <Link href={`/admin/attendance/services/${id}/qr-banner`}>
+                <QrCode className="h-4 w-4" />
+                {t("printQrBanner")}
               </Link>
             </Button>
             <ServiceTogglePublishButton id={id} isActive={service.isActive} />

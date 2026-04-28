@@ -3,6 +3,7 @@ import { CheckCircle2 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 
+import { AutoCheckIn } from "./auto-check-in";
 import { SelfCheckInButton } from "./self-check-in-button";
 import {
   Card,
@@ -15,10 +16,16 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import {
   getCheckInOpenServices,
+  getService,
   getUpcomingServices,
+  isCheckInOpen,
 } from "@/server/queries/services";
 
-export default async function MemberCheckInPage() {
+export default async function MemberCheckInPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ service?: string }>;
+}) {
   const session = await auth();
   if (!session?.user) redirect("/auth/sign-in");
   const memberId = session.user.memberId;
@@ -27,7 +34,10 @@ export default async function MemberCheckInPage() {
   const t = await getTranslations("memberPortal.checkIn");
   const tType = await getTranslations("services.type");
 
-  const [open, upcoming, alreadyChecked] = await Promise.all([
+  const sp = await searchParams;
+  const requestedServiceId = sp.service;
+
+  const [open, upcoming, alreadyChecked, requestedService] = await Promise.all([
     getCheckInOpenServices(),
     getUpcomingServices(5),
     prisma.attendanceRecord.findMany({
@@ -36,9 +46,18 @@ export default async function MemberCheckInPage() {
       take: 50,
       select: { serviceId: true },
     }),
+    requestedServiceId ? getService(requestedServiceId) : Promise.resolve(null),
   ]);
 
   const checkedInIds = new Set(alreadyChecked.map((r) => r.serviceId));
+
+  // Auto-checkin via QR scan: ?service=<id> appended by service banner QR
+  const autoCheckInTarget =
+    requestedService &&
+    requestedService.isActive &&
+    isCheckInOpen(requestedService, new Date())
+      ? requestedService
+      : null;
 
   return (
     <div className="flex flex-col gap-6">
@@ -46,6 +65,14 @@ export default async function MemberCheckInPage() {
         <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
         <p className="text-muted-foreground">{t("subtitle")}</p>
       </header>
+
+      {autoCheckInTarget ? (
+        <AutoCheckIn
+          serviceId={autoCheckInTarget.id}
+          memberId={memberId}
+          serviceName={autoCheckInTarget.name}
+        />
+      ) : null}
 
       <Card>
         <CardHeader>
