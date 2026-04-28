@@ -1,36 +1,110 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Church Management System (ChMS)
 
-## Getting Started
+Single-tenant church management web app for Indonesian churches. One deployment serves one church — no multi-tenant database isolation, no SaaS billing layer. The codebase ships configurable so each deployment can be re-skinned via environment variables and asset replacement.
 
-First, run the development server:
+## Modules
+
+- **Members & households** — directory, profile, life-cycle status
+- **Attendance** — service definitions, QR/manual check-in, weekly trends
+- **Giving** — manual records (cash / transfer / QRIS), funds, member statements
+- **Cell groups** — komsel directory, leader assignments, weekly reports
+- **Events** — RSVP-able events with capacity & waitlist
+- **Communications** — WhatsApp/email templates, broadcast campaigns, audience filters
+- **Volunteers** — teams, positions, scheduled assignments
+- **Children's check-in** — guardian-linked check-in/out at services
+- **Pastoral care** — visit log, follow-up scheduling
+- **Discipleship** — milestone tracking per member
+- **Prayer requests** — public/private submissions, status tracking
+- **Reports & dashboards** — KPI strip, snapshots per module
+- **Member portal** — installable PWA with QR, profile, giving, events, prayer
+
+## Tech stack
+
+| Layer | Tech |
+|---|---|
+| Framework | Next.js 15 (App Router, Server Actions) |
+| Language | TypeScript strict |
+| Database | PostgreSQL 16 + Prisma 6 |
+| Auth | Auth.js v5 (credentials + WhatsApp OTP) |
+| UI | Tailwind 4 + shadcn/ui (New York) |
+| i18n | next-intl (id default, en optional) |
+| PWA | Vanilla service worker, scoped to member portal |
+
+For full conventions, see [`CLAUDE.md`](./CLAUDE.md). For per-feature spec see `PROJECT_BUILD_GUIDE.md` (if present).
+
+## Quick start (development)
+
+**Prerequisites**: Node 20+, pnpm 9+, Docker (for local Postgres).
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+# 1. Clone & install
+pnpm install
+
+# 2. Start local Postgres
+docker compose up -d
+
+# 3. Configure environment
+cp .env.example .env.local
+# Edit .env.local — at minimum, set DATABASE_URL to:
+#   postgresql://chms:chms_dev_password@localhost:5432/chms_dev
+# Generate AUTH_SECRET with: openssl rand -base64 32
+
+# 4. Migrate + seed (creates initial admin)
+pnpm prisma migrate dev
+pnpm prisma db seed
+
+# 5. Run
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000). Sign in at `/auth/sign-in` with `INITIAL_ADMIN_EMAIL` / `INITIAL_ADMIN_PASSWORD` from `.env.local`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Common commands
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+pnpm dev                 # Dev server (Turbopack)
+pnpm build               # Production build
+pnpm start               # Run production build
+pnpm lint                # ESLint
+pnpm typecheck           # tsc --noEmit
+pnpm prisma studio       # GUI DB inspector
+pnpm prisma migrate dev  # Create + apply migration
+pnpm prisma db seed      # Run seed (idempotent for admin)
+docker compose up -d     # Start local Postgres
+docker compose down      # Stop Postgres
+```
 
-## Learn More
+## Deploying for a church
 
-To learn more about Next.js, take a look at the following resources:
+See [`docs/deployment.md`](./docs/deployment.md) for the step-by-step runbook (Vercel + Neon, or self-hosted Docker), and [`docs/customization.md`](./docs/customization.md) for branding and feature flag changes per deployment.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+prisma/         schema, migrations, seed
+messages/       i18n strings (id.json, en.json)
+public/         static assets, service worker
+src/
+  app/[locale]/(public)    landing, auth, public attend & give
+  app/[locale]/(admin)     admin/staff/leader UI under /admin
+  app/[locale]/(member)    jemaat portal under /me (PWA)
+  app/[locale]/api         route handlers (webhooks, public)
+  components/admin         admin-area UI
+  components/member        member-area UI
+  components/ui            shadcn primitives — DO NOT edit by hand
+  config/                  church.ts, features.ts, nav.ts
+  lib/                     prisma, auth, i18n, permissions
+  server/actions/          server actions per feature
+  server/queries/          read-side helpers (RSC-friendly)
+```
 
-## Deploy on Vercel
+## Conventions
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Server-first**: Server Components + Server Actions by default. `"use client"` only when necessary.
+- **Validation**: Every external input goes through Zod, colocated with the action.
+- **Auth at the boundary**: Every server action / route handler checks role before doing work.
+- **i18n discipline**: No hardcoded user-facing strings — keys in `messages/{id,en}.json`.
+- **Single-tenant**: No `tenant_id` columns. One deployment = one church.
+- **Feature flags**: `src/config/features.ts` toggles modules per deployment.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+See [`CLAUDE.md`](./CLAUDE.md) for the full convention reference.

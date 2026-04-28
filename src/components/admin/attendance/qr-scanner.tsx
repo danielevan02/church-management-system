@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 
 type Props = {
@@ -10,6 +11,7 @@ type Props = {
 };
 
 export function QrScanner({ onScan, cooldownMs = 2000, paused = false }: Props) {
+  const t = useTranslations("attendance.scanner");
   const containerRef = useRef<HTMLDivElement | null>(null);
   const scannerRef = useRef<unknown>(null);
   const lastScanRef = useRef<{ text: string; at: number } | null>(null);
@@ -78,7 +80,7 @@ export function QrScanner({ onScan, cooldownMs = 2000, paused = false }: Props) 
   if (paused) {
     return (
       <div className="flex h-72 items-center justify-center rounded-md border border-dashed bg-muted text-sm text-muted-foreground">
-        Scanner paused
+        {t("paused")}
       </div>
     );
   }
@@ -86,7 +88,7 @@ export function QrScanner({ onScan, cooldownMs = 2000, paused = false }: Props) 
   if (error) {
     return (
       <div className="flex h-72 flex-col items-center justify-center gap-2 rounded-md border border-dashed bg-destructive/5 px-6 text-center text-sm text-destructive">
-        <p className="font-medium">Camera unavailable</p>
+        <p className="font-medium">{t("cameraUnavailable")}</p>
         <p className="text-xs opacity-80">{error}</p>
       </div>
     );
@@ -97,7 +99,7 @@ export function QrScanner({ onScan, cooldownMs = 2000, paused = false }: Props) 
       <div id="chms-qr-scanner" ref={containerRef} className="aspect-square w-full" />
       {starting ? (
         <p className="border-t bg-muted px-3 py-2 text-center text-xs text-muted-foreground">
-          Starting camera…
+          {t("startingCamera")}
         </p>
       ) : null}
     </div>

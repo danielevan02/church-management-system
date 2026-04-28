@@ -19,6 +19,7 @@ const ANY = "_any";
 
 export function MemberFilters() {
   const t = useTranslations("members.filters");
+  const tStatus = useTranslations("members.form.status");
   const router = useRouter();
   const pathname = usePathname();
   const sp = useSearchParams();
@@ -71,11 +72,11 @@ export function MemberFilters() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value={ANY}>{t("anyStatus")}</SelectItem>
-            <SelectItem value="ACTIVE">Active</SelectItem>
-            <SelectItem value="VISITOR">Visitor</SelectItem>
-            <SelectItem value="INACTIVE">Inactive</SelectItem>
-            <SelectItem value="TRANSFERRED">Transferred</SelectItem>
-            <SelectItem value="DECEASED">Deceased</SelectItem>
+            <SelectItem value="ACTIVE">{tStatus("active")}</SelectItem>
+            <SelectItem value="VISITOR">{tStatus("visitor")}</SelectItem>
+            <SelectItem value="INACTIVE">{tStatus("inactive")}</SelectItem>
+            <SelectItem value="TRANSFERRED">{tStatus("transferred")}</SelectItem>
+            <SelectItem value="DECEASED">{tStatus("deceased")}</SelectItem>
           </SelectContent>
         </Select>
 

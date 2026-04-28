@@ -705,6 +705,11 @@
     }
   },
   "attendance": {
+    "scanner": {
+      "paused": "Scanner paused",
+      "cameraUnavailable": "Camera unavailable",
+      "startingCamera": "Starting camera…"
+    },
     "home": {
       "title": "Attendance",
       "subtitle": "Manage services and check-ins.",
