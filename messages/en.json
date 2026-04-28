@@ -1784,5 +1784,120 @@
       "colPickup": "Pickup",
       "colCode": "Code"
     }
+  },
+  "search": {
+    "title": "Search",
+    "subtitle": "Find members, households, cell groups, and events.",
+    "placeholder": "Type at least 2 characters…",
+    "submit": "Search",
+    "hintEmpty": "Start typing to search across members, households, cell groups, and events.",
+    "hintShort": "Type at least 2 characters.",
+    "noResults": "No results for \"{query}\".",
+    "resultsSummary": "{total} result(s) for \"{query}\"",
+    "noLeader": "No leader assigned",
+    "memberCount": "{count} members",
+    "groups": {
+      "members": "Members ({count})",
+      "households": "Households ({count})",
+      "cellGroups": "Cell groups ({count})",
+      "events": "Events ({count})"
+    }
+  },
+  "help": {
+    "title": "Help",
+    "subtitle": "Quick start, module overview, and common tasks.",
+    "modulesTitle": "Modules",
+    "modulesDescription": "A guided tour of every section in the admin.",
+    "openModule": "Open",
+    "commonTasksTitle": "Common tasks",
+    "commonTasksDescription": "Step-by-step playbooks for the things you will do most.",
+    "supportTitle": "Need a hand?",
+    "supportDescription": "Reach out to the developer who set up this deployment.",
+    "supportBody": "For bug reports or feature requests, contact the IT lead at your church or the developer who handed off this system.",
+    "quickStart": {
+      "title": "Quick start",
+      "description": "Five steps to get your church running on this system.",
+      "step1": "Add core members at /admin/members. Households and cell groups can be set up after.",
+      "step2": "Set up your services at /admin/attendance/services so you can record check-ins on Sundays.",
+      "step3": "Configure giving funds at /admin/giving so persembahan are categorized correctly.",
+      "step4": "Customize bank account, QRIS, and confirmation WhatsApp at /admin/settings.",
+      "step5": "Invite staff at /admin/settings/users — they sign in with email + password."
+    },
+    "modules": {
+      "members": {
+        "title": "Members",
+        "description": "Add, edit, and search members. The starting point for almost everything else."
+      },
+      "households": {
+        "title": "Households",
+        "description": "Group members by family. Used by children check-in to find guardians."
+      },
+      "attendance": {
+        "title": "Attendance",
+        "description": "Create services and record who came on Sundays."
+      },
+      "giving": {
+        "title": "Giving",
+        "description": "Record persembahan against funds and reconcile bank transfers."
+      },
+      "cellGroups": {
+        "title": "Cell groups",
+        "description": "Komsel structure, members, and meeting reports."
+      },
+      "events": {
+        "title": "Events",
+        "description": "Create church events and track RSVPs."
+      },
+      "communications": {
+        "title": "Communications",
+        "description": "Templates and broadcasts via WhatsApp."
+      },
+      "volunteers": {
+        "title": "Volunteers",
+        "description": "Teams, positions, and serving assignments."
+      },
+      "children": {
+        "title": "Children check-in",
+        "description": "Class management, live check-in counter, and history."
+      },
+      "pastoral": {
+        "title": "Pastoral care",
+        "description": "Track visits and follow-ups with members."
+      },
+      "discipleship": {
+        "title": "Discipleship",
+        "description": "Spiritual milestones for each member."
+      },
+      "reports": {
+        "title": "Reports",
+        "description": "Cross-feature analytics dashboard."
+      },
+      "settings": {
+        "title": "Settings",
+        "description": "Operational config, user management, and audit log."
+      }
+    },
+    "tasks": {
+      "addMember": {
+        "title": "Add a new member",
+        "description": "Members → New member. Fill in name, gender, birth date, phone — link to a household if applicable."
+      },
+      "recordAttendance": {
+        "title": "Record Sunday attendance",
+        "description": "Attendance → pick the service for this Sunday → Check-in. Scan QR codes or search by name."
+      },
+      "recordGiving": {
+        "title": "Record a persembahan",
+        "description": "Giving → New giving. Pick the member (or anonymous), the fund, the amount, and the method."
+      },
+      "broadcastMessage": {
+        "title": "Send a WhatsApp broadcast",
+        "description": "Communications → New broadcast. Pick a template and a member group, then preview and send."
+      },
+      "checkInChild": {
+        "title": "Check a child in for kids ministry",
+        "description": "Children → Check-in. Pick the child, drop-off guardian, and class. The system issues a 4-character safety code."
+      }
+    }
   }
 }

@@ -1784,5 +1784,120 @@
       "colPickup": "Penjemput",
       "colCode": "Kode"
     }
+  },
+  "search": {
+    "title": "Pencarian",
+    "subtitle": "Cari anggota, rumah tangga, komsel, dan acara.",
+    "placeholder": "Ketik minimal 2 karakter…",
+    "submit": "Cari",
+    "hintEmpty": "Mulai mengetik untuk mencari di anggota, rumah tangga, komsel, dan acara.",
+    "hintShort": "Ketik minimal 2 karakter.",
+    "noResults": "Tidak ada hasil untuk \"{query}\".",
+    "resultsSummary": "{total} hasil untuk \"{query}\"",
+    "noLeader": "Belum ada pemimpin",
+    "memberCount": "{count} anggota",
+    "groups": {
+      "members": "Anggota ({count})",
+      "households": "Rumah Tangga ({count})",
+      "cellGroups": "Komsel ({count})",
+      "events": "Acara ({count})"
+    }
+  },
+  "help": {
+    "title": "Bantuan",
+    "subtitle": "Quick start, ringkasan modul, dan tugas umum.",
+    "modulesTitle": "Modul",
+    "modulesDescription": "Panduan singkat tiap bagian admin.",
+    "openModule": "Buka",
+    "commonTasksTitle": "Tugas umum",
+    "commonTasksDescription": "Langkah-langkah untuk hal yang paling sering dilakukan.",
+    "supportTitle": "Butuh bantuan?",
+    "supportDescription": "Hubungi developer yang setup deployment ini.",
+    "supportBody": "Untuk laporan bug atau request fitur, hubungi pengelola IT gereja atau developer yang menangani sistem ini.",
+    "quickStart": {
+      "title": "Quick start",
+      "description": "Lima langkah untuk menjalankan sistem di gereja Anda.",
+      "step1": "Tambahkan jemaat inti di /admin/members. Rumah tangga & komsel bisa diatur setelah itu.",
+      "step2": "Atur ibadah di /admin/attendance/services supaya bisa catat check-in setiap Minggu.",
+      "step3": "Konfigurasi fund persembahan di /admin/giving agar persembahan terkategori benar.",
+      "step4": "Sesuaikan rekening bank, QRIS, & WhatsApp konfirmasi di /admin/settings.",
+      "step5": "Undang staff di /admin/settings/users — mereka login pakai email + password."
+    },
+    "modules": {
+      "members": {
+        "title": "Jemaat",
+        "description": "Tambah, ubah, & cari jemaat. Titik awal hampir semua lainnya."
+      },
+      "households": {
+        "title": "Rumah Tangga",
+        "description": "Kelompokkan jemaat berdasar keluarga. Dipakai check-in anak untuk menemukan pengantar."
+      },
+      "attendance": {
+        "title": "Kehadiran",
+        "description": "Buat ibadah & catat siapa yang datang pada Minggu."
+      },
+      "giving": {
+        "title": "Persembahan",
+        "description": "Catat persembahan ke fund & rekonsiliasi transfer bank."
+      },
+      "cellGroups": {
+        "title": "Komsel",
+        "description": "Struktur komsel, anggota, & laporan pertemuan."
+      },
+      "events": {
+        "title": "Acara",
+        "description": "Buat acara gereja & lacak RSVP."
+      },
+      "communications": {
+        "title": "Komunikasi",
+        "description": "Template & broadcast via WhatsApp."
+      },
+      "volunteers": {
+        "title": "Pelayanan",
+        "description": "Tim, posisi, & jadwal pelayan."
+      },
+      "children": {
+        "title": "Check-in Anak",
+        "description": "Kelola kelas, counter check-in langsung, & riwayat."
+      },
+      "pastoral": {
+        "title": "Pastoral",
+        "description": "Catat kunjungan & tindak lanjut jemaat."
+      },
+      "discipleship": {
+        "title": "Pemuridan",
+        "description": "Tonggak rohani per jemaat."
+      },
+      "reports": {
+        "title": "Laporan",
+        "description": "Dashboard analitik lintas fitur."
+      },
+      "settings": {
+        "title": "Pengaturan",
+        "description": "Konfigurasi operasional, pengguna, & audit log."
+      }
+    },
+    "tasks": {
+      "addMember": {
+        "title": "Tambah jemaat baru",
+        "description": "Jemaat → Jemaat baru. Isi nama, jenis kelamin, tanggal lahir, no HP — tautkan ke rumah tangga jika ada."
+      },
+      "recordAttendance": {
+        "title": "Catat kehadiran Minggu",
+        "description": "Kehadiran → pilih ibadah Minggu ini → Check-in. Scan QR atau cari nama."
+      },
+      "recordGiving": {
+        "title": "Catat persembahan",
+        "description": "Persembahan → Persembahan baru. Pilih jemaat (atau anonim), fund, jumlah, & metode."
+      },
+      "broadcastMessage": {
+        "title": "Kirim broadcast WhatsApp",
+        "description": "Komunikasi → Broadcast baru. Pilih template & grup jemaat, preview, lalu kirim."
+      },
+      "checkInChild": {
+        "title": "Check-in anak ke sekolah Minggu",
+        "description": "Check-in Anak → Check-in. Pilih anak, pengantar, & kelas. Sistem mengeluarkan kode keamanan 4 karakter."
+      }
+    }
   }
 }
