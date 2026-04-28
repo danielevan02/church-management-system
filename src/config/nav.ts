@@ -112,7 +112,6 @@ export const adminNav: readonly AdminNavItem[] = [
     group: "documents",
     roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
     feature: "childrensCheckIn",
-    comingSoon: true,
   },
   {
     href: "/admin/pastoral",
@@ -237,5 +236,11 @@ export const memberNav: readonly MemberNavItem[] = [
     href: "/me/prayer-requests",
     labelKey: "nav.prayerRequests",
     icon: Heart,
+  },
+  {
+    href: "/me/children",
+    labelKey: "nav.myChildren",
+    icon: Heart,
+    feature: "childrensCheckIn",
   },
 ] as const;

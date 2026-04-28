@@ -45,7 +45,8 @@
     "myCheckIn": "Check-in",
     "myVolunteer": "My serving",
     "myDiscipleship": "My journey",
-    "prayerRequestsAdmin": "Prayer requests"
+    "prayerRequestsAdmin": "Prayer requests",
+    "myChildren": "My children"
   },
   "auth": {
     "shell": {
@@ -286,6 +287,16 @@
         "savedToast": "Prayer request saved.",
         "errorToast": "Save failed."
       }
+    },
+    "children": {
+      "title": "My children",
+      "subtitle": "Recent kids-ministry check-ins for children in your household.",
+      "empty": "No children linked to your household yet.",
+      "emptyHint": "Ask the church admin to link your kids to your household.",
+      "noHistory": "No check-ins yet.",
+      "active": "In class",
+      "age": "{age} years",
+      "noAge": "Age not set"
     }
   },
   "members": {
@@ -1639,6 +1650,139 @@
       "colEntity": "Entity",
       "colMetadata": "Metadata",
       "system": "system"
+    }
+  },
+  "children": {
+    "title": "Children check-in",
+    "subtitle": "Manage Sunday-school check-in, classes, and history.",
+    "stats": {
+      "activeNow": "Checked in now",
+      "activeClasses": "Active classes"
+    },
+    "sections": {
+      "checkIn": {
+        "title": "Check-in / out",
+        "description": "Run the live check-in counter.",
+        "cta": "Open"
+      },
+      "classes": {
+        "title": "Classes",
+        "description": "Define age groups for kids ministry.",
+        "cta": "Manage"
+      },
+      "history": {
+        "title": "History",
+        "description": "Past check-ins by class or date.",
+        "cta": "View"
+      }
+    },
+    "classes": {
+      "title": "Child classes",
+      "subtitle": "{total} class(es).",
+      "empty": "No classes yet. Create one to start checking in kids.",
+      "newButton": "New class",
+      "back": "Back to children",
+      "active": "Active",
+      "inactive": "Inactive",
+      "deactivate": "Deactivate",
+      "activate": "Activate",
+      "edit": "Edit",
+      "ageRange": "{min}–{max} years",
+      "toggleSavedToast": "Class updated.",
+      "errorToast": "Action failed.",
+      "newTitle": "New class",
+      "editTitle": "Edit class",
+      "submitCreate": "Create class",
+      "submitUpdate": "Save changes",
+      "colName": "Name",
+      "colAges": "Ages",
+      "colStatus": "Status",
+      "colActions": "Actions"
+    },
+    "classForm": {
+      "fields": {
+        "name": "Name",
+        "namePlaceholder": "e.g. Toddlers",
+        "ageMin": "Minimum age",
+        "ageMax": "Maximum age",
+        "isActive": "Active",
+        "isActiveHint": "Inactive classes are hidden from check-in."
+      },
+      "savedToast": "Class saved.",
+      "errorToast": "Save failed."
+    },
+    "checkIn": {
+      "title": "Check-in counter",
+      "subtitle": "Issue safety codes and process pickups.",
+      "back": "Back to children",
+      "formTitle": "Check in a child",
+      "formDescription": "Pick child + guardian + class.",
+      "checkOutTitle": "Check out",
+      "checkOutDescription": "Verify the safety code and pickup person.",
+      "noClasses": "No active classes yet — create one first.",
+      "createClassCta": "Create class",
+      "activeTitle": "Currently checked in ({count})",
+      "activeDescription": "Children waiting to be picked up.",
+      "activeEmpty": "No active check-ins.",
+      "activeCard": {
+        "code": "Code",
+        "guardian": "Dropped off by",
+        "checkedInAt": "In at"
+      },
+      "form": {
+        "fields": {
+          "child": "Child",
+          "childPlaceholder": "Search a child…",
+          "guardian": "Drop-off guardian",
+          "guardianPlaceholder": "Search a member…",
+          "class": "Class",
+          "classPlaceholder": "Select class",
+          "notes": "Notes",
+          "notesPlaceholder": "Allergies, mood, special needs…"
+        },
+        "savedToast": "Checked in.",
+        "errorToast": "Check-in failed.",
+        "missingFields": "Pick a child, guardian, and class.",
+        "alreadyCheckedIn": "This child is already checked in.",
+        "ageMismatchWarning": "Age {age} is outside this class range.",
+        "autoSuggestHint": "Tip: select a child to auto-suggest a class.",
+        "submit": "Check in",
+        "issued": {
+          "title": "Safety code for {name}",
+          "description": "Give one tag to the parent and one to the child. They will need this code to pick up.",
+          "dismiss": "Done"
+        }
+      }
+    },
+    "checkOut": {
+      "form": {
+        "fields": {
+          "code": "Safety code",
+          "codePlaceholder": "ABCD",
+          "pickupGuardian": "Pickup person",
+          "pickupGuardianPlaceholder": "Search a member…"
+        },
+        "savedToast": "Checked out.",
+        "errorToast": "Check-out failed.",
+        "missingFields": "Code and pickup person are required.",
+        "codeNotFound": "No active check-in matches that code.",
+        "submit": "Check out"
+      }
+    },
+    "history": {
+      "title": "Check-in history",
+      "subtitle": "Showing the last {total} check-ins.",
+      "back": "Back to children",
+      "empty": "No check-ins yet.",
+      "active": "Active",
+      "filterAll": "All",
+      "colChild": "Child",
+      "colClass": "Class",
+      "colCheckedIn": "Checked in",
+      "colCheckedOut": "Out",
+      "colGuardian": "Drop-off",
+      "colPickup": "Pickup",
+      "colCode": "Code"
     }
   }
 }
