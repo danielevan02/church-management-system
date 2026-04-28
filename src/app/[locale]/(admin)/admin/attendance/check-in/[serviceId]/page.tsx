@@ -21,9 +21,17 @@ export default async function UsherCheckInPage({
 
   const t = await getTranslations("attendance.checkIn");
   const tType = await getTranslations("services.type");
-  const { total, memberCount, visitorCount } =
+  const { total, memberCount, visitorCount, items } =
     await listAttendanceForService(serviceId);
   const open = service.isActive && isCheckInOpen(service, new Date());
+
+  const initialRecent = items.slice(0, 20).map((r) => ({
+    recordId: r.id,
+    name: r.member?.fullName ?? r.visitorName ?? "—",
+    source: r.source,
+    alreadyCheckedIn: false,
+    at: r.checkedInAt,
+  }));
 
   return (
     <div className="flex flex-col gap-6">
@@ -67,7 +75,7 @@ export default async function UsherCheckInPage({
           {t("closedNotice")}
         </div>
       ) : (
-        <CheckInConsole serviceId={serviceId} />
+        <CheckInConsole serviceId={serviceId} initialRecent={initialRecent} />
       )}
     </div>
   );

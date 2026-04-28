@@ -33,10 +33,16 @@ type RecentRow = {
   at: Date;
 };
 
-export function CheckInConsole({ serviceId }: { serviceId: string }) {
+export function CheckInConsole({
+  serviceId,
+  initialRecent = [],
+}: {
+  serviceId: string;
+  initialRecent?: RecentRow[];
+}) {
   const t = useTranslations("attendance.checkIn");
   const router = useRouter();
-  const [recent, setRecent] = useState<RecentRow[]>([]);
+  const [recent, setRecent] = useState<RecentRow[]>(initialRecent);
   const [tab, setTab] = useState("qr");
   const [isQrPending, startQr] = useTransition();
 
@@ -52,18 +58,19 @@ export function CheckInConsole({ serviceId }: { serviceId: string }) {
       fallbackName?: string,
     ) => {
       const name = result.memberName ?? fallbackName ?? "—";
-      setRecent((prev) =>
-        [
-          {
-            recordId: result.recordId,
-            name,
-            source,
-            alreadyCheckedIn: result.alreadyCheckedIn,
-            at: new Date(),
-          },
-          ...prev,
-        ].slice(0, 20),
-      );
+      setRecent((prev) => {
+        const newRow = {
+          recordId: result.recordId,
+          name,
+          source,
+          alreadyCheckedIn: result.alreadyCheckedIn,
+          at: new Date(),
+        };
+        return [
+          newRow,
+          ...prev.filter((r) => r.recordId !== newRow.recordId),
+        ].slice(0, 20);
+      });
       if (result.alreadyCheckedIn) {
         toast.info(t("alreadyCheckedIn", { name }));
       } else {
