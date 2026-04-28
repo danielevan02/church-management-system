@@ -142,8 +142,7 @@ export const adminNav: readonly AdminNavItem[] = [
     labelKey: "nav.reports",
     icon: BarChart3,
     group: "documents",
-    roles: ["SUPER_ADMIN", "ADMIN"],
-    comingSoon: true,
+    roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
   },
 
   // === SECONDARY ===
