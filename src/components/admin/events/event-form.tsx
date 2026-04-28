@@ -6,6 +6,7 @@ import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
+import { DateTimePicker } from "@/components/shared/date-time-picker";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -143,7 +144,11 @@ export function EventForm({
               <FormItem>
                 <FormLabel>{t("fields.startsAt")} *</FormLabel>
                 <FormControl>
-                  <Input type="datetime-local" {...field} />
+                  <DateTimePicker
+                    value={field.value}
+                    onChange={field.onChange}
+                    ariaLabel={t("fields.startsAt")}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -156,7 +161,11 @@ export function EventForm({
               <FormItem>
                 <FormLabel>{t("fields.endsAt")} *</FormLabel>
                 <FormControl>
-                  <Input type="datetime-local" {...field} />
+                  <DateTimePicker
+                    value={field.value}
+                    onChange={field.onChange}
+                    ariaLabel={t("fields.endsAt")}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

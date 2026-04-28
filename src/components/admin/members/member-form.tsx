@@ -6,6 +6,7 @@ import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
+import { DatePicker } from "@/components/shared/date-picker";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -233,7 +234,12 @@ export function MemberForm({
                 <FormItem>
                   <FormLabel>{t("fields.birthDate")}</FormLabel>
                   <FormControl>
-                    <Input type="date" {...field} />
+                    <DatePicker
+                      value={field.value ?? ""}
+                      onChange={field.onChange}
+                      clearable
+                      ariaLabel={t("fields.birthDate")}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -429,7 +435,12 @@ export function MemberForm({
                 <FormItem>
                   <FormLabel>{t("fields.joinedAt")}</FormLabel>
                   <FormControl>
-                    <Input type="date" {...field} />
+                    <DatePicker
+                      value={field.value ?? ""}
+                      onChange={field.onChange}
+                      clearable
+                      ariaLabel={t("fields.joinedAt")}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -442,7 +453,12 @@ export function MemberForm({
                 <FormItem>
                   <FormLabel>{t("fields.baptismDate")}</FormLabel>
                   <FormControl>
-                    <Input type="date" {...field} />
+                    <DatePicker
+                      value={field.value ?? ""}
+                      onChange={field.onChange}
+                      clearable
+                      ariaLabel={t("fields.baptismDate")}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

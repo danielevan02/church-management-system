@@ -11,7 +11,15 @@
     "delete": "Hapus",
     "confirm": "Ya",
     "signOut": "Keluar",
-    "soon": "Soon"
+    "soon": "Soon",
+    "datetime": {
+      "placeholder": "Pilih tanggal & jam",
+      "placeholderDate": "Pilih tanggal",
+      "hour": "Jam",
+      "minute": "Menit",
+      "done": "Selesai",
+      "clear": "Hapus"
+    }
   },
   "nav": {
     "dashboard": "Dasbor",

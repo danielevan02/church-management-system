@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { MemberPicker } from "@/components/admin/giving/member-picker";
+import { DatePicker } from "@/components/shared/date-picker";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -16,7 +17,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -208,7 +208,11 @@ export function AssignmentForm({
               <FormItem>
                 <FormLabel>{t("fields.serviceDate")} *</FormLabel>
                 <FormControl>
-                  <Input type="date" {...field} />
+                  <DatePicker
+                    value={field.value}
+                    onChange={field.onChange}
+                    ariaLabel={t("fields.serviceDate")}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

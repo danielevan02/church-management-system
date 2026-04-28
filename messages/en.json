@@ -11,7 +11,15 @@
     "delete": "Delete",
     "confirm": "Yes",
     "signOut": "Sign out",
-    "soon": "Soon"
+    "soon": "Soon",
+    "datetime": {
+      "placeholder": "Pick date & time",
+      "placeholderDate": "Pick a date",
+      "hour": "Hour",
+      "minute": "Minute",
+      "done": "Done",
+      "clear": "Clear"
+    }
   },
   "nav": {
     "dashboard": "Dashboard",
