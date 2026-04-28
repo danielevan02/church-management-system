@@ -74,9 +74,17 @@ docker compose up -d     # Start local Postgres
 docker compose down      # Stop Postgres
 ```
 
-## Deploying for a church
+## Documentation
 
-See [`docs/deployment.md`](./docs/deployment.md) for the step-by-step runbook (Vercel + Neon, or self-hosted Docker), and [`docs/customization.md`](./docs/customization.md) for branding and feature flag changes per deployment.
+All docs live in [`docs/`](./docs/):
+
+| Doc | Audience |
+|---|---|
+| [User guide — admin/staff](./docs/user-guide-admin.md) | Pengurus gereja, panduan lengkap per modul + cookbook |
+| [User guide — jemaat](./docs/user-guide-jemaat.md) | Anggota jemaat, panduan portal `/me` + FAQ |
+| [Deployment](./docs/deployment.md) | Step-by-step deploy untuk gereja baru (Vercel+Neon / Docker) |
+| [Customization](./docs/customization.md) | Branding, feature flags, icon PWA per deployment |
+| [Index dokumentasi](./docs/README.md) | Navigasi semua dokumen |
 
 ## Project structure
 
