@@ -8,7 +8,6 @@ import { toast } from "sonner";
 
 import { DatePicker } from "@/components/shared/date-picker";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -52,7 +51,6 @@ type FormValues = {
   baptismChurch: string;
   joinedAt: string;
   notes: string;
-  excludeFromBroadcasts: boolean;
 };
 
 const emptyDefaults: FormValues = {
@@ -74,7 +72,6 @@ const emptyDefaults: FormValues = {
   baptismChurch: "",
   joinedAt: "",
   notes: "",
-  excludeFromBroadcasts: false,
 };
 
 function toFormValues(
@@ -104,7 +101,6 @@ function toMemberInput(values: FormValues): MemberInput {
     baptismChurch: values.baptismChurch,
     joinedAt: values.joinedAt,
     notes: values.notes,
-    excludeFromBroadcasts: values.excludeFromBroadcasts,
   };
 }
 
@@ -491,29 +487,6 @@ export function MemberForm({
               )}
             />
           </div>
-        </Section>
-
-        <Section title={t("sections.preferences")}>
-          <FormField
-            control={form.control}
-            name="excludeFromBroadcasts"
-            render={({ field }) => (
-              <FormItem className="flex items-center gap-3 space-y-0">
-                <FormControl>
-                  <Checkbox
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                </FormControl>
-                <div>
-                  <FormLabel>{t("fields.excludeFromBroadcasts")}</FormLabel>
-                  <FormDescription>
-                    {t("fields.excludeFromBroadcastsHelp")}
-                  </FormDescription>
-                </div>
-              </FormItem>
-            )}
-          />
         </Section>
 
         <div className="flex justify-end gap-3">

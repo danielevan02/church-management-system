@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { normalizePhone } from "@/lib/whatsapp";
+import { normalizePhone } from "@/lib/phone";
 
 const empty = z
   .string()

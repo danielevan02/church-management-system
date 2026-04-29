@@ -35,7 +35,7 @@
     "giving": "Giving",
     "cellGroups": "Cell groups",
     "events": "Events",
-    "communications": "Communications",
+    "announcements": "Announcements",
     "volunteers": "Volunteers",
     "children": "Children",
     "pastoral": "Pastoral care",
@@ -50,6 +50,7 @@
       "inbox": "Inbox"
     },
     "myDashboard": "My dashboard",
+    "myAnnouncements": "Announcements",
     "myProfile": "My profile",
     "myQr": "My QR",
     "myGiving": "My giving",
@@ -160,7 +161,7 @@
         "newMember": "Add Member",
         "checkIn": "Open Check-in",
         "newGiving": "Record Giving",
-        "newCommunication": "Send Message",
+        "newAnnouncement": "New Announcement",
         "newEvent": "Add Event",
         "reports": "Reports"
       },
@@ -235,6 +236,11 @@
       "title": "You are offline",
       "description": "No internet connection. This page was cached for you. Try again once you're back online.",
       "retry": "Try again"
+    },
+    "announcements": {
+      "title": "Announcements",
+      "subtitle": "Latest news and updates from the church.",
+      "empty": "No announcements yet."
     },
     "profile": {
       "title": "My profile",
@@ -506,9 +512,7 @@
         "joinedAt": "Joined date",
         "baptismDate": "Baptism date",
         "baptismChurch": "Baptism church",
-        "notes": "Notes",
-        "excludeFromBroadcasts": "Exclude from broadcasts",
-        "excludeFromBroadcastsHelp": "This member won't receive bulletins or mass announcements."
+        "notes": "Notes"
       },
       "gender": {
         "male": "Male",
@@ -1350,141 +1354,47 @@
       }
     }
   },
-  "communications": {
-    "channel": {
-      "whatsapp": "WhatsApp",
-      "email": "Email",
-      "sms": "SMS",
-      "push": "Push"
-    },
-    "delivery": {
-      "status": {
-        "pending": "Pending",
-        "sent": "Sent",
-        "delivered": "Delivered",
-        "failed": "Failed"
-      }
-    },
+  "announcements": {
     "list": {
-      "title": "Communications",
-      "subtitle": "{total} broadcasts.",
-      "newButton": "New broadcast",
-      "templatesButton": "Templates",
-      "empty": "No broadcasts yet.",
-      "colName": "Name",
-      "colChannel": "Channel",
+      "title": "Announcements",
+      "subtitle": "{total} announcement(s) total.",
+      "newButton": "New announcement",
+      "empty": "No announcements yet. Click \"New announcement\" to publish one.",
+      "colTitle": "Title",
+      "colPublishedAt": "Published",
       "colStatus": "Status",
-      "colSent": "Sent at",
-      "colTotals": "Sent / Total",
-      "failedAbbr": "failed"
+      "colAuthor": "Author",
+      "statusPublished": "Published",
+      "statusScheduled": "Scheduled"
     },
-    "campaign": {
-      "status": {
-        "draft": "Draft",
-        "sending": "Sending",
-        "sent": "Sent",
-        "failed": "Failed"
-      },
-      "new": {
-        "title": "New broadcast",
-        "subtitle": "Compose a message and pick the audience. Stays in draft until you send it.",
-        "submit": "Save draft"
-      },
-      "form": {
-        "savedToast": "Draft saved.",
-        "errorToast": "Save failed.",
-        "fields": {
-          "name": "Internal name",
-          "namePlaceholder": "Bulletin Minggu 5 Mei",
-          "nameHelp": "Only visible to admin — for tracking.",
-          "channel": "Channel",
-          "template": "Use template",
-          "templateHelp": "Pre-fill subject and body from a saved template.",
-          "templateApplied": "Template applied — edit below before sending.",
-          "subject": "Subject",
-          "body": "Message"
-        }
-      },
-      "audience": {
-        "title": "Audience",
-        "description": "Members with WhatsApp opt-out enabled are excluded automatically.",
-        "kind": "Audience",
-        "all": "All members",
-        "filter": "Filtered",
-        "status": "Member status",
-        "anyStatus": "Any status",
-        "gender": "Gender",
-        "anyGender": "Any gender",
-        "male": "Male",
-        "female": "Female",
-        "cellGroup": "Cell group",
-        "anyCellGroup": "Any cell group",
-        "household": "Household",
-        "anyHousehold": "Any household",
-        "optOutNote": "Members flagged \"exclude from broadcasts\" are never included."
-      },
-      "detail": {
-        "backToList": "All broadcasts",
-        "delete": "Delete",
-        "send": "Send now",
-        "sentLabel": "Sent",
-        "subjectLabel": "Subject",
-        "messageTitle": "Message",
-        "deliveriesTitle": "Deliveries",
-        "deliveriesDescription": "{count} recipients on this broadcast.",
-        "deliveriesEmpty": "No deliveries recorded yet — hit Send when ready.",
-        "colRecipient": "Recipient",
-        "colStatus": "Status",
-        "colSentAt": "Sent at",
-        "colError": "Error",
-        "statTotal": "Recipients",
-        "statSent": "Delivered",
-        "statFailed": "Failed",
-        "confirmSend": "Send to {count} recipients?",
-        "confirmDelete": "Delete this broadcast and all delivery records? Cannot be undone.",
-        "deletedToast": "Broadcast deleted.",
-        "sentToast": "Sent {sent}/{total} ({failed} failed).",
-        "errorToast": "Action failed.",
-        "alreadySent": "Already sent."
-      }
+    "new": {
+      "title": "New announcement",
+      "subtitle": "Write a message that all members will see in their portal inbox.",
+      "backToList": "Announcements",
+      "submit": "Publish"
     },
-    "template": {
-      "confirmDelete": "Delete this template?",
-      "deletedToast": "Template deleted.",
-      "errorToast": "Action failed.",
-      "list": {
-        "title": "Templates",
-        "subtitle": "{total} templates.",
-        "backToList": "Communications",
-        "newButton": "New template",
-        "empty": "No templates yet.",
-        "colName": "Name",
-        "colChannel": "Channel",
-        "colStatus": "Status",
-        "colActions": "Actions",
-        "statusActive": "Active",
-        "statusInactive": "Inactive"
+    "edit": {
+      "backToList": "Announcements",
+      "submit": "Save changes"
+    },
+    "form": {
+      "fields": {
+        "title": "Title",
+        "body": "Body",
+        "bodyHint": "Plain text. Line breaks are preserved.",
+        "publishedAt": "Publish at",
+        "publishedAtHint": "Leave empty to publish immediately. Set a future time to schedule."
       },
-      "new": {
-        "title": "New template",
-        "subtitle": "Reusable message you can pull into broadcasts.",
-        "submit": "Save"
-      },
-      "edit": {
-        "title": "Edit template",
-        "submit": "Save changes"
-      },
-      "form": {
-        "savedToast": "Template saved.",
-        "errorToast": "Save failed.",
-        "fields": {
-          "name": "Name",
-          "channel": "Channel",
-          "subject": "Subject",
-          "body": "Body",
-          "isActive": "Active"
-        }
-      }
+      "savedToast": "Announcement saved.",
+      "errorToast": "Save failed. Check the form."
+    },
+    "delete": {
+      "button": "Delete",
+      "confirmTitle": "Delete this announcement?",
+      "confirmDescription": "Members will no longer see it in their inbox. This action cannot be undone.",
+      "cancel": "Cancel",
+      "deletedToast": "Announcement deleted.",
+      "errorToast": "Delete failed."
     }
   },
   "publicGive": {
@@ -1800,10 +1710,6 @@
           "label": "Giving",
           "description": "Tithes, offerings, and fund tracking."
         },
-        "whatsappBroadcast": {
-          "label": "WhatsApp broadcast",
-          "description": "Bulk messaging via WhatsApp templates."
-        },
         "selfCheckIn": {
           "label": "Self check-in",
           "description": "Members check themselves in via the member portal."
@@ -2019,9 +1925,9 @@
         "title": "Events",
         "description": "Create church events and track RSVPs."
       },
-      "communications": {
-        "title": "Communications",
-        "description": "Templates and broadcasts via WhatsApp."
+      "announcements": {
+        "title": "Announcements",
+        "description": "Publish church-wide announcements that members see in their portal inbox."
       },
       "volunteers": {
         "title": "Volunteers",

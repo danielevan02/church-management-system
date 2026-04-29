@@ -41,9 +41,10 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  accounts  Account[]
-  sessions  Session[]
-  auditLogs AuditLog[]
+  accounts      Account[]
+  sessions      Session[]
+  auditLogs     AuditLog[]
+  announcements Announcement[]
 
   @@map("users")
 }
@@ -144,8 +145,6 @@ model Member {
   baptismChurch String?
   joinedAt      DateTime?
   notes         String?
-
-  excludeFromBroadcasts Boolean @default(false)
 
   household     Household? @relation(fields: [householdId], references: [id])
   householdId   String?
@@ -424,77 +423,22 @@ model EventRsvp {
 }
 
 // =====================================================================
-// Communications
+// Announcements
 // =====================================================================
 
-enum MessageChannel {
-  WHATSAPP
-  EMAIL
-  SMS
-  PUSH
-}
+model Announcement {
+  id          String    @id @default(cuid())
+  title       String
+  body        String
+  publishedAt DateTime  @default(now())
+  createdById String?
+  createdBy   User?     @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
 
-enum MessageStatus {
-  PENDING
-  SENT
-  DELIVERED
-  FAILED
-}
-
-model MessageTemplate {
-  id        String         @id @default(cuid())
-  name      String
-  channel   MessageChannel
-  subject   String?
-  body      String
-  isActive  Boolean        @default(true)
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
-
-  @@map("message_templates")
-}
-
-model BroadcastCampaign {
-  id           String         @id @default(cuid())
-  name         String
-  channel      MessageChannel
-  subject      String?
-  body         String
-  audienceJson Json
-  scheduledAt  DateTime?
-  sentAt       DateTime?
-  createdBy    String
-  status       String         @default("DRAFT")
-  totalCount   Int            @default(0)
-  successCount Int            @default(0)
-  failureCount Int            @default(0)
-
-  messages MessageDelivery[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("broadcast_campaigns")
-}
-
-model MessageDelivery {
-  id           String             @id @default(cuid())
-  campaign     BroadcastCampaign? @relation(fields: [campaignId], references: [id])
-  campaignId   String?
-  channel      MessageChannel
-  recipient    String
-  memberId     String?
-  body         String
-  status       MessageStatus      @default(PENDING)
-  externalRef  String?
-  errorMessage String?
-  sentAt       DateTime?
-  deliveredAt  DateTime?
-  createdAt    DateTime           @default(now())
-
-  @@index([campaignId])
-  @@index([recipient])
-  @@map("message_deliveries")
+  @@index([publishedAt])
+  @@map("announcements")
 }
 
 // =====================================================================

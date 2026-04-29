@@ -7,7 +7,6 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -40,7 +39,6 @@ type FormValues = {
   postalCode: string;
   country: string;
   maritalStatus: "" | "SINGLE" | "MARRIED" | "DIVORCED" | "WIDOWED";
-  excludeFromBroadcasts: boolean;
 };
 
 function toInput(values: FormValues): OwnProfileInput {
@@ -53,7 +51,6 @@ function toInput(values: FormValues): OwnProfileInput {
     country: values.country,
     maritalStatus:
       values.maritalStatus === "" ? null : values.maritalStatus,
-    excludeFromBroadcasts: values.excludeFromBroadcasts,
   };
 }
 
@@ -209,29 +206,6 @@ export function ProfileEditForm({
                 </SelectContent>
               </Select>
               <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="excludeFromBroadcasts"
-          render={({ field }) => (
-            <FormItem className="flex items-center gap-3 space-y-0">
-              <FormControl>
-                <Checkbox
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
-              </FormControl>
-              <div>
-                <FormLabel>
-                  {tForm("fields.excludeFromBroadcasts")}
-                </FormLabel>
-                <FormDescription>
-                  {tForm("fields.excludeFromBroadcastsHelp")}
-                </FormDescription>
-              </div>
             </FormItem>
           )}
         />

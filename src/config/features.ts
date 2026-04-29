@@ -4,7 +4,6 @@ export const features = {
   discipleship: true,
   volunteers: true,
   giving: true,
-  whatsappBroadcast: true,
   selfCheckIn: true,
 } as const;
 

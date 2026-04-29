@@ -58,7 +58,6 @@ export async function updateMemberAction(
         baptismChurch: data.baptismChurch,
         joinedAt: data.joinedAt,
         notes: data.notes,
-        excludeFromBroadcasts: data.excludeFromBroadcasts,
       },
     });
 

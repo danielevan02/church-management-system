@@ -8,7 +8,7 @@ import {
   CalendarDays,
   HandCoins,
   HeartHandshake,
-  MessageSquare,
+  Megaphone,
   PlusCircle,
   ScanLine,
   UserCheck,
@@ -318,9 +318,9 @@ export default async function AdminDashboardPage() {
               />
             ) : null}
             <QuickAction
-              href="/admin/communications/new"
-              icon={MessageSquare}
-              label={t("quickActions.newCommunication")}
+              href="/admin/announcements/new"
+              icon={Megaphone}
+              label={t("quickActions.newAnnouncement")}
             />
             <QuickAction
               href="/admin/events/new"

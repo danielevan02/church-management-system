@@ -43,7 +43,6 @@ export async function updateOwnProfileAction(
         postalCode: data.postalCode,
         country: data.country ?? "ID",
         maritalStatus: data.maritalStatus,
-        excludeFromBroadcasts: data.excludeFromBroadcasts,
       },
     });
 
