@@ -4,6 +4,8 @@ import type { Prisma } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
 
+import { clampPage, paginate } from "./_pagination";
+
 const adminListSelect = {
   id: true,
   title: true,
@@ -32,18 +34,28 @@ export type PrayerRequestFilters = {
 
 export async function listPrayerRequests(opts?: {
   filters?: PrayerRequestFilters;
+  page?: number;
+  pageSize?: number;
 }) {
+  const { page, pageSize, skip, take } = clampPage(opts ?? {});
   const where: Prisma.PrayerRequestWhereInput = {};
   const f = opts?.filters;
   if (f?.status) where.status = f.status as never;
   if (f?.memberId) where.memberId = f.memberId;
   if (f?.isPublic !== undefined) where.isPublic = f.isPublic;
 
-  return prisma.prayerRequest.findMany({
-    where,
-    orderBy: [{ status: "asc" }, { createdAt: "desc" }],
-    select: adminListSelect,
-  });
+  const [items, total] = await Promise.all([
+    prisma.prayerRequest.findMany({
+      where,
+      orderBy: [{ status: "asc" }, { createdAt: "desc" }],
+      skip,
+      take,
+      select: adminListSelect,
+    }),
+    prisma.prayerRequest.count({ where }),
+  ]);
+
+  return paginate(items, total, page, pageSize);
 }
 
 export async function getPrayerRequest(id: string) {

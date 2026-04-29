@@ -2,6 +2,7 @@ import { ArrowLeft, Plus } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
 import { DeleteTemplateButton } from "@/components/admin/communications/delete-template-button";
+import { Pagination } from "@/components/shared/pagination";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,11 +15,18 @@ import {
 } from "@/components/ui/table";
 import { Link } from "@/lib/i18n/navigation";
 import { listTemplates } from "@/server/queries/communications";
+import { parsePageParam } from "@/server/queries/_pagination";
 
-export default async function TemplatesListPage() {
+export default async function TemplatesListPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const sp = await searchParams;
+  const page = parsePageParam(sp.page);
   const t = await getTranslations("communications.template.list");
   const tChannel = await getTranslations("communications.channel");
-  const templates = await listTemplates();
+  const result = await listTemplates({ page });
 
   return (
     <div className="flex flex-col gap-6">
@@ -32,7 +40,7 @@ export default async function TemplatesListPage() {
           </Button>
           <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
           <p className="text-muted-foreground">
-            {t("subtitle", { total: templates.length })}
+            {t("subtitle", { total: result.total })}
           </p>
         </div>
         <Button asChild>
@@ -43,7 +51,7 @@ export default async function TemplatesListPage() {
         </Button>
       </header>
 
-      {templates.length === 0 ? (
+      {result.total === 0 ? (
         <div className="rounded-md border border-dashed p-10 text-center text-sm text-muted-foreground">
           {t("empty")}
         </div>
@@ -59,7 +67,7 @@ export default async function TemplatesListPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {templates.map((tpl) => (
+              {result.items.map((tpl) => (
                 <TableRow key={tpl.id}>
                   <TableCell>
                     <Link
@@ -93,6 +101,12 @@ export default async function TemplatesListPage() {
           </Table>
         </div>
       )}
+
+      <Pagination
+        page={result.page}
+        totalPages={result.totalPages}
+        total={result.total}
+      />
     </div>
   );
 }

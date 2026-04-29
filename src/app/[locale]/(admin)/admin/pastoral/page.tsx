@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 
 import { DeleteVisitButton } from "@/components/admin/pastoral/delete-visit-button";
+import { Pagination } from "@/components/shared/pagination";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -21,9 +22,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { listPastoralVisits } from "@/server/queries/pastoral";
+import { parsePageParam } from "@/server/queries/_pagination";
 import { notFound } from "next/navigation";
 
-export default async function PastoralListPage() {
+export default async function PastoralListPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   if (!features.pastoralCare) notFound();
 
   const session = await auth();
@@ -50,7 +56,9 @@ export default async function PastoralListPage() {
     }
   }
 
-  const items = await listPastoralVisits({ filters: { cellGroupIds } });
+  const sp = await searchParams;
+  const page = parsePageParam(sp.page);
+  const result = await listPastoralVisits({ filters: { cellGroupIds }, page });
   const canCreate = hasAtLeastRole(role, "LEADER");
 
   return (
@@ -59,7 +67,7 @@ export default async function PastoralListPage() {
         <div className="flex flex-col gap-1">
           <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
           <p className="text-muted-foreground">
-            {t("subtitle", { total: items.length })}
+            {t("subtitle", { total: result.total })}
           </p>
         </div>
         {canCreate ? (
@@ -72,7 +80,7 @@ export default async function PastoralListPage() {
         ) : null}
       </header>
 
-      {items.length === 0 ? (
+      {result.total === 0 ? (
         <div className="rounded-md border border-dashed p-10 text-center text-sm text-muted-foreground">
           {t("empty")}
         </div>
@@ -90,7 +98,7 @@ export default async function PastoralListPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {items.map((v) => (
+              {result.items.map((v) => (
                 <TableRow key={v.id}>
                   <TableCell>
                     <div className="flex items-center gap-2">
@@ -149,6 +157,12 @@ export default async function PastoralListPage() {
           </Table>
         </div>
       )}
+
+      <Pagination
+        page={result.page}
+        totalPages={result.totalPages}
+        total={result.total}
+      />
     </div>
   );
 }

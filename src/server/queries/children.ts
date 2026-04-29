@@ -4,11 +4,36 @@ import type { Prisma } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
 
+import { clampPage, paginate } from "./_pagination";
+
 // =====================================================================
 // Child classes
 // =====================================================================
 
-export async function listChildClasses(opts?: { activeOnly?: boolean }) {
+export async function listChildClasses(opts?: {
+  activeOnly?: boolean;
+  page?: number;
+  pageSize?: number;
+}) {
+  const { page, pageSize, skip, take } = clampPage(opts ?? {});
+  const where: Prisma.ChildClassWhereInput = opts?.activeOnly
+    ? { isActive: true }
+    : {};
+
+  const [items, total] = await Promise.all([
+    prisma.childClass.findMany({
+      where,
+      orderBy: [{ isActive: "desc" }, { ageMin: "asc" }],
+      skip,
+      take,
+    }),
+    prisma.childClass.count({ where }),
+  ]);
+
+  return paginate(items, total, page, pageSize);
+}
+
+export async function listAllChildClasses(opts?: { activeOnly?: boolean }) {
   return prisma.childClass.findMany({
     where: opts?.activeOnly ? { isActive: true } : undefined,
     orderBy: [{ isActive: "desc" }, { ageMin: "asc" }],
@@ -156,8 +181,10 @@ export async function listCheckInsHistory(opts?: {
   classId?: string;
   from?: Date;
   to?: Date;
-  take?: number;
+  page?: number;
+  pageSize?: number;
 }) {
+  const { page, pageSize, skip, take } = clampPage(opts ?? {});
   const where: Prisma.ChildCheckInWhereInput = {};
   if (opts?.childId) where.childId = opts.childId;
   if (opts?.classId) where.classId = opts.classId;
@@ -166,12 +193,19 @@ export async function listCheckInsHistory(opts?: {
     if (opts.from) where.checkedInAt.gte = opts.from;
     if (opts.to) where.checkedInAt.lte = opts.to;
   }
-  return prisma.childCheckIn.findMany({
-    where,
-    orderBy: { checkedInAt: "desc" },
-    take: opts?.take ?? 100,
-    select: checkInSelect,
-  });
+
+  const [items, total] = await Promise.all([
+    prisma.childCheckIn.findMany({
+      where,
+      orderBy: { checkedInAt: "desc" },
+      skip,
+      take,
+      select: checkInSelect,
+    }),
+    prisma.childCheckIn.count({ where }),
+  ]);
+
+  return paginate(items, total, page, pageSize);
 }
 
 export async function findActiveCheckInByCode(code: string) {

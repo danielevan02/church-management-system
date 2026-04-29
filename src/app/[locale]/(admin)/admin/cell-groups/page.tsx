@@ -1,6 +1,7 @@
 import { Plus } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
+import { Pagination } from "@/components/shared/pagination";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -11,18 +12,26 @@ import {
 import { auth } from "@/lib/auth";
 import { Link } from "@/lib/i18n/navigation";
 import { listCellGroups } from "@/server/queries/cell-groups";
+import { parsePageParam } from "@/server/queries/_pagination";
 
-export default async function CellGroupsListPage() {
+export default async function CellGroupsListPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const sp = await searchParams;
+  const page = parsePageParam(sp.page);
   const session = await auth();
   const role = session?.user.role;
   const t = await getTranslations("cellGroups.list");
   const tDay = await getTranslations("cellGroups.day");
 
-  const groups = await listCellGroups({
+  const result = await listCellGroups({
     scope:
       role && session?.user
         ? { role, memberId: session.user.memberId ?? null }
         : undefined,
+    page,
   });
 
   const canCreate = role === "SUPER_ADMIN" || role === "ADMIN" || role === "STAFF";
@@ -33,7 +42,7 @@ export default async function CellGroupsListPage() {
         <div className="flex flex-col gap-1">
           <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
           <p className="text-muted-foreground">
-            {t("subtitle", { total: groups.length })}
+            {t("subtitle", { total: result.total })}
           </p>
         </div>
         {canCreate ? (
@@ -46,13 +55,13 @@ export default async function CellGroupsListPage() {
         ) : null}
       </header>
 
-      {groups.length === 0 ? (
+      {result.total === 0 ? (
         <div className="rounded-md border border-dashed p-10 text-center text-sm text-muted-foreground">
           {t("empty")}
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {groups.map((g) => (
+          {result.items.map((g) => (
             <Card key={g.id}>
               <CardContent className="flex flex-col gap-3 pt-6">
                 <div className="flex items-start justify-between gap-2">
@@ -99,6 +108,12 @@ export default async function CellGroupsListPage() {
           ))}
         </div>
       )}
+
+      <Pagination
+        page={result.page}
+        totalPages={result.totalPages}
+        total={result.total}
+      />
     </div>
   );
 }

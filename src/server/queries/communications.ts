@@ -5,6 +5,8 @@ import type { MessageChannel, Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import type { AudienceFilter } from "@/lib/validation/communications";
 
+import { clampPage, paginate } from "./_pagination";
+
 const templateListSelect = {
   id: true,
   name: true,
@@ -19,7 +21,31 @@ export type TemplateListItem = Prisma.MessageTemplateGetPayload<{
   select: typeof templateListSelect;
 }>;
 
-export async function listTemplates(opts?: { channel?: MessageChannel }) {
+export async function listTemplates(opts?: {
+  channel?: MessageChannel;
+  page?: number;
+  pageSize?: number;
+}) {
+  const { page, pageSize, skip, take } = clampPage(opts ?? {});
+  const where: Prisma.MessageTemplateWhereInput = opts?.channel
+    ? { channel: opts.channel }
+    : {};
+
+  const [items, total] = await Promise.all([
+    prisma.messageTemplate.findMany({
+      where,
+      orderBy: [{ isActive: "desc" }, { name: "asc" }],
+      skip,
+      take,
+      select: templateListSelect,
+    }),
+    prisma.messageTemplate.count({ where }),
+  ]);
+
+  return paginate(items, total, page, pageSize);
+}
+
+export async function listAllTemplates(opts?: { channel?: MessageChannel }) {
   return prisma.messageTemplate.findMany({
     where: opts?.channel ? { channel: opts.channel } : undefined,
     orderBy: [{ isActive: "desc" }, { name: "asc" }],
@@ -49,11 +75,23 @@ export type CampaignListItem = Prisma.BroadcastCampaignGetPayload<{
   select: typeof campaignListSelect;
 }>;
 
-export async function listCampaigns() {
-  return prisma.broadcastCampaign.findMany({
-    orderBy: { createdAt: "desc" },
-    select: campaignListSelect,
-  });
+export async function listCampaigns(opts?: {
+  page?: number;
+  pageSize?: number;
+}) {
+  const { page, pageSize, skip, take } = clampPage(opts ?? {});
+
+  const [items, total] = await Promise.all([
+    prisma.broadcastCampaign.findMany({
+      orderBy: { createdAt: "desc" },
+      skip,
+      take,
+      select: campaignListSelect,
+    }),
+    prisma.broadcastCampaign.count(),
+  ]);
+
+  return paginate(items, total, page, pageSize);
 }
 
 export async function getCampaign(id: string) {

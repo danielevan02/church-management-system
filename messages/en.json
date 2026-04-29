@@ -19,6 +19,12 @@
       "minute": "Minute",
       "done": "Done",
       "clear": "Clear"
+    },
+    "pagination": {
+      "prev": "Previous",
+      "next": "Next",
+      "summary": "Page {page} of {totalPages} · {total} total",
+      "count": "{total} total"
     }
   },
   "nav": {
@@ -447,11 +453,6 @@
       "colJoined": "Joined",
       "empty": "No members match your filters."
     },
-    "pagination": {
-      "summary": "Page {page} of {totalPages} · {total} total",
-      "prev": "Previous",
-      "next": "Next"
-    },
     "new": {
       "title": "Add member",
       "subtitle": "Fill in basic details. Fields marked * are required.",
@@ -851,10 +852,7 @@
       "colFund": "Fund",
       "colMethod": "Method",
       "colStatus": "Status",
-      "colAmount": "Amount",
-      "page": "Page {page} of {totalPages}",
-      "prev": "Previous",
-      "next": "Next"
+      "colAmount": "Amount"
     },
     "new": {
       "title": "Record giving",

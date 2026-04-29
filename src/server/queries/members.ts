@@ -4,6 +4,8 @@ import type { Gender, MemberStatus, Prisma } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
 
+import { clampPage, paginate } from "./_pagination";
+
 export type MemberFilters = {
   q?: string;
   status?: MemberStatus;
@@ -18,9 +20,6 @@ export type MemberSort =
   | "joined_desc"
   | "joined_asc"
   | "created_desc";
-
-export const DEFAULT_PAGE_SIZE = 25;
-export const MAX_PAGE_SIZE = 100;
 
 const memberListSelect = {
   id: true,
@@ -46,8 +45,7 @@ export async function listMembers(opts: {
   pageSize?: number;
   sort?: MemberSort;
 }) {
-  const page = Math.max(1, opts.page ?? 1);
-  const pageSize = Math.min(MAX_PAGE_SIZE, Math.max(1, opts.pageSize ?? DEFAULT_PAGE_SIZE));
+  const { page, pageSize, skip, take } = clampPage(opts);
   const filters = opts.filters ?? {};
   const sort = opts.sort ?? "name_asc";
 
@@ -84,20 +82,14 @@ export async function listMembers(opts: {
     prisma.member.findMany({
       where,
       orderBy,
-      skip: (page - 1) * pageSize,
-      take: pageSize,
+      skip,
+      take,
       select: memberListSelect,
     }),
     prisma.member.count({ where }),
   ]);
 
-  return {
-    items,
-    total,
-    page,
-    pageSize,
-    totalPages: Math.max(1, Math.ceil(total / pageSize)),
-  };
+  return paginate(items, total, page, pageSize);
 }
 
 export async function getMember(id: string) {

@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { CellGroupCreateForm } from "./cell-group-create-form";
 import { auth } from "@/lib/auth";
 import {
-  listCellGroups,
+  listAllCellGroups,
   listLeaderCandidates,
 } from "@/server/queries/cell-groups";
 
@@ -19,7 +19,7 @@ export default async function NewCellGroupPage() {
   const t = await getTranslations("cellGroups.new");
   const [leaders, parents] = await Promise.all([
     listLeaderCandidates(),
-    listCellGroups(),
+    listAllCellGroups(),
   ]);
 
   return (

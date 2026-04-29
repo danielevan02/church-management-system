@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 
 import { ServiceDeleteRecordButton } from "./service-delete-record-button";
 import { ServiceTogglePublishButton } from "./service-toggle-publish-button";
+import { Pagination } from "@/components/shared/pagination";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -25,21 +26,26 @@ import {
 } from "@/components/ui/table";
 import { Link } from "@/lib/i18n/navigation";
 import { listAttendanceForService } from "@/server/queries/attendance";
+import { parsePageParam } from "@/server/queries/_pagination";
 import { getService, isCheckInOpen } from "@/server/queries/services";
 
 export default async function ServiceDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const { id } = await params;
+  const sp = await searchParams;
+  const page = parsePageParam(sp.page);
   const service = await getService(id);
   if (!service) notFound();
 
   const t = await getTranslations("services.detail");
   const tType = await getTranslations("services.type");
-  const { items, memberCount, visitorCount, total } =
-    await listAttendanceForService(id);
+  const result = await listAttendanceForService(id, { page });
+  const { items, memberCount, visitorCount, total } = result;
   const open = service.isActive && isCheckInOpen(service, new Date());
 
   return (
@@ -184,6 +190,12 @@ export default async function ServiceDetailPage({
           )}
         </CardContent>
       </Card>
+
+      <Pagination
+        page={result.page}
+        totalPages={result.totalPages}
+        total={result.total}
+      />
     </div>
   );
 }

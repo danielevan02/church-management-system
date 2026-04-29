@@ -20,7 +20,7 @@ import { Link } from "@/lib/i18n/navigation";
 import { hasAtLeastRole } from "@/lib/permissions";
 import {
   listActiveCheckIns,
-  listChildClasses,
+  listAllChildClasses,
 } from "@/server/queries/children";
 
 export default async function CheckInDashboardPage() {
@@ -34,7 +34,7 @@ export default async function CheckInDashboardPage() {
 
   const [active, classes] = await Promise.all([
     listActiveCheckIns(),
-    listChildClasses({ activeOnly: true }),
+    listAllChildClasses({ activeOnly: true }),
   ]);
 
   return (

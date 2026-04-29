@@ -4,6 +4,8 @@ import type { Prisma } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
 
+import { clampPage, paginate } from "./_pagination";
+
 const eventListSelect = {
   id: true,
   title: true,
@@ -27,16 +29,26 @@ export type EventListItem = Prisma.EventGetPayload<{
 export async function listEvents(opts?: {
   publishedOnly?: boolean;
   upcomingOnly?: boolean;
+  page?: number;
+  pageSize?: number;
 }) {
+  const { page, pageSize, skip, take } = clampPage(opts ?? {});
   const where: Prisma.EventWhereInput = { deletedAt: null };
   if (opts?.publishedOnly) where.isPublished = true;
   if (opts?.upcomingOnly) where.endsAt = { gte: new Date() };
 
-  return prisma.event.findMany({
-    where,
-    orderBy: { startsAt: "asc" },
-    select: eventListSelect,
-  });
+  const [items, total] = await Promise.all([
+    prisma.event.findMany({
+      where,
+      orderBy: { startsAt: "asc" },
+      skip,
+      take,
+      select: eventListSelect,
+    }),
+    prisma.event.count({ where }),
+  ]);
+
+  return paginate(items, total, page, pageSize);
 }
 
 export async function getEvent(id: string) {

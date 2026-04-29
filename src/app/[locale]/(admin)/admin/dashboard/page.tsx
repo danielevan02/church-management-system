@@ -32,7 +32,7 @@ import { auth } from "@/lib/auth";
 import { formatRupiah } from "@/lib/format";
 import { Link } from "@/lib/i18n/navigation";
 import { hasAtLeastRole } from "@/lib/permissions";
-import { listAuditLogs } from "@/server/queries/audit";
+import { listRecentAuditLogs } from "@/server/queries/audit";
 import { listEvents } from "@/server/queries/events";
 import { getUpcomingFollowUps } from "@/server/queries/pastoral";
 import { countOpenPrayerRequests } from "@/server/queries/prayer-requests";
@@ -71,12 +71,12 @@ export default async function AdminDashboardPage() {
     canSeeGiving ? getGivingSnapshot() : Promise.resolve(null),
     countOpenPrayerRequests(),
     getUpcomingServices(3),
-    listEvents({ upcomingOnly: true, publishedOnly: false }),
+    listEvents({ upcomingOnly: true, publishedOnly: false, pageSize: 3 }),
     features.pastoralCare ? getUpcomingFollowUps(5) : Promise.resolve([]),
-    canSeeAudit ? listAuditLogs({ take: 10 }) : Promise.resolve([]),
+    canSeeAudit ? listRecentAuditLogs(10) : Promise.resolve([]),
   ]);
 
-  const topEvents = upcomingEvents.slice(0, 3);
+  const topEvents = upcomingEvents.items;
   const greetingName = session.user.email?.split("@")[0] ?? "Admin";
 
   return (

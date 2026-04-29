@@ -3,6 +3,7 @@ import { Plus } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
 import { DeleteMilestoneButton } from "@/components/admin/discipleship/delete-milestone-button";
+import { Pagination } from "@/components/shared/pagination";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,12 +16,19 @@ import {
 } from "@/components/ui/table";
 import { Link } from "@/lib/i18n/navigation";
 import { listMilestones } from "@/server/queries/discipleship";
+import { parsePageParam } from "@/server/queries/_pagination";
 
-export default async function DiscipleshipListPage() {
+export default async function DiscipleshipListPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const sp = await searchParams;
+  const page = parsePageParam(sp.page);
   const t = await getTranslations("discipleship.list");
   const tType = await getTranslations("discipleship.type");
 
-  const items = await listMilestones();
+  const result = await listMilestones({ page });
 
   return (
     <div className="flex flex-col gap-6">
@@ -28,7 +36,7 @@ export default async function DiscipleshipListPage() {
         <div className="flex flex-col gap-1">
           <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
           <p className="text-muted-foreground">
-            {t("subtitle", { total: items.length })}
+            {t("subtitle", { total: result.total })}
           </p>
         </div>
         <Button asChild>
@@ -39,7 +47,7 @@ export default async function DiscipleshipListPage() {
         </Button>
       </header>
 
-      {items.length === 0 ? (
+      {result.total === 0 ? (
         <div className="rounded-md border border-dashed p-10 text-center text-sm text-muted-foreground">
           {t("empty")}
         </div>
@@ -56,7 +64,7 @@ export default async function DiscipleshipListPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {items.map((m) => (
+              {result.items.map((m) => (
                 <TableRow key={m.id}>
                   <TableCell>
                     <div className="flex items-center gap-2">
@@ -104,6 +112,12 @@ export default async function DiscipleshipListPage() {
           </Table>
         </div>
       )}
+
+      <Pagination
+        page={result.page}
+        totalPages={result.totalPages}
+        total={result.total}
+      />
     </div>
   );
 }

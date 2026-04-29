@@ -32,11 +32,13 @@ export default async function TeamDetailPage({
   const t = await getTranslations("volunteers.team.detail");
   const tStatus = await getTranslations("volunteers.assignmentStatus");
 
-  const recent = await listAssignments({
-    filters: { teamId: id },
-    upcomingOnly: true,
-    limit: 20,
-  });
+  const recent = (
+    await listAssignments({
+      filters: { teamId: id },
+      upcomingOnly: true,
+      pageSize: 20,
+    })
+  ).items;
 
   return (
     <div className="flex flex-col gap-6">

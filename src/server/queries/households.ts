@@ -2,13 +2,36 @@ import "server-only";
 
 import { prisma } from "@/lib/prisma";
 
-export async function listHouseholds() {
+import { clampPage, paginate } from "./_pagination";
+
+export async function listHouseholds(opts?: {
+  page?: number;
+  pageSize?: number;
+}) {
+  const { page, pageSize, skip, take } = clampPage(opts ?? {});
+  const where = { deletedAt: null };
+
+  const [items, total] = await Promise.all([
+    prisma.household.findMany({
+      where,
+      orderBy: { name: "asc" },
+      skip,
+      take,
+      include: {
+        _count: { select: { members: { where: { deletedAt: null } } } },
+      },
+    }),
+    prisma.household.count({ where }),
+  ]);
+
+  return paginate(items, total, page, pageSize);
+}
+
+export async function listAllHouseholds() {
   return prisma.household.findMany({
     where: { deletedAt: null },
     orderBy: { name: "asc" },
-    include: {
-      _count: { select: { members: { where: { deletedAt: null } } } },
-    },
+    select: { id: true, name: true },
   });
 }
 
