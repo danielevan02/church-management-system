@@ -1,6 +1,7 @@
 import { Plus } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
+import { Pagination } from "@/components/shared/pagination";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -12,10 +13,17 @@ import {
 } from "@/components/ui/table";
 import { Link } from "@/lib/i18n/navigation";
 import { listHouseholds } from "@/server/queries/households";
+import { parsePageParam } from "@/server/queries/_pagination";
 
-export default async function HouseholdsListPage() {
+export default async function HouseholdsListPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const sp = await searchParams;
+  const page = parsePageParam(sp.page);
   const t = await getTranslations("households");
-  const households = await listHouseholds();
+  const result = await listHouseholds({ page });
 
   return (
     <div className="flex flex-col gap-6">
@@ -25,7 +33,7 @@ export default async function HouseholdsListPage() {
             {t("list.title")}
           </h1>
           <p className="text-muted-foreground">
-            {t("list.subtitle", { total: households.length })}
+            {t("list.subtitle", { total: result.total })}
           </p>
         </div>
         <Button asChild>
@@ -36,7 +44,7 @@ export default async function HouseholdsListPage() {
         </Button>
       </header>
 
-      {households.length === 0 ? (
+      {result.total === 0 ? (
         <div className="rounded-md border border-dashed p-12 text-center">
           <p className="text-sm text-muted-foreground">{t("list.empty")}</p>
         </div>
@@ -53,7 +61,7 @@ export default async function HouseholdsListPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {households.map((h) => (
+              {result.items.map((h) => (
                 <TableRow key={h.id}>
                   <TableCell>
                     <Link
@@ -75,6 +83,12 @@ export default async function HouseholdsListPage() {
           </Table>
         </div>
       )}
+
+      <Pagination
+        page={result.page}
+        totalPages={result.totalPages}
+        total={result.total}
+      />
     </div>
   );
 }

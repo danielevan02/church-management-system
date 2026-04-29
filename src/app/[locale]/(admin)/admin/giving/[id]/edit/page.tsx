@@ -7,7 +7,7 @@ import { GivingEditForm } from "./giving-edit-form";
 import { Button } from "@/components/ui/button";
 import { formatRupiah } from "@/lib/format";
 import { Link } from "@/lib/i18n/navigation";
-import { listFunds } from "@/server/queries/funds";
+import { listAllFunds } from "@/server/queries/funds";
 import { getGiving } from "@/server/queries/giving";
 
 export default async function EditGivingPage({
@@ -18,7 +18,7 @@ export default async function EditGivingPage({
   const { id } = await params;
   const [giving, funds] = await Promise.all([
     getGiving(id),
-    listFunds(),
+    listAllFunds(),
   ]);
   if (!giving) notFound();
 

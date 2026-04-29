@@ -4,6 +4,8 @@ import type { Prisma } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
 
+import { clampPage } from "./_pagination";
+
 const attendanceRowSelect = {
   id: true,
   checkedInAt: true,
@@ -26,11 +28,17 @@ export type AttendanceRow = Prisma.AttendanceRecordGetPayload<{
   select: typeof attendanceRowSelect;
 }>;
 
-export async function listAttendanceForService(serviceId: string) {
+export async function listAttendanceForService(
+  serviceId: string,
+  opts?: { page?: number; pageSize?: number },
+) {
+  const { page, pageSize, skip, take } = clampPage(opts ?? {});
   const [items, memberCount, visitorCount, total] = await Promise.all([
     prisma.attendanceRecord.findMany({
       where: { serviceId },
       orderBy: { checkedInAt: "desc" },
+      skip,
+      take,
       select: attendanceRowSelect,
     }),
     prisma.attendanceRecord.count({
@@ -41,7 +49,15 @@ export async function listAttendanceForService(serviceId: string) {
     }),
     prisma.attendanceRecord.count({ where: { serviceId } }),
   ]);
-  return { items, memberCount, visitorCount, total };
+  return {
+    items,
+    memberCount,
+    visitorCount,
+    total,
+    page,
+    pageSize,
+    totalPages: Math.max(1, Math.ceil(total / pageSize)),
+  };
 }
 
 export async function getAttendanceForMember(memberId: string, limit = 25) {

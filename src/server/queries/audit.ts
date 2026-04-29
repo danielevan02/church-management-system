@@ -4,6 +4,8 @@ import type { Prisma } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
 
+import { clampPage, paginate } from "./_pagination";
+
 const auditListSelect = {
   id: true,
   action: true,
@@ -29,25 +31,46 @@ export type AuditFilters = {
   to?: Date;
 };
 
+function buildAuditWhere(filters?: AuditFilters): Prisma.AuditLogWhereInput {
+  const where: Prisma.AuditLogWhereInput = {};
+  if (!filters) return where;
+  if (filters.action) where.action = filters.action;
+  if (filters.entityType) where.entityType = filters.entityType;
+  if (filters.userId) where.userId = filters.userId;
+  if (filters.from || filters.to) {
+    where.createdAt = {};
+    if (filters.from) where.createdAt.gte = filters.from;
+    if (filters.to) where.createdAt.lte = filters.to;
+  }
+  return where;
+}
+
 export async function listAuditLogs(opts?: {
   filters?: AuditFilters;
-  take?: number;
+  page?: number;
+  pageSize?: number;
 }) {
-  const where: Prisma.AuditLogWhereInput = {};
-  const f = opts?.filters;
-  if (f?.action) where.action = f.action;
-  if (f?.entityType) where.entityType = f.entityType;
-  if (f?.userId) where.userId = f.userId;
-  if (f?.from || f?.to) {
-    where.createdAt = {};
-    if (f.from) where.createdAt.gte = f.from;
-    if (f.to) where.createdAt.lte = f.to;
-  }
+  const { page, pageSize, skip, take } = clampPage(opts ?? {});
+  const where = buildAuditWhere(opts?.filters);
 
+  const [items, total] = await Promise.all([
+    prisma.auditLog.findMany({
+      where,
+      orderBy: { createdAt: "desc" },
+      skip,
+      take,
+      select: auditListSelect,
+    }),
+    prisma.auditLog.count({ where }),
+  ]);
+
+  return paginate(items, total, page, pageSize);
+}
+
+export async function listRecentAuditLogs(take = 10) {
   return prisma.auditLog.findMany({
-    where,
     orderBy: { createdAt: "desc" },
-    take: opts?.take ?? 100,
+    take,
     select: auditListSelect,
   });
 }

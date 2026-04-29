@@ -4,6 +4,8 @@ import type { Prisma } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
 
+import { clampPage, paginate } from "./_pagination";
+
 const visitListSelect = {
   id: true,
   visitType: true,
@@ -35,7 +37,10 @@ export type PastoralVisitFilters = {
 
 export async function listPastoralVisits(opts?: {
   filters?: PastoralVisitFilters;
+  page?: number;
+  pageSize?: number;
 }) {
+  const { page, pageSize, skip, take } = clampPage(opts ?? {});
   const where: Prisma.PastoralVisitWhereInput = {};
   const f = opts?.filters;
   if (f?.memberId) where.memberId = f.memberId;
@@ -56,11 +61,18 @@ export async function listPastoralVisits(opts?: {
     where.followUpDate = { not: null };
   }
 
-  return prisma.pastoralVisit.findMany({
-    where,
-    orderBy: { visitedAt: "desc" },
-    select: visitListSelect,
-  });
+  const [items, total] = await Promise.all([
+    prisma.pastoralVisit.findMany({
+      where,
+      orderBy: { visitedAt: "desc" },
+      skip,
+      take,
+      select: visitListSelect,
+    }),
+    prisma.pastoralVisit.count({ where }),
+  ]);
+
+  return paginate(items, total, page, pageSize);
 }
 
 export async function getVisitsForMember(memberId: string, take = 50) {

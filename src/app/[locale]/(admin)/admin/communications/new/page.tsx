@@ -1,17 +1,17 @@
 import { getTranslations } from "next-intl/server";
 
 import { CampaignForm } from "@/components/admin/communications/campaign-form";
-import { listCellGroups } from "@/server/queries/cell-groups";
-import { listTemplates } from "@/server/queries/communications";
-import { listHouseholds } from "@/server/queries/households";
+import { listAllCellGroups } from "@/server/queries/cell-groups";
+import { listAllTemplates } from "@/server/queries/communications";
+import { listAllHouseholds } from "@/server/queries/households";
 
 export default async function NewCampaignPage() {
   const t = await getTranslations("communications.campaign.new");
 
   const [templates, cellGroups, households] = await Promise.all([
-    listTemplates(),
-    listCellGroups(),
-    listHouseholds(),
+    listAllTemplates(),
+    listAllCellGroups(),
+    listAllHouseholds(),
   ]);
 
   return (

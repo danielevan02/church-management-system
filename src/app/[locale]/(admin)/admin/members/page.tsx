@@ -2,8 +2,8 @@ import { Plus } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
 import { MemberFilters } from "@/components/admin/members/member-filters";
-import { MemberPagination } from "@/components/admin/members/member-pagination";
 import { MemberTable } from "@/components/admin/members/member-table";
+import { Pagination } from "@/components/shared/pagination";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/lib/i18n/navigation";
 import {
@@ -11,6 +11,7 @@ import {
   type MemberSort,
   listMembers,
 } from "@/server/queries/members";
+import { parsePageParam } from "@/server/queries/_pagination";
 
 import type { Gender, MemberStatus } from "@prisma/client";
 
@@ -69,8 +70,7 @@ export default async function MembersListPage({
     gender: parseGender(get("gender")),
   };
   const sort = parseSort(get("sort"));
-  const pageNum = Number.parseInt(get("page") ?? "1", 10);
-  const page = Number.isNaN(pageNum) || pageNum < 1 ? 1 : pageNum;
+  const page = parsePageParam(sp.page);
 
   const result = await listMembers({ filters, sort, page });
 
@@ -97,7 +97,7 @@ export default async function MembersListPage({
 
       <MemberTable items={result.items} />
 
-      <MemberPagination
+      <Pagination
         page={result.page}
         totalPages={result.totalPages}
         total={result.total}

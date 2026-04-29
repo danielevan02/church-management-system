@@ -5,6 +5,7 @@ import { notFound, redirect } from "next/navigation";
 
 import { DeletePrayerButton } from "@/components/admin/prayer-requests/delete-prayer-button";
 import { PrayerStatusSelect } from "@/components/admin/prayer-requests/status-select";
+import { Pagination } from "@/components/shared/pagination";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -21,6 +22,7 @@ import { Link } from "@/lib/i18n/navigation";
 import { hasAtLeastRole } from "@/lib/permissions";
 import type { PrayerStatusInput } from "@/lib/validation/prayer-requests";
 import { listPrayerRequests } from "@/server/queries/prayer-requests";
+import { parsePageParam } from "@/server/queries/_pagination";
 
 export default async function AdminPrayerRequestsPage({
   searchParams,
@@ -33,12 +35,14 @@ export default async function AdminPrayerRequestsPage({
 
   const sp = await searchParams;
   const statusParam = Array.isArray(sp.status) ? sp.status[0] : sp.status;
+  const page = parsePageParam(sp.page);
 
   const t = await getTranslations("prayerRequests.list");
   const tStatus = await getTranslations("prayerRequests.status");
 
-  const items = await listPrayerRequests({
+  const result = await listPrayerRequests({
     filters: statusParam ? { status: statusParam } : undefined,
+    page,
   });
 
   const canDelete = hasAtLeastRole(session.user.role, "ADMIN");
@@ -57,7 +61,7 @@ export default async function AdminPrayerRequestsPage({
         <div className="flex flex-col gap-1">
           <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
           <p className="text-muted-foreground">
-            {t("subtitle", { total: items.length })}
+            {t("subtitle", { total: result.total })}
           </p>
         </div>
       </header>
@@ -86,7 +90,7 @@ export default async function AdminPrayerRequestsPage({
         })}
       </div>
 
-      {items.length === 0 ? (
+      {result.total === 0 ? (
         <div className="rounded-md border border-dashed p-10 text-center text-sm text-muted-foreground">
           {t("empty")}
         </div>
@@ -104,7 +108,7 @@ export default async function AdminPrayerRequestsPage({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {items.map((p) => (
+              {result.items.map((p) => (
                 <TableRow key={p.id}>
                   <TableCell>
                     {p.isAnonymous ? (
@@ -190,6 +194,12 @@ export default async function AdminPrayerRequestsPage({
           </Table>
         </div>
       )}
+
+      <Pagination
+        page={result.page}
+        totalPages={result.totalPages}
+        total={result.total}
+      />
     </div>
   );
 }

@@ -4,6 +4,8 @@ import type { Prisma } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
 
+import { clampPage, paginate } from "./_pagination";
+
 const teamListSelect = {
   id: true,
   name: true,
@@ -21,7 +23,21 @@ export type TeamListItem = Prisma.VolunteerTeamGetPayload<{
   select: typeof teamListSelect;
 }>;
 
-export async function listTeams() {
+export async function listTeams(opts?: { page?: number; pageSize?: number }) {
+  const { page, pageSize, skip, take } = clampPage(opts ?? {});
+  const [items, total] = await Promise.all([
+    prisma.volunteerTeam.findMany({
+      orderBy: [{ isActive: "desc" }, { name: "asc" }],
+      skip,
+      take,
+      select: teamListSelect,
+    }),
+    prisma.volunteerTeam.count(),
+  ]);
+  return paginate(items, total, page, pageSize);
+}
+
+export async function listAllTeams() {
   return prisma.volunteerTeam.findMany({
     orderBy: [{ isActive: "desc" }, { name: "asc" }],
     select: teamListSelect,
@@ -64,8 +80,10 @@ export type AssignmentFilters = {
 export async function listAssignments(opts?: {
   filters?: AssignmentFilters;
   upcomingOnly?: boolean;
-  limit?: number;
+  page?: number;
+  pageSize?: number;
 }) {
+  const { page, pageSize, skip, take } = clampPage(opts ?? {});
   const where: Prisma.VolunteerAssignmentWhereInput = {};
   if (opts?.filters?.teamId) where.teamId = opts.filters.teamId;
   if (opts?.filters?.memberId) where.memberId = opts.filters.memberId;
@@ -79,12 +97,18 @@ export async function listAssignments(opts?: {
     };
   }
 
-  return prisma.volunteerAssignment.findMany({
-    where,
-    orderBy: { serviceDate: "asc" },
-    take: opts?.limit,
-    select: assignmentListSelect,
-  });
+  const [items, total] = await Promise.all([
+    prisma.volunteerAssignment.findMany({
+      where,
+      orderBy: { serviceDate: "asc" },
+      skip,
+      take,
+      select: assignmentListSelect,
+    }),
+    prisma.volunteerAssignment.count({ where }),
+  ]);
+
+  return paginate(items, total, page, pageSize);
 }
 
 export async function getAssignmentsForMember(memberId: string, limit = 25) {

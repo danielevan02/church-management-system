@@ -2,6 +2,7 @@ import { format } from "date-fns";
 import { CalendarRange, Plus } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
+import { Pagination } from "@/components/shared/pagination";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,6 +14,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Link } from "@/lib/i18n/navigation";
+import { parsePageParam } from "@/server/queries/_pagination";
 import { listServices } from "@/server/queries/services";
 
 export default async function ServicesListPage({
@@ -21,12 +23,7 @@ export default async function ServicesListPage({
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const sp = await searchParams;
-  const get = (key: string) => {
-    const v = sp[key];
-    return Array.isArray(v) ? v[0] : v ?? null;
-  };
-  const pageNum = Number.parseInt(get("page") ?? "1", 10);
-  const page = Number.isNaN(pageNum) || pageNum < 1 ? 1 : pageNum;
+  const page = parsePageParam(sp.page);
 
   const t = await getTranslations("services.list");
   const tType = await getTranslations("services.type");
@@ -109,6 +106,12 @@ export default async function ServicesListPage({
           </Table>
         </div>
       )}
+
+      <Pagination
+        page={result.page}
+        totalPages={result.totalPages}
+        total={result.total}
+      />
     </div>
   );
 }

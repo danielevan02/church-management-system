@@ -4,6 +4,8 @@ import type { Prisma, Role } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
 
+import { clampPage, paginate } from "./_pagination";
+
 const cellGroupListSelect = {
   id: true,
   name: true,
@@ -28,10 +30,10 @@ export type CellGroupFilters = {
   parentGroupId?: string;
 };
 
-export async function listCellGroups(opts?: {
+function buildCellGroupWhere(opts?: {
   filters?: CellGroupFilters;
   scope?: { role: Role; memberId: string | null };
-}) {
+}): Prisma.CellGroupWhereInput {
   const filters = opts?.filters ?? {};
   const where: Prisma.CellGroupWhereInput = { deletedAt: null };
 
@@ -49,6 +51,37 @@ export async function listCellGroups(opts?: {
     }
   }
 
+  return where;
+}
+
+export async function listCellGroups(opts?: {
+  filters?: CellGroupFilters;
+  scope?: { role: Role; memberId: string | null };
+  page?: number;
+  pageSize?: number;
+}) {
+  const { page, pageSize, skip, take } = clampPage(opts ?? {});
+  const where = buildCellGroupWhere(opts);
+
+  const [items, total] = await Promise.all([
+    prisma.cellGroup.findMany({
+      where,
+      orderBy: [{ isActive: "desc" }, { name: "asc" }],
+      skip,
+      take,
+      select: cellGroupListSelect,
+    }),
+    prisma.cellGroup.count({ where }),
+  ]);
+
+  return paginate(items, total, page, pageSize);
+}
+
+export async function listAllCellGroups(opts?: {
+  filters?: CellGroupFilters;
+  scope?: { role: Role; memberId: string | null };
+}) {
+  const where = buildCellGroupWhere(opts);
   return prisma.cellGroup.findMany({
     where,
     orderBy: [{ isActive: "desc" }, { name: "asc" }],

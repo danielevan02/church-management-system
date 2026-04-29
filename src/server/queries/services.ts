@@ -4,6 +4,8 @@ import type { Prisma, ServiceType } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
 
+import { clampPage, paginate } from "./_pagination";
+
 export type ServiceFilters = {
   q?: string;
   type?: ServiceType;
@@ -12,8 +14,6 @@ export type ServiceFilters = {
   from?: Date;
   to?: Date;
 };
-
-export const SERVICES_PAGE_SIZE = 25;
 
 const serviceListSelect = {
   id: true,
@@ -35,8 +35,7 @@ export async function listServices(opts: {
   page?: number;
   pageSize?: number;
 }) {
-  const page = Math.max(1, opts.page ?? 1);
-  const pageSize = Math.max(1, opts.pageSize ?? SERVICES_PAGE_SIZE);
+  const { page, pageSize, skip, take } = clampPage(opts);
   const filters = opts.filters ?? {};
 
   const where: Prisma.ServiceWhereInput = {};
@@ -53,20 +52,14 @@ export async function listServices(opts: {
     prisma.service.findMany({
       where,
       orderBy: { startsAt: "desc" },
-      skip: (page - 1) * pageSize,
-      take: pageSize,
+      skip,
+      take,
       select: serviceListSelect,
     }),
     prisma.service.count({ where }),
   ]);
 
-  return {
-    items,
-    total,
-    page,
-    pageSize,
-    totalPages: Math.max(1, Math.ceil(total / pageSize)),
-  };
+  return paginate(items, total, page, pageSize);
 }
 
 export async function getService(id: string) {

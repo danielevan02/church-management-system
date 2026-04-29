@@ -4,6 +4,8 @@ import type { Prisma, Role } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
 
+import { clampPage, paginate } from "./_pagination";
+
 const userListSelect = {
   id: true,
   email: true,
@@ -27,7 +29,12 @@ export type UserFilters = {
   search?: string;
 };
 
-export async function listUsers(opts?: { filters?: UserFilters }) {
+export async function listUsers(opts?: {
+  filters?: UserFilters;
+  page?: number;
+  pageSize?: number;
+}) {
+  const { page, pageSize, skip, take } = clampPage(opts ?? {});
   const where: Prisma.UserWhereInput = {};
   const f = opts?.filters;
   if (f?.role) where.role = f.role;
@@ -41,11 +48,18 @@ export async function listUsers(opts?: { filters?: UserFilters }) {
     ];
   }
 
-  return prisma.user.findMany({
-    where,
-    orderBy: [{ isActive: "desc" }, { createdAt: "desc" }],
-    select: userListSelect,
-  });
+  const [items, total] = await Promise.all([
+    prisma.user.findMany({
+      where,
+      orderBy: [{ isActive: "desc" }, { createdAt: "desc" }],
+      skip,
+      take,
+      select: userListSelect,
+    }),
+    prisma.user.count({ where }),
+  ]);
+
+  return paginate(items, total, page, pageSize);
 }
 
 export async function getUser(id: string) {

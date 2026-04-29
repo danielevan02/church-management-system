@@ -19,6 +19,12 @@
       "minute": "Menit",
       "done": "Selesai",
       "clear": "Hapus"
+    },
+    "pagination": {
+      "prev": "Sebelumnya",
+      "next": "Berikutnya",
+      "summary": "Halaman {page} dari {totalPages} · {total} total",
+      "count": "{total} total"
     }
   },
   "nav": {
@@ -447,11 +453,6 @@
       "colJoined": "Bergabung",
       "empty": "Belum ada jemaat yang cocok dengan filter."
     },
-    "pagination": {
-      "summary": "Halaman {page} dari {totalPages} · {total} total",
-      "prev": "Sebelumnya",
-      "next": "Berikutnya"
-    },
     "new": {
       "title": "Tambah Jemaat",
       "subtitle": "Lengkapi data dasar. Field bertanda * wajib diisi.",
@@ -851,10 +852,7 @@
       "colFund": "Pos",
       "colMethod": "Metode",
       "colStatus": "Status",
-      "colAmount": "Jumlah",
-      "page": "Halaman {page} dari {totalPages}",
-      "prev": "Sebelumnya",
-      "next": "Berikutnya"
+      "colAmount": "Jumlah"
     },
     "new": {
       "title": "Catat Persembahan",

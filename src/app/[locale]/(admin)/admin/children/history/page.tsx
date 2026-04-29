@@ -3,6 +3,7 @@ import { ArrowLeft, CheckCircle2, Clock } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { notFound, redirect } from "next/navigation";
 
+import { Pagination } from "@/components/shared/pagination";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -19,9 +20,10 @@ import { auth } from "@/lib/auth";
 import { Link } from "@/lib/i18n/navigation";
 import { hasAtLeastRole } from "@/lib/permissions";
 import {
+  listAllChildClasses,
   listCheckInsHistory,
-  listChildClasses,
 } from "@/server/queries/children";
+import { parsePageParam } from "@/server/queries/_pagination";
 
 export default async function CheckInHistoryPage({
   searchParams,
@@ -36,15 +38,16 @@ export default async function CheckInHistoryPage({
 
   const sp = await searchParams;
   const classParam = pickFirst(sp.class);
+  const page = parsePageParam(sp.page);
 
   const t = await getTranslations("children.history");
 
-  const [items, classes] = await Promise.all([
+  const [result, classes] = await Promise.all([
     listCheckInsHistory({
       classId: classParam || undefined,
-      take: 200,
+      page,
     }),
-    listChildClasses(),
+    listAllChildClasses(),
   ]);
 
   return (
@@ -58,7 +61,7 @@ export default async function CheckInHistoryPage({
         </Button>
         <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
         <p className="text-muted-foreground">
-          {t("subtitle", { total: items.length })}
+          {t("subtitle", { total: result.total })}
         </p>
       </header>
 
@@ -84,7 +87,7 @@ export default async function CheckInHistoryPage({
         ))}
       </div>
 
-      {items.length === 0 ? (
+      {result.total === 0 ? (
         <div className="rounded-md border border-dashed p-10 text-center text-sm text-muted-foreground">
           {t("empty")}
         </div>
@@ -103,7 +106,7 @@ export default async function CheckInHistoryPage({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {items.map((row) => (
+              {result.items.map((row) => (
                 <TableRow key={row.id}>
                   <TableCell>
                     <div className="flex items-center gap-2">
@@ -160,6 +163,12 @@ export default async function CheckInHistoryPage({
           </Table>
         </div>
       )}
+
+      <Pagination
+        page={result.page}
+        totalPages={result.totalPages}
+        total={result.total}
+      />
     </div>
   );
 }

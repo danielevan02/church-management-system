@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
 
 import { AssignmentForm } from "@/components/admin/volunteers/assignment-form";
-import { listTeams } from "@/server/queries/volunteers";
+import { listAllTeams } from "@/server/queries/volunteers";
 
 export default async function NewAssignmentPage({
   searchParams,
@@ -12,7 +12,7 @@ export default async function NewAssignmentPage({
   const teamParam = Array.isArray(sp.team) ? sp.team[0] : sp.team;
 
   const t = await getTranslations("volunteers.assignment.new");
-  const teams = await listTeams();
+  const teams = await listAllTeams();
 
   return (
     <div className="flex flex-col gap-6">

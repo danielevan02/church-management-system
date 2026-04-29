@@ -9,7 +9,7 @@ import { Link } from "@/lib/i18n/navigation";
 import { canAccessCellGroup, hasAtLeastRole } from "@/lib/permissions";
 import {
   getCellGroup,
-  listCellGroups,
+  listAllCellGroups,
   listLeaderCandidates,
 } from "@/server/queries/cell-groups";
 
@@ -35,7 +35,7 @@ export default async function EditCellGroupPage({
   const [group, leaders, parents] = await Promise.all([
     getCellGroup(id),
     listLeaderCandidates(),
-    listCellGroups(),
+    listAllCellGroups(),
   ]);
   if (!group) notFound();
 

@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { notFound, redirect } from "next/navigation";
 
 import { ToggleActiveButton } from "@/components/admin/settings/toggle-active-button";
+import { Pagination } from "@/components/shared/pagination";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -18,17 +19,24 @@ import {
 import { auth } from "@/lib/auth";
 import { Link } from "@/lib/i18n/navigation";
 import { hasAtLeastRole } from "@/lib/permissions";
+import { parsePageParam } from "@/server/queries/_pagination";
 import { listUsers } from "@/server/queries/users";
 
-export default async function UsersListPage() {
+export default async function UsersListPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const session = await auth();
   if (!session?.user) redirect("/auth/sign-in");
   if (!hasAtLeastRole(session.user.role, "ADMIN")) notFound();
 
+  const sp = await searchParams;
+  const page = parsePageParam(sp.page);
   const t = await getTranslations("settings.users");
   const tRole = await getTranslations("settings.users.roles");
 
-  const items = await listUsers();
+  const result = await listUsers({ page });
 
   return (
     <div className="flex flex-col gap-6">
@@ -36,7 +44,7 @@ export default async function UsersListPage() {
         <div className="flex flex-col gap-1">
           <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
           <p className="text-muted-foreground">
-            {t("subtitle", { total: items.length })}
+            {t("subtitle", { total: result.total })}
           </p>
         </div>
         <Button asChild>
@@ -47,7 +55,7 @@ export default async function UsersListPage() {
         </Button>
       </header>
 
-      {items.length === 0 ? (
+      {result.total === 0 ? (
         <div className="rounded-md border border-dashed p-10 text-center text-sm text-muted-foreground">
           {t("empty")}
         </div>
@@ -65,7 +73,7 @@ export default async function UsersListPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {items.map((u) => {
+              {result.items.map((u) => {
                 const isSelf = u.id === session.user.id;
                 const isSuperAdmin = u.role === "SUPER_ADMIN";
                 const cannotToggleSuperAdmin =
@@ -149,6 +157,12 @@ export default async function UsersListPage() {
           </Table>
         </div>
       )}
+
+      <Pagination
+        page={result.page}
+        totalPages={result.totalPages}
+        total={result.total}
+      />
     </div>
   );
 }

@@ -1,11 +1,11 @@
 import { getTranslations } from "next-intl/server";
 
 import { GivingCreateForm } from "./giving-create-form";
-import { listFunds } from "@/server/queries/funds";
+import { listAllFunds } from "@/server/queries/funds";
 
 export default async function NewGivingPage() {
   const t = await getTranslations("giving.new");
-  const funds = await listFunds({ onlyActive: true });
+  const funds = await listAllFunds({ onlyActive: true });
 
   return (
     <div className="flex flex-col gap-6">

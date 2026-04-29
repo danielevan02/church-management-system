@@ -3,6 +3,7 @@ import { BarChart3, Layers, Plus } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
 import { GivingFilters } from "@/components/admin/giving/giving-filters";
+import { Pagination } from "@/components/shared/pagination";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,8 +16,9 @@ import {
 } from "@/components/ui/table";
 import { formatRupiah } from "@/lib/format";
 import { Link } from "@/lib/i18n/navigation";
-import { listFunds } from "@/server/queries/funds";
+import { listAllFunds } from "@/server/queries/funds";
 import { listGiving, type GivingFilters as Filters } from "@/server/queries/giving";
+import { parsePageParam } from "@/server/queries/_pagination";
 
 import type { GivingMethod, GivingStatus } from "@prisma/client";
 
@@ -69,15 +71,14 @@ export default async function GivingListPage({
     from: parseDate(get("from")),
     to: parseDate(get("to")),
   };
-  const pageNum = Number.parseInt(get("page") ?? "1", 10);
-  const page = Number.isNaN(pageNum) || pageNum < 1 ? 1 : pageNum;
+  const page = parsePageParam(sp.page);
 
   const t = await getTranslations("giving.list");
   const tMethod = await getTranslations("giving.method");
   const tStatus = await getTranslations("giving.status");
 
   const [funds, result] = await Promise.all([
-    listFunds(),
+    listAllFunds(),
     listGiving({ filters, page }),
   ]);
 
@@ -185,32 +186,11 @@ export default async function GivingListPage({
         </div>
       )}
 
-      {result.totalPages > 1 ? (
-        <div className="flex items-center justify-end gap-2 text-sm">
-          <span className="text-muted-foreground">
-            {t("page", { page: result.page, totalPages: result.totalPages })}
-          </span>
-          <Button asChild variant="outline" size="sm" disabled={page <= 1}>
-            <Link
-              href={{ pathname: "/admin/giving", query: { ...sp, page: page - 1 } }}
-            >
-              {t("prev")}
-            </Link>
-          </Button>
-          <Button
-            asChild
-            variant="outline"
-            size="sm"
-            disabled={page >= result.totalPages}
-          >
-            <Link
-              href={{ pathname: "/admin/giving", query: { ...sp, page: page + 1 } }}
-            >
-              {t("next")}
-            </Link>
-          </Button>
-        </div>
-      ) : null}
+      <Pagination
+        page={result.page}
+        totalPages={result.totalPages}
+        total={result.total}
+      />
     </div>
   );
 }

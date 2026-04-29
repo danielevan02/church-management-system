@@ -4,6 +4,8 @@ import type { GivingMethod, GivingStatus, Prisma } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
 
+import { clampPage } from "./_pagination";
+
 export type GivingFilters = {
   fundId?: string;
   memberId?: string;
@@ -12,8 +14,6 @@ export type GivingFilters = {
   from?: Date;
   to?: Date;
 };
-
-export const GIVING_PAGE_SIZE = 25;
 
 const givingListSelect = {
   id: true,
@@ -53,8 +53,7 @@ export async function listGiving(opts: {
   page?: number;
   pageSize?: number;
 }) {
-  const page = Math.max(1, opts.page ?? 1);
-  const pageSize = Math.max(1, opts.pageSize ?? GIVING_PAGE_SIZE);
+  const { page, pageSize, skip, take } = clampPage(opts);
   const filters = opts.filters ?? {};
   const where = buildWhere(filters);
 
@@ -62,8 +61,8 @@ export async function listGiving(opts: {
     prisma.givingRecord.findMany({
       where,
       orderBy: { receivedAt: "desc" },
-      skip: (page - 1) * pageSize,
-      take: pageSize,
+      skip,
+      take,
       select: givingListSelect,
     }),
     prisma.givingRecord.count({ where }),
