@@ -5,7 +5,7 @@ import Credentials from "next-auth/providers/credentials";
 import { z } from "zod";
 
 import { authConfig } from "@/lib/auth.config";
-import { verifyOtp } from "@/lib/otp";
+import { PIN_MAX_LENGTH, PIN_MIN_LENGTH, signInWithPin } from "@/lib/pin";
 import { prisma } from "@/lib/prisma";
 
 const credentialsSchema = z.object({
@@ -13,9 +13,9 @@ const credentialsSchema = z.object({
   password: z.string().min(1),
 });
 
-const otpSchema = z.object({
+const pinSchema = z.object({
   phone: z.string().min(1),
-  code: z.string().regex(/^\d{6}$/),
+  pin: z.string().regex(new RegExp(`^\\d{${PIN_MIN_LENGTH},${PIN_MAX_LENGTH}}$`)),
 });
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
@@ -54,17 +54,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
     Credentials({
-      id: "otp",
-      name: "WhatsApp OTP",
+      id: "pin",
+      name: "Phone & PIN",
       credentials: {
         phone: { label: "Phone", type: "text" },
-        code: { label: "Code", type: "text" },
+        pin: { label: "PIN", type: "password" },
       },
       async authorize(raw) {
-        const parsed = otpSchema.safeParse(raw);
+        const parsed = pinSchema.safeParse(raw);
         if (!parsed.success) return null;
 
-        const result = await verifyOtp(parsed.data.phone, parsed.data.code);
+        const result = await signInWithPin(parsed.data.phone, parsed.data.pin);
         if (!result.ok) return null;
 
         return {

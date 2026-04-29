@@ -80,7 +80,7 @@ export default async function Home() {
 
           <div className="flex flex-col gap-3 sm:flex-row">
             <Button asChild size="lg" className="px-7">
-              <Link href="/auth/verify-otp">
+              <Link href="/auth/member">
                 {t("hero.primaryCta")}
                 <ArrowRight className="h-4 w-4" />
               </Link>

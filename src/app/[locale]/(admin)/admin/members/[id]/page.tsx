@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
 import { DeleteMemberButton } from "./delete-member-button";
+import { SetPinDialog } from "@/components/admin/members/set-pin-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -215,6 +216,43 @@ export default async function MemberDetailPage({
                     {t("profile.noHousehold")}
                   </p>
                 )}
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>{t("login.title")}</CardTitle>
+                <CardDescription>{t("login.description")}</CardDescription>
+              </CardHeader>
+              <CardContent className="flex flex-col gap-3 text-sm">
+                <Field
+                  label={t("login.statusLabel")}
+                  value={
+                    member.user?.pinHash ? (
+                      <Badge>{t("login.statusActive")}</Badge>
+                    ) : (
+                      <Badge variant="secondary">
+                        {t("login.statusNoPin")}
+                      </Badge>
+                    )
+                  }
+                />
+                {member.user?.lastLoginAt ? (
+                  <Field
+                    label={t("login.lastLoginLabel")}
+                    value={format(member.user.lastLoginAt, "dd MMM yyyy, HH:mm")}
+                  />
+                ) : null}
+                <SetPinDialog
+                  memberId={id}
+                  hasExistingPin={Boolean(member.user?.pinHash)}
+                  hasPhone={Boolean(member.phone)}
+                />
+                {!member.phone ? (
+                  <p className="text-xs text-muted-foreground">
+                    {t("login.noPhoneHint")}
+                  </p>
+                ) : null}
               </CardContent>
             </Card>
 

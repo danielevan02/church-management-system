@@ -2,6 +2,7 @@ import { format } from "date-fns";
 import { getTranslations } from "next-intl/server";
 import { notFound, redirect } from "next/navigation";
 
+import { ChangePinForm } from "./change-pin-form";
 import { ProfileEditForm } from "./profile-edit-form";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -96,6 +97,16 @@ export default async function MemberProfilePage() {
               excludeFromBroadcasts: member.excludeFromBroadcasts,
             }}
           />
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">{t("pin.title")}</CardTitle>
+          <CardDescription>{t("pin.description")}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ChangePinForm />
         </CardContent>
       </Card>
     </div>
