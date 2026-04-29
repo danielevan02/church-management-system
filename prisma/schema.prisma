@@ -31,6 +31,7 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   passwordHash  String?
+  pinHash       String?
   phone         String?   @unique
   phoneVerified DateTime?
   role          Role      @default(MEMBER)
@@ -43,7 +44,6 @@ model User {
 
   accounts  Account[]
   sessions  Session[]
-  otpCodes  OtpCode[]
   auditLogs AuditLog[]
 
   @@map("users")
@@ -89,21 +89,13 @@ model VerificationToken {
   @@map("verification_tokens")
 }
 
-model OtpCode {
-  id         String    @id @default(cuid())
-  userId     String?
-  phone      String
-  codeHash   String
-  purpose    String
-  attempts   Int       @default(0)
-  expiresAt  DateTime
-  consumedAt DateTime?
-  createdAt  DateTime  @default(now())
+model PinAttempt {
+  id        String   @id @default(cuid())
+  phone     String
+  createdAt DateTime @default(now())
 
-  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
-
-  @@index([phone, purpose])
-  @@map("otp_codes")
+  @@index([phone, createdAt])
+  @@map("pin_attempts")
 }
 
 // =====================================================================

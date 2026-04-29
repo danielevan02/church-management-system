@@ -77,35 +77,33 @@
       "or": "atau",
       "showPassword": "Tampilkan password",
       "hidePassword": "Sembunyikan password",
-      "switchToOtp": "Saya jemaat — masuk pakai WhatsApp OTP",
+      "switchToMember": "Saya jemaat — masuk pakai nomor HP & PIN",
       "errors": {
         "invalidCredentials": "Email atau password salah.",
         "accountInactive": "Akun Anda dinonaktifkan. Hubungi pengurus.",
         "internal": "Terjadi kesalahan. Coba lagi."
       }
     },
-    "otp": {
-      "requestTitle": "Masuk Jemaat",
-      "requestSubtitle": "Masukkan nomor WhatsApp Anda. Kami akan kirim kode 6 digit.",
-      "phoneLabel": "Nomor WhatsApp",
+    "pin": {
+      "title": "Masuk Jemaat",
+      "subtitle": "Masuk pakai nomor HP dan PIN Anda.",
+      "phoneLabel": "Nomor HP",
       "phonePlaceholder": "08xxxxxxxxxx",
       "phoneHint": "Pakai nomor yang terdaftar di gereja. Format 08xxx atau +62xxx.",
-      "requestSubmit": "Kirim Kode",
-      "verifyTitle": "Masukkan Kode",
-      "verifySubtitle": "Kode 6 digit telah dikirim ke {phone}. Berlaku 5 menit.",
-      "codeLabel": "Kode OTP",
-      "verifySubmit": "Verifikasi",
-      "resend": "Kirim ulang kode",
-      "resendIn": "Kirim ulang dalam {seconds} detik",
-      "changeNumber": "Ganti nomor",
+      "pinLabel": "PIN",
+      "pinPlaceholder": "PIN 4–6 digit",
+      "pinHint": "Hubungi pengurus gereja kalau belum punya PIN atau lupa.",
+      "showPin": "Tampilkan PIN",
+      "hidePin": "Sembunyikan PIN",
+      "submit": "Masuk",
+      "forgotPin": "Lupa PIN? Hubungi pengurus gereja untuk reset.",
       "or": "atau",
       "switchToStaff": "Saya staff/admin — masuk pakai email",
       "errors": {
-        "phoneNotFound": "Nomor tidak terdaftar. Hubungi pengurus gereja.",
-        "rateLimited": "Terlalu banyak permintaan. Coba lagi nanti.",
-        "invalidCode": "Kode salah.",
-        "codeExpired": "Kode kedaluwarsa. Minta kode baru.",
-        "tooManyAttempts": "Terlalu banyak percobaan. Minta kode baru.",
+        "invalidCredentials": "Nomor HP atau PIN salah.",
+        "noPinSet": "PIN belum diatur. Hubungi pengurus gereja.",
+        "accountInactive": "Akun Anda dinonaktifkan. Hubungi pengurus gereja.",
+        "throttled": "Terlalu banyak percobaan gagal. Coba lagi dalam {seconds} detik.",
         "internal": "Terjadi kesalahan. Coba lagi."
       }
     }
@@ -260,6 +258,23 @@
         "joinedAt": "Bergabung",
         "baptismDate": "Tanggal baptis",
         "baptismChurch": "Gereja baptis"
+      },
+      "pin": {
+        "title": "PIN Login",
+        "description": "Ganti PIN yang Anda pakai untuk masuk. Pilih 4–6 digit yang mudah diingat.",
+        "currentLabel": "PIN saat ini",
+        "newLabel": "PIN baru",
+        "confirmLabel": "Konfirmasi PIN baru",
+        "hint": "4–6 digit angka.",
+        "submit": "Ubah PIN",
+        "savedToast": "PIN berhasil diubah.",
+        "errors": {
+          "invalidFormat": "PIN harus 4–6 digit angka.",
+          "invalidCurrent": "PIN saat ini salah.",
+          "mismatch": "Konfirmasi PIN baru tidak cocok.",
+          "sameAsCurrent": "PIN baru harus berbeda dari PIN saat ini.",
+          "internal": "Terjadi kesalahan. Coba lagi."
+        }
       }
     },
     "qr": {
@@ -567,6 +582,33 @@
       "pastoral": {
         "addVisit": "Tambah kunjungan",
         "followUpLabel": "Tindak lanjut"
+      },
+      "login": {
+        "title": "Akun Login",
+        "description": "PIN yang dipakai jemaat untuk masuk ke portal.",
+        "statusLabel": "Status",
+        "statusActive": "PIN sudah diatur",
+        "statusNoPin": "PIN belum diatur",
+        "lastLoginLabel": "Login terakhir",
+        "noPhoneHint": "Jemaat ini belum punya nomor HP. Tambahkan nomor HP dulu untuk mengaktifkan login.",
+        "setButton": "Atur PIN",
+        "resetButton": "Reset PIN",
+        "setTitle": "Atur PIN Login",
+        "resetTitle": "Reset PIN Login",
+        "description": "Pilih PIN 4–6 digit. Beritahukan PIN baru ke jemaat secara pribadi.",
+        "pinLabel": "PIN Baru",
+        "pinHint": "4–6 digit angka.",
+        "confirmLabel": "Konfirmasi PIN",
+        "cancel": "Batal",
+        "submit": "Simpan PIN",
+        "savedToast": "PIN tersimpan.",
+        "errors": {
+          "invalidFormat": "PIN harus 4–6 digit angka.",
+          "mismatch": "Konfirmasi PIN tidak cocok.",
+          "noPhone": "Jemaat ini belum punya nomor HP.",
+          "forbidden": "Anda tidak punya akses untuk ini.",
+          "internal": "Terjadi kesalahan. Coba lagi."
+        }
       }
     },
     "delete": {

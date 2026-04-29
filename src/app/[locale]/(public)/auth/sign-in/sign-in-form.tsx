@@ -93,10 +93,10 @@ export function SignInForm() {
       </div>
 
       <Link
-        href="/auth/verify-otp"
+        href="/auth/member"
         className="text-center text-sm font-medium text-foreground hover:underline"
       >
-        {t("switchToOtp")}
+        {t("switchToMember")}
       </Link>
     </form>
   );

@@ -77,35 +77,33 @@
       "or": "or",
       "showPassword": "Show password",
       "hidePassword": "Hide password",
-      "switchToOtp": "I'm a member — sign in with WhatsApp OTP",
+      "switchToMember": "I'm a member — sign in with phone & PIN",
       "errors": {
         "invalidCredentials": "Wrong email or password.",
         "accountInactive": "Your account is disabled. Contact an administrator.",
         "internal": "Something went wrong. Please try again."
       }
     },
-    "otp": {
-      "requestTitle": "Member sign in",
-      "requestSubtitle": "Enter your WhatsApp number. We'll send you a 6-digit code.",
-      "phoneLabel": "WhatsApp number",
+    "pin": {
+      "title": "Member sign in",
+      "subtitle": "Sign in with your phone number and PIN.",
+      "phoneLabel": "Phone number",
       "phonePlaceholder": "08xxxxxxxxxx",
       "phoneHint": "Use the number registered with your church. Format 08xxx or +62xxx.",
-      "requestSubmit": "Send code",
-      "verifyTitle": "Enter the code",
-      "verifySubtitle": "A 6-digit code was sent to {phone}. It expires in 5 minutes.",
-      "codeLabel": "OTP code",
-      "verifySubmit": "Verify",
-      "resend": "Resend code",
-      "resendIn": "Resend in {seconds}s",
-      "changeNumber": "Change number",
+      "pinLabel": "PIN",
+      "pinPlaceholder": "4–6 digit PIN",
+      "pinHint": "Ask the church admin if you don't have a PIN yet or have forgotten it.",
+      "showPin": "Show PIN",
+      "hidePin": "Hide PIN",
+      "submit": "Sign in",
+      "forgotPin": "Forgot your PIN? Contact the church admin to reset it.",
       "or": "or",
       "switchToStaff": "I'm staff/admin — sign in with email",
       "errors": {
-        "phoneNotFound": "Number not registered. Contact your church admin.",
-        "rateLimited": "Too many requests. Please try again later.",
-        "invalidCode": "Wrong code.",
-        "codeExpired": "Code expired. Request a new one.",
-        "tooManyAttempts": "Too many attempts. Request a new code.",
+        "invalidCredentials": "Wrong phone or PIN.",
+        "noPinSet": "PIN not set. Contact the church admin.",
+        "accountInactive": "Your account is disabled. Contact the church admin.",
+        "throttled": "Too many failed attempts. Try again in {seconds}s.",
         "internal": "Something went wrong. Please try again."
       }
     }
@@ -260,6 +258,23 @@
         "joinedAt": "Joined",
         "baptismDate": "Baptism date",
         "baptismChurch": "Baptism church"
+      },
+      "pin": {
+        "title": "Login PIN",
+        "description": "Change the PIN you use to sign in. Choose 4–6 digits you can remember.",
+        "currentLabel": "Current PIN",
+        "newLabel": "New PIN",
+        "confirmLabel": "Confirm new PIN",
+        "hint": "4–6 digits, numbers only.",
+        "submit": "Update PIN",
+        "savedToast": "PIN updated.",
+        "errors": {
+          "invalidFormat": "PIN must be 4–6 digits.",
+          "invalidCurrent": "Current PIN is wrong.",
+          "mismatch": "New PIN confirmation does not match.",
+          "sameAsCurrent": "New PIN must be different from the current PIN.",
+          "internal": "Something went wrong. Please try again."
+        }
       }
     },
     "qr": {
@@ -567,6 +582,33 @@
       "pastoral": {
         "addVisit": "Add visit",
         "followUpLabel": "Follow-up"
+      },
+      "login": {
+        "title": "Login account",
+        "description": "PIN that the member uses to sign in to the portal.",
+        "statusLabel": "Status",
+        "statusActive": "PIN set",
+        "statusNoPin": "PIN not set",
+        "lastLoginLabel": "Last sign-in",
+        "noPhoneHint": "This member has no phone number. Add a phone first to enable login.",
+        "setButton": "Set PIN",
+        "resetButton": "Reset PIN",
+        "setTitle": "Set login PIN",
+        "resetTitle": "Reset login PIN",
+        "description": "Choose a 4–6 digit PIN. Tell the jemaat their new PIN privately.",
+        "pinLabel": "New PIN",
+        "pinHint": "4–6 digits, numbers only.",
+        "confirmLabel": "Confirm PIN",
+        "cancel": "Cancel",
+        "submit": "Save PIN",
+        "savedToast": "PIN saved.",
+        "errors": {
+          "invalidFormat": "PIN must be 4–6 digits.",
+          "mismatch": "PIN confirmation does not match.",
+          "noPhone": "This member has no phone number.",
+          "forbidden": "You don't have permission to do this.",
+          "internal": "Something went wrong. Please try again."
+        }
       }
     },
     "delete": {

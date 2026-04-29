@@ -101,6 +101,9 @@ export async function getMember(id: string) {
         where: { leftAt: null },
         include: { cellGroup: { select: { id: true, name: true } } },
       },
+      user: {
+        select: { id: true, isActive: true, lastLoginAt: true, pinHash: true },
+      },
     },
   });
 }
