@@ -35,7 +35,7 @@
     "giving": "Persembahan",
     "cellGroups": "Komsel",
     "events": "Acara",
-    "communications": "Komunikasi",
+    "announcements": "Pengumuman",
     "volunteers": "Pelayan",
     "children": "Anak",
     "pastoral": "Penggembalaan",
@@ -50,6 +50,7 @@
       "inbox": "Kotak Masuk"
     },
     "myDashboard": "Dasbor Saya",
+    "myAnnouncements": "Pengumuman",
     "myProfile": "Profil Saya",
     "myQr": "QR Saya",
     "myGiving": "Persembahan Saya",
@@ -160,7 +161,7 @@
         "newMember": "Tambah Jemaat",
         "checkIn": "Buka Check-in",
         "newGiving": "Catat Persembahan",
-        "newCommunication": "Kirim Pesan",
+        "newAnnouncement": "Pengumuman Baru",
         "newEvent": "Tambah Acara",
         "reports": "Laporan"
       },
@@ -235,6 +236,11 @@
       "title": "Anda sedang offline",
       "description": "Tidak ada koneksi internet. Halaman ini di-cache untuk Anda. Coba lagi setelah koneksi pulih.",
       "retry": "Coba lagi"
+    },
+    "announcements": {
+      "title": "Pengumuman",
+      "subtitle": "Berita & info terbaru dari gereja.",
+      "empty": "Belum ada pengumuman."
     },
     "profile": {
       "title": "Profil Saya",
@@ -506,9 +512,7 @@
         "joinedAt": "Tanggal bergabung",
         "baptismDate": "Tanggal baptis",
         "baptismChurch": "Gereja tempat baptis",
-        "notes": "Catatan",
-        "excludeFromBroadcasts": "Jangan kirim broadcast",
-        "excludeFromBroadcastsHelp": "Jemaat ini tidak akan menerima warta atau pengumuman massal."
+        "notes": "Catatan"
       },
       "gender": {
         "male": "Pria",
@@ -1350,141 +1354,47 @@
       }
     }
   },
-  "communications": {
-    "channel": {
-      "whatsapp": "WhatsApp",
-      "email": "Email",
-      "sms": "SMS",
-      "push": "Push"
-    },
-    "delivery": {
-      "status": {
-        "pending": "Tertunda",
-        "sent": "Terkirim",
-        "delivered": "Sampai",
-        "failed": "Gagal"
-      }
-    },
+  "announcements": {
     "list": {
-      "title": "Komunikasi",
-      "subtitle": "{total} broadcast.",
-      "newButton": "Broadcast Baru",
-      "templatesButton": "Template",
-      "empty": "Belum ada broadcast.",
-      "colName": "Nama",
-      "colChannel": "Channel",
+      "title": "Pengumuman",
+      "subtitle": "Total {total} pengumuman.",
+      "newButton": "Pengumuman Baru",
+      "empty": "Belum ada pengumuman. Klik \"Pengumuman Baru\" untuk membuat.",
+      "colTitle": "Judul",
+      "colPublishedAt": "Tayang",
       "colStatus": "Status",
-      "colSent": "Dikirim",
-      "colTotals": "Terkirim / Total",
-      "failedAbbr": "gagal"
+      "colAuthor": "Penulis",
+      "statusPublished": "Terbit",
+      "statusScheduled": "Dijadwalkan"
     },
-    "campaign": {
-      "status": {
-        "draft": "Draft",
-        "sending": "Mengirim",
-        "sent": "Terkirim",
-        "failed": "Gagal"
-      },
-      "new": {
-        "title": "Broadcast Baru",
-        "subtitle": "Susun pesan dan pilih audience. Tersimpan sebagai draft sampai dikirim.",
-        "submit": "Simpan Draft"
-      },
-      "form": {
-        "savedToast": "Draft tersimpan.",
-        "errorToast": "Gagal menyimpan.",
-        "fields": {
-          "name": "Nama internal",
-          "namePlaceholder": "Buletin Minggu 5 Mei",
-          "nameHelp": "Hanya admin yang melihat — untuk tracking.",
-          "channel": "Channel",
-          "template": "Pakai template",
-          "templateHelp": "Isi otomatis subject dan body dari template tersimpan.",
-          "templateApplied": "Template terisi — sunting dulu sebelum kirim.",
-          "subject": "Subjek",
-          "body": "Pesan"
-        }
-      },
-      "audience": {
-        "title": "Audience",
-        "description": "Jemaat yang mengaktifkan opt-out broadcast otomatis dikecualikan.",
-        "kind": "Tipe audience",
-        "all": "Semua jemaat",
-        "filter": "Filter",
-        "status": "Status jemaat",
-        "anyStatus": "Semua status",
-        "gender": "Gender",
-        "anyGender": "Semua gender",
-        "male": "Pria",
-        "female": "Wanita",
-        "cellGroup": "Komsel",
-        "anyCellGroup": "Semua komsel",
-        "household": "Keluarga",
-        "anyHousehold": "Semua keluarga",
-        "optOutNote": "Jemaat yang ditandai \"exclude from broadcasts\" tidak pernah ikut dikirim."
-      },
-      "detail": {
-        "backToList": "Daftar broadcast",
-        "delete": "Hapus",
-        "send": "Kirim Sekarang",
-        "sentLabel": "Terkirim",
-        "subjectLabel": "Subjek",
-        "messageTitle": "Pesan",
-        "deliveriesTitle": "Pengiriman",
-        "deliveriesDescription": "{count} penerima di broadcast ini.",
-        "deliveriesEmpty": "Belum ada pengiriman — klik Kirim ketika siap.",
-        "colRecipient": "Penerima",
-        "colStatus": "Status",
-        "colSentAt": "Dikirim",
-        "colError": "Error",
-        "statTotal": "Penerima",
-        "statSent": "Terkirim",
-        "statFailed": "Gagal",
-        "confirmSend": "Kirim ke {count} penerima?",
-        "confirmDelete": "Hapus broadcast ini beserta semua catatan pengirimannya? Tidak bisa dibatalkan.",
-        "deletedToast": "Broadcast dihapus.",
-        "sentToast": "Terkirim {sent}/{total} ({failed} gagal).",
-        "errorToast": "Aksi gagal.",
-        "alreadySent": "Sudah terkirim."
-      }
+    "new": {
+      "title": "Pengumuman Baru",
+      "subtitle": "Tulis pesan yang akan muncul di inbox semua jemaat di portal.",
+      "backToList": "Pengumuman",
+      "submit": "Terbitkan"
     },
-    "template": {
-      "confirmDelete": "Hapus template ini?",
-      "deletedToast": "Template dihapus.",
-      "errorToast": "Aksi gagal.",
-      "list": {
-        "title": "Template",
-        "subtitle": "{total} template.",
-        "backToList": "Komunikasi",
-        "newButton": "Template Baru",
-        "empty": "Belum ada template.",
-        "colName": "Nama",
-        "colChannel": "Channel",
-        "colStatus": "Status",
-        "colActions": "Aksi",
-        "statusActive": "Aktif",
-        "statusInactive": "Nonaktif"
+    "edit": {
+      "backToList": "Pengumuman",
+      "submit": "Simpan Perubahan"
+    },
+    "form": {
+      "fields": {
+        "title": "Judul",
+        "body": "Isi",
+        "bodyHint": "Teks biasa. Baris baru tetap dipertahankan.",
+        "publishedAt": "Tayang Pada",
+        "publishedAtHint": "Kosongkan untuk terbit langsung. Isi waktu mendatang untuk menjadwalkan."
       },
-      "new": {
-        "title": "Template Baru",
-        "subtitle": "Pesan reusable yang bisa dipanggil di broadcast.",
-        "submit": "Simpan"
-      },
-      "edit": {
-        "title": "Ubah Template",
-        "submit": "Simpan Perubahan"
-      },
-      "form": {
-        "savedToast": "Template tersimpan.",
-        "errorToast": "Gagal menyimpan.",
-        "fields": {
-          "name": "Nama",
-          "channel": "Channel",
-          "subject": "Subjek",
-          "body": "Isi",
-          "isActive": "Aktif"
-        }
-      }
+      "savedToast": "Pengumuman tersimpan.",
+      "errorToast": "Gagal menyimpan. Periksa form."
+    },
+    "delete": {
+      "button": "Hapus",
+      "confirmTitle": "Hapus pengumuman ini?",
+      "confirmDescription": "Jemaat tidak akan melihatnya lagi di inbox. Aksi ini tidak bisa dibatalkan.",
+      "cancel": "Batal",
+      "deletedToast": "Pengumuman dihapus.",
+      "errorToast": "Gagal menghapus."
     }
   },
   "publicGive": {
@@ -1800,10 +1710,6 @@
           "label": "Persembahan",
           "description": "Persembahan & tracking dana."
         },
-        "whatsappBroadcast": {
-          "label": "Broadcast WhatsApp",
-          "description": "Pesan massal via template WhatsApp."
-        },
         "selfCheckIn": {
           "label": "Self check-in",
           "description": "Jemaat check-in sendiri via member portal."
@@ -2019,9 +1925,9 @@
         "title": "Acara",
         "description": "Buat acara gereja & lacak RSVP."
       },
-      "communications": {
-        "title": "Komunikasi",
-        "description": "Template & broadcast via WhatsApp."
+      "announcements": {
+        "title": "Pengumuman",
+        "description": "Terbitkan pengumuman gereja yang muncul di inbox jemaat di portal."
       },
       "volunteers": {
         "title": "Pelayanan",

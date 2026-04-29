@@ -9,7 +9,7 @@ import {
   HelpCircle,
   Home,
   LayoutDashboard,
-  MessageSquare,
+  Megaphone,
   QrCode,
   Search,
   Settings,
@@ -90,12 +90,11 @@ export const adminNav: readonly AdminNavItem[] = [
 
   // === DOCUMENTS / MODUL ===
   {
-    href: "/admin/communications",
-    labelKey: "nav.communications",
-    icon: MessageSquare,
+    href: "/admin/announcements",
+    labelKey: "nav.announcements",
+    icon: Megaphone,
     group: "documents",
     roles: ["ADMIN", "STAFF"],
-    feature: "whatsappBroadcast",
   },
   {
     href: "/admin/volunteers",
@@ -185,6 +184,11 @@ export const memberNav: readonly MemberNavItem[] = [
     href: "/me/dashboard",
     labelKey: "nav.myDashboard",
     icon: LayoutDashboard,
+  },
+  {
+    href: "/me/announcements",
+    labelKey: "nav.myAnnouncements",
+    icon: Megaphone,
   },
   {
     href: "/me/profile",

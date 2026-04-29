@@ -22,7 +22,6 @@ const FLAG_KEYS: FeatureFlag[] = [
   "discipleship",
   "volunteers",
   "giving",
-  "whatsappBroadcast",
   "selfCheckIn",
 ];
 

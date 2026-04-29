@@ -94,7 +94,6 @@ export default async function MemberProfilePage() {
               postalCode: member.postalCode ?? "",
               country: member.country ?? "ID",
               maritalStatus: member.maritalStatus ?? "",
-              excludeFromBroadcasts: member.excludeFromBroadcasts,
             }}
           />
         </CardContent>

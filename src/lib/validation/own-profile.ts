@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { normalizePhone } from "@/lib/whatsapp";
+import { normalizePhone } from "@/lib/phone";
 
 const empty = z
   .string()
@@ -31,7 +31,6 @@ export const ownProfileSchema = z.object({
     .nullable()
     .optional()
     .transform((v) => v ?? null),
-  excludeFromBroadcasts: z.boolean().default(false),
 });
 
 export type OwnProfileInput = z.input<typeof ownProfileSchema>;

@@ -57,7 +57,6 @@ export default async function EditMemberPage({
           baptismChurch: member.baptismChurch ?? "",
           joinedAt: toDateInput(member.joinedAt),
           notes: member.notes ?? "",
-          excludeFromBroadcasts: member.excludeFromBroadcasts,
         }}
       />
     </div>
