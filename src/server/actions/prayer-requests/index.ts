@@ -186,7 +186,7 @@ export async function updatePrayerRequestAction(
   const session = await auth();
   if (!session?.user) return { ok: false, error: "UNAUTHORIZED" };
   try {
-    requireRole(session.user.role, ["SUPER_ADMIN", "ADMIN", "STAFF"]);
+    requireRole(session.user.role, ["ADMIN", "STAFF"]);
   } catch {
     return { ok: false, error: "FORBIDDEN" };
   }
@@ -231,7 +231,7 @@ export async function deletePrayerRequestAction(
   const session = await auth();
   if (!session?.user) return { ok: false, error: "UNAUTHORIZED" };
   try {
-    requireRole(session.user.role, ["SUPER_ADMIN", "ADMIN"]);
+    requireRole(session.user.role, ["ADMIN"]);
   } catch {
     return { ok: false, error: "FORBIDDEN" };
   }

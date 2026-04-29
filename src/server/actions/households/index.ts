@@ -20,7 +20,7 @@ async function authorize() {
   const session = await auth();
   if (!session?.user) return { ok: false, error: "UNAUTHORIZED" } as const;
   try {
-    requireRole(session.user.role, ["SUPER_ADMIN", "ADMIN", "STAFF"]);
+    requireRole(session.user.role, ["ADMIN", "STAFF"]);
     return { ok: true } as const;
   } catch {
     return { ok: false, error: "FORBIDDEN" } as const;
@@ -91,7 +91,7 @@ export async function softDeleteHouseholdAction(
   const session = await auth();
   if (!session?.user) return { ok: false, error: "UNAUTHORIZED" };
   try {
-    requireRole(session.user.role, ["SUPER_ADMIN", "ADMIN"]);
+    requireRole(session.user.role, ["ADMIN"]);
   } catch {
     return { ok: false, error: "FORBIDDEN" };
   }

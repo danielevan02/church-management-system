@@ -14,7 +14,7 @@ export async function deleteFundAction(id: string): Promise<DeleteFundResult> {
   const session = await auth();
   if (!session?.user) return { ok: false, error: "UNAUTHORIZED" };
   try {
-    requireRole(session.user.role, ["SUPER_ADMIN", "ADMIN"]);
+    requireRole(session.user.role, ["ADMIN"]);
   } catch {
     return { ok: false, error: "FORBIDDEN" };
   }

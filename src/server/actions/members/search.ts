@@ -22,7 +22,7 @@ export async function searchMembersAction(
   const session = await auth();
   if (!session?.user) return { ok: false, error: "UNAUTHORIZED" };
   try {
-    requireRole(session.user.role, ["SUPER_ADMIN", "ADMIN", "STAFF", "LEADER"]);
+    requireRole(session.user.role, ["ADMIN", "STAFF", "LEADER"]);
   } catch {
     return { ok: false, error: "FORBIDDEN" };
   }

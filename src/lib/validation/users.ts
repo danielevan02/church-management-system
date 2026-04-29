@@ -6,7 +6,6 @@ const empty = z
   .transform((v) => (v == null || v.trim() === "" ? null : v.trim()));
 
 export const roleEnum = z.enum([
-  "SUPER_ADMIN",
   "ADMIN",
   "STAFF",
   "LEADER",

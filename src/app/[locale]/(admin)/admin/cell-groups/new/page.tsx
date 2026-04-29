@@ -12,7 +12,7 @@ export default async function NewCellGroupPage() {
   const session = await auth();
   if (!session?.user) redirect("/auth/sign-in");
   const role = session.user.role;
-  if (role !== "SUPER_ADMIN" && role !== "ADMIN" && role !== "STAFF") {
+  if (role !== "ADMIN" && role !== "STAFF") {
     redirect("/admin/cell-groups");
   }
 

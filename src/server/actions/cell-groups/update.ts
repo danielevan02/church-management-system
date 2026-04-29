@@ -22,7 +22,7 @@ export async function updateCellGroupAction(
   if (!session?.user) return { ok: false, error: "UNAUTHORIZED" };
 
   const role = session.user.role;
-  const isStaff = role === "SUPER_ADMIN" || role === "ADMIN" || role === "STAFF";
+  const isStaff = role === "ADMIN" || role === "STAFF";
   if (!isStaff) {
     const allowed = await canAccessCellGroup(
       {
@@ -97,7 +97,7 @@ export async function softDeleteCellGroupAction(
   const session = await auth();
   if (!session?.user) return { ok: false, error: "UNAUTHORIZED" };
   try {
-    requireRole(session.user.role, ["SUPER_ADMIN", "ADMIN"]);
+    requireRole(session.user.role, ["ADMIN"]);
   } catch {
     return { ok: false, error: "FORBIDDEN" };
   }

@@ -14,28 +14,11 @@ function nextSundayMorning(): Date {
 }
 
 async function main() {
-  const superAdminEmail = "superadmin@example.church";
-  const superAdminPassword = "ChangeMe!Super123";
   const adminEmail = process.env.INITIAL_ADMIN_EMAIL ?? "admin@example.church";
   const adminPassword =
     process.env.INITIAL_ADMIN_PASSWORD ?? "ChangeMe!123";
 
-  const [superAdminHash, adminHash] = await Promise.all([
-    bcrypt.hash(superAdminPassword, 10),
-    bcrypt.hash(adminPassword, 10),
-  ]);
-
-  const superAdmin = await prisma.user.upsert({
-    where: { email: superAdminEmail },
-    update: {},
-    create: {
-      email: superAdminEmail,
-      passwordHash: superAdminHash,
-      emailVerified: new Date(),
-      role: "SUPER_ADMIN",
-      isActive: true,
-    },
-  });
+  const adminHash = await bcrypt.hash(adminPassword, 10);
 
   const admin = await prisma.user.upsert({
     where: { email: adminEmail },
@@ -49,8 +32,10 @@ async function main() {
     },
   });
 
-  // Sample member with WhatsApp phone — for testing OTP login.
+  // Sample member with phone + PIN — for testing member sign-in.
   const samplePhone = "+628123456789";
+  const samplePin = "123456";
+  const samplePinHash = await bcrypt.hash(samplePin, 10);
   const sampleMember = await prisma.member.upsert({
     where: { id: "seed-member-budi" },
     update: {},
@@ -68,9 +53,10 @@ async function main() {
 
   await prisma.user.upsert({
     where: { phone: samplePhone },
-    update: {},
+    update: { pinHash: samplePinHash },
     create: {
       phone: samplePhone,
+      pinHash: samplePinHash,
       role: "MEMBER",
       memberId: sampleMember.id,
       isActive: true,
@@ -124,9 +110,8 @@ async function main() {
   });
 
   console.log("Seed complete:");
-  console.log(`  SUPER_ADMIN: ${superAdmin.email} / ${superAdminPassword}`);
   console.log(`  ADMIN:       ${admin.email} / ${adminPassword}`);
-  console.log(`  MEMBER:      phone=${samplePhone} (Budi Santoso) — login via OTP`);
+  console.log(`  MEMBER:      phone=${samplePhone} (Budi Santoso) / PIN=${samplePin}`);
   console.log(`  Funds:       ${funds.length} entries`);
   console.log(`  Service:     1 upcoming Sunday morning`);
   console.log(`  Child class: 1 (Kelas Kecil)`);

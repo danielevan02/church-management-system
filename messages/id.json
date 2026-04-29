@@ -1732,7 +1732,6 @@
       "colStatus": "Status",
       "colActions": "Aksi",
       "roles": {
-        "superAdmin": "Super admin",
         "admin": "Admin",
         "staff": "Staff",
         "leader": "Pemimpin",
