@@ -22,7 +22,7 @@ export async function createCellGroupReportAction(
   if (!session?.user) return { ok: false, error: "UNAUTHORIZED" };
 
   const role = session.user.role;
-  const isStaff = role === "SUPER_ADMIN" || role === "ADMIN" || role === "STAFF";
+  const isStaff = role === "ADMIN" || role === "STAFF";
   if (!isStaff) {
     const allowed = await canAccessCellGroup(
       {
@@ -74,7 +74,7 @@ export async function deleteCellGroupReportAction(
   if (!session?.user) return { ok: false, error: "UNAUTHORIZED" };
 
   const role = session.user.role;
-  const isStaff = role === "SUPER_ADMIN" || role === "ADMIN" || role === "STAFF";
+  const isStaff = role === "ADMIN" || role === "STAFF";
   if (!isStaff) {
     const allowed = await canAccessCellGroup(
       {

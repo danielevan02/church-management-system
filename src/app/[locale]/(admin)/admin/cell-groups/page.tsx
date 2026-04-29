@@ -34,7 +34,7 @@ export default async function CellGroupsListPage({
     page,
   });
 
-  const canCreate = role === "SUPER_ADMIN" || role === "ADMIN" || role === "STAFF";
+  const canCreate = role === "ADMIN" || role === "STAFF";
 
   return (
     <div className="flex flex-col gap-6">

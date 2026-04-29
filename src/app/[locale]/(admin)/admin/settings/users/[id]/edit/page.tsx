@@ -32,8 +32,6 @@ export default async function EditUserPage({
 
   const t = await getTranslations("settings.users");
 
-  const allowSuperAdmin = session.user.role === "SUPER_ADMIN";
-  const isSuperAdminTarget = user.role === "SUPER_ADMIN";
   const isSelf = user.id === session.user.id;
 
   return (
@@ -66,8 +64,6 @@ export default async function EditUserPage({
               memberId: user.memberId ?? "",
             }}
             initialMemberName={user.member?.fullName ?? null}
-            allowSuperAdmin={allowSuperAdmin}
-            isSuperAdminTarget={isSuperAdminTarget}
             isSelf={isSelf}
           />
         </CardContent>

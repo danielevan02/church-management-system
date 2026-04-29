@@ -20,7 +20,7 @@ async function assertAccess(
 ): Promise<boolean> {
   const role = session.user.role as never;
   const isStaff =
-    role === "SUPER_ADMIN" || role === "ADMIN" || role === "STAFF";
+    role === "ADMIN" || role === "STAFF";
   if (isStaff) return true;
   return canAccessCellGroup(
     {

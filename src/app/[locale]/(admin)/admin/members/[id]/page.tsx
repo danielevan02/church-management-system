@@ -51,9 +51,7 @@ export default async function MemberDetailPage({
   const tMilestone = await getTranslations("discipleship.type");
   const tVisitType = await getTranslations("pastoral.visitType");
   const canPastoral =
-    session?.user.role === "SUPER_ADMIN" ||
-    session?.user.role === "ADMIN" ||
-    session?.user.role === "STAFF";
+    session?.user.role === "ADMIN" || session?.user.role === "STAFF";
   const [attendanceHistory, givingHistory, rsvpHistory, milestones, visits] =
     await Promise.all([
       getAttendanceForMember(id, 25),
@@ -63,8 +61,7 @@ export default async function MemberDetailPage({
       canPastoral ? getVisitsForMember(id, 25) : Promise.resolve([]),
     ]);
 
-  const canDelete =
-    session?.user.role === "SUPER_ADMIN" || session?.user.role === "ADMIN";
+  const canDelete = session?.user.role === "ADMIN";
 
   return (
     <div className="flex flex-col gap-6">

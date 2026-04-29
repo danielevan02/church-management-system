@@ -9,7 +9,6 @@ export type SessionUser = {
 };
 
 const ROLE_RANK: Record<Role, number> = {
-  SUPER_ADMIN: 5,
   ADMIN: 4,
   STAFF: 3,
   LEADER: 2,

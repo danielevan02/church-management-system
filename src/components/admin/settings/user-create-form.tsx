@@ -47,13 +47,7 @@ const defaults: FormValues = {
   memberId: "",
 };
 
-export function UserCreateForm({
-  submitLabel,
-  allowSuperAdmin,
-}: {
-  submitLabel: string;
-  allowSuperAdmin: boolean;
-}) {
+export function UserCreateForm({ submitLabel }: { submitLabel: string }) {
   const t = useTranslations("settings.users.form");
   const tRole = useTranslations("settings.users.roles");
   const tCommon = useTranslations("common");
@@ -61,9 +55,7 @@ export function UserCreateForm({
   const [pending, startTransition] = useTransition();
   const [pickedName, setPickedName] = useState<string | null>(null);
 
-  const ROLES: RoleInput[] = allowSuperAdmin
-    ? ["SUPER_ADMIN", "ADMIN", "STAFF", "LEADER", "MEMBER"]
-    : ["ADMIN", "STAFF", "LEADER", "MEMBER"];
+  const ROLES: RoleInput[] = ["ADMIN", "STAFF", "LEADER", "MEMBER"];
 
   const form = useForm<FormValues>({
     resolver: zodResolver(userCreateSchema as never),
@@ -197,8 +189,6 @@ export function UserCreateForm({
 
 function roleKey(r: RoleInput): string {
   switch (r) {
-    case "SUPER_ADMIN":
-      return "superAdmin";
     case "ADMIN":
       return "admin";
     case "STAFF":

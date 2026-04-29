@@ -51,11 +51,6 @@ export async function createUserAction(
   }
   const data = parsed.data;
 
-  // Only SUPER_ADMIN can create another SUPER_ADMIN.
-  if (data.role === "SUPER_ADMIN" && guard.role !== "SUPER_ADMIN") {
-    return { ok: false, error: "FORBIDDEN" };
-  }
-
   if (await isEmailTaken(data.email)) {
     return {
       ok: false,
@@ -122,16 +117,8 @@ export async function updateUserAction(
   });
   if (!existing) return { ok: false, error: "NOT_FOUND" };
 
-  // Prevent non-super-admin from elevating to SUPER_ADMIN or modifying one.
-  if (
-    (existing.role === "SUPER_ADMIN" || data.role === "SUPER_ADMIN") &&
-    guard.role !== "SUPER_ADMIN"
-  ) {
-    return { ok: false, error: "FORBIDDEN" };
-  }
-
   // Don't allow demoting yourself out of admin (avoid lockout).
-  if (id === guard.userId && data.role !== "SUPER_ADMIN" && data.role !== "ADMIN") {
+  if (id === guard.userId && data.role !== "ADMIN") {
     return { ok: false, error: "CANNOT_DEMOTE_SELF" };
   }
   // Don't allow deactivating yourself.
@@ -222,7 +209,7 @@ export async function toggleUserActiveAction(
   const session = await auth();
   if (!session?.user) return { ok: false, error: "UNAUTHORIZED" };
   try {
-    requireRole(session.user.role, ["SUPER_ADMIN", "ADMIN"]);
+    requireRole(session.user.role, ["ADMIN"]);
   } catch {
     return { ok: false, error: "FORBIDDEN" };
   }
@@ -237,9 +224,6 @@ export async function toggleUserActiveAction(
       select: { isActive: true, role: true },
     });
     if (!u) return { ok: false, error: "NOT_FOUND" };
-    if (u.role === "SUPER_ADMIN" && session.user.role !== "SUPER_ADMIN") {
-      return { ok: false, error: "FORBIDDEN" };
-    }
 
     await prisma.user.update({
       where: { id },

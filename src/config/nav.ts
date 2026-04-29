@@ -42,42 +42,42 @@ export const adminNav: readonly AdminNavItem[] = [
     labelKey: "nav.dashboard",
     icon: LayoutDashboard,
     group: "main",
-    roles: ["SUPER_ADMIN", "ADMIN", "STAFF", "LEADER"],
+    roles: ["ADMIN", "STAFF", "LEADER"],
   },
   {
     href: "/admin/members",
     labelKey: "nav.members",
     icon: Users,
     group: "main",
-    roles: ["SUPER_ADMIN", "ADMIN", "STAFF", "LEADER"],
+    roles: ["ADMIN", "STAFF", "LEADER"],
   },
   {
     href: "/admin/households",
     labelKey: "nav.households",
     icon: Home,
     group: "main",
-    roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
+    roles: ["ADMIN", "STAFF"],
   },
   {
     href: "/admin/cell-groups",
     labelKey: "nav.cellGroups",
     icon: UsersRound,
     group: "main",
-    roles: ["SUPER_ADMIN", "ADMIN", "STAFF", "LEADER"],
+    roles: ["ADMIN", "STAFF", "LEADER"],
   },
   {
     href: "/admin/attendance",
     labelKey: "nav.attendance",
     icon: UserCheck,
     group: "main",
-    roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
+    roles: ["ADMIN", "STAFF"],
   },
   {
     href: "/admin/giving",
     labelKey: "nav.giving",
     icon: HandCoins,
     group: "main",
-    roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
+    roles: ["ADMIN", "STAFF"],
     feature: "giving",
   },
   {
@@ -85,7 +85,7 @@ export const adminNav: readonly AdminNavItem[] = [
     labelKey: "nav.events",
     icon: Calendar,
     group: "main",
-    roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
+    roles: ["ADMIN", "STAFF"],
   },
 
   // === DOCUMENTS / MODUL ===
@@ -94,7 +94,7 @@ export const adminNav: readonly AdminNavItem[] = [
     labelKey: "nav.communications",
     icon: MessageSquare,
     group: "documents",
-    roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
+    roles: ["ADMIN", "STAFF"],
     feature: "whatsappBroadcast",
   },
   {
@@ -102,7 +102,7 @@ export const adminNav: readonly AdminNavItem[] = [
     labelKey: "nav.volunteers",
     icon: HeartHandshake,
     group: "documents",
-    roles: ["SUPER_ADMIN", "ADMIN", "STAFF", "LEADER"],
+    roles: ["ADMIN", "STAFF", "LEADER"],
     feature: "volunteers",
   },
   {
@@ -110,7 +110,7 @@ export const adminNav: readonly AdminNavItem[] = [
     labelKey: "nav.children",
     icon: Heart,
     group: "documents",
-    roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
+    roles: ["ADMIN", "STAFF"],
     feature: "childrensCheckIn",
   },
   {
@@ -118,7 +118,7 @@ export const adminNav: readonly AdminNavItem[] = [
     labelKey: "nav.pastoral",
     icon: HeartHandshake,
     group: "documents",
-    roles: ["SUPER_ADMIN", "ADMIN", "STAFF", "LEADER"],
+    roles: ["ADMIN", "STAFF", "LEADER"],
     feature: "pastoralCare",
   },
   {
@@ -126,14 +126,14 @@ export const adminNav: readonly AdminNavItem[] = [
     labelKey: "nav.prayerRequestsAdmin",
     icon: Heart,
     group: "documents",
-    roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
+    roles: ["ADMIN", "STAFF"],
   },
   {
     href: "/admin/discipleship",
     labelKey: "nav.discipleship",
     icon: Sprout,
     group: "documents",
-    roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
+    roles: ["ADMIN", "STAFF"],
     feature: "discipleship",
   },
   {
@@ -141,7 +141,7 @@ export const adminNav: readonly AdminNavItem[] = [
     labelKey: "nav.reports",
     icon: BarChart3,
     group: "documents",
-    roles: ["SUPER_ADMIN", "ADMIN", "STAFF"],
+    roles: ["ADMIN", "STAFF"],
   },
 
   // === SECONDARY ===
@@ -150,21 +150,21 @@ export const adminNav: readonly AdminNavItem[] = [
     labelKey: "nav.settings",
     icon: Settings,
     group: "secondary",
-    roles: ["SUPER_ADMIN", "ADMIN"],
+    roles: ["ADMIN"],
   },
   {
     href: "/admin/help",
     labelKey: "nav.help",
     icon: HelpCircle,
     group: "secondary",
-    roles: ["SUPER_ADMIN", "ADMIN", "STAFF", "LEADER"],
+    roles: ["ADMIN", "STAFF", "LEADER"],
   },
   {
     href: "/admin/search",
     labelKey: "nav.search",
     icon: Search,
     group: "secondary",
-    roles: ["SUPER_ADMIN", "ADMIN", "STAFF", "LEADER"],
+    roles: ["ADMIN", "STAFF", "LEADER"],
   },
 ] as const;
 

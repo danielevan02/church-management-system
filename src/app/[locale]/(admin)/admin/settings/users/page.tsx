@@ -75,9 +75,6 @@ export default async function UsersListPage({
             <TableBody>
               {result.items.map((u) => {
                 const isSelf = u.id === session.user.id;
-                const isSuperAdmin = u.role === "SUPER_ADMIN";
-                const cannotToggleSuperAdmin =
-                  isSuperAdmin && session.user.role !== "SUPER_ADMIN";
                 return (
                   <TableRow key={u.id}>
                     <TableCell>
@@ -108,7 +105,7 @@ export default async function UsersListPage({
                       </div>
                     </TableCell>
                     <TableCell>
-                      <Badge variant={isSuperAdmin ? "default" : "outline"}>
+                      <Badge variant="outline">
                         {tRole(roleKey(u.role))}
                       </Badge>
                     </TableCell>
@@ -146,7 +143,7 @@ export default async function UsersListPage({
                         <ToggleActiveButton
                           id={u.id}
                           isActive={u.isActive}
-                          disabled={isSelf || cannotToggleSuperAdmin}
+                          disabled={isSelf}
                         />
                       </div>
                     </TableCell>
@@ -169,8 +166,6 @@ export default async function UsersListPage({
 
 function roleKey(r: string): string {
   switch (r) {
-    case "SUPER_ADMIN":
-      return "superAdmin";
     case "ADMIN":
       return "admin";
     case "STAFF":

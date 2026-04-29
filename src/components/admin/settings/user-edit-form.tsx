@@ -44,16 +44,12 @@ export function UserEditForm({
   initialValues,
   initialMemberName,
   submitLabel,
-  allowSuperAdmin,
-  isSuperAdminTarget,
   isSelf,
 }: {
   id: string;
   initialValues: FormValues;
   initialMemberName: string | null;
   submitLabel: string;
-  allowSuperAdmin: boolean;
-  isSuperAdminTarget: boolean;
   isSelf: boolean;
 }) {
   const t = useTranslations("settings.users.form");
@@ -63,9 +59,7 @@ export function UserEditForm({
   const [pending, startTransition] = useTransition();
   const [pickedName, setPickedName] = useState<string | null>(initialMemberName);
 
-  const ROLES: RoleInput[] = allowSuperAdmin
-    ? ["SUPER_ADMIN", "ADMIN", "STAFF", "LEADER", "MEMBER"]
-    : ["ADMIN", "STAFF", "LEADER", "MEMBER"];
+  const ROLES: RoleInput[] = ["ADMIN", "STAFF", "LEADER", "MEMBER"];
 
   const form = useForm<FormValues>({
     resolver: zodResolver(userEditSchema as never),
@@ -100,9 +94,6 @@ export function UserEditForm({
     });
   }
 
-  // If editing a SUPER_ADMIN and the actor isn't one, lock everything.
-  const lockRole = isSuperAdminTarget && !allowSuperAdmin;
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
@@ -113,11 +104,7 @@ export function UserEditForm({
             render={({ field }) => (
               <FormItem>
                 <FormLabel>{t("fields.role")} *</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  value={field.value}
-                  disabled={lockRole}
-                >
+                <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue />
@@ -202,8 +189,6 @@ export function UserEditForm({
 
 function roleKey(r: RoleInput): string {
   switch (r) {
-    case "SUPER_ADMIN":
-      return "superAdmin";
     case "ADMIN":
       return "admin";
     case "STAFF":

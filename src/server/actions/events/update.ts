@@ -18,7 +18,7 @@ export async function updateEventAction(
   const session = await auth();
   if (!session?.user) return { ok: false, error: "UNAUTHORIZED" };
   try {
-    requireRole(session.user.role, ["SUPER_ADMIN", "ADMIN", "STAFF"]);
+    requireRole(session.user.role, ["ADMIN", "STAFF"]);
   } catch {
     return { ok: false, error: "FORBIDDEN" };
   }
@@ -68,7 +68,7 @@ export async function setEventPublishedAction(
   const session = await auth();
   if (!session?.user) return { ok: false, error: "UNAUTHORIZED" };
   try {
-    requireRole(session.user.role, ["SUPER_ADMIN", "ADMIN", "STAFF"]);
+    requireRole(session.user.role, ["ADMIN", "STAFF"]);
   } catch {
     return { ok: false, error: "FORBIDDEN" };
   }
@@ -91,7 +91,7 @@ export async function softDeleteEventAction(
   const session = await auth();
   if (!session?.user) return { ok: false, error: "UNAUTHORIZED" };
   try {
-    requireRole(session.user.role, ["SUPER_ADMIN", "ADMIN"]);
+    requireRole(session.user.role, ["ADMIN"]);
   } catch {
     return { ok: false, error: "FORBIDDEN" };
   }

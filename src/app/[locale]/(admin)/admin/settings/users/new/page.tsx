@@ -27,10 +27,7 @@ export default async function NewUserPage() {
         <h1 className="text-3xl font-bold tracking-tight">{t("newTitle")}</h1>
         <p className="text-muted-foreground">{t("newSubtitle")}</p>
       </header>
-      <UserCreateForm
-        submitLabel={t("submitCreate")}
-        allowSuperAdmin={session.user.role === "SUPER_ADMIN"}
-      />
+      <UserCreateForm submitLabel={t("submitCreate")} />
     </div>
   );
 }

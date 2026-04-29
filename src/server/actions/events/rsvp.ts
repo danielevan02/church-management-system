@@ -117,7 +117,7 @@ export async function adminGuestRsvpAction(
   const session = await auth();
   if (!session?.user) return { ok: false, error: "UNAUTHORIZED" };
   try {
-    requireRole(session.user.role, ["SUPER_ADMIN", "ADMIN", "STAFF"]);
+    requireRole(session.user.role, ["ADMIN", "STAFF"]);
   } catch {
     return { ok: false, error: "FORBIDDEN" };
   }
@@ -176,9 +176,7 @@ export async function deleteRsvpAction(
   if (!rsvp) return { ok: false, error: "NOT_FOUND" };
 
   const isStaff =
-    session.user.role === "SUPER_ADMIN" ||
-    session.user.role === "ADMIN" ||
-    session.user.role === "STAFF";
+    session.user.role === "ADMIN" || session.user.role === "STAFF";
   const isOwn =
     !!rsvp.memberId && rsvp.memberId === (session.user.memberId ?? null);
   if (!isStaff && !isOwn) return { ok: false, error: "FORBIDDEN" };
