@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import { ArrowLeft } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { notFound, redirect } from "next/navigation";
@@ -18,6 +17,7 @@ import { features } from "@/config/features";
 import { auth } from "@/lib/auth";
 import { Link } from "@/lib/i18n/navigation";
 import { hasAtLeastRole } from "@/lib/permissions";
+import { formatJakarta } from "@/lib/datetime";
 import {
   listActiveCheckIns,
   listAllChildClasses,
@@ -142,7 +142,7 @@ export default async function CheckInDashboardPage() {
                   </div>
                   <div className="text-xs tabular-nums text-muted-foreground">
                     {t("activeCard.checkedInAt")}:{" "}
-                    {format(row.checkedInAt, "HH:mm")}
+                    {formatJakarta(row.checkedInAt, "HH:mm")}
                   </div>
                 </li>
               ))}

@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import { ArrowLeft, CheckCircle2, Clock } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { notFound, redirect } from "next/navigation";
@@ -24,6 +23,7 @@ import {
   listCheckInsHistory,
 } from "@/server/queries/children";
 import { parsePageParam } from "@/server/queries/_pagination";
+import { formatJakarta } from "@/lib/datetime";
 
 export default async function CheckInHistoryPage({
   searchParams,
@@ -131,13 +131,13 @@ export default async function CheckInHistoryPage({
                   </TableCell>
                   <TableCell className="text-sm">{row.childClass.name}</TableCell>
                   <TableCell className="text-xs tabular-nums">
-                    {format(row.checkedInAt, "dd MMM yyyy, HH:mm")}
+                    {formatJakarta(row.checkedInAt, "dd MMM yyyy, HH:mm")}
                   </TableCell>
                   <TableCell>
                     {row.checkedOutAt ? (
                       <Badge variant="default">
                         <CheckCircle2 className="h-3 w-3" />
-                        {format(row.checkedOutAt, "HH:mm")}
+                        {formatJakarta(row.checkedOutAt, "HH:mm")}
                       </Badge>
                     ) : (
                       <Badge variant="outline">

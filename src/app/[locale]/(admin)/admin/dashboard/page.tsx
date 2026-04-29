@@ -43,6 +43,7 @@ import {
   getMembershipSnapshot,
 } from "@/server/queries/reports";
 import { getUpcomingServices } from "@/server/queries/services";
+import { formatJakarta } from "@/lib/datetime";
 
 export default async function AdminDashboardPage() {
   const session = await auth();
@@ -167,7 +168,7 @@ export default async function AdminDashboardPage() {
                         <div className="flex flex-col">
                           <span className="font-medium">{s.name}</span>
                           <span className="text-xs text-muted-foreground">
-                            {format(s.startsAt, "EEE dd MMM · HH:mm")}
+                            {formatJakarta(s.startsAt, "EEE dd MMM · HH:mm")}
                             {s.location ? ` · ${s.location}` : ""}
                           </span>
                         </div>
@@ -205,7 +206,7 @@ export default async function AdminDashboardPage() {
                             ) : null}
                           </span>
                           <span className="text-xs text-muted-foreground">
-                            {format(e.startsAt, "EEE dd MMM · HH:mm")}
+                            {formatJakarta(e.startsAt, "EEE dd MMM · HH:mm")}
                             {e.location ? ` · ${e.location}` : ""}
                           </span>
                         </div>
@@ -373,7 +374,7 @@ export default async function AdminDashboardPage() {
                       </span>
                     </div>
                     <span className="shrink-0 text-xs tabular-nums text-muted-foreground">
-                      {format(log.createdAt, "dd MMM HH:mm")}
+                      {formatJakarta(log.createdAt, "dd MMM HH:mm")}
                     </span>
                   </li>
                 ))}

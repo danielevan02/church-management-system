@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import { CheckCircle2, Clock, Heart } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { notFound, redirect } from "next/navigation";
@@ -14,6 +13,7 @@ import {
 } from "@/components/ui/card";
 import { features } from "@/config/features";
 import { auth } from "@/lib/auth";
+import { formatJakarta } from "@/lib/datetime";
 import {
   getCheckInsForChild,
   listChildrenForGuardian,
@@ -93,13 +93,13 @@ export default async function MyChildrenPage() {
                               {h.childClass.name}
                             </span>
                             <span className="text-xs text-muted-foreground tabular-nums">
-                              {format(h.checkedInAt, "EEE dd MMM yyyy, HH:mm")}
+                              {formatJakarta(h.checkedInAt, "EEE dd MMM yyyy, HH:mm")}
                             </span>
                           </div>
                           {h.checkedOutAt ? (
                             <Badge variant="default">
                               <CheckCircle2 className="h-3 w-3" />
-                              {format(h.checkedOutAt, "HH:mm")}
+                              {formatJakarta(h.checkedOutAt, "HH:mm")}
                             </Badge>
                           ) : (
                             <Badge variant="outline">

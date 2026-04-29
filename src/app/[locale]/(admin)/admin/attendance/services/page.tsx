@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import { CalendarRange, Plus } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
@@ -16,6 +15,7 @@ import {
 import { Link } from "@/lib/i18n/navigation";
 import { parsePageParam } from "@/server/queries/_pagination";
 import { listServices } from "@/server/queries/services";
+import { formatJakarta } from "@/lib/datetime";
 
 export default async function ServicesListPage({
   searchParams,
@@ -90,7 +90,7 @@ export default async function ServicesListPage({
                     {tType(typeKey(s.type))}
                   </TableCell>
                   <TableCell className="text-sm">
-                    {format(s.startsAt, "dd MMM yyyy, HH:mm")}
+                    {formatJakarta(s.startsAt, "dd MMM yyyy, HH:mm")}
                   </TableCell>
                   <TableCell className="text-sm tabular-nums">
                     {s._count.attendances}

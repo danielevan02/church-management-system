@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import { ArrowLeft, Pencil, QrCode, ScanLine } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -28,6 +27,7 @@ import { Link } from "@/lib/i18n/navigation";
 import { listAttendanceForService } from "@/server/queries/attendance";
 import { parsePageParam } from "@/server/queries/_pagination";
 import { getService, isCheckInOpen } from "@/server/queries/services";
+import { formatJakarta } from "@/lib/datetime";
 
 export default async function ServiceDetailPage({
   params,
@@ -73,7 +73,7 @@ export default async function ServiceDetailPage({
               <span>{tType(typeKey(service.type))}</span>
               <span>•</span>
               <span>
-                {format(service.startsAt, "EEE dd MMM yyyy, HH:mm")}
+                {formatJakarta(service.startsAt, "EEE dd MMM yyyy, HH:mm")}
               </span>
               {service.location ? (
                 <>
@@ -177,7 +177,7 @@ export default async function ServiceDetailPage({
                         <SourceBadge source={row.source} />
                       </TableCell>
                       <TableCell className="text-sm tabular-nums">
-                        {format(row.checkedInAt, "HH:mm")}
+                        {formatJakarta(row.checkedInAt, "HH:mm")}
                       </TableCell>
                       <TableCell className="text-right">
                         <ServiceDeleteRecordButton recordId={row.id} />

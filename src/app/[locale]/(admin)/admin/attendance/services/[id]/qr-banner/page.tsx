@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import { id as idLocale } from "date-fns/locale";
 import { ArrowLeft } from "lucide-react";
 import { getTranslations } from "next-intl/server";
@@ -12,6 +11,7 @@ import { Link } from "@/lib/i18n/navigation";
 import { hasAtLeastRole } from "@/lib/permissions";
 import { renderServiceQrDataUrl } from "@/lib/service-qr";
 import { getService } from "@/server/queries/services";
+import { formatJakarta } from "@/lib/datetime";
 
 export default async function ServiceQrBannerPage({
   params,
@@ -60,9 +60,11 @@ export default async function ServiceQrBannerPage({
           </p>
           <h1 className="text-4xl font-bold tracking-tight">{service.name}</h1>
           <p className="text-lg text-muted-foreground">
-            {format(service.startsAt, "EEEE, dd MMMM yyyy · HH:mm", {
-              locale: locale === "id" ? idLocale : undefined,
-            })}
+            {formatJakarta(
+              service.startsAt,
+              "EEEE, dd MMMM yyyy · HH:mm",
+              locale === "id" ? idLocale : undefined,
+            )}
             {service.location ? ` · ${service.location}` : ""}
           </p>
         </div>

@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import { ArrowLeft } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { notFound, redirect } from "next/navigation";
@@ -19,6 +18,7 @@ import { Link } from "@/lib/i18n/navigation";
 import { hasAtLeastRole } from "@/lib/permissions";
 import { listAuditLogs } from "@/server/queries/audit";
 import { parsePageParam } from "@/server/queries/_pagination";
+import { formatJakarta } from "@/lib/datetime";
 
 export default async function AuditLogPage({
   searchParams,
@@ -79,7 +79,7 @@ export default async function AuditLogPage({
               {result.items.map((row) => (
                 <TableRow key={row.id}>
                   <TableCell className="text-xs tabular-nums text-muted-foreground">
-                    {format(row.createdAt, "dd MMM yyyy, HH:mm:ss")}
+                    {formatJakarta(row.createdAt, "dd MMM yyyy, HH:mm:ss")}
                   </TableCell>
                   <TableCell className="text-xs">
                     {row.user?.email ?? (

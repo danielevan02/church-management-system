@@ -1,6 +1,5 @@
 "use client";
 
-import { format } from "date-fns";
 import { CheckCircle2, Search, ScanLine, UserPlus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useRef, useState, useTransition } from "react";
@@ -24,6 +23,7 @@ import {
   checkInVisitorAction,
 } from "@/server/actions/attendance/check-in";
 import { searchMembersAction } from "@/server/actions/members/search";
+import { formatJakarta } from "@/lib/datetime";
 
 type RecentRow = {
   recordId: string;
@@ -169,7 +169,7 @@ export function CheckInConsole({
                   <div className="flex flex-1 flex-col">
                     <span className="font-medium">{r.name}</span>
                     <span className="text-xs text-muted-foreground">
-                      {format(r.at, "HH:mm:ss")} · {r.source}
+                      {formatJakarta(r.at, "HH:mm:ss")} · {r.source}
                       {r.alreadyCheckedIn ? ` · ${t("alreadyTag")}` : ""}
                     </span>
                   </div>

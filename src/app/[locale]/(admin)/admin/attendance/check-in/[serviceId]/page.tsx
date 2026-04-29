@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import { ArrowLeft } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -9,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "@/lib/i18n/navigation";
 import { listAttendanceForService } from "@/server/queries/attendance";
 import { getService, isCheckInOpen } from "@/server/queries/services";
+import { formatJakarta } from "@/lib/datetime";
 
 export default async function UsherCheckInPage({
   params,
@@ -54,7 +54,7 @@ export default async function UsherCheckInPage({
               <span>{tType(typeKey(service.type))}</span>
               <span>•</span>
               <span>
-                {format(service.startsAt, "EEE dd MMM yyyy, HH:mm")}
+                {formatJakarta(service.startsAt, "EEE dd MMM yyyy, HH:mm")}
               </span>
             </div>
           </div>

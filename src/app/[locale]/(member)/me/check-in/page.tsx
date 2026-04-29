@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import { CheckCircle2 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
@@ -15,6 +14,7 @@ import {
 } from "@/components/ui/card";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { formatJakarta } from "@/lib/datetime";
 import {
   getCheckInOpenServices,
   getService,
@@ -99,7 +99,7 @@ export default async function MemberCheckInPage({
                       <span className="font-medium">{s.name}</span>
                       <span className="text-xs text-muted-foreground">
                         {tType(typeKey(s.type))} ·{" "}
-                        {format(s.startsAt, "EEE dd MMM, HH:mm")}
+                        {formatJakarta(s.startsAt, "EEE dd MMM, HH:mm")}
                         {s.location ? ` · ${s.location}` : ""}
                       </span>
                     </div>
@@ -137,7 +137,7 @@ export default async function MemberCheckInPage({
                   <span className="font-medium">{s.name}</span>
                   <span className="text-xs text-muted-foreground">
                     {tType(typeKey(s.type))} ·{" "}
-                    {format(s.startsAt, "EEE dd MMM yyyy, HH:mm")}
+                    {formatJakarta(s.startsAt, "EEE dd MMM yyyy, HH:mm")}
                   </span>
                 </li>
               ))}

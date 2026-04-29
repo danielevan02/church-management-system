@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import { Plus } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { notFound, redirect } from "next/navigation";
@@ -21,6 +20,7 @@ import { Link } from "@/lib/i18n/navigation";
 import { hasAtLeastRole } from "@/lib/permissions";
 import { parsePageParam } from "@/server/queries/_pagination";
 import { listUsers } from "@/server/queries/users";
+import { formatJakarta } from "@/lib/datetime";
 
 export default async function UsersListPage({
   searchParams,
@@ -123,7 +123,7 @@ export default async function UsersListPage({
                     </TableCell>
                     <TableCell className="text-xs tabular-nums text-muted-foreground">
                       {u.lastLoginAt
-                        ? format(u.lastLoginAt, "dd MMM yyyy, HH:mm")
+                        ? formatJakarta(u.lastLoginAt, "dd MMM yyyy, HH:mm")
                         : "—"}
                     </TableCell>
                     <TableCell>

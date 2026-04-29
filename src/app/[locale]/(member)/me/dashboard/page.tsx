@@ -35,6 +35,7 @@ import { getMilestonesForMember } from "@/server/queries/discipleship";
 import { getRsvpsForMember } from "@/server/queries/events";
 import { getGivingForMember } from "@/server/queries/giving";
 import { getAssignmentsForMember } from "@/server/queries/volunteers";
+import { formatJakarta } from "@/lib/datetime";
 
 export default async function MemberDashboardPage() {
   const session = await auth();
@@ -169,7 +170,7 @@ export default async function MemberDashboardPage() {
                 <div className="flex flex-col gap-1 rounded-md border px-3 py-2 text-sm">
                   <span className="font-medium">{upcomingService.name}</span>
                   <span className="text-xs text-muted-foreground">
-                    {format(upcomingService.startsAt, "EEEE, dd MMM yyyy · HH:mm")}
+                    {formatJakarta(upcomingService.startsAt, "EEEE, dd MMM yyyy · HH:mm")}
                     {upcomingService.location ? ` · ${upcomingService.location}` : ""}
                   </span>
                 </div>
@@ -190,7 +191,7 @@ export default async function MemberDashboardPage() {
                   <div className="flex flex-col">
                     <span className="font-medium">{nextEvent.event.title}</span>
                     <span className="text-xs text-muted-foreground">
-                      {format(nextEvent.event.startsAt, "EEE dd MMM · HH:mm")}
+                      {formatJakarta(nextEvent.event.startsAt, "EEE dd MMM · HH:mm")}
                       {nextEvent.event.location
                         ? ` · ${nextEvent.event.location}`
                         : ""}
@@ -218,7 +219,7 @@ export default async function MemberDashboardPage() {
                           : ""}
                       </span>
                       <span className="text-xs text-muted-foreground">
-                        {format(nextAssignment.serviceDate, "EEE dd MMM · HH:mm")}
+                        {formatJakarta(nextAssignment.serviceDate, "EEE dd MMM · HH:mm")}
                       </span>
                     </div>
                     <span className="text-xs uppercase tracking-wide text-muted-foreground">

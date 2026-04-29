@@ -1,4 +1,4 @@
-import { format, formatDistanceToNow } from "date-fns";
+import { formatDistanceToNow } from "date-fns";
 import { getTranslations } from "next-intl/server";
 
 import { WeeklyTrendChart } from "@/components/admin/attendance/weekly-trend-chart";
@@ -24,6 +24,7 @@ import {
   getWeeklyAttendanceTrend,
 } from "@/server/queries/attendance";
 import { listServices } from "@/server/queries/services";
+import { formatJakarta } from "@/lib/datetime";
 
 const INACTIVE_WEEKS_DEFAULT = 6;
 
@@ -103,7 +104,7 @@ export default async function AttendanceReportsPage({
                       </Link>
                       <span className="text-xs text-muted-foreground">
                         {tType(typeKey(s.type))} ·{" "}
-                        {format(s.startsAt, "dd MMM yyyy, HH:mm")}
+                        {formatJakarta(s.startsAt, "dd MMM yyyy, HH:mm")}
                       </span>
                     </div>
                     <span className="text-lg font-semibold tabular-nums">
