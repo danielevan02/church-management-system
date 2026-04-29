@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import { ArrowLeft } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -7,9 +6,10 @@ import { EventEditForm } from "./event-edit-form";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/lib/i18n/navigation";
 import { getEvent } from "@/server/queries/events";
+import { formatJakarta } from "@/lib/datetime";
 
 function toDateTimeLocal(date: Date): string {
-  return format(date, "yyyy-MM-dd'T'HH:mm");
+  return formatJakarta(date, "yyyy-MM-dd'T'HH:mm");
 }
 
 export default async function EditEventPage({

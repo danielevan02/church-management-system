@@ -26,6 +26,7 @@ import { getRsvpsForMember } from "@/server/queries/events";
 import { getGivingForMember } from "@/server/queries/giving";
 import { getMember } from "@/server/queries/members";
 import { getVisitsForMember } from "@/server/queries/pastoral";
+import { formatJakarta } from "@/lib/datetime";
 
 function fmtDate(d: Date | null | undefined): string {
   return d ? format(d, "yyyy-MM-dd") : "—";
@@ -237,7 +238,7 @@ export default async function MemberDetailPage({
                 {member.user?.lastLoginAt ? (
                   <Field
                     label={t("login.lastLoginLabel")}
-                    value={format(member.user.lastLoginAt, "dd MMM yyyy, HH:mm")}
+                    value={formatJakarta(member.user.lastLoginAt, "dd MMM yyyy, HH:mm")}
                   />
                 ) : null}
                 <SetPinDialog
@@ -316,11 +317,11 @@ export default async function MemberDetailPage({
                         </Link>
                         <span className="text-xs text-muted-foreground">
                           {tType(serviceTypeKey(row.service.type))} ·{" "}
-                          {format(row.service.startsAt, "EEE dd MMM yyyy, HH:mm")}
+                          {formatJakarta(row.service.startsAt, "EEE dd MMM yyyy, HH:mm")}
                         </span>
                       </div>
                       <span className="text-xs text-muted-foreground tabular-nums">
-                        {format(row.checkedInAt, "HH:mm")}
+                        {formatJakarta(row.checkedInAt, "HH:mm")}
                       </span>
                     </li>
                   ))}
@@ -416,7 +417,7 @@ export default async function MemberDetailPage({
                           {row.event.title}
                         </Link>
                         <span className="text-xs text-muted-foreground">
-                          {format(row.event.startsAt, "EEE dd MMM yyyy, HH:mm")}
+                          {formatJakarta(row.event.startsAt, "EEE dd MMM yyyy, HH:mm")}
                           {row.event.location ? ` · ${row.event.location}` : ""}
                         </span>
                       </div>

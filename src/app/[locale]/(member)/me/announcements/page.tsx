@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import { Megaphone } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
@@ -12,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import { listAnnouncementsForMember } from "@/server/queries/announcements";
 import { parsePageParam } from "@/server/queries/_pagination";
+import { formatJakarta } from "@/lib/datetime";
 
 export default async function MemberAnnouncementsPage({
   searchParams,
@@ -42,7 +42,7 @@ export default async function MemberAnnouncementsPage({
               <CardHeader>
                 <CardTitle>{a.title}</CardTitle>
                 <CardDescription>
-                  {format(a.publishedAt, "EEE, dd MMM yyyy · HH:mm")}
+                  {formatJakarta(a.publishedAt, "EEE, dd MMM yyyy · HH:mm")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="whitespace-pre-wrap text-sm">

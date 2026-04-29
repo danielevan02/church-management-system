@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import { CalendarPlus, Plus, ScanLine, BarChart3 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
@@ -11,6 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Link } from "@/lib/i18n/navigation";
+import { formatJakarta } from "@/lib/datetime";
 import {
   getCheckInOpenServices,
   getUpcomingServices,
@@ -74,7 +74,7 @@ export default async function AttendanceHomePage() {
                       <span className="font-medium">{s.name}</span>
                       <span className="text-xs text-muted-foreground">
                         {tType(typeKey(s.type))} ·{" "}
-                        {format(s.startsAt, "EEE dd MMM, HH:mm")} ·{" "}
+                        {formatJakarta(s.startsAt, "EEE dd MMM, HH:mm")} ·{" "}
                         {s._count.attendances} {t("checkedInAbbr")}
                       </span>
                     </div>
@@ -114,7 +114,7 @@ export default async function AttendanceHomePage() {
                     </Link>
                     <span className="text-xs text-muted-foreground">
                       {tType(typeKey(s.type))} ·{" "}
-                      {format(s.startsAt, "EEE dd MMM yyyy, HH:mm")}
+                      {formatJakarta(s.startsAt, "EEE dd MMM yyyy, HH:mm")}
                       {s.location ? ` · ${s.location}` : null}
                     </span>
                   </li>

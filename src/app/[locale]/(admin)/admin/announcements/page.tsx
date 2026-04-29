@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import { Megaphone, Plus } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { notFound, redirect } from "next/navigation";
@@ -19,6 +18,7 @@ import { Link } from "@/lib/i18n/navigation";
 import { hasAtLeastRole } from "@/lib/permissions";
 import { listAnnouncements } from "@/server/queries/announcements";
 import { parsePageParam } from "@/server/queries/_pagination";
+import { formatJakarta } from "@/lib/datetime";
 
 export default async function AnnouncementsListPage({
   searchParams,
@@ -85,7 +85,7 @@ export default async function AnnouncementsListPage({
                       </p>
                     </TableCell>
                     <TableCell className="text-sm tabular-nums">
-                      {format(a.publishedAt, "dd MMM yyyy, HH:mm")}
+                      {formatJakarta(a.publishedAt, "dd MMM yyyy, HH:mm")}
                     </TableCell>
                     <TableCell>
                       {isScheduled ? (

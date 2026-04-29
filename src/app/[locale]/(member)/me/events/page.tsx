@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import { Calendar } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
@@ -11,6 +10,7 @@ import {
 import { auth } from "@/lib/auth";
 import { Link } from "@/lib/i18n/navigation";
 import { getUpcomingPublishedEventsForMember } from "@/server/queries/events";
+import { formatJakarta } from "@/lib/datetime";
 
 export default async function MemberEventsPage() {
   const session = await auth();
@@ -56,7 +56,7 @@ export default async function MemberEventsPage() {
                   ) : null}
                 </div>
                 <div className="text-sm text-muted-foreground">
-                  {format(e.startsAt, "EEE, dd MMM yyyy · HH:mm")}
+                  {formatJakarta(e.startsAt, "EEE, dd MMM yyyy · HH:mm")}
                   {e.location ? ` · ${e.location}` : ""}
                 </div>
                 {e.capacity ? (

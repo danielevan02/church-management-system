@@ -18,6 +18,7 @@ import { formatRupiah } from "@/lib/format";
 import { Link } from "@/lib/i18n/navigation";
 import { prisma } from "@/lib/prisma";
 import { countGoingFor, getEvent } from "@/server/queries/events";
+import { formatJakarta } from "@/lib/datetime";
 
 export default async function MemberEventDetailPage({
   params,
@@ -73,9 +74,9 @@ export default async function MemberEventDetailPage({
             <Calendar className="mt-0.5 h-4 w-4 text-muted-foreground" />
             <div>
               {format(event.startsAt, "EEEE, dd MMM yyyy")} ·{" "}
-              {format(event.startsAt, "HH:mm")}
+              {formatJakarta(event.startsAt, "HH:mm")}
               {" — "}
-              {format(event.endsAt, "HH:mm")}
+              {formatJakarta(event.endsAt, "HH:mm")}
             </div>
           </div>
           {event.location ? (

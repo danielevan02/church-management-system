@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import { ArrowLeft } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { notFound, redirect } from "next/navigation";
@@ -7,6 +6,7 @@ import { AnnouncementForm } from "@/components/admin/announcements/announcement-
 import { DeleteAnnouncementButton } from "./delete-announcement-button";
 import { Button } from "@/components/ui/button";
 import { auth } from "@/lib/auth";
+import { toJakartaInput } from "@/lib/datetime";
 import { Link } from "@/lib/i18n/navigation";
 import { hasAtLeastRole } from "@/lib/permissions";
 import { updateAnnouncementAction } from "@/server/actions/announcements";
@@ -57,7 +57,7 @@ export default async function EditAnnouncementPage({
         initialValues={{
           title: announcement.title,
           body: announcement.body,
-          publishedAt: format(announcement.publishedAt, "yyyy-MM-dd'T'HH:mm"),
+          publishedAt: toJakartaInput(announcement.publishedAt),
         }}
       />
     </div>

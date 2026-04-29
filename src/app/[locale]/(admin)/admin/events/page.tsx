@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import { Plus } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
@@ -13,6 +12,7 @@ import { formatRupiah } from "@/lib/format";
 import { Link } from "@/lib/i18n/navigation";
 import { listEvents } from "@/server/queries/events";
 import { parsePageParam } from "@/server/queries/_pagination";
+import { formatJakarta } from "@/lib/datetime";
 
 export default async function EventsListPage({
   searchParams,
@@ -71,7 +71,7 @@ export default async function EventsListPage({
                     </div>
                   </div>
                   <div className="text-sm text-muted-foreground">
-                    {format(e.startsAt, "EEE, dd MMM yyyy · HH:mm")}
+                    {formatJakarta(e.startsAt, "EEE, dd MMM yyyy · HH:mm")}
                     {e.location ? ` · ${e.location}` : ""}
                   </div>
                   <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">

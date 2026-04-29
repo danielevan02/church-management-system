@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import { ArrowLeft, Pencil } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -28,6 +27,7 @@ import {
 import { formatRupiah } from "@/lib/format";
 import { Link } from "@/lib/i18n/navigation";
 import { getEventWithRsvps } from "@/server/queries/events";
+import { formatJakarta } from "@/lib/datetime";
 
 export default async function EventDetailPage({
   params,
@@ -65,9 +65,9 @@ export default async function EventDetailPage({
               </Badge>
               <span>•</span>
               <span>
-                {format(event.startsAt, "EEE, dd MMM yyyy · HH:mm")}
+                {formatJakarta(event.startsAt, "EEE, dd MMM yyyy · HH:mm")}
                 {" → "}
-                {format(event.endsAt, "HH:mm")}
+                {formatJakarta(event.endsAt, "HH:mm")}
               </span>
               {event.location ? (
                 <>

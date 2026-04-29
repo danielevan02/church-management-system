@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import { ArrowLeft, EyeOff, Globe } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { notFound, redirect } from "next/navigation";
@@ -18,6 +17,7 @@ import { auth } from "@/lib/auth";
 import { Link } from "@/lib/i18n/navigation";
 import { hasAtLeastRole } from "@/lib/permissions";
 import { getPrayerRequest } from "@/server/queries/prayer-requests";
+import { formatJakarta } from "@/lib/datetime";
 
 export default async function PrayerRequestDetailPage({
   params,
@@ -98,7 +98,7 @@ export default async function PrayerRequestDetailPage({
             </Field>
             <Field label={t("detail.createdAt")}>
               <span className="tabular-nums">
-                {format(item.createdAt, "dd MMM yyyy, HH:mm")}
+                {formatJakarta(item.createdAt, "dd MMM yyyy, HH:mm")}
               </span>
             </Field>
             <Field label={t("detail.status")}>
