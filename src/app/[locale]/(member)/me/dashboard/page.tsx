@@ -21,7 +21,6 @@ import { redirect } from "next/navigation";
 
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
@@ -225,13 +224,11 @@ export default async function MemberDashboardPage() {
               {t("announcements.title")}
             </CardTitle>
             <CardDescription>{t("announcements.description")}</CardDescription>
-            <CardAction>
-              <Button asChild variant="outline" size="sm">
-                <Link href="/me/announcements">
-                  {t("announcements.viewAll")}
-                </Link>
-              </Button>
-            </CardAction>
+            <Button asChild variant="outline" size="sm" className="mt-2 w-fit">
+              <Link href="/me/announcements">
+                {t("announcements.viewAll")}
+              </Link>
+            </Button>
           </CardHeader>
           <CardContent>
             <ul className="divide-y flex flex-col gap-1">
