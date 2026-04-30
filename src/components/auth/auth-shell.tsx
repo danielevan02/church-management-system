@@ -1,5 +1,5 @@
-import { Church } from "lucide-react";
 import { getTranslations } from "next-intl/server";
+import Image from "next/image";
 
 import { church } from "@/config/church";
 
@@ -18,12 +18,15 @@ export async function AuthShell({ title, subtitle, children }: AuthShellProps) {
     <main className="grid min-h-screen lg:grid-cols-2">
       <section className="flex flex-col px-6 py-10 sm:px-10 lg:px-16">
         <header className="flex items-center gap-2 text-sm font-medium">
-          <span
-            className="flex h-8 w-8 items-center justify-center rounded-md text-white"
-            style={{ backgroundColor: church.primaryColor }}
-          >
-            <Church className="h-4 w-4" />
-          </span>
+          <Image
+            src="/icon-192.png"
+            alt=""
+            aria-hidden
+            width={32}
+            height={32}
+            priority
+            className="h-8 w-8 object-contain"
+          />
           <span className="text-foreground">{church.name}</span>
         </header>
 
@@ -61,8 +64,16 @@ export async function AuthShell({ title, subtitle, children }: AuthShellProps) {
 
         <div className="relative flex h-full flex-col justify-between p-12 text-white">
           <div className="flex items-center gap-3">
-            <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/15 backdrop-blur">
-              <Church className="h-5 w-5" />
+            <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/95 p-1 shadow-sm backdrop-blur">
+              <Image
+                src="/icon-192.png"
+                alt=""
+                aria-hidden
+                width={32}
+                height={32}
+                priority
+                className="h-full w-full object-contain"
+              />
             </span>
             <span className="text-sm font-medium uppercase tracking-widest opacity-90">
               {church.shortName}

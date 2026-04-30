@@ -14,7 +14,8 @@
     "db:deploy": "prisma migrate deploy",
     "db:studio": "prisma studio",
     "db:seed": "tsx prisma/seed.ts",
-    "db:reset": "prisma migrate reset"
+    "db:reset": "prisma migrate reset",
+    "icons": "node scripts/generate-icons.cjs"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
@@ -67,6 +68,7 @@
     "eslint": "^9",
     "eslint-config-next": "15.5.15",
     "prisma": "^6.19.3",
+    "sharp": "^0.34.5",
     "tailwindcss": "^4",
     "tsx": "^4.21.0",
     "typescript": "^5"

@@ -5,12 +5,17 @@
 //   - Stale-while-revalidate for static assets (images, fonts, _next/static).
 //   - Bypass: API routes, auth flows, and admin pages — never cache those.
 
-const CACHE_VERSION = "v2";
+const CACHE_VERSION = "v3";
 const SHELL_CACHE = `chms-shell-${CACHE_VERSION}`;
 const ASSET_CACHE = `chms-assets-${CACHE_VERSION}`;
 const OFFLINE_URL = "/me/offline";
 
-const SHELL_URLS = [OFFLINE_URL, "/icon-192.png", "/icon-512.png"];
+const SHELL_URLS = [
+  OFFLINE_URL,
+  "/icon-192.png",
+  "/icon-512.png",
+  "/badge-72.png",
+];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -116,7 +121,7 @@ self.addEventListener("push", (event) => {
   const options = {
     body: payload.body || "",
     icon: "/icon-192.png",
-    badge: "/icon-192.png",
+    badge: "/badge-72.png",
     tag: payload.tag || "announcement",
     data: { url: payload.url || "/me/announcements" },
     requireInteraction: false,
