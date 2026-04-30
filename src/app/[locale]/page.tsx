@@ -35,7 +35,7 @@ export default async function Home() {
       <header className="flex items-center justify-between px-6 py-5 sm:px-10">
         <div className="flex items-center gap-2">
           <Image
-            src="/icon-192.png"
+            src="/icon-ui-192.png"
             alt=""
             aria-hidden
             width={32}

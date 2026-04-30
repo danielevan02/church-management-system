@@ -64,7 +64,7 @@ export function MemberSidebar({ member, ...props }: Props) {
             >
               <Link href="/me/dashboard">
                 <Image
-                  src="/icon-192.png"
+                  src="/icon-ui-192.png"
                   alt=""
                   aria-hidden
                   width={20}

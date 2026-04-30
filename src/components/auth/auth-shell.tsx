@@ -19,7 +19,7 @@ export async function AuthShell({ title, subtitle, children }: AuthShellProps) {
       <section className="flex flex-col px-6 py-10 sm:px-10 lg:px-16">
         <header className="flex items-center gap-2 text-sm font-medium">
           <Image
-            src="/icon-192.png"
+            src="/icon-ui-192.png"
             alt=""
             aria-hidden
             width={32}
@@ -66,7 +66,7 @@ export async function AuthShell({ title, subtitle, children }: AuthShellProps) {
           <div className="flex items-center gap-3">
             <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/95 p-1 shadow-sm backdrop-blur">
               <Image
-                src="/icon-192.png"
+                src="/icon-ui-192.png"
                 alt=""
                 aria-hidden
                 width={32}
