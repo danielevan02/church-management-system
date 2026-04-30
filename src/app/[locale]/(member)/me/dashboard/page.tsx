@@ -8,6 +8,7 @@ import {
   HandCoins,
   Heart,
   HeartHandshake,
+  Megaphone,
   QrCode,
   ScanLine,
   Sprout,
@@ -20,6 +21,7 @@ import { redirect } from "next/navigation";
 
 import {
   Card,
+  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
@@ -33,6 +35,7 @@ import { formatRupiah } from "@/lib/format";
 import { Link } from "@/lib/i18n/navigation";
 import { excerpt } from "@/lib/markdown";
 import { prisma } from "@/lib/prisma";
+import { getLatestAnnouncementsForMember } from "@/server/queries/announcements";
 import { listChildrenForGuardian } from "@/server/queries/children";
 import { getTodayDevotionalForMember } from "@/server/queries/devotionals";
 import { getMilestonesForMember } from "@/server/queries/discipleship";
@@ -80,6 +83,7 @@ export default async function MemberDashboardPage() {
     milestones,
     children,
     todayDevotional,
+    latestAnnouncements,
   ] = await Promise.all([
     prisma.service.findFirst({
       where: { isActive: true, startsAt: { gte: new Date() } },
@@ -102,6 +106,7 @@ export default async function MemberDashboardPage() {
     features.devotionals
       ? getTodayDevotionalForMember()
       : Promise.resolve(null),
+    getLatestAnnouncementsForMember(3),
   ]);
 
   const cellGroup = member?.cellGroupMembers[0]?.cellGroup ?? null;
@@ -131,26 +136,44 @@ export default async function MemberDashboardPage() {
       {features.devotionals && todayDevotional ? (
         <Link
           href={`/me/devotionals/${todayDevotional.id}`}
-          className="block focus-visible:outline-none"
+          className="group block focus-visible:outline-none"
         >
-          <Card className="border-primary/20 bg-primary/5 transition-colors hover:bg-primary/10">
-            <CardHeader className="space-y-1.5 pb-3">
-              <div className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-primary">
-                <BookOpen className="h-3.5 w-3.5" />
-                {t("devotionalToday.label")}
+          <Card className="relative overflow-hidden border-primary/20 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent transition-all hover:shadow-md">
+            <BookOpen
+              aria-hidden
+              className="pointer-events-none absolute -right-4 -top-4 h-32 w-32 text-primary/5 transition-transform group-hover:scale-110"
+            />
+            <CardHeader className="relative space-y-2 pb-3">
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-primary px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-primary-foreground">
+                  <BookOpen className="h-3 w-3" />
+                  {t("devotionalToday.label")}
+                </span>
+                <span className="text-xs text-muted-foreground">
+                  {formatJakarta(todayDevotional.publishedAt, "EEE, dd MMM yyyy")}
+                </span>
               </div>
-              <CardTitle className="text-xl">{todayDevotional.title}</CardTitle>
-              <CardDescription>
-                {formatJakarta(todayDevotional.publishedAt, "EEE, dd MMM yyyy")}
-                {todayDevotional.verseRef ? ` · ${todayDevotional.verseRef}` : ""}
-                {todayDevotional.authorName ? ` · ${todayDevotional.authorName}` : ""}
-              </CardDescription>
+              <CardTitle className="text-2xl leading-tight">
+                {todayDevotional.title}
+              </CardTitle>
+              {todayDevotional.verseRef || todayDevotional.authorName ? (
+                <CardDescription className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                  {todayDevotional.verseRef ? (
+                    <span className="inline-flex items-center gap-1 rounded border border-primary/30 bg-background/60 px-2 py-0.5 text-xs font-medium text-primary">
+                      {todayDevotional.verseRef}
+                    </span>
+                  ) : null}
+                  {todayDevotional.authorName ? (
+                    <span className="text-xs">— {todayDevotional.authorName}</span>
+                  ) : null}
+                </CardDescription>
+              ) : null}
             </CardHeader>
-            <CardContent>
-              <p className="line-clamp-3 text-sm text-muted-foreground">
+            <CardContent className="relative">
+              <p className="line-clamp-3 text-sm leading-relaxed text-foreground/80">
                 {excerpt(todayDevotional.body, 220)}
               </p>
-              <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-primary">
+              <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-primary transition-transform group-hover:translate-x-0.5">
                 {t("devotionalToday.read")}
                 <ArrowRight className="h-4 w-4" />
               </span>
@@ -192,6 +215,68 @@ export default async function MemberDashboardPage() {
           label={tQuick("prayer")}
         />
       </div>
+
+      {/* Pengumuman Terbaru */}
+      {latestAnnouncements.length > 0 ? (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-base">
+              <Megaphone className="h-5 w-5" />
+              {t("announcements.title")}
+            </CardTitle>
+            <CardDescription>{t("announcements.description")}</CardDescription>
+            <CardAction>
+              <Button asChild variant="outline" size="sm">
+                <Link href="/me/announcements">
+                  {t("announcements.viewAll")}
+                </Link>
+              </Button>
+            </CardAction>
+          </CardHeader>
+          <CardContent>
+            <ul className="divide-y flex flex-col gap-1">
+              {latestAnnouncements.map((a) => {
+                const isFresh =
+                  Date.now() - a.publishedAt.getTime() < 24 * 60 * 60 * 1000;
+                return (
+                  <li key={a.id}>
+                    <Link
+                      href={`/me/announcements/${a.id}`}
+                      className="group flex items-start gap-3 py-3 transition-colors hover:bg-accent/20"
+                    >
+                      <div className="flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-md border bg-muted/40">
+                        <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                          {formatJakarta(a.publishedAt, "MMM")}
+                        </span>
+                        <span className="text-base font-bold leading-none tabular-nums">
+                          {formatJakarta(a.publishedAt, "dd")}
+                        </span>
+                      </div>
+                      <div className="min-w-0 flex-1 space-y-0.5">
+                        <div className="flex items-center gap-2">
+                          <p className="font-semibold leading-tight line-clamp-1">
+                            {a.title}
+                          </p>
+                          {isFresh ? (
+                            <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-primary">
+                              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" />
+                              {t("announcements.new")}
+                            </span>
+                          ) : null}
+                        </div>
+                        <p className="line-clamp-2 text-sm text-muted-foreground">
+                          {excerpt(a.body)}
+                        </p>
+                      </div>
+                      <ArrowRight className="mt-1 h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </CardContent>
+        </Card>
+      ) : null}
 
       {/* Upcoming + About me */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">

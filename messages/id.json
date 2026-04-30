@@ -182,6 +182,12 @@
         "label": "Renungan Hari Ini",
         "read": "Baca selengkapnya"
       },
+      "announcements": {
+        "title": "Pengumuman Terbaru",
+        "description": "Berita & info dari gereja.",
+        "viewAll": "Lihat semua",
+        "new": "Baru"
+      },
       "quickActions": {
         "title": "Aksi Cepat",
         "myQr": "QR Saya",
@@ -247,7 +253,8 @@
       "title": "Pengumuman",
       "subtitle": "Berita & info terbaru dari gereja.",
       "empty": "Belum ada pengumuman.",
-      "back": "Kembali"
+      "back": "Kembali",
+      "new": "Baru"
     },
     "devotionals": {
       "title": "Renungan",

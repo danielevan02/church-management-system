@@ -182,6 +182,12 @@
         "label": "Today's devotional",
         "read": "Read more"
       },
+      "announcements": {
+        "title": "Recent announcements",
+        "description": "News & info from the church.",
+        "viewAll": "View all",
+        "new": "New"
+      },
       "quickActions": {
         "title": "Quick Actions",
         "myQr": "My QR",
@@ -247,7 +253,8 @@
       "title": "Announcements",
       "subtitle": "Latest news and updates from the church.",
       "empty": "No announcements yet.",
-      "back": "Back"
+      "back": "Back",
+      "new": "New"
     },
     "devotionals": {
       "title": "Devotionals",
