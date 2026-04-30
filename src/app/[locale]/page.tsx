@@ -2,7 +2,7 @@ import { ArrowRight } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 
-import { LocaleSwitcher } from "@/components/shared/locale-switcher";
+import { LocaleSwitcherStatic } from "@/components/shared/locale-switcher-static";
 import { Button } from "@/components/ui/button";
 import { church } from "@/config/church";
 import { Link } from "@/lib/i18n/navigation";
@@ -47,7 +47,7 @@ export default async function Home() {
             {church.shortName}
           </span>
         </div>
-        <LocaleSwitcher />
+        <LocaleSwitcherStatic />
       </header>
 
       <section className="flex flex-1 items-center justify-center px-6 py-12 sm:py-16">
