@@ -53,7 +53,7 @@ export function AdminSidebar({ user, ...props }: Props) {
             >
               <Link href="/admin/dashboard">
                 <Image
-                  src="/icon-192.png"
+                  src="/icon-ui-192.png"
                   alt=""
                   aria-hidden
                   width={20}

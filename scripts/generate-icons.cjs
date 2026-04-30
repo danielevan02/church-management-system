@@ -36,6 +36,28 @@ async function fitTransparent(size, dest) {
   console.log(`  ${dest} (${size}x${size}, transparent)`);
 }
 
+async function fitWhite(size, dest, padding = 0.1) {
+  // PWA home-screen icons: white background, small padding so the logo
+  // doesn't touch the edge.
+  const inner = Math.round(size * (1 - padding * 2));
+  const buf = await sharp(SOURCE)
+    .resize(inner, inner, { fit: "contain", background: { r: 255, g: 255, b: 255, alpha: 0 } })
+    .png()
+    .toBuffer();
+  await sharp({
+    create: {
+      width: size,
+      height: size,
+      channels: 4,
+      background: { r: 255, g: 255, b: 255, alpha: 1 },
+    },
+  })
+    .composite([{ input: buf, gravity: "center" }])
+    .png()
+    .toFile(path.join(PUBLIC, dest));
+  console.log(`  ${dest} (${size}x${size}, white bg, ${Math.round(padding * 100)}% padding)`);
+}
+
 async function maskable(size, dest) {
   // Android maskable: 80% safe zone in the center, white padding around.
   const inner = Math.round(size * 0.8);
@@ -93,9 +115,16 @@ async function favicon() {
 
 (async () => {
   console.log("generating...");
-  await fitTransparent(192, "icon-192.png");
-  await fitTransparent(512, "icon-512.png");
+  // PWA install icons (manifest "any" purpose) — white bg so they look
+  // consistent on both light and dark home screens.
+  await fitWhite(192, "icon-192.png");
+  await fitWhite(512, "icon-512.png");
+  // Maskable for Android adaptive icons.
   await maskable(512, "icon-maskable.png");
+  // UI chrome (sidebar headers, auth shell, landing) — transparent so
+  // the logo blends with whatever surface it sits on.
+  await fitTransparent(192, "icon-ui-192.png");
+  // Push notification status-bar badge — monochrome white silhouette.
   await badge(72, "badge-72.png");
   await badge(96, "badge-96.png");
   await favicon();
