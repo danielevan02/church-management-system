@@ -87,6 +87,23 @@ export async function getAnnouncement(id: string) {
   });
 }
 
+/**
+ * Member-facing detail — only resolves if the announcement is live
+ * (publishedAt <= now), so members can't access scheduled-but-unpublished
+ * ones via direct URL.
+ */
+export async function getAnnouncementForMember(id: string) {
+  return prisma.announcement.findFirst({
+    where: { id, deletedAt: null, publishedAt: { lte: new Date() } },
+    select: {
+      id: true,
+      title: true,
+      body: true,
+      publishedAt: true,
+    },
+  });
+}
+
 export async function getLatestAnnouncementsForMember(take = 3) {
   return prisma.announcement.findMany({
     where: { deletedAt: null, publishedAt: { lte: new Date() } },

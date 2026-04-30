@@ -240,7 +240,8 @@
     "announcements": {
       "title": "Pengumuman",
       "subtitle": "Berita & info terbaru dari gereja.",
-      "empty": "Belum ada pengumuman."
+      "empty": "Belum ada pengumuman.",
+      "back": "Kembali"
     },
     "push": {
       "enableTitle": "Aktifkan notifikasi",
@@ -1365,6 +1366,31 @@
           "status": "Status",
           "notes": "Catatan"
         }
+      }
+    }
+  },
+  "markdown": {
+    "tools": {
+      "bold": "Tebal",
+      "italic": "Miring",
+      "heading": "Sub-judul",
+      "bullet": "Daftar (peluru)",
+      "numbered": "Daftar bernomor",
+      "quote": "Kutipan",
+      "link": "Tautan"
+    },
+    "placeholders": {
+      "linkUrl": "Masukkan URL"
+    },
+    "help": {
+      "button": "Bantuan",
+      "title": "Cara Pakai Editor",
+      "subtitleWysiwyg": "Tulis seperti biasa, lalu format dengan tombol di toolbar:",
+      "tipsWysiwyg": {
+        "select": "Blok teks yang mau diformat, klik tombol Bold/Italic — teks langsung berubah.",
+        "list": "Untuk daftar, klik tombol bullet/nomor lalu mulai mengetik tiap baris.",
+        "link": "Untuk menyisipkan tautan, blok teks dulu, klik ikon link, masukkan URL.",
+        "shortcut": "Pintasan keyboard: Ctrl+B (tebal), Ctrl+I (miring)."
       }
     }
   },

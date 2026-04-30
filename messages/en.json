@@ -240,7 +240,8 @@
     "announcements": {
       "title": "Announcements",
       "subtitle": "Latest news and updates from the church.",
-      "empty": "No announcements yet."
+      "empty": "No announcements yet.",
+      "back": "Back"
     },
     "push": {
       "enableTitle": "Enable notifications",
@@ -1365,6 +1366,31 @@
           "status": "Status",
           "notes": "Notes"
         }
+      }
+    }
+  },
+  "markdown": {
+    "tools": {
+      "bold": "Bold",
+      "italic": "Italic",
+      "heading": "Heading",
+      "bullet": "Bullet list",
+      "numbered": "Numbered list",
+      "quote": "Quote",
+      "link": "Link"
+    },
+    "placeholders": {
+      "linkUrl": "Enter URL"
+    },
+    "help": {
+      "button": "Help",
+      "title": "How to use the editor",
+      "subtitleWysiwyg": "Type normally, then format using the toolbar:",
+      "tipsWysiwyg": {
+        "select": "Select the text you want to format, then click Bold/Italic — text updates instantly.",
+        "list": "For lists, click the bullet/numbered button then start typing each line.",
+        "link": "To insert a link, select the text first, click the link icon, then enter the URL.",
+        "shortcut": "Keyboard shortcuts: Ctrl+B (bold), Ctrl+I (italic)."
       }
     }
   },
