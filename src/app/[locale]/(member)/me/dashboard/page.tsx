@@ -8,6 +8,7 @@ import {
   HandCoins,
   Heart,
   HeartHandshake,
+  Megaphone,
   QrCode,
   ScanLine,
   Sprout,
@@ -33,6 +34,7 @@ import { formatRupiah } from "@/lib/format";
 import { Link } from "@/lib/i18n/navigation";
 import { excerpt } from "@/lib/markdown";
 import { prisma } from "@/lib/prisma";
+import { getLatestAnnouncementsForMember } from "@/server/queries/announcements";
 import { listChildrenForGuardian } from "@/server/queries/children";
 import { getTodayDevotionalForMember } from "@/server/queries/devotionals";
 import { getMilestonesForMember } from "@/server/queries/discipleship";
@@ -80,6 +82,7 @@ export default async function MemberDashboardPage() {
     milestones,
     children,
     todayDevotional,
+    latestAnnouncements,
   ] = await Promise.all([
     prisma.service.findFirst({
       where: { isActive: true, startsAt: { gte: new Date() } },
@@ -102,6 +105,7 @@ export default async function MemberDashboardPage() {
     features.devotionals
       ? getTodayDevotionalForMember()
       : Promise.resolve(null),
+    getLatestAnnouncementsForMember(3),
   ]);
 
   const cellGroup = member?.cellGroupMembers[0]?.cellGroup ?? null;
@@ -192,6 +196,45 @@ export default async function MemberDashboardPage() {
           label={tQuick("prayer")}
         />
       </div>
+
+      {/* Pengumuman Terbaru */}
+      {latestAnnouncements.length > 0 ? (
+        <Card>
+          <CardHeader className="flex-row items-start justify-between gap-2 space-y-0">
+            <div className="space-y-1">
+              <CardTitle className="flex items-center gap-2 text-base">
+                <Megaphone className="h-5 w-5" />
+                {t("announcements.title")}
+              </CardTitle>
+              <CardDescription>{t("announcements.description")}</CardDescription>
+            </div>
+            <Button asChild variant="ghost" size="sm">
+              <Link href="/me/announcements">{t("announcements.viewAll")}</Link>
+            </Button>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col gap-2">
+              {latestAnnouncements.map((a) => (
+                <Link
+                  key={a.id}
+                  href={`/me/announcements/${a.id}`}
+                  className="block rounded-md border p-3 transition-colors hover:bg-accent/30"
+                >
+                  <p className="font-medium leading-tight line-clamp-1">
+                    {a.title}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {formatJakarta(a.publishedAt, "EEE, dd MMM yyyy · HH:mm")}
+                  </p>
+                  <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
+                    {excerpt(a.body)}
+                  </p>
+                </Link>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      ) : null}
 
       {/* Upcoming + About me */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">

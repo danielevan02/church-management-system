@@ -182,6 +182,11 @@
         "label": "Renungan Hari Ini",
         "read": "Baca selengkapnya"
       },
+      "announcements": {
+        "title": "Pengumuman Terbaru",
+        "description": "Berita & info dari gereja.",
+        "viewAll": "Lihat semua"
+      },
       "quickActions": {
         "title": "Aksi Cepat",
         "myQr": "QR Saya",
