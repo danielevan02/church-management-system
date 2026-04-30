@@ -9,69 +9,72 @@ Single-tenant church management web app for Indonesian churches. One deployment 
 - **Giving** — manual records (cash / transfer / QRIS), funds, member statements
 - **Cell groups** — komsel directory, leader assignments, weekly reports
 - **Events** — RSVP-able events with capacity & waitlist
-- **Communications** — WhatsApp/email templates, broadcast campaigns, audience filters
+- **Announcements** — in-app inbox + push notification fan-out
+- **Devotionals (renungan)** — daily quiet-time content with verse + WYSIWYG body
 - **Volunteers** — teams, positions, scheduled assignments
 - **Children's check-in** — guardian-linked check-in/out at services
 - **Pastoral care** — visit log, follow-up scheduling
 - **Discipleship** — milestone tracking per member
 - **Prayer requests** — public/private submissions, status tracking
 - **Reports & dashboards** — KPI strip, snapshots per module
-- **Member portal** — installable PWA with QR, profile, giving, events, prayer
+- **Member portal** — installable PWA with QR, profile, giving, events, push notifications
 
 ## Tech stack
 
 | Layer | Tech |
 |---|---|
-| Framework | Next.js 15 (App Router, Server Actions) |
+| Framework | Next.js 15 (App Router, Server Actions, Turbopack) |
 | Language | TypeScript strict |
-| Database | PostgreSQL 16 + Prisma 6 |
-| Auth | Auth.js v5 (credentials + WhatsApp OTP) |
+| Database | PostgreSQL 16 + Prisma 6 (Neon in prod) |
+| Auth | Auth.js v5 — staff via email+password, member via phone+PIN |
 | UI | Tailwind 4 + shadcn/ui (New York) |
+| Markdown | TipTap WYSIWYG editor → markdown storage → react-markdown render |
+| Push | Web Push API + VAPID (browser-native, free) |
 | i18n | next-intl (id default, en optional) |
-| PWA | Vanilla service worker, scoped to member portal |
+| PWA | Service worker scoped to member portal with offline shell + push handlers |
+| Hosting | Vercel — auto-runs `prisma migrate deploy` on every build |
 
-For full conventions, see [`CLAUDE.md`](./CLAUDE.md). For per-feature spec see `PROJECT_BUILD_GUIDE.md` (if present).
+For full conventions, see [`CLAUDE.md`](./CLAUDE.md). For developer workflow notes, see [`DEVELOPMENT.md`](./DEVELOPMENT.md).
 
 ## Quick start (development)
 
-**Prerequisites**: Node 20+, pnpm 9+, Docker (for local Postgres).
+**Prerequisites**: Node 20+, pnpm 10+, a Postgres database (Neon free tier or local).
 
 ```bash
 # 1. Clone & install
 pnpm install
 
-# 2. Start local Postgres
-docker compose up -d
+# 2. Configure environment
+cp .env.example .env
+# Edit .env:
+#   - DATABASE_URL (Neon connection string or local Postgres)
+#   - AUTH_SECRET (generate with: openssl rand -base64 32)
+#   - NEXT_PUBLIC_CHURCH_NAME / SHORT_NAME / DOMAIN
+#   - INITIAL_ADMIN_EMAIL / INITIAL_ADMIN_PASSWORD
 
-# 3. Configure environment
-cp .env.example .env.local
-# Edit .env.local — at minimum, set DATABASE_URL to:
-#   postgresql://chms:chms_dev_password@localhost:5432/chms_dev
-# Generate AUTH_SECRET with: openssl rand -base64 32
+# 3. Migrate + seed (creates initial admin)
+pnpm db:migrate
+pnpm db:seed
 
-# 4. Migrate + seed (creates initial admin)
-pnpm prisma migrate dev
-pnpm prisma db seed
-
-# 5. Run
+# 4. Run
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). Sign in at `/auth/sign-in` with `INITIAL_ADMIN_EMAIL` / `INITIAL_ADMIN_PASSWORD` from `.env.local`.
+Open [http://localhost:3000](http://localhost:3000). Sign in at `/auth/sign-in` with `INITIAL_ADMIN_EMAIL` / `INITIAL_ADMIN_PASSWORD` from `.env`.
 
 ## Common commands
 
 ```bash
 pnpm dev                 # Dev server (Turbopack)
-pnpm build               # Production build
+pnpm build               # Production build (auto: prisma migrate deploy → generate → next build)
 pnpm start               # Run production build
 pnpm lint                # ESLint
 pnpm typecheck           # tsc --noEmit
-pnpm prisma studio       # GUI DB inspector
-pnpm prisma migrate dev  # Create + apply migration
-pnpm prisma db seed      # Run seed (idempotent for admin)
-docker compose up -d     # Start local Postgres
-docker compose down      # Stop Postgres
+pnpm db:studio           # GUI DB inspector
+pnpm db:migrate          # Create + apply migration in dev
+pnpm db:deploy           # Apply pending migrations (prod / pre-merge check)
+pnpm db:seed             # Run seed (idempotent for admin)
+pnpm icons               # Regenerate PWA icons from scripts/source-logo.png
 ```
 
 ## Documentation

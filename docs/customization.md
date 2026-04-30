@@ -22,28 +22,38 @@ Restart the dev server (or redeploy) after changing these.
 
 ## 2. Asset replacement
 
-Replace these files in `public/` per deployment:
+### Logo + PWA icons (one source, generated)
+
+Drop the church logo at `scripts/source-logo.png`:
+- Square PNG ≥ 512×512
+- **Transparent background** (so the badge silhouette generator can extract the alpha channel cleanly)
+
+Then run:
+
+```bash
+pnpm icons
+```
+
+This emits the full icon set into `public/`:
+
+| File | Size | Purpose |
+|---|---|---|
+| `icon-192.png` | 192×192, **white bg** | Manifest icon (`purpose: any`), home screen + splash |
+| `icon-512.png` | 512×512, **white bg** | Manifest icon (`purpose: any`), high-DPR splash |
+| `icon-maskable.png` | 512×512, white bg, 80% safe zone | Manifest icon (`purpose: maskable`), Android adaptive shapes |
+| `icon-ui-192.png` | 192×192, **transparent** | UI chrome — sidebar headers, auth shell, landing |
+| `badge-72.png` | 72×72, **monochrome white silhouette** | Push notification status-bar badge (Android requires monochrome) |
+| `badge-96.png` | 96×96, monochrome | Higher-DPR push badge |
+| `favicon-32.png` | 32×32 | Browser tab icon |
+
+The generator (`scripts/generate-icons.cjs`) uses `sharp`. Re-run `pnpm icons` whenever the logo changes.
+
+### Other assets
 
 | Path | Purpose | Required size |
 |---|---|---|
-| `public/logo.svg` | Header / sidebar logo | SVG, square preferred |
-| `public/favicon.ico` | Browser tab icon | 32×32 ICO |
 | `public/qris.png` | QRIS image on giving page (optional) | Any size, displayed up to 320px |
-
-### PWA icons
-
-By default, `/icon-192.png`, `/icon-512.png`, and `/icon-maskable.png` are generated dynamically via `next/og` from the church short name + primary color (see [`src/app/icon-192.png/route.tsx`](../src/app/icon-192.png/route.tsx)).
-
-To use custom icons for a church:
-
-**Option 1** — Replace the route handler with a static file:
-- Delete the `src/app/icon-192.png/route.tsx` file (and 512 / maskable variants).
-- Place `public/icon-192.png`, `public/icon-512.png`, `public/icon-maskable.png` (the static files take precedence after the route is removed).
-
-**Option 2** — Edit the route handler to embed a logo:
-- Modify the JSX in the route handler to render the church logo as background, e.g. by using a remote `<img>` tag inside `<ImageResponse>`.
-
-Maskable icons need ~10% safe-zone padding on each side so OS-level cropping doesn't cut content. Use [maskable.app](https://maskable.app) to preview.
+| `app/favicon.ico` | Tab icon (Next.js convention) | 32×32 ICO — Next.js auto-handles |
 
 ### Bank / giving info
 
@@ -70,8 +80,8 @@ export const features = {
   discipleship: true,        // Milestone tracking
   volunteers: true,          // Teams, positions, scheduled assignments
   giving: true,              // Giving records, funds, KPIs (admin); /me/giving (member)
-  whatsappBroadcast: true,   // Communications module mass send
   selfCheckIn: true,         // Member portal /me/check-in (self-scan)
+  devotionals: true,         // Daily renungan (admin CRUD + member archive + dashboard hero)
 } as const;
 ```
 
@@ -87,7 +97,8 @@ Common deployment scenarios:
 | Small church, no children's program | `childrensCheckIn: false` |
 | No formal discipleship pathway | `discipleship: false` |
 | No komsel / cell groups (rare) | Keep on — it's the social backbone |
-| WhatsApp not allowed (e.g. compliance) | `whatsappBroadcast: false` + switch `WHATSAPP_PROVIDER` to `stub` |
+| Pengurus tidak punya bandwidth tulis renungan harian | `devotionals: false` |
+| Disable push notifications | Leave `announcements` flag alone; just don't set VAPID env vars (push silently disables, inbox still works) |
 
 After changing the file, redeploy. Feature flag changes do **not** drop or migrate data — disabled modules keep their tables intact, just hidden.
 
@@ -113,10 +124,10 @@ Do **not** hardcode UI strings in components. Always use `useTranslations()` (cl
 Roles are fixed in `prisma/schema.prisma`:
 
 ```
-SUPER_ADMIN | ADMIN | STAFF | LEADER | MEMBER
+ADMIN | STAFF | LEADER | MEMBER
 ```
 
-The seed script creates one `SUPER_ADMIN` from `INITIAL_ADMIN_EMAIL` / `INITIAL_ADMIN_PASSWORD`. Every other staff account is created in-app via Settings → Users. Members are added via the Members module — phone-only accounts log in via WhatsApp OTP.
+The seed script creates one `ADMIN` from `INITIAL_ADMIN_EMAIL` / `INITIAL_ADMIN_PASSWORD`. Every other staff account is created in-app via Settings → Users. Members are added via the Members module — admins set the member's initial PIN, and members log in with phone + PIN. Members can change their own PIN in `/me/profile` after first login.
 
 ---
 
