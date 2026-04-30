@@ -76,6 +76,8 @@ pnpm db:deploy        # Apply pending migrations ke prod
 pnpm db:studio        # GUI buat inspect DB (jalanin lokal)
 pnpm db:seed          # Run seed script (admin user + sample data)
 pnpm db:reset         # ⚠️ DESTRUCTIVE: drop + recreate all tables (dev only)
+
+pnpm icons            # Regenerate PWA + push badge icons dari scripts/source-logo.png
 ```
 
 ---
@@ -90,6 +92,8 @@ Sebelum merge PR ke main:
 - [ ] Kalau ada migration: file `prisma/migrations/<timestamp>_<name>/` di-commit (Vercel auto-apply pas build)
 - [ ] Translation keys baru ditambahin di **kedua** `messages/en.json` & `messages/id.json`
 - [ ] Kalau ubah `public/sw.js`: bump `CACHE_VERSION` supaya client install ulang service worker
+- [ ] Kalau pakai `format(date, "...HH:mm...")` dari date-fns: ganti ke `formatJakarta(...)` dari `@/lib/datetime` (Vercel timezone UTC, bukan WIB)
+- [ ] Setiap route baru yang fetch data: tambah `loading.tsx` di sebelahnya (pakai skeleton helpers di `@/components/shared/skeletons`)
 - [ ] Kalau ada fitur baru yg bisa di-toggle: tambah flag di `src/config/features.ts`
 - [ ] Test minimal di browser (tampilan utama, golden path)
 

@@ -14,11 +14,11 @@ Pick one — don't mix.
 Before starting, gather from the church:
 
 - [ ] **Church name** (full + short / abbreviation)
-- [ ] **Domain** (e.g. `gereja-anu.id`) — DNS access required
-- [ ] **Logo** (SVG preferred, plus a square PNG ≥ 512×512 for PWA icons)
+- [ ] **Domain** (e.g. `gereja-anu.id`) — DNS access required, or use Vercel free subdomain
+- [ ] **Logo** — square PNG ≥ 512×512 with **transparent background** (so the badge silhouette generator works cleanly). Place at `scripts/source-logo.png`.
 - [ ] **Brand color** (hex, used as theme color)
 - [ ] **Bank info** for offline giving (name, account number, account holder)
-- [ ] **WhatsApp number** for giving confirmations (optional)
+- [ ] **WhatsApp number** for giving confirmations (optional — admin contact for jemaat to send transfer proof)
 - [ ] **Initial admin** email (lead pastor or admin staff)
 
 ---
@@ -43,39 +43,57 @@ Before starting, gather from the church:
    - `AUTH_TRUST_HOST=true`
    - `INITIAL_ADMIN_EMAIL`, `INITIAL_ADMIN_PASSWORD`
    - All `NEXT_PUBLIC_CHURCH_*` branding vars
-4. Trigger the first deploy. Build will fail on first run because the DB schema isn't there yet — that's expected. Move to step 3.
+   - **VAPID keys** for push notifications (optional but recommended — see step 3 below)
+4. Trigger the first deploy. The build script auto-runs `prisma migrate deploy` so the schema applies on first build — no manual step needed for migrations.
 
-### 3. Migrate + seed the database
+### 3. Generate VAPID keys (push notifications)
 
-Run from your local machine, pointing at the Neon DB:
+Required only if you want push notifications. Without these, announcements still work as an in-app inbox, push is just silently disabled.
+
+Run **once locally**, then paste keys into Vercel env vars:
 
 ```bash
-# Export the same DATABASE_URL / DIRECT_URL temporarily
+pnpm exec web-push generate-vapid-keys --json
+```
+
+Output:
+```json
+{"publicKey": "B...", "privateKey": "..."}
+```
+
+Add to Vercel → Settings → Environment Variables (Production scope):
+- `NEXT_PUBLIC_VAPID_PUBLIC_KEY` — `publicKey` from output
+- `VAPID_PRIVATE_KEY` — `privateKey` from output
+- `VAPID_SUBJECT` — `mailto:admin@<your-church>.com`
+
+Trigger redeploy after setting env vars.
+
+> ⚠️ Once members start subscribing, **don't regenerate** these keys — every existing subscription becomes invalid and members would need to re-enable notifications.
+
+### 4. Seed the initial admin
+
+```bash
+# Export connection strings from Neon temporarily
 export DATABASE_URL="..."
 export DIRECT_URL="..."
 
-# Apply migrations to production
-pnpm prisma migrate deploy
-
-# Seed the initial admin (uses INITIAL_ADMIN_EMAIL / _PASSWORD)
-INITIAL_ADMIN_EMAIL="admin@..." INITIAL_ADMIN_PASSWORD="..." pnpm prisma db seed
+INITIAL_ADMIN_EMAIL="admin@..." INITIAL_ADMIN_PASSWORD="..." pnpm db:seed
 ```
 
-After this, redeploy on Vercel — the build should succeed.
-
-### 4. Custom domain
+### 5. Custom domain
 
 1. In Vercel **Settings → Domains**, add `<your-church-domain>`.
 2. Follow Vercel's DNS instructions (usually a CNAME to `cname.vercel-dns.com` or A records).
 3. Once SSL is provisioned, update `AUTH_URL=https://<your-church-domain>` in env vars and redeploy.
 4. Verify sign-in works at the live URL.
 
-### 5. Replace branding assets
+### 6. Replace branding assets
 
-Per [`docs/customization.md`](./customization.md), replace:
-- `public/logo.svg` (header, sidebar)
-- `public/qris.png` (giving page, optional)
-- PWA icons are auto-generated from `NEXT_PUBLIC_CHURCH_SHORT_NAME` and `NEXT_PUBLIC_PRIMARY_COLOR` — replace `src/app/icon-{192,512,maskable}.png/route.tsx` if the church wants custom artwork.
+Per [`docs/customization.md`](./customization.md):
+1. Drop the church logo at `scripts/source-logo.png` (square PNG ≥ 512×512, transparent bg).
+2. Run `pnpm icons` locally — generates `public/icon-192.png`, `icon-512.png`, `icon-maskable.png`, `icon-ui-192.png`, `badge-72.png`, `badge-96.png`, `favicon-32.png`.
+3. (Optional) Replace `public/qris.png` for the giving page.
+4. Commit + push → Vercel rebuilds with new icons.
 
 ---
 
@@ -183,15 +201,17 @@ Mirror these dumps offsite (S3, Backblaze, Wasabi).
 
 Run through this list once the app is live:
 
-- [ ] Sign in as initial admin succeeds
+- [ ] Sign in as initial admin succeeds (`/auth/sign-in` → "Pengurus" tab → email + password)
 - [ ] Change admin password (Settings → Users)
 - [ ] Create at least one Service entry (admin/attendance/services/new)
-- [ ] Create at least one Member to test the directory
+- [ ] Create at least one Member with a phone number, set their PIN (Settings → Users → Reset PIN)
+- [ ] Sign in as that member (`/auth/sign-in` → "Jemaat" tab → phone + PIN)
 - [ ] Visit `/me/dashboard` — manifest loads, install prompt appears (Chrome/Edge desktop)
 - [ ] DevTools → Application → Service Worker shows `sw.js` activated
 - [ ] Toggle airplane mode and reload — `/me/offline` fallback renders
-- [ ] Sign-in via WhatsApp OTP shows the OTP in server logs (stub provider) — switch to real Fonnte before launch (see `WHATSAPP_PROVIDER`)
+- [ ] (If VAPID set) Click "Aktifkan notifikasi" banner → grant permission → publish a test announcement → verify push notification arrives
 - [ ] All `NEXT_PUBLIC_CHURCH_*` values appear in the UI (header, footer, manifest)
+- [ ] Logo correct in sidebar, splash screen, and home screen icon after PWA install
 
 ---
 
@@ -202,16 +222,22 @@ Run through this list once the app is live:
 | `AUTH_SECRET` | Quarterly or on suspected compromise | Generate new value, redeploy. All sessions invalidated. |
 | Initial admin password | Immediately after first sign-in | Settings → Users → edit |
 | Postgres password | Yearly or on compromise | Update DB user, update `DATABASE_URL` / `DIRECT_URL`, redeploy |
+| `VAPID_PRIVATE_KEY` | **Never** unless compromised | If forced: regenerate, redeploy. **All member subscriptions become invalid** — they must re-enable notifications. |
 
 ---
 
 ## Upgrading the deployed app
 
+For Vercel: **just push to `main`**. The build script auto-runs `prisma migrate deploy` before `next build`, so any new migrations apply on every deploy. No manual migration step needed.
+
+For Docker:
 ```bash
 git pull origin main
 pnpm install
-pnpm prisma migrate deploy   # apply any new migrations
-# rebuild & redeploy (Vercel: auto on push to main; Docker: rebuild image)
+pnpm db:deploy   # apply any new migrations
+# rebuild & restart container
 ```
 
 Always test migrations on a staging copy of the prod DB before applying to production. `prisma migrate deploy` is non-destructive but a backup before any deploy is mandatory.
+
+See `DEVELOPMENT.md` for the full migration workflow + recovery from failed migrations.

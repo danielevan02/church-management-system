@@ -9,21 +9,23 @@ Panduan lengkap untuk **jemaat** menggunakan portal jemaat (Member Portal) di al
 ## Daftar Isi
 
 1. [Apa itu Portal Jemaat?](#1-apa-itu-portal-jemaat)
-2. [Login dengan WhatsApp](#2-login-dengan-whatsapp)
+2. [Login dengan PIN](#2-login-dengan-pin)
 3. [Install ke layar utama (PWA)](#3-install-ke-layar-utama-pwa)
-4. [Dasbor Saya](#4-dasbor-saya)
-5. [Profil Saya](#5-profil-saya)
-6. [QR Pribadi](#6-qr-pribadi)
-7. [Check-in Mandiri](#7-check-in-mandiri)
-8. [Komsel Saya](#8-komsel-saya)
-9. [Persembahan](#9-persembahan)
-10. [Acara](#10-acara)
-11. [Pelayanan Saya](#11-pelayanan-saya)
-12. [Perjalanan Rohani (Pemuridan)](#12-perjalanan-rohani-pemuridan)
-13. [Permintaan Doa](#13-permintaan-doa)
-14. [Anak Saya](#14-anak-saya)
-15. [Logout](#15-logout)
-16. [FAQ — Pertanyaan Sering Ditanyakan](#16-faq--pertanyaan-sering-ditanyakan)
+4. [Notifikasi (Push)](#4-notifikasi-push)
+5. [Dasbor Saya](#5-dasbor-saya)
+6. [Pengumuman & Renungan](#6-pengumuman--renungan)
+7. [Profil Saya](#7-profil-saya)
+8. [QR Pribadi](#8-qr-pribadi)
+9. [Check-in Mandiri](#9-check-in-mandiri)
+10. [Komsel Saya](#10-komsel-saya)
+11. [Persembahan](#11-persembahan)
+12. [Acara](#12-acara)
+13. [Pelayanan Saya](#13-pelayanan-saya)
+14. [Perjalanan Rohani (Pemuridan)](#14-perjalanan-rohani-pemuridan)
+15. [Permintaan Doa](#15-permintaan-doa)
+16. [Anak Saya](#16-anak-saya)
+17. [Logout](#17-logout)
+18. [FAQ — Pertanyaan Sering Ditanyakan](#18-faq--pertanyaan-sering-ditanyakan)
 
 ---
 
@@ -31,6 +33,7 @@ Panduan lengkap untuk **jemaat** menggunakan portal jemaat (Member Portal) di al
 
 Portal Jemaat adalah aplikasi web khusus untuk jemaat gereja, dengan fitur:
 
+- **Pengumuman & renungan harian** lengkap dengan notifikasi push ke HP
 - **QR pribadi** untuk check-in cepat saat datang ke kebaktian
 - Lihat **info komsel** (waktu & tempat pertemuan)
 - **Beri persembahan** dan lihat riwayat persembahan kamu
@@ -44,31 +47,34 @@ Bisa diakses dari HP atau komputer manapun, atau **install ke home screen** sepe
 
 ---
 
-## 2. Login dengan WhatsApp
+## 2. Login dengan PIN
 
-Login pakai nomor WhatsApp (tidak perlu password!).
+Login jemaat pakai **nomor HP + PIN** (4–6 digit). PIN-nya kamu yang tentukan sendiri (atau pengurus yang set awal kalau kamu lupa).
 
 ### Langkah-langkah
 
 1. Buka `https://<alamat-gereja>/auth/sign-in` di browser
 2. Pilih tab **"Jemaat"** (bukan "Pengurus")
-3. Masukkan nomor WA kamu (format `08xxxxxx` atau `+628xxxxxx`)
-4. Klik **Kirim Kode**
-5. Cek WhatsApp — akan masuk pesan berisi kode 6 digit (mis. `483291`)
-6. Masukkan kode di halaman → klik **Verifikasi**
-7. Berhasil masuk → otomatis redirect ke `/me/dashboard`
+3. Masukkan nomor HP kamu (format `08xxxxxx` atau `+628xxxxxx`)
+4. Masukkan PIN 4–6 digit
+5. Klik **Masuk**
+6. Berhasil → otomatis redirect ke `/me/dashboard`
 
-### Catatan
+### Catatan keamanan
 
-- Kode berlaku **5 menit**. Kalau habis, klik "Kirim Ulang"
-- Maksimal **3 permintaan kode per 15 menit** per nomor (anti-spam)
-- Maksimal **5x salah masukkan** kode — setelah itu request kode baru
+- PIN disimpan dalam bentuk hash (gak bisa dibaca admin sekalipun).
+- Salah PIN beberapa kali OK, tapi setelah **10 percobaan gagal dalam 15 menit**, kamu kena throttle 30 detik supaya brute force gak bisa nebak. **Tidak ada lockout permanen** — tinggal tunggu sebentar dan coba lagi.
+- Ganti PIN kapan aja di **Profil Saya → Ganti PIN**.
+
+### Kalau lupa PIN
+
+Tidak ada self-service reset. Hubungi pengurus gereja → mereka bisa set ulang PIN kamu via `Settings → Users`.
 
 ### Kalau nomor tidak terdaftar
 
-Sistem akan bilang: "Nomor tidak terdaftar. Hubungi pengurus gereja."
+Sistem akan bilang: "Nomor tidak terdaftar atau PIN belum diatur."
 
-→ Hubungi pengurus untuk daftarkan nomor kamu di sistem.
+→ Hubungi pengurus untuk daftarkan nomor + set PIN awal.
 
 ---
 
@@ -103,13 +109,45 @@ Portal Jemaat bisa di-install seperti aplikasi native. Setelah install, ada ikon
 - Tampil full-screen seperti native app
 - Bisa buka offline (halaman yang sudah pernah dibuka)
 - QR pribadi tetap accessible meski sinyal jelek
+- **Push notifikasi** (cuma jalan kalau kamu install PWA — terutama di iPhone)
 
 ---
 
-## 4. Dasbor Saya
+## 4. Notifikasi (Push)
+
+Saat pengurus terbitkan **pengumuman baru**, kamu bisa langsung dapat notifikasi di HP — meski portal lagi gak dibuka. Mirip kayak notif WA atau Instagram.
+
+### Cara aktifkan
+
+1. Buka portal jemaat (`/me/dashboard`).
+2. Banner **"Aktifkan notifikasi"** akan muncul di atas → tap **Aktifkan**.
+3. Browser akan minta izin → tap **Allow / Izinkan**.
+4. Selesai. Notifikasi muncul tiap kali pengurus terbitkan pengumuman.
+
+### Catatan per platform
+
+- **Android Chrome / Edge**: jalan tanpa harus install PWA.
+- **iPhone Safari**: **wajib install PWA dulu** ke home screen (lihat section 3). Tanpa install PWA, iOS gak kasih izin push sama sekali.
+- **Desktop Chrome / Firefox / Edge**: jalan, notifikasi muncul di pojok layar bahkan saat browser ke-minimize.
+
+### Matikan notifikasi
+
+Buka **Profil Saya** → ada baris "Notifikasi aktif" → tap **Matikan**. Atau: cabut izin dari browser settings.
+
+### Kalau gak muncul setelah aktifkan
+
+1. Pastikan kamu udah klik **Aktifkan** (bukan cuma "Tutup" banner).
+2. Cek izin notif di HP: Settings → browser/PWA → Notifications harus **Allowed**.
+3. Coba uninstall PWA + reinstall (kadang Android cache icon/permission lama).
+4. Restart HP — Android kadang refresh setelah restart.
+
+---
+
+## 5. Dasbor Saya
 
 Halaman pertama setelah login: `/me/dashboard`. Ringkasan info penting kamu:
 
+- **Renungan Hari Ini**: card paling atas berisi judul + ayat + cuplikan renungan terbaru. Tap untuk baca penuh.
 - **Aksi cepat**: 6 tombol shortcut — QR, Check-in, Profil, Beri Persembahan, Acara, Doa
 - **Mendatang**:
   - Ibadah berikutnya (jadwal & lokasi)
@@ -123,18 +161,43 @@ Halaman pertama setelah login: `/me/dashboard`. Ringkasan info penting kamu:
 
 ---
 
-## 5. Profil Saya
+## 6. Pengumuman & Renungan
+
+Dua menu baru di sidebar:
+
+### Pengumuman (`/me/announcements`)
+
+Berita & info terbaru dari gereja. Pengumuman yang sudah dipublish muncul di sini, urut dari yang paling baru.
+
+- Tap card pengumuman untuk baca isi penuh dengan formatting (bold, list, link, dll).
+- Notifikasi push otomatis muncul di HP saat ada pengumuman baru (kalau push aktif).
+
+### Renungan (`/me/devotionals`)
+
+Saat teduh harian dari gereja. Tiap renungan punya:
+- Judul
+- Referensi ayat (mis. "Yohanes 3:16")
+- Isi ayat (kalau diisi pengurus)
+- Body renungan (paragraf panjang dengan formatting)
+- Penulis renungan (kalau dicantumkan)
+
+Renungan terbaru juga muncul sebagai hero card di Dasbor.
+
+---
+
+## 7. Profil Saya
 
 Menu: **Profil** di sidebar (`/me/profile`).
 
 ### Yang BISA kamu ubah sendiri
 
-- Foto profil
 - Email
 - Alamat
 - Kota
-- Tanggal lahir (kalau belum diisi pengurus)
-- Preferensi komunikasi (mau terima broadcast atau tidak)
+- Provinsi & kode pos
+- Status pernikahan
+- PIN (Ganti PIN di kartu paling bawah)
+- Notifikasi push (Aktifkan / Matikan kalau sudah aktif)
 
 ### Yang TIDAK bisa kamu ubah (read-only)
 
@@ -156,7 +219,7 @@ Menu: **Profil** di sidebar (`/me/profile`).
 
 ---
 
-## 6. QR Pribadi
+## 8. QR Pribadi
 
 Menu: **QR Saya** (`/me/qr`).
 
@@ -187,7 +250,7 @@ QR bisa dibuka **tanpa internet** kalau kamu sudah install PWA — penting kalau
 
 ---
 
-## 7. Check-in Mandiri
+## 9. Check-in Mandiri
 
 Menu: **Check-in** (`/me/check-in`). Hanya muncul kalau fitur ini diaktifkan oleh gereja.
 
@@ -228,7 +291,7 @@ Kedua cara hasilnya sama. **A1 lebih cepat** karena gak perlu buka app dulu. **A
 
 ---
 
-## 8. Komsel Saya
+## 10. Komsel Saya
 
 Menu: **Komsel Saya** (`/me/cell-group`).
 
@@ -249,7 +312,7 @@ Tidak bisa pindah sendiri — hubungi pengurus / pemimpin komsel saat ini untuk 
 
 ---
 
-## 9. Persembahan
+## 11. Persembahan
 
 Menu: **Persembahan Saya** (`/me/giving`).
 
@@ -293,7 +356,7 @@ Sistem ini **bukan** payment gateway. Pencatatan persembahan dilakukan manual ol
 
 ---
 
-## 10. Acara
+## 12. Acara
 
 Menu: **Acara** (`/me/events`).
 
@@ -333,7 +396,7 @@ Acara berbayar (mis. retreat Rp 500k):
 
 ---
 
-## 11. Pelayanan Saya
+## 13. Pelayanan Saya
 
 Menu: **Pelayanan Saya** (`/me/volunteer`). Hanya muncul kalau kamu pelayan/sukarelawan.
 
@@ -348,7 +411,7 @@ Per jadwal:
 
 ### Konfirmasi jadwal
 
-Saat pengurus assign kamu, status awalnya **Pending** dan kamu dapat notifikasi WA.
+Saat pengurus assign kamu, status awalnya **Pending**. Cek menu **Pelayanan Saya** secara berkala untuk konfirmasi.
 
 1. Buka **Pelayanan Saya**
 2. Klik jadwal yang status Pending
@@ -369,7 +432,7 @@ Tab **Pelayanan Sebelumnya**: track record pelayanan kamu sepanjang waktu.
 
 ---
 
-## 12. Perjalanan Rohani (Pemuridan)
+## 14. Perjalanan Rohani (Pemuridan)
 
 Menu: **Perjalanan Saya** (`/me/discipleship`).
 
@@ -402,7 +465,7 @@ Hubungi pengurus / gembala untuk koreksi. Kamu **tidak bisa edit sendiri** (data
 
 ---
 
-## 13. Permintaan Doa
+## 15. Permintaan Doa
 
 Menu: **Doa & Permohonan** (`/me/prayer-requests`).
 
@@ -438,7 +501,7 @@ Klik permintaan → **Edit** (selama status Open). Setelah Praying, hanya pengur
 
 ---
 
-## 14. Anak Saya
+## 16. Anak Saya
 
 Menu: **Anak Saya** (`/me/children`). Hanya muncul kalau kamu **guardian** (orang tua / wali) yang punya anak di rumah tangga.
 
@@ -473,28 +536,31 @@ Hubungi pengurus untuk koreksi data household.
 
 ---
 
-## 15. Logout
+## 17. Logout
 
 Klik **avatar kamu** di pojok kiri bawah sidebar → dropdown muncul → **Sign out**.
 
-Sesi langsung berakhir. Untuk login lagi, perlu request OTP baru via WhatsApp.
+Sesi langsung berakhir. Untuk login lagi, masukkan nomor HP + PIN.
 
 ---
 
-## 16. FAQ — Pertanyaan Sering Ditanyakan
+## 18. FAQ — Pertanyaan Sering Ditanyakan
 
-### Q: Saya tidak menerima OTP WhatsApp. Apa yang salah?
+### Q: Saya lupa PIN. Bagaimana?
 
-A: Cek:
-- Nomor yang kamu masukkan benar (format `08xxx` atau `+62xxx`)
-- WA aktif, tidak block dari nomor pengirim gereja
-- Tunggu 1-2 menit (kadang delay)
-- Klik **Kirim Ulang** kalau lebih dari 5 menit
-- Kalau tetap tidak masuk: hubungi pengurus, mungkin nomor kamu di sistem berbeda
+A: Tidak ada fitur self-service reset PIN. Hubungi pengurus gereja → mereka akan reset PIN kamu di Settings → Users. Setelah itu, login pakai nomor HP + PIN baru.
 
-### Q: Bisa login pakai email saja?
+### Q: Boleh login pakai email saja?
 
-A: **Tidak**. Login jemaat WAJIB pakai WA OTP. Email & password hanya untuk pengurus/staff.
+A: **Tidak**. Jemaat login pakai nomor HP + PIN. Email & password hanya untuk pengurus/staff.
+
+### Q: PIN saya berapa digit?
+
+A: Antara **4 sampai 6 digit**. Pilih yang gampang diingat tapi gak terlalu obvious (jangan tanggal lahir).
+
+### Q: Saya salah PIN beberapa kali, kena lockout?
+
+A: **Tidak ada lockout permanen.** Setelah 10 percobaan gagal dalam 15 menit, kamu kena throttle 30 detik. Tunggu sebentar dan coba lagi dengan PIN yang benar. Kalau emang lupa, langsung hubungi pengurus untuk reset.
 
 ### Q: Kalau ganti nomor HP, bagaimana?
 
@@ -510,7 +576,7 @@ A: Hubungi pengurus untuk **regenerate QR** kamu. QR lama jadi invalid.
 
 ### Q: Saya install PWA tapi tetap minta login terus?
 
-A: PWA simpan login normal seperti browser biasa. Sesi expired setelah ~30 hari. Login lagi via WA OTP.
+A: PWA simpan login normal seperti browser biasa. Sesi expired setelah ~30 hari. Login lagi pakai nomor HP + PIN.
 
 ### Q: Bisa login di 2 device sekaligus?
 
@@ -537,7 +603,7 @@ A: **Ya**, anonim hanya menyembunyikan nama dari list publik (kalau ditampilkan)
 
 ### Q: RSVP ada kuota waitlist. Pasti dapet slot kalau ada yang batal?
 
-A: Tidak otomatis. Pengurus manual approve dari waitlist (urut FIFO biasanya). Kamu akan dapat notifikasi WA kalau di-promote.
+A: Tidak otomatis. Pengurus manual approve dari waitlist (urut FIFO biasanya). Cek halaman acara secara berkala.
 
 ### Q: Bagaimana download semua data saya?
 
@@ -555,12 +621,12 @@ A: Hubungi pengurus gereja kamu (lihat info kontak di website utama gereja). Pen
 
 ## Tips & Trik
 
-- **Bookmark URL** portal jemaat di browser untuk akses cepat (kalau belum install PWA)
-- **Set foto profil** dengan foto wajah jelas → memudahkan pengurus & sesama jemaat mengenal kamu
-- **Update preferensi komunikasi** kalau tidak mau terima broadcast — biar inbox WA tidak penuh
+- **Install PWA** ke home screen — akses 1-tap, dukung push notif (terutama di iPhone wajib install)
+- **Aktifkan notifikasi push** supaya gak kelewatan pengumuman penting dari gereja
 - **Submit permintaan doa bahkan untuk hal kecil** — jemaat lain dengan pengalaman yang sama bisa kasih dukungan
 - **Konfirmasi RSVP cepat** — bantu pengurus prepare logistik acara
 - **Check QR terlebih dahulu** sebelum berangkat ke gereja — antisipasi sinyal hilang saat tiba
+- **Baca renungan harian** di Dasbor — saat teduh singkat sebelum mulai aktivitas
 
 ---
 

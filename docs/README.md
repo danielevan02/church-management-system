@@ -7,7 +7,7 @@ Index untuk semua dokumentasi proyek. Pilih dokumen sesuai kebutuhan kamu:
 | Dokumen | Audiens | Isi |
 |---|---|---|
 | [`user-guide-admin.md`](./user-guide-admin.md) | Pengurus, staff, gembala | Panduan lengkap operasional admin: 13 modul step-by-step, skenario umum, troubleshooting, best practices |
-| [`user-guide-jemaat.md`](./user-guide-jemaat.md) | Anggota jemaat | Panduan portal jemaat (`/me`): login WA OTP, install PWA, fitur QR/giving/RSVP/doa, FAQ |
+| [`user-guide-jemaat.md`](./user-guide-jemaat.md) | Anggota jemaat | Panduan portal jemaat (`/me`): login phone+PIN, install PWA, push notif, fitur QR/giving/RSVP/doa/renungan, FAQ |
 
 ## Untuk teknisi & deployment
 

@@ -19,7 +19,7 @@ Panduan lengkap mengoperasikan Church Management System (ChMS) dari sisi admin/s
 7. [Modul Persembahan (Giving)](#7-modul-persembahan-giving)
 8. [Modul Komsel (Cell Groups)](#8-modul-komsel-cell-groups)
 9. [Modul Acara (Events)](#9-modul-acara-events)
-10. [Modul Komunikasi (Communications)](#10-modul-komunikasi-communications)
+10. [Pengumuman & Renungan](#10-pengumuman--renungan)
 11. [Modul Pelayanan (Volunteers)](#11-modul-pelayanan-volunteers)
 12. [Modul Anak (Children)](#12-modul-anak-children)
 13. [Modul Penggembalaan (Pastoral)](#13-modul-penggembalaan-pastoral)
@@ -47,7 +47,8 @@ ChMS adalah aplikasi web pengelolaan gereja terpusat. Satu deployment = satu ger
 | Persembahan | Catatan offline (transfer/cash/QRIS), fund/anggaran |
 | Komsel | Daftar komsel, leader, anggota, laporan mingguan |
 | Acara | Acara dengan RSVP, kapasitas, waitlist |
-| Komunikasi | Template pesan, broadcast WA/email |
+| Pengumuman | Inbox in-app + push notifikasi ke jemaat |
+| Renungan | Saat teduh harian dengan ayat + body markdown |
 | Pelayanan | Tim pelayanan, jadwal sukarelawan |
 | Anak | Check-in/check-out anak di kebaktian |
 | Penggembalaan | Catatan kunjungan, tindak lanjut |
@@ -61,9 +62,8 @@ Setiap user yang login ke `/admin` punya salah satu role berikut, dari paling ti
 
 | Role | Akses |
 |---|---|
-| `SUPER_ADMIN` | Semua + Settings (users, features, audit log). Biasanya developer / handover account. |
-| `ADMIN` | Operasional penuh: semua modul, termasuk Persembahan & Audit. Untuk pendeta / gembala senior. |
-| `STAFF` | Operasional umum tanpa Persembahan detail & Settings. Untuk staf umum. |
+| `ADMIN` | Operasional penuh: semua modul + Settings (users, features, audit log). Untuk pendeta / gembala senior / handover account. |
+| `STAFF` | Operasional umum tanpa Settings. Untuk staf umum. |
 | `LEADER` | Hanya data komsel yang dipimpin + jemaat anggotanya. Untuk pemimpin komsel. |
 | `MEMBER` | Tidak bisa akses `/admin`. Akses portal `/me` saja. |
 
@@ -77,7 +77,7 @@ Aplikasi tersedia dalam Bahasa Indonesia (default) dan English. Switch bahasa vi
 
 ### Login pertama kali (admin awal)
 
-Setelah deployment selesai, akun **SUPER_ADMIN** awal sudah dibuat oleh seed script (lihat `INITIAL_ADMIN_EMAIL` di env). Caranya:
+Setelah deployment selesai, akun **ADMIN** awal sudah dibuat oleh seed script (lihat `INITIAL_ADMIN_EMAIL` di env). Caranya:
 
 1. Buka `https://<domain-gereja>/auth/sign-in`
 2. Pilih tab **"Pengurus / Admin"** (bukan "Jemaat")
@@ -88,11 +88,11 @@ Setelah deployment selesai, akun **SUPER_ADMIN** awal sudah dibuat oleh seed scr
 
 ### Login staff/admin biasa
 
-Sama seperti di atas. Email & password yang dipakai sudah dibuat oleh super admin via Settings → Users.
+Sama seperti di atas. Email & password yang dipakai sudah dibuat oleh ADMIN via Settings → Users.
 
 ### Lupa password
 
-Tidak ada self-service reset password. Hubungi admin/super admin di gereja untuk reset:
+Tidak ada self-service reset password. Hubungi ADMIN gereja untuk reset:
 - Settings → Users → klik user → **Reset Password**
 - Sistem generate password baru, sampaikan secara langsung (jangan via WA/email)
 - User wajib ganti password lagi setelah login
@@ -428,52 +428,56 @@ Buka detail → **Tutup pendaftaran**. Jemaat tidak bisa RSVP lagi, tapi yang su
 
 ---
 
-## 10. Modul Komunikasi (Communications)
+## 10. Pengumuman & Renungan
 
-Menu: **Komunikasi**. Kirim WhatsApp / Email broadcast.
+Dua modul terpisah untuk komunikasi ke jemaat — keduanya pakai **WYSIWYG editor** (mirip Word: blok teks, klik Bold) dan disimpan sebagai markdown di DB.
 
-### Konsep
+### Pengumuman (Announcements)
 
-- **Template** = template pesan dengan placeholder (mis. `Halo {{firstName}}, ibadah Minggu jam 9.`)
-- **Campaign** = satu broadcast: pakai template apa, target audience siapa, kapan dikirim
+Menu: **Pengumuman**. Untuk berita/info satu-kali (jadwal ibadah khusus, perubahan, undangan).
 
-### Buat template
+**Buat pengumuman:**
+1. Klik **+ Pengumuman Baru**
+2. Isi **Judul** + **Isi** (pakai toolbar untuk format Bold/Italic/List/Link/Quote)
+3. **Tayang Pada**: kosongkan untuk publish sekarang, atau set waktu mendatang untuk schedule
+4. **Terbitkan**
 
-1. **Komunikasi → Templates → + Tambah**
-2. Isi:
-   - Nama (untuk identifikasi internal)
-   - Channel (WhatsApp / Email)
-   - Body — pakai placeholder `{{firstName}}`, `{{fullName}}`, dll
-3. **Simpan**
+**Yang terjadi saat publish:**
+- Pengumuman muncul di inbox jemaat (`/me/announcements`)
+- **Push notification fan-out** ke semua jemaat yang sudah aktifkan notif (kalau VAPID env vars di-set di Vercel)
+- Tap notif → buka langsung ke detail pengumuman
 
-### Buat campaign
-
-1. **Komunikasi → + Buat Campaign**
-2. Pilih template
-3. Pilih audience filter:
-   - Semua jemaat aktif
-   - Komsel tertentu
-   - Custom: by gender, status, kota, dll
-4. Klik **Preview Audience** → cek jumlah penerima sebelum kirim
-5. Klik **Kirim Sekarang** atau **Jadwalkan** (jadwal di masa depan)
-
-### Status campaign
-
+**Status:**
 | Status | Arti |
 |---|---|
-| Draft | Belum dikirim |
-| Scheduled | Akan dikirim otomatis |
-| Sending | Sedang dikirim |
-| Completed | Selesai |
-| Failed | Gagal (cek log) |
+| Terbit | Sudah live, jemaat bisa baca |
+| Dijadwalkan | `publishedAt` di masa depan, akan otomatis muncul di inbox saat waktunya tiba |
 
-### Riwayat pengiriman
+**⚠️ Push untuk yang dijadwalkan**: saat ini push hanya fire saat klik Publish (kalau publishedAt sudah lewat). Untuk scheduled push perlu cron — belum diimplementasi. Inbox tetep update otomatis.
 
-Buka detail campaign → tab **Riwayat**: per-recipient status (sent / failed) + error message kalau ada.
+### Renungan (Devotionals)
 
-### ⚠️ Setup provider WhatsApp
+Menu: **Renungan**. Untuk konten saat teduh harian.
 
-Default `WHATSAPP_PROVIDER=stub` = pesan cuma log ke server console, **tidak terkirim ke jemaat**. Sebelum launch, ganti ke provider real (Fonnte / WhatsApp Cloud API). Lihat [`deployment.md`](./deployment.md).
+**Buat renungan:**
+1. Klik **+ Renungan Baru**
+2. Isi:
+   - **Judul** (mis. "Tetap Bersyukur")
+   - **Referensi Ayat** (opsional, mis. "Yohanes 3:16")
+   - **Isi Ayat** (opsional, body ayatnya)
+   - **Penulis** (opsional, mis. "Pdt. Budi")
+   - **Isi Renungan** (markdown WYSIWYG, panjang OK)
+   - **Tayang Pada** (untuk schedule)
+3. **Terbitkan**
+
+**Yang terjadi:**
+- Muncul di archive jemaat (`/me/devotionals`)
+- Renungan terbaru jadi **hero card "Renungan Hari Ini"** di Dasbor jemaat
+- Tidak fire push (renungan sifatnya pull-style, jemaat baca pas mau aja)
+
+### Setup push notifikasi (sekali aja)
+
+Push fan-out untuk pengumuman baru jalan kalau VAPID keys di-set di Vercel. Lihat [`deployment.md`](./deployment.md) untuk setup-nya. Kalau env vars kosong, push silently disabled — pengumuman tetep masuk inbox.
 
 ---
 
@@ -706,14 +710,14 @@ Cari nomor HP terakhir 4 digit (mis. `1234`) — sistem tetap match dari nomor l
 
 ## 18. Pengaturan (Settings)
 
-Menu: **Pengaturan** (hanya untuk ADMIN+, kecuali audit log = SUPER_ADMIN).
+Menu: **Pengaturan** (hanya untuk ADMIN).
 
 ### Users
 
-Settings → **Users**: kelola akun login admin/staff.
+Settings → **Users**: kelola akun login admin/staff/jemaat.
 
-- **+ Tambah User**: email, password, role (STAFF/LEADER/ADMIN), jemaat yang di-link (opsional)
-- **Edit user**: ganti role, reset password, disable
+- **+ Tambah User**: email + password (untuk staff/admin) atau phone + PIN awal (untuk jemaat), role (MEMBER/STAFF/LEADER/ADMIN), jemaat yang di-link (opsional)
+- **Edit user**: ganti role, reset password / reset PIN, disable
 - **Hapus user**: soft-delete (audit log tetap ada)
 
 ### Features
@@ -722,7 +726,7 @@ Settings → **Features**: toggle modul on/off untuk deployment ini. Lihat [`cus
 
 ### Audit Log
 
-Settings → **Audit** (SUPER_ADMIN only): log semua aksi di sistem.
+Settings → **Audit** (ADMIN): log semua aksi di sistem.
 
 - Filter: action, entity type, user, tanggal
 - Per entry: siapa, kapan, dari IP berapa, action apa, target apa, payload metadata
@@ -752,7 +756,7 @@ Audit log tidak bisa dihapus.
 1. Pastikan recurring service Minggu sudah ada (lihat [Kehadiran](#6-modul-kehadiran-attendance))
 2. Setup tim pelayanan: **Pelayanan → jadwal baru** untuk worship, multimedia, dll, untuk tanggal Minggu yang akan datang
 3. Buat acara khusus kalau ada (mis. baptisan): **Acara → + Tambah** + publish
-4. Pesan reminder broadcast: **Komunikasi → Campaign → audience: aktif → kirim Sabtu sore**
+4. Pesan reminder: **Pengumuman → + Pengumuman Baru → "Ibadah Minggu jam 09:00" → Terbitkan** Sabtu sore (jemaat dapat push notif + masuk inbox)
 
 ### C. Closing books bulanan persembahan
 
@@ -773,27 +777,34 @@ Akhir bulan:
 
 ### E. Komunikasi crisis (mis. ibadah dibatalkan)
 
-1. **Komunikasi → Campaign baru**
-2. Template "Pengumuman Singkat" (atau buat baru)
-3. Audience: semua jemaat aktif + tamu aktif
-4. Channel: WhatsApp (cepat)
-5. **Kirim Sekarang**
+1. **Pengumuman → + Pengumuman Baru**
+2. Judul singkat + jelas (mis. "Ibadah Minggu 5 Mei DIBATALKAN")
+3. Isi: alasan + jadwal pengganti (kalau ada)
+4. Tayang Pada: kosongkan (publish sekarang)
+5. **Terbitkan** → push notif fan-out otomatis ke semua jemaat yang aktif notif
 
 ---
 
 ## 20. Troubleshooting
 
-### "Saya tidak bisa login"
+### "Saya tidak bisa login (admin)"
 
 - Cek email & password (case sensitive)
-- Hubungi super admin untuk reset
+- Hubungi ADMIN lain untuk reset (Settings → Users → Reset Password)
 - Kalau masalah server-side: hubungi developer
 
-### "Jemaat tidak menerima OTP WhatsApp"
+### "Jemaat tidak bisa login (PIN salah)"
 
-- Cek `WHATSAPP_PROVIDER` di env — kalau `stub`, OTP cuma muncul di server log (development mode)
-- Kalau provider real: cek device Fonnte connected, saldo cukup, nomor jemaat valid (format `+628xxx`)
-- Cek rate limit: max 3 OTP per nomor per 15 menit (built-in safety)
+- Pastikan PIN yang mereka pakai adalah yang terakhir di-set
+- Salah berkali-kali bukan masalah — gak ada lockout permanen, cuma throttle 30 detik setelah 10x gagal
+- Kalau lupa: Settings → Users → cari jemaat → **Reset PIN** → kasih tau jemaat PIN baru via WA pribadi
+
+### "Jemaat tidak dapat push notifikasi pengumuman"
+
+- Cek dulu VAPID env vars di Vercel (`NEXT_PUBLIC_VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT`) — kalau kosong, push silently disabled
+- Jemaat harus klik **Aktifkan** di banner notifikasi minimal sekali
+- iPhone: push hanya jalan kalau jemaat install PWA ke home screen dulu (gak bisa di Safari biasa)
+- Android Chrome: kadang launcher cache permission lama — uninstall + reinstall PWA, atau restart HP
 
 ### "Camera tidak jalan saat scan QR"
 
@@ -842,9 +853,10 @@ Akhir bulan:
 
 ### Komunikasi
 
-- **Jangan spam**: maks 1 broadcast non-urgent per minggu
-- Selalu **preview audience** sebelum kirim — pastikan tidak salah target
-- Test kirim ke 1-2 nomor (tim) sebelum kirim massal
+- **Jangan spam push notif**: maks 1 pengumuman non-urgent per minggu — kalau terlalu sering, jemaat akan matikan notif.
+- Tulis judul yang **action-oriented** (mis. "Ibadah Minggu jam 09:00 di GKJ Tangerang" lebih baik daripada "Pengumuman").
+- **Preview di portal jemaat** sebelum publish — buka di tab incognito sebagai member untuk lihat hasilnya.
+- **Renungan harian** publish konsisten (mis. setiap Senin pagi) supaya jemaat terbiasa cek.
 
 ### Privasi data jemaat
 
