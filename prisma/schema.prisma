@@ -45,6 +45,7 @@ model User {
   sessions          Session[]
   auditLogs         AuditLog[]
   announcements     Announcement[]
+  devotionals       Devotional[]
   pushSubscriptions PushSubscription[]
 
   @@map("users")
@@ -440,6 +441,28 @@ model Announcement {
 
   @@index([publishedAt])
   @@map("announcements")
+}
+
+// =====================================================================
+// Devotionals (Renungan)
+// =====================================================================
+
+model Devotional {
+  id          String    @id @default(cuid())
+  title       String
+  verseRef    String?
+  verseText   String?
+  body        String
+  authorName  String?
+  publishedAt DateTime  @default(now())
+  createdById String?
+  createdBy   User?     @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+
+  @@index([publishedAt])
+  @@map("devotionals")
 }
 
 // =====================================================================

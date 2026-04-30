@@ -2,6 +2,7 @@ import type { Role } from "@prisma/client";
 import type { LucideIcon } from "lucide-react";
 import {
   BarChart3,
+  BookOpen,
   Calendar,
   HandCoins,
   Heart,
@@ -97,6 +98,14 @@ export const adminNav: readonly AdminNavItem[] = [
     roles: ["ADMIN", "STAFF"],
   },
   {
+    href: "/admin/devotionals",
+    labelKey: "nav.devotionals",
+    icon: BookOpen,
+    group: "documents",
+    roles: ["ADMIN", "STAFF"],
+    feature: "devotionals",
+  },
+  {
     href: "/admin/volunteers",
     labelKey: "nav.volunteers",
     icon: HeartHandshake,
@@ -189,6 +198,12 @@ export const memberNav: readonly MemberNavItem[] = [
     href: "/me/announcements",
     labelKey: "nav.myAnnouncements",
     icon: Megaphone,
+  },
+  {
+    href: "/me/devotionals",
+    labelKey: "nav.myDevotionals",
+    icon: BookOpen,
+    feature: "devotionals",
   },
   {
     href: "/me/profile",

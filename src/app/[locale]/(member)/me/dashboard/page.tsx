@@ -2,6 +2,7 @@ import { format } from "date-fns";
 import {
   ArrowRight,
   Baby,
+  BookOpen,
   Calendar,
   CalendarDays,
   HandCoins,
@@ -27,15 +28,17 @@ import {
 import { Button } from "@/components/ui/button";
 import { features } from "@/config/features";
 import { auth } from "@/lib/auth";
+import { formatJakarta } from "@/lib/datetime";
 import { formatRupiah } from "@/lib/format";
 import { Link } from "@/lib/i18n/navigation";
+import { excerpt } from "@/lib/markdown";
 import { prisma } from "@/lib/prisma";
 import { listChildrenForGuardian } from "@/server/queries/children";
+import { getTodayDevotionalForMember } from "@/server/queries/devotionals";
 import { getMilestonesForMember } from "@/server/queries/discipleship";
 import { getRsvpsForMember } from "@/server/queries/events";
 import { getGivingForMember } from "@/server/queries/giving";
 import { getAssignmentsForMember } from "@/server/queries/volunteers";
-import { formatJakarta } from "@/lib/datetime";
 
 export default async function MemberDashboardPage() {
   const session = await auth();
@@ -76,6 +79,7 @@ export default async function MemberDashboardPage() {
     giving,
     milestones,
     children,
+    todayDevotional,
   ] = await Promise.all([
     prisma.service.findFirst({
       where: { isActive: true, startsAt: { gte: new Date() } },
@@ -95,6 +99,9 @@ export default async function MemberDashboardPage() {
     memberId && features.childrensCheckIn
       ? listChildrenForGuardian(memberId)
       : Promise.resolve([]),
+    features.devotionals
+      ? getTodayDevotionalForMember()
+      : Promise.resolve(null),
   ]);
 
   const cellGroup = member?.cellGroupMembers[0]?.cellGroup ?? null;
@@ -119,6 +126,38 @@ export default async function MemberDashboardPage() {
           {t("subtitle", { date: format(new Date(), "EEEE, dd MMM yyyy") })}
         </p>
       </header>
+
+      {/* Renungan Hari Ini */}
+      {features.devotionals && todayDevotional ? (
+        <Link
+          href={`/me/devotionals/${todayDevotional.id}`}
+          className="block focus-visible:outline-none"
+        >
+          <Card className="border-primary/20 bg-primary/5 transition-colors hover:bg-primary/10">
+            <CardHeader className="space-y-1.5 pb-3">
+              <div className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-primary">
+                <BookOpen className="h-3.5 w-3.5" />
+                {t("devotionalToday.label")}
+              </div>
+              <CardTitle className="text-xl">{todayDevotional.title}</CardTitle>
+              <CardDescription>
+                {formatJakarta(todayDevotional.publishedAt, "EEE, dd MMM yyyy")}
+                {todayDevotional.verseRef ? ` · ${todayDevotional.verseRef}` : ""}
+                {todayDevotional.authorName ? ` · ${todayDevotional.authorName}` : ""}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="line-clamp-3 text-sm text-muted-foreground">
+                {excerpt(todayDevotional.body, 220)}
+              </p>
+              <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-primary">
+                {t("devotionalToday.read")}
+                <ArrowRight className="h-4 w-4" />
+              </span>
+            </CardContent>
+          </Card>
+        </Link>
+      ) : null}
 
       {/* Quick actions */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
