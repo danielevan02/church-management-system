@@ -1,7 +1,8 @@
 "use client";
 
-import { Church, LogOut, MoreVertical } from "lucide-react";
+import { LogOut, MoreVertical } from "lucide-react";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
 import * as React from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -62,7 +63,15 @@ export function MemberSidebar({ member, ...props }: Props) {
               className="data-[slot=sidebar-menu-button]:p-1.5!"
             >
               <Link href="/me/dashboard">
-                <Church className="size-5!" />
+                <Image
+                  src="/icon-192.png"
+                  alt=""
+                  aria-hidden
+                  width={20}
+                  height={20}
+                  priority
+                  className="size-5! object-contain"
+                />
                 <span className="text-base font-semibold">{church.name}</span>
               </Link>
             </SidebarMenuButton>

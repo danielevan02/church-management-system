@@ -1,5 +1,6 @@
-import { ArrowRight, Church } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { getTranslations } from "next-intl/server";
+import Image from "next/image";
 
 import { LocaleSwitcher } from "@/components/shared/locale-switcher";
 import { Button } from "@/components/ui/button";
@@ -33,12 +34,15 @@ export default async function Home() {
 
       <header className="flex items-center justify-between px-6 py-5 sm:px-10">
         <div className="flex items-center gap-2">
-          <span
-            className="flex h-8 w-8 items-center justify-center rounded-md text-white shadow-sm"
-            style={{ backgroundColor: primary }}
-          >
-            <Church className="h-4 w-4" />
-          </span>
+          <Image
+            src="/icon-192.png"
+            alt=""
+            aria-hidden
+            width={32}
+            height={32}
+            priority
+            className="h-8 w-8 object-contain"
+          />
           <span className="text-sm font-medium text-foreground">
             {church.shortName}
           </span>

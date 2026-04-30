@@ -1,7 +1,7 @@
 "use client";
 
 import type { Role } from "@prisma/client";
-import { Church } from "lucide-react";
+import Image from "next/image";
 import * as React from "react";
 
 import { AdminNavDocuments } from "@/components/admin/admin-nav-documents";
@@ -52,7 +52,15 @@ export function AdminSidebar({ user, ...props }: Props) {
               className="data-[slot=sidebar-menu-button]:p-1.5!"
             >
               <Link href="/admin/dashboard">
-                <Church className="size-5!" />
+                <Image
+                  src="/icon-192.png"
+                  alt=""
+                  aria-hidden
+                  width={20}
+                  height={20}
+                  priority
+                  className="size-5! object-contain"
+                />
                 <span className="text-base font-semibold">{church.name}</span>
               </Link>
             </SidebarMenuButton>
