@@ -49,7 +49,7 @@ export function AdminSidebar({ user, ...props }: Props) {
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
-              className="data-[slot=sidebar-menu-button]:p-1.5!"
+              className="h-auto items-center py-2 data-[slot=sidebar-menu-button]:p-1.5!"
             >
               <Link href="/admin/dashboard">
                 <Image
@@ -61,7 +61,9 @@ export function AdminSidebar({ user, ...props }: Props) {
                   priority
                   className="size-5! object-contain"
                 />
-                <span className="text-base font-semibold">{church.name}</span>
+                <span className="line-clamp-2 text-sm font-semibold leading-tight whitespace-normal!">
+                  {church.name}
+                </span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
