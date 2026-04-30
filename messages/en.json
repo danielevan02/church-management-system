@@ -36,6 +36,7 @@
     "cellGroups": "Cell groups",
     "events": "Events",
     "announcements": "Announcements",
+    "devotionals": "Devotionals",
     "volunteers": "Volunteers",
     "children": "Children",
     "pastoral": "Pastoral care",
@@ -51,6 +52,7 @@
     },
     "myDashboard": "My dashboard",
     "myAnnouncements": "Announcements",
+    "myDevotionals": "Devotionals",
     "myProfile": "My profile",
     "myQr": "My QR",
     "myGiving": "My giving",
@@ -176,6 +178,10 @@
       "title": "My dashboard",
       "welcome": "Hi, {name}.",
       "subtitle": "Snapshot for {date}.",
+      "devotionalToday": {
+        "label": "Today's devotional",
+        "read": "Read more"
+      },
       "quickActions": {
         "title": "Quick Actions",
         "myQr": "My QR",
@@ -241,6 +247,12 @@
       "title": "Announcements",
       "subtitle": "Latest news and updates from the church.",
       "empty": "No announcements yet.",
+      "back": "Back"
+    },
+    "devotionals": {
+      "title": "Devotionals",
+      "subtitle": "Daily quiet time from the church.",
+      "empty": "No devotionals yet.",
       "back": "Back"
     },
     "push": {
@@ -1434,6 +1446,55 @@
       "confirmDescription": "Members will no longer see it in their inbox. This action cannot be undone.",
       "cancel": "Cancel",
       "deletedToast": "Announcement deleted.",
+      "errorToast": "Delete failed."
+    }
+  },
+  "devotionals": {
+    "list": {
+      "title": "Devotionals",
+      "subtitle": "{total} devotional(s) total.",
+      "newButton": "New devotional",
+      "empty": "No devotionals yet. Click \"New devotional\" to add one.",
+      "colTitle": "Title",
+      "colPublishedAt": "Published",
+      "colStatus": "Status",
+      "colAuthor": "Author",
+      "statusPublished": "Published",
+      "statusScheduled": "Scheduled"
+    },
+    "new": {
+      "title": "New devotional",
+      "subtitle": "Write a daily devotional for the congregation.",
+      "backToList": "Devotionals",
+      "submit": "Publish"
+    },
+    "edit": {
+      "backToList": "Devotionals",
+      "submit": "Save changes"
+    },
+    "form": {
+      "fields": {
+        "title": "Title",
+        "verseRef": "Verse reference",
+        "verseRefPlaceholder": "e.g. John 3:16",
+        "verseText": "Verse text",
+        "verseTextPlaceholder": "Type the verse text here…",
+        "verseTextHint": "Optional. If filled, it'll be shown in a highlighted box above the body.",
+        "body": "Devotional body",
+        "authorName": "Author",
+        "authorNamePlaceholder": "e.g. Pastor John",
+        "publishedAt": "Publish at",
+        "publishedAtHint": "Leave empty to publish immediately. Set a future time to schedule."
+      },
+      "savedToast": "Devotional saved.",
+      "errorToast": "Save failed. Check the form."
+    },
+    "delete": {
+      "button": "Delete",
+      "confirmTitle": "Delete this devotional?",
+      "confirmDescription": "Members will no longer see it. This action cannot be undone.",
+      "cancel": "Cancel",
+      "deletedToast": "Devotional deleted.",
       "errorToast": "Delete failed."
     }
   },

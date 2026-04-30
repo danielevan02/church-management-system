@@ -36,6 +36,7 @@
     "cellGroups": "Komsel",
     "events": "Acara",
     "announcements": "Pengumuman",
+    "devotionals": "Renungan",
     "volunteers": "Pelayan",
     "children": "Anak",
     "pastoral": "Penggembalaan",
@@ -51,6 +52,7 @@
     },
     "myDashboard": "Dasbor Saya",
     "myAnnouncements": "Pengumuman",
+    "myDevotionals": "Renungan",
     "myProfile": "Profil Saya",
     "myQr": "QR Saya",
     "myGiving": "Persembahan Saya",
@@ -176,6 +178,10 @@
       "title": "Dasbor Saya",
       "welcome": "Halo, {name}.",
       "subtitle": "Ringkasan {date}.",
+      "devotionalToday": {
+        "label": "Renungan Hari Ini",
+        "read": "Baca selengkapnya"
+      },
       "quickActions": {
         "title": "Aksi Cepat",
         "myQr": "QR Saya",
@@ -241,6 +247,12 @@
       "title": "Pengumuman",
       "subtitle": "Berita & info terbaru dari gereja.",
       "empty": "Belum ada pengumuman.",
+      "back": "Kembali"
+    },
+    "devotionals": {
+      "title": "Renungan",
+      "subtitle": "Saat teduh harian dari gereja.",
+      "empty": "Belum ada renungan.",
       "back": "Kembali"
     },
     "push": {
@@ -1434,6 +1446,55 @@
       "confirmDescription": "Jemaat tidak akan melihatnya lagi di inbox. Aksi ini tidak bisa dibatalkan.",
       "cancel": "Batal",
       "deletedToast": "Pengumuman dihapus.",
+      "errorToast": "Gagal menghapus."
+    }
+  },
+  "devotionals": {
+    "list": {
+      "title": "Renungan",
+      "subtitle": "Total {total} renungan.",
+      "newButton": "Renungan Baru",
+      "empty": "Belum ada renungan. Klik \"Renungan Baru\" untuk menambahkan.",
+      "colTitle": "Judul",
+      "colPublishedAt": "Tayang",
+      "colStatus": "Status",
+      "colAuthor": "Penulis",
+      "statusPublished": "Terbit",
+      "statusScheduled": "Dijadwalkan"
+    },
+    "new": {
+      "title": "Renungan Baru",
+      "subtitle": "Tulis renungan harian untuk jemaat.",
+      "backToList": "Renungan",
+      "submit": "Terbitkan"
+    },
+    "edit": {
+      "backToList": "Renungan",
+      "submit": "Simpan Perubahan"
+    },
+    "form": {
+      "fields": {
+        "title": "Judul",
+        "verseRef": "Referensi Ayat",
+        "verseRefPlaceholder": "Mis. Yohanes 3:16",
+        "verseText": "Isi Ayat",
+        "verseTextPlaceholder": "Tulis isi ayatnya di sini…",
+        "verseTextHint": "Opsional. Kalau diisi, akan ditampilkan dalam kotak khusus di atas isi renungan.",
+        "body": "Isi Renungan",
+        "authorName": "Penulis",
+        "authorNamePlaceholder": "Mis. Pdt. Budi",
+        "publishedAt": "Tayang Pada",
+        "publishedAtHint": "Kosongkan untuk terbit langsung. Isi waktu mendatang untuk menjadwalkan."
+      },
+      "savedToast": "Renungan tersimpan.",
+      "errorToast": "Gagal menyimpan. Periksa form."
+    },
+    "delete": {
+      "button": "Hapus",
+      "confirmTitle": "Hapus renungan ini?",
+      "confirmDescription": "Jemaat tidak akan melihatnya lagi. Aksi ini tidak bisa dibatalkan.",
+      "cancel": "Batal",
+      "deletedToast": "Renungan dihapus.",
       "errorToast": "Gagal menghapus."
     }
   },
