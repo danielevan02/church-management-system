@@ -185,7 +185,8 @@
       "announcements": {
         "title": "Recent announcements",
         "description": "News & info from the church.",
-        "viewAll": "View all"
+        "viewAll": "View all",
+        "new": "New"
       },
       "quickActions": {
         "title": "Quick Actions",
@@ -252,7 +253,8 @@
       "title": "Announcements",
       "subtitle": "Latest news and updates from the church.",
       "empty": "No announcements yet.",
-      "back": "Back"
+      "back": "Back",
+      "new": "New"
     },
     "devotionals": {
       "title": "Devotionals",

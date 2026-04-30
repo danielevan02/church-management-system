@@ -1,4 +1,4 @@
-import { BookOpen, ChevronRight } from "lucide-react";
+import { ArrowRight, BookOpen } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
 import { Pagination } from "@/components/shared/pagination";
@@ -32,29 +32,49 @@ export default async function MemberDevotionalsPage({
           <p className="text-sm text-muted-foreground">{t("empty")}</p>
         </div>
       ) : (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-3">
           {result.items.map((d) => (
             <Link
               key={d.id}
               href={`/me/devotionals/${d.id}`}
-              className="block focus-visible:outline-none"
+              className="group block focus-visible:outline-none"
             >
-              <Card className="transition-colors hover:border-primary/40 hover:bg-accent/30">
-                <CardContent className="flex items-center gap-3 p-4">
-                  <div className="min-w-0 flex-1 space-y-1">
-                    <p className="font-semibold leading-tight line-clamp-1">
-                      {d.title}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {formatJakarta(d.publishedAt, "EEE, dd MMM yyyy")}
-                      {d.verseRef ? ` · ${d.verseRef}` : ""}
-                      {d.authorName ? ` · ${d.authorName}` : ""}
-                    </p>
-                    <p className="line-clamp-2 text-sm text-muted-foreground">
-                      {excerpt(d.body)}
-                    </p>
+              <Card className="overflow-hidden transition-all hover:border-primary/40 hover:shadow-md">
+                <CardContent className="flex items-stretch gap-0 p-0">
+                  <div className="flex w-20 shrink-0 flex-col items-center justify-center gap-0.5 border-r bg-gradient-to-b from-primary/10 to-primary/5 p-3">
+                    <BookOpen className="mb-1 h-4 w-4 text-primary" />
+                    <span className="text-2xl font-bold leading-none tabular-nums text-foreground">
+                      {formatJakarta(d.publishedAt, "dd")}
+                    </span>
+                    <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+                      {formatJakarta(d.publishedAt, "MMM")}
+                    </span>
                   </div>
-                  <ChevronRight className="h-5 w-5 shrink-0 text-muted-foreground" />
+                  <div className="flex min-w-0 flex-1 items-center gap-3 p-4">
+                    <div className="min-w-0 flex-1 space-y-1.5">
+                      {d.verseRef || d.authorName ? (
+                        <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                          {d.verseRef ? (
+                            <span className="inline-flex items-center gap-1 rounded border border-primary/30 bg-primary/5 px-1.5 py-0.5 text-[11px] font-medium text-primary">
+                              {d.verseRef}
+                            </span>
+                          ) : null}
+                          {d.authorName ? (
+                            <span className="text-xs italic text-muted-foreground">
+                              — {d.authorName}
+                            </span>
+                          ) : null}
+                        </div>
+                      ) : null}
+                      <h3 className="font-semibold leading-tight line-clamp-1">
+                        {d.title}
+                      </h3>
+                      <p className="line-clamp-2 text-sm text-muted-foreground">
+                        {excerpt(d.body)}
+                      </p>
+                    </div>
+                    <ArrowRight className="h-5 w-5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-primary" />
+                  </div>
                 </CardContent>
               </Card>
             </Link>
