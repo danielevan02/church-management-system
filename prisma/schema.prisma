@@ -41,10 +41,11 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  accounts      Account[]
-  sessions      Session[]
-  auditLogs     AuditLog[]
-  announcements Announcement[]
+  accounts          Account[]
+  sessions          Session[]
+  auditLogs         AuditLog[]
+  announcements     Announcement[]
+  pushSubscriptions PushSubscription[]
 
   @@map("users")
 }
@@ -439,6 +440,26 @@ model Announcement {
 
   @@index([publishedAt])
   @@map("announcements")
+}
+
+// =====================================================================
+// Push Notifications
+// =====================================================================
+
+model PushSubscription {
+  id         String   @id @default(cuid())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
+  endpoint   String   @unique
+  p256dh     String
+  auth       String
+  userAgent  String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  lastSeenAt DateTime @default(now())
+
+  @@index([userId])
+  @@map("push_subscriptions")
 }
 
 // =====================================================================

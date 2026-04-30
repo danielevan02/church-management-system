@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from "next";
 import { InstallPrompt } from "@/components/member/install-prompt";
 import { MemberHeader } from "@/components/member/member-header";
 import { MemberSidebar } from "@/components/member/member-sidebar";
+import { PushBanner } from "@/components/member/push-banner";
 import { PwaRegister } from "@/components/member/pwa-register";
 import { SidebarAutoCloseMobile } from "@/components/shared/sidebar-autoclose-mobile";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
@@ -51,6 +52,7 @@ export default async function MemberLayout({
           <MemberHeader />
           <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-4 overflow-x-hidden p-4 sm:p-6 lg:p-8">
             <InstallPrompt />
+            <PushBanner />
             {children}
           </div>
         </SidebarInset>

@@ -242,6 +242,20 @@
       "subtitle": "Latest news and updates from the church.",
       "empty": "No announcements yet."
     },
+    "push": {
+      "enableTitle": "Enable notifications",
+      "enableDescription": "Get church announcements directly on your phone.",
+      "enable": "Enable",
+      "disable": "Disable",
+      "dismiss": "Dismiss",
+      "deniedTitle": "Notifications blocked",
+      "deniedDescription": "Allow notifications from your browser settings.",
+      "subscribedTitle": "Notifications enabled",
+      "subscribedDescription": "You'll receive a notification for new announcements.",
+      "toastEnabled": "Notifications enabled.",
+      "toastDisabled": "Notifications disabled.",
+      "toastError": "Failed to update notification settings."
+    },
     "profile": {
       "title": "My profile",
       "subtitle": "Some fields can only be changed by an administrator.",

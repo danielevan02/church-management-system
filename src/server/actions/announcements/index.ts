@@ -5,10 +5,16 @@ import { revalidatePath } from "next/cache";
 import { auth } from "@/lib/auth";
 import { requireRole } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
+import { sendPushToAllMembers } from "@/lib/push";
 import {
   announcementInputSchema,
   type AnnouncementInput,
 } from "@/lib/validation/announcement";
+
+function excerpt(text: string, max = 140): string {
+  const trimmed = text.trim().replace(/\s+/g, " ");
+  return trimmed.length <= max ? trimmed : `${trimmed.slice(0, max - 1)}…`;
+}
 
 export type AnnouncementActionResult<T = void> =
   | { ok: true; data: T }
@@ -43,16 +49,30 @@ export async function createAnnouncementAction(
   const data = parsed.data;
 
   try {
+    const publishedAt = data.publishedAt ?? new Date();
     const announcement = await prisma.announcement.create({
       data: {
         title: data.title,
         body: data.body,
-        publishedAt: data.publishedAt ?? new Date(),
+        publishedAt,
         createdById: session.user.id ?? null,
       },
       select: { id: true },
     });
     revalidate(announcement.id);
+
+    // Fan out push only when the announcement is live now. Scheduled ones
+    // (publishedAt in the future) will appear in the inbox at the right
+    // time but won't fire a push without a cron — accept that gap for now.
+    if (publishedAt.getTime() <= Date.now()) {
+      void sendPushToAllMembers({
+        title: data.title,
+        body: excerpt(data.body),
+        url: `/me/announcements`,
+        tag: `announcement:${announcement.id}`,
+      }).catch((e) => console.error("[announcement push fanout]", e));
+    }
+
     return { ok: true, data: { id: announcement.id } };
   } catch (e) {
     console.error("[createAnnouncement]", e);

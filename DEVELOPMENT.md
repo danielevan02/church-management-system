@@ -89,6 +89,7 @@ Sebelum merge PR ke main:
 - [ ] `pnpm build` lulus lokal
 - [ ] Kalau ada migration: file `prisma/migrations/<timestamp>_<name>/` di-commit (Vercel auto-apply pas build)
 - [ ] Translation keys baru ditambahin di **kedua** `messages/en.json` & `messages/id.json`
+- [ ] Kalau ubah `public/sw.js`: bump `CACHE_VERSION` supaya client install ulang service worker
 - [ ] Kalau ada fitur baru yg bisa di-toggle: tambah flag di `src/config/features.ts`
 - [ ] Test minimal di browser (tampilan utama, golden path)
 
@@ -152,6 +153,34 @@ Production (Vercel dashboard → Settings → Environment Variables):
 - Wajib ada `DATABASE_URL` (dari Neon)
 - Wajib ada `AUTH_SECRET` (generate via `openssl rand -base64 32`)
 - `NEXT_PUBLIC_*` untuk branding
+
+---
+
+## Push Notifications (VAPID)
+
+Push notif jemaat butuh VAPID key pair (gratis, disimpan di env). Generate sekali aja:
+
+```bash
+pnpm exec web-push generate-vapid-keys --json
+```
+
+Output:
+```json
+{"publicKey":"B...","privateKey":"..."}
+```
+
+Tambahin ke `.env` lokal **dan** ke Vercel env vars:
+
+```env
+NEXT_PUBLIC_VAPID_PUBLIC_KEY="B..."   # publicKey, exposed ke browser
+VAPID_PRIVATE_KEY="..."               # privateKey, server only
+VAPID_SUBJECT="mailto:admin@gereja.com"  # contact untuk push service
+```
+
+**Catatan**:
+- Kalau VAPID kosong, fitur push silent disabled — announcement tetap masuk inbox.
+- Re-generate VAPID = semua subscription jemaat invalid (mereka harus aktifkan ulang). Jangan re-generate kecuali kepepet.
+- Browser cuma kasih push kalau site di-akses via HTTPS (otomatis di Vercel) dan service worker ke-register (otomatis di `/me/*`).
 
 ---
 
