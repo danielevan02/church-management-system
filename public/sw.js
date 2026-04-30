@@ -5,7 +5,7 @@
 //   - Stale-while-revalidate for static assets (images, fonts, _next/static).
 //   - Bypass: API routes, auth flows, and admin pages — never cache those.
 
-const CACHE_VERSION = "v1";
+const CACHE_VERSION = "v2";
 const SHELL_CACHE = `chms-shell-${CACHE_VERSION}`;
 const ASSET_CACHE = `chms-assets-${CACHE_VERSION}`;
 const OFFLINE_URL = "/me/offline";
@@ -99,3 +99,55 @@ function isMemberPath(pathname) {
   // Match /me/* or /<locale>/me/* (we treat any 2-letter prefix as locale)
   return /^\/(?:[a-z]{2}\/)?me(?:\/|$)/.test(pathname);
 }
+
+// =====================================================================
+// Web Push
+// =====================================================================
+
+self.addEventListener("push", (event) => {
+  let payload = {};
+  try {
+    payload = event.data ? event.data.json() : {};
+  } catch {
+    payload = { title: event.data ? event.data.text() : "" };
+  }
+
+  const title = payload.title || "Pengumuman baru";
+  const options = {
+    body: payload.body || "",
+    icon: "/icon-192.png",
+    badge: "/icon-192.png",
+    tag: payload.tag || "announcement",
+    data: { url: payload.url || "/me/announcements" },
+    requireInteraction: false,
+  };
+
+  event.waitUntil(self.registration.showNotification(title, options));
+});
+
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+
+  const targetUrl = (event.notification.data && event.notification.data.url) || "/me/announcements";
+
+  event.waitUntil(
+    self.clients
+      .matchAll({ type: "window", includeUncontrolled: true })
+      .then((clientList) => {
+        // Try to focus an existing /me/* window and navigate it.
+        for (const client of clientList) {
+          const url = new URL(client.url);
+          if (isMemberPath(url.pathname) && "focus" in client) {
+            return client.focus().then((c) => {
+              if ("navigate" in c) return c.navigate(targetUrl);
+              return c;
+            });
+          }
+        }
+        // Otherwise open a new window.
+        if (self.clients.openWindow) {
+          return self.clients.openWindow(targetUrl);
+        }
+      }),
+  );
+});

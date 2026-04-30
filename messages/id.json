@@ -242,6 +242,20 @@
       "subtitle": "Berita & info terbaru dari gereja.",
       "empty": "Belum ada pengumuman."
     },
+    "push": {
+      "enableTitle": "Aktifkan notifikasi",
+      "enableDescription": "Dapatkan pengumuman gereja langsung di HP.",
+      "enable": "Aktifkan",
+      "disable": "Matikan",
+      "dismiss": "Tutup",
+      "deniedTitle": "Notifikasi diblokir",
+      "deniedDescription": "Aktifkan izin notifikasi dari pengaturan browser.",
+      "subscribedTitle": "Notifikasi aktif",
+      "subscribedDescription": "Anda akan menerima pemberitahuan pengumuman baru.",
+      "toastEnabled": "Notifikasi diaktifkan.",
+      "toastDisabled": "Notifikasi dinonaktifkan.",
+      "toastError": "Gagal mengubah pengaturan notifikasi."
+    },
     "profile": {
       "title": "Profil Saya",
       "subtitle": "Beberapa data hanya bisa diubah oleh pengurus.",

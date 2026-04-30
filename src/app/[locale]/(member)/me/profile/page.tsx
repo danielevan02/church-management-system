@@ -4,6 +4,7 @@ import { notFound, redirect } from "next/navigation";
 
 import { ChangePinForm } from "./change-pin-form";
 import { ProfileEditForm } from "./profile-edit-form";
+import { PushUnsubscribeRow } from "@/components/member/push-banner";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -108,6 +109,8 @@ export default async function MemberProfilePage() {
           <ChangePinForm />
         </CardContent>
       </Card>
+
+      <PushUnsubscribeRow />
     </div>
   );
 }
