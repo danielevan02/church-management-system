@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 
 import { auth } from "@/lib/auth";
+import { excerpt } from "@/lib/markdown";
 import { requireRole } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
 import { sendPushToAllMembers } from "@/lib/push";
@@ -10,11 +11,6 @@ import {
   announcementInputSchema,
   type AnnouncementInput,
 } from "@/lib/validation/announcement";
-
-function excerpt(text: string, max = 140): string {
-  const trimmed = text.trim().replace(/\s+/g, " ");
-  return trimmed.length <= max ? trimmed : `${trimmed.slice(0, max - 1)}…`;
-}
 
 export type AnnouncementActionResult<T = void> =
   | { ok: true; data: T }
@@ -68,7 +64,7 @@ export async function createAnnouncementAction(
       void sendPushToAllMembers({
         title: data.title,
         body: excerpt(data.body),
-        url: `/me/announcements`,
+        url: `/me/announcements/${announcement.id}`,
         tag: `announcement:${announcement.id}`,
       }).catch((e) => console.error("[announcement push fanout]", e));
     }

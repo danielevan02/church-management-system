@@ -13,12 +13,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { formatJakarta } from "@/lib/datetime";
 import { auth } from "@/lib/auth";
 import { Link } from "@/lib/i18n/navigation";
+import { stripMarkdown } from "@/lib/markdown";
 import { hasAtLeastRole } from "@/lib/permissions";
-import { listAnnouncements } from "@/server/queries/announcements";
 import { parsePageParam } from "@/server/queries/_pagination";
-import { formatJakarta } from "@/lib/datetime";
+import { listAnnouncements } from "@/server/queries/announcements";
 
 export default async function AnnouncementsListPage({
   searchParams,
@@ -81,7 +82,7 @@ export default async function AnnouncementsListPage({
                         {a.title}
                       </Link>
                       <p className="line-clamp-1 text-xs text-muted-foreground">
-                        {a.body}
+                        {stripMarkdown(a.body)}
                       </p>
                     </TableCell>
                     <TableCell className="text-sm tabular-nums">

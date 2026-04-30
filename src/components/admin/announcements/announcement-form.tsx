@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { DateTimePicker } from "@/components/shared/date-time-picker";
+import { WysiwygEditor } from "@/components/shared/wysiwyg-editor";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -18,7 +19,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { useRouter } from "@/lib/i18n/navigation";
 import {
   announcementInputSchema,
@@ -114,7 +114,10 @@ export function AnnouncementForm({
             <FormItem>
               <FormLabel>{t("fields.body")} *</FormLabel>
               <FormControl>
-                <Textarea rows={10} {...field} />
+                <WysiwygEditor
+                  value={field.value}
+                  onChange={field.onChange}
+                />
               </FormControl>
               <FormDescription>{t("fields.bodyHint")}</FormDescription>
               <FormMessage />
