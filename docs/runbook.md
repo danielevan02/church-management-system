@@ -286,6 +286,30 @@ Kalau salah satu fail, **investigasi sebelum closed pos**. Jangan tinggalkan dep
 
 ---
 
+## 9. Mengaktifkan Sentry (Sekali Setup)
+
+Project sudah ter-instrument dengan Sentry SDK. Tinggal aktifkan dengan langkah berikut:
+
+1. Daftar gratis di [sentry.io](https://sentry.io) → Create Project → pilih **Next.js**
+2. Salin **DSN** yang muncul di setup wizard
+3. Di Vercel project → Settings → Environment Variables, tambah:
+   ```
+   NEXT_PUBLIC_SENTRY_DSN=<paste-dsn>
+   ```
+4. (Opsional, untuk source map upload supaya stack trace prod readable)
+   ```
+   SENTRY_ORG=<your-org-slug>
+   SENTRY_PROJECT=<your-project-slug>
+   SENTRY_AUTH_TOKEN=<from-sentry-account-settings>
+   ```
+5. Redeploy
+
+**Verifikasi**: trigger error sengaja (mis. tambah `throw new Error("test")` di `src/app/[locale]/page.tsx`, deploy, buka homepage) — error harus muncul di Sentry dashboard dalam 30 detik.
+
+**Tanpa DSN**: SDK silently no-op. Tidak break dev / staging.
+
+---
+
 ## Hubungi Bantuan
 
 Kalau runbook ini tidak cover masalah Anda:
