@@ -4,8 +4,13 @@
 //   - Network-first for member-portal navigations, with offline-page fallback.
 //   - Stale-while-revalidate for static assets (images, fonts, _next/static).
 //   - Bypass: API routes, auth flows, and admin pages — never cache those.
+//
+// CACHE_VERSION below is stamped at build time by scripts/build-sw.cjs
+// with the git SHA, so every deploy invalidates old caches automatically.
+// During `pnpm dev` the same script runs via `predev`. The generated
+// `public/sw.js` is gitignored — this template is the source of truth.
 
-const CACHE_VERSION = "v3";
+const CACHE_VERSION = "__BUILD_VERSION__";
 const SHELL_CACHE = `chms-shell-${CACHE_VERSION}`;
 const ASSET_CACHE = `chms-assets-${CACHE_VERSION}`;
 const OFFLINE_URL = "/me/offline";

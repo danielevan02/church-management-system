@@ -457,7 +457,7 @@ Helpers (in `src/lib/permissions.ts`):
 - Soft-delete user-facing entities; hard-delete only ephemeral ones.
 - Add a `loading.tsx` next to every new `page.tsx` — match the eventual layout shape so there's no jarring shift.
 - Format dates with `formatJakarta()` (or other helpers in `src/lib/datetime.ts`), never raw `format()` from `date-fns` for time-of-day.
-- Bump `CACHE_VERSION` in `public/sw.js` when you change the service worker — otherwise existing PWA installs won't pick up the new code.
+- The service worker is generated from `public/sw.template.js` by `scripts/build-sw.cjs` on every `pnpm dev` / `pnpm build`. `CACHE_VERSION` is auto-stamped with the git SHA, so deploys invalidate old caches automatically. Don't edit `public/sw.js` directly — it's gitignored.
 
 ---
 
