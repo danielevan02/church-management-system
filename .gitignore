@@ -17,6 +17,10 @@
 /.next/
 /out/
 
+# Service worker is generated from public/sw.template.js by scripts/build-sw.cjs
+# with the git SHA stamped in as CACHE_VERSION on every dev/build. Don't commit.
+/public/sw.js
+
 # production
 /build
 

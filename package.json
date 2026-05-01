@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "node scripts/build-sw.cjs",
     "dev": "next dev --turbopack",
+    "prebuild": "node scripts/build-sw.cjs",
     "build": "prisma migrate deploy && prisma generate && next build --turbopack",
     "start": "next start",
     "lint": "eslint",

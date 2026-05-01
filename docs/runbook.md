@@ -183,18 +183,23 @@ Lewat Prisma Studio, cek tabel `push_subscriptions` — jumlah row > 0?
 **Symptom**: Sudah deploy, tapi member masih lihat UI lama / fitur baru tidak muncul.
 
 ### Cause
-Service worker cache tidak invalidated. Variabel `CACHE_VERSION` di `public/sw.js` tidak ter-bump.
+Service worker cache tidak invalidated. Pada deployment normal **ini sudah otomatis** — `scripts/build-sw.cjs` stamp `CACHE_VERSION` dengan git SHA tiap build, jadi cache key berubah setiap deploy.
 
-### Fix saat development
+Kalau masih stuck, kemungkinan: build-sw script gagal jalan, atau browser member belum check service worker baru (SW update tertunda kalau tab tertutup lama).
 
-Di `public/sw.js`:
+### Verifikasi build-sw jalan
+Setelah deploy, cek `https://your-domain.com/sw.js` di browser. Cari baris:
 ```js
-const CACHE_VERSION = "v3"; // ← naikkan setiap kali ubah SW
+const CACHE_VERSION = "abc1234"; // ← harus git SHA, BUKAN "__BUILD_VERSION__" atau "dev-..."
 ```
 
-Setiap kali ubah file `sw.js`, increment number ini, lalu deploy.
+Kalau yang tampil literal `__BUILD_VERSION__` → script `predev`/`prebuild` tidak jalan. Cek logs Vercel build.
 
-### Fix dari sisi member (kalau sudah terjadi)
+### Source of truth
+- **Source**: [`public/sw.template.js`](../public/sw.template.js) — committed
+- **Generated**: `public/sw.js` — gitignored, dibuat oleh `scripts/build-sw.cjs` saat `pnpm dev` / `pnpm build`
+
+### Fix dari sisi member (kalau update belum nyangkut juga)
 
 Member harus:
 1. Buka PWA → DevTools → Application → Service Workers → **Unregister**
