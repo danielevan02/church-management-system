@@ -14,6 +14,7 @@ Index untuk semua dokumentasi proyek. Pilih dokumen sesuai kebutuhan kamu:
 | Dokumen | Audiens | Isi |
 |---|---|---|
 | [`deployment.md`](./deployment.md) | Devops / yang men-deploy | Runbook deployment: Vercel+Neon, self-host Docker, post-deploy checklist, rotation, upgrade |
+| [`runbook.md`](./runbook.md) | Devops / yang on-call | Operasi pasca-deploy: backup/restore, admin lockout recovery, push troubleshooting, migrasi gagal |
 | [`customization.md`](./customization.md) | Devops / yang men-customize | Branding via env, asset replacement, PWA icons, feature flags, lokalisasi, data import |
 | [`../README.md`](../README.md) | Developer / kontributor | Overview proyek, tech stack, dev quick-start, common commands, project structure, conventions |
 | [`../CLAUDE.md`](../CLAUDE.md) | Developer / AI assistant | Konvensi proyek lengkap, do's & don'ts, arsitektur |

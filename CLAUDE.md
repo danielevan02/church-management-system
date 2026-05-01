@@ -325,13 +325,18 @@ pnpm db:studio                  # GUI for inspecting DB
 pnpm db:seed                    # Run seed (idempotent for initial admin)
 pnpm db:reset                   # ⚠️ DESTRUCTIVE: drop + recreate all tables (dev only)
 
-# Build & lint
+# Build & lint & test
 pnpm build                      # Production build (auto: prisma migrate deploy → generate → next build)
 pnpm lint                       # ESLint
 pnpm typecheck                  # tsc --noEmit
+pnpm test                       # Run unit tests (vitest)
+pnpm test:watch                 # Run tests in watch mode
 
 # Per-deployment branding
 pnpm icons                      # Regenerate PWA + push badge icons from scripts/source-logo.png
+
+# Emergency operations
+pnpm admin:reset-password --email <email> --password <new>  # See docs/runbook.md §2
 
 # Adding shadcn components
 pnpm dlx shadcn@latest add <component>
