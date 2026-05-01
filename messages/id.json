@@ -1211,15 +1211,23 @@
     "schedule": {
       "title": "Pelayanan",
       "subtitle": "{total} jadwal pelayanan akan datang.",
+      "rangeSubtitle": "{start} – {end} · {total} pelayanan",
       "manageTeams": "Tim",
       "newAssignment": "Jadwal Baru",
-      "empty": "Belum ada jadwal pelayanan.",
+      "empty": "Belum ada jadwal pelayanan untuk rentang ini.",
       "colDate": "Tanggal",
       "colTeam": "Tim",
       "colPosition": "Posisi",
       "colMember": "Pelayan",
       "colStatus": "Status",
       "colActions": "Aksi",
+      "weekHeader": "Minggu, {date}",
+      "totalAssignments": "{count} pelayanan",
+      "weekConflictCount": "{count} konflik mingguan",
+      "conflictBadge": "Konflik",
+      "prevQuarter": "3 Bulan Sebelumnya",
+      "nextQuarter": "3 Bulan Berikutnya",
+      "today": "Hari ini",
       "statusUpdatedToast": "Status diperbarui.",
       "deletedToast": "Jadwal dihapus.",
       "errorToast": "Aksi gagal.",
@@ -1293,7 +1301,14 @@
           "serviceDate": "Tanggal pelayanan",
           "status": "Status",
           "notes": "Catatan"
-        }
+        },
+        "conflict": {
+          "title": "Pelayan sudah dijadwalkan minggu ini",
+          "description": "{memberName} sudah ditugaskan di {teamName}{positionLabel} pada {date}. Lanjutkan menugaskan ke tim ini juga?",
+          "forceAssign": "Tetap tugaskan"
+        },
+        "alreadyScheduled": "Sudah dijadwalkan minggu ini ({count})",
+        "conflictHint": "Pelayan ini sudah di {teamName}{positionLabel} minggu ini."
       }
     }
   },
