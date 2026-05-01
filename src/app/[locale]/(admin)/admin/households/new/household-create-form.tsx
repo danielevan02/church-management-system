@@ -2,7 +2,7 @@
 
 import { HouseholdForm } from "@/components/admin/households/household-form";
 import { useRouter } from "@/lib/i18n/navigation";
-import { createHouseholdAction } from "@/server/actions/households";
+import { createHouseholdAction } from "@/server/actions/households/create";
 
 export function HouseholdCreateForm({
   submitLabel,

@@ -31,10 +31,15 @@ export type SignInPinResult =
       retryAfterS?: number;
     };
 
+/**
+ * Format check only — digits only, length 4–6. Doesn't compare against any
+ * stored PIN. Use to guard inputs before calling `hashPin` or `signInWithPin`.
+ */
 export function isValidPinFormat(pin: string): boolean {
   return /^\d+$/.test(pin) && pin.length >= PIN_MIN_LENGTH && pin.length <= PIN_MAX_LENGTH;
 }
 
+/** bcrypt-hash a PIN at cost 10. Stored on User.pinHash. */
 export async function hashPin(pin: string): Promise<string> {
   return bcrypt.hash(pin, 10);
 }
@@ -67,6 +72,20 @@ async function recordFailure(phone: string): Promise<void> {
   await prisma.pinAttempt.create({ data: { phone } });
 }
 
+/**
+ * Verify phone + PIN and produce a session-ready user payload.
+ *
+ * Throttling (lenient — designed for elderly users): after 10 failed attempts
+ * within 15 minutes for the same phone, the next failed verify returns
+ * THROTTLED with a 30-second `retryAfterS`. There is NO permanent lockout.
+ * Successful verify clears nothing — the window simply rolls forward.
+ *
+ * Possible failure reasons:
+ * - INVALID_CREDENTIALS: phone unknown, member soft-deleted, or PIN mismatch.
+ * - NO_PIN_SET: user exists but admin hasn't set an initial PIN yet.
+ * - ACCOUNT_INACTIVE: user.isActive = false.
+ * - THROTTLED: too many recent failures, see retryAfterS.
+ */
 export async function signInWithPin(
   rawPhone: string,
   pin: string,

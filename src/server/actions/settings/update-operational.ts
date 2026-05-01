@@ -12,13 +12,13 @@ import {
 } from "@/lib/validation/settings";
 import { writeAudit } from "@/server/audit";
 
-export type SettingsResult =
+export type UpdateOperationalSettingsResult =
   | { ok: true }
   | { ok: false; error: string; fieldErrors?: Record<string, string[]> };
 
 export async function updateOperationalSettingsAction(
   input: OperationalSettingsInput,
-): Promise<SettingsResult> {
+): Promise<UpdateOperationalSettingsResult> {
   const session = await auth();
   if (!session?.user) return { ok: false, error: "UNAUTHORIZED" };
   if (!hasAtLeastRole(session.user.role, "ADMIN")) {

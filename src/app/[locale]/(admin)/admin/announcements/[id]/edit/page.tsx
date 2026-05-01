@@ -9,7 +9,7 @@ import { auth } from "@/lib/auth";
 import { toJakartaInput } from "@/lib/datetime";
 import { Link } from "@/lib/i18n/navigation";
 import { hasAtLeastRole } from "@/lib/permissions";
-import { updateAnnouncementAction } from "@/server/actions/announcements";
+import { updateAnnouncementAction } from "@/server/actions/announcements/update";
 import { getAnnouncement } from "@/server/queries/announcements";
 
 import type { AnnouncementInput } from "@/lib/validation/announcement";

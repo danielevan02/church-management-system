@@ -20,7 +20,7 @@ import {
   passwordResetSchema,
   type PasswordResetInput,
 } from "@/lib/validation/users";
-import { resetPasswordAction } from "@/server/actions/users";
+import { resetPasswordAction } from "@/server/actions/users/reset-password";
 
 type FormValues = { password: string };
 

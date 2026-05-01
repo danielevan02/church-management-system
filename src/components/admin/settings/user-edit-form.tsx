@@ -31,7 +31,7 @@ import {
   type RoleInput,
   type UserEditInput,
 } from "@/lib/validation/users";
-import { updateUserAction } from "@/server/actions/users";
+import { updateUserAction } from "@/server/actions/users/update";
 
 type FormValues = {
   role: RoleInput;

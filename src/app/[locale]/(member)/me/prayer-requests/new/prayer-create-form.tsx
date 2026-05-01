@@ -2,7 +2,7 @@
 
 import { PrayerRequestForm } from "@/components/member/prayer-requests/prayer-request-form";
 import { useRouter } from "@/lib/i18n/navigation";
-import { submitMyPrayerRequestAction } from "@/server/actions/prayer-requests";
+import { submitMyPrayerRequestAction } from "@/server/actions/prayer-requests/submit-my";
 
 export function PrayerCreateForm({ submitLabel }: { submitLabel: string }) {
   const router = useRouter();

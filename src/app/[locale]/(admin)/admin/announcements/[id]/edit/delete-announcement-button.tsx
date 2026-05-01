@@ -16,7 +16,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useRouter } from "@/lib/i18n/navigation";
-import { deleteAnnouncementAction } from "@/server/actions/announcements";
+import { deleteAnnouncementAction } from "@/server/actions/announcements/delete";
 
 export function DeleteAnnouncementButton({ id }: { id: string }) {
   const t = useTranslations("announcements.delete");

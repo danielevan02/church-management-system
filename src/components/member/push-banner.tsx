@@ -6,10 +6,8 @@ import { useCallback, useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
-import {
-  subscribePushAction,
-  unsubscribePushAction,
-} from "@/server/actions/push";
+import { subscribePushAction } from "@/server/actions/push/subscribe";
+import { unsubscribePushAction } from "@/server/actions/push/unsubscribe";
 
 const VAPID_PUBLIC_KEY = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY ?? "";
 const DISMISSED_KEY = "chms.push.bannerDismissed";

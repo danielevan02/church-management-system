@@ -2,7 +2,7 @@
 
 import { HouseholdForm } from "@/components/admin/households/household-form";
 import { useRouter } from "@/lib/i18n/navigation";
-import { updateHouseholdAction } from "@/server/actions/households";
+import { updateHouseholdAction } from "@/server/actions/households/update";
 
 export function HouseholdEditForm({
   id,

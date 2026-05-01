@@ -6,7 +6,7 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { useRouter } from "@/lib/i18n/navigation";
-import { toggleUserActiveAction } from "@/server/actions/users";
+import { toggleUserActiveAction } from "@/server/actions/users/toggle-active";
 
 export function ToggleActiveButton({
   id,

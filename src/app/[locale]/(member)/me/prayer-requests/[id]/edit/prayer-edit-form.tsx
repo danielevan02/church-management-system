@@ -2,7 +2,7 @@
 
 import { PrayerRequestForm } from "@/components/member/prayer-requests/prayer-request-form";
 import { useRouter } from "@/lib/i18n/navigation";
-import { updateMyPrayerRequestAction } from "@/server/actions/prayer-requests";
+import { updateMyPrayerRequestAction } from "@/server/actions/prayer-requests/update-my";
 
 import type { ComponentProps } from "react";
 

@@ -21,7 +21,7 @@ import {
   operationalSettingsSchema,
   type OperationalSettingsInput,
 } from "@/lib/validation/settings";
-import { updateOperationalSettingsAction } from "@/server/actions/settings";
+import { updateOperationalSettingsAction } from "@/server/actions/settings/update-operational";
 
 type FormValues = {
   bankAccountHolder: string;

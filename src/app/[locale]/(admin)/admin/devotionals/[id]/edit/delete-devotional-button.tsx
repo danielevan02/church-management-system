@@ -16,7 +16,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useRouter } from "@/lib/i18n/navigation";
-import { deleteDevotionalAction } from "@/server/actions/devotionals";
+import { deleteDevotionalAction } from "@/server/actions/devotionals/delete";
 
 export function DeleteDevotionalButton({ id }: { id: string }) {
   const t = useTranslations("devotionals.delete");
