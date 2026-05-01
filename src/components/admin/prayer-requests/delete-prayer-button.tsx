@@ -7,7 +7,7 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { useRouter } from "@/lib/i18n/navigation";
-import { deletePrayerRequestAction } from "@/server/actions/prayer-requests";
+import { deletePrayerRequestAction } from "@/server/actions/prayer-requests/delete";
 
 export function DeletePrayerButton({
   id,

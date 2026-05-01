@@ -31,7 +31,7 @@ import {
   type RoleInput,
   type UserCreateInput,
 } from "@/lib/validation/users";
-import { createUserAction } from "@/server/actions/users";
+import { createUserAction } from "@/server/actions/users/create";
 
 type FormValues = {
   email: string;

@@ -6,7 +6,7 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { useRouter } from "@/lib/i18n/navigation";
-import { cancelMyPrayerRequestAction } from "@/server/actions/prayer-requests";
+import { cancelMyPrayerRequestAction } from "@/server/actions/prayer-requests/cancel-my";
 
 export function CancelMyPrayerButton({ id }: { id: string }) {
   const t = useTranslations("memberPortal.prayerRequests");

@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/select";
 import { useRouter } from "@/lib/i18n/navigation";
 import type { PrayerStatusInput } from "@/lib/validation/prayer-requests";
-import { updatePrayerStatusAction } from "@/server/actions/prayer-requests";
+import { updatePrayerStatusAction } from "@/server/actions/prayer-requests/update-status";
 
 const STATUSES: PrayerStatusInput[] = ["OPEN", "PRAYING", "ANSWERED", "ARCHIVED"];
 

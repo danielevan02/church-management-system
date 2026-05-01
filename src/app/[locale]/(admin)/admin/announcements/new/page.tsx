@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { auth } from "@/lib/auth";
 import { Link } from "@/lib/i18n/navigation";
 import { hasAtLeastRole } from "@/lib/permissions";
-import { createAnnouncementAction } from "@/server/actions/announcements";
+import { createAnnouncementAction } from "@/server/actions/announcements/create";
 
 export default async function NewAnnouncementPage() {
   const session = await auth();

@@ -6,7 +6,7 @@ import { useTransition } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
-import { removeMemberFromHouseholdAction } from "@/server/actions/households";
+import { removeMemberFromHouseholdAction } from "@/server/actions/households/remove-member";
 
 export function RemoveMemberButton({
   householdId,

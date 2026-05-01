@@ -9,7 +9,7 @@ import { auth } from "@/lib/auth";
 import { toJakartaInput } from "@/lib/datetime";
 import { Link } from "@/lib/i18n/navigation";
 import { hasAtLeastRole } from "@/lib/permissions";
-import { updateDevotionalAction } from "@/server/actions/devotionals";
+import { updateDevotionalAction } from "@/server/actions/devotionals/update";
 import { getDevotional } from "@/server/queries/devotionals";
 
 import type { DevotionalInput } from "@/lib/validation/devotional";

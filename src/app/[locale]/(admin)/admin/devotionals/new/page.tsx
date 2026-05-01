@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { auth } from "@/lib/auth";
 import { Link } from "@/lib/i18n/navigation";
 import { hasAtLeastRole } from "@/lib/permissions";
-import { createDevotionalAction } from "@/server/actions/devotionals";
+import { createDevotionalAction } from "@/server/actions/devotionals/create";
 
 export default async function NewDevotionalPage() {
   const session = await auth();

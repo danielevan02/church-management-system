@@ -17,7 +17,7 @@ import {
   HOUSEHOLD_ROLES,
   type HouseholdRole,
 } from "@/lib/validation/household";
-import { assignMemberToHouseholdAction } from "@/server/actions/households";
+import { assignMemberToHouseholdAction } from "@/server/actions/households/assign-member";
 
 type Candidate = { id: string; fullName: string; phone: string | null };
 
