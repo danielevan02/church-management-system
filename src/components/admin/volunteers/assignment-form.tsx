@@ -1,14 +1,25 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { format } from "date-fns";
+import { AlertTriangle } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { MemberPicker } from "@/components/admin/giving/member-picker";
 import { DatePicker } from "@/components/shared/date-picker";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -30,7 +41,14 @@ import {
   assignmentInputSchema,
   type AssignmentInput,
 } from "@/lib/validation/volunteer";
-import { createAssignmentAction } from "@/server/actions/volunteers/assignments";
+import {
+  createAssignmentAction,
+  type WeekConflict,
+} from "@/server/actions/volunteers/assignments";
+import {
+  getWeekAssignmentsAction,
+  type WeekAssignmentItem,
+} from "@/server/actions/volunteers/get-week-assignments";
 
 type FormValues = {
   teamId: string;
@@ -84,6 +102,11 @@ export function AssignmentForm({
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [pickedMemberName, setPickedMemberName] = useState<string | null>(null);
+  const [conflict, setConflict] = useState<{
+    info: WeekConflict;
+    pendingValues: FormValues;
+  } | null>(null);
+  const [weekBusy, setWeekBusy] = useState<WeekAssignmentItem[]>([]);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(assignmentInputSchema as never),
@@ -94,13 +117,38 @@ export function AssignmentForm({
   const teamId = form.watch("teamId");
   const team = teams.find((t) => t.id === teamId);
   const positions = team?.positions.filter((p) => p.isActive) ?? [];
+  const serviceDate = form.watch("serviceDate");
+  const memberId = form.watch("memberId");
 
-  function handleSubmit(values: FormValues) {
+  useEffect(() => {
+    if (!serviceDate) {
+      setWeekBusy([]);
+      return;
+    }
+    let cancelled = false;
+    getWeekAssignmentsAction(serviceDate).then((r) => {
+      if (cancelled) return;
+      setWeekBusy(r.ok ? r.data : []);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [serviceDate]);
+
+  const pickedMemberWeekConflict = memberId
+    ? weekBusy.find((b) => b.memberId === memberId)
+    : null;
+
+  function submit(values: FormValues, options?: { forceAssign?: boolean }) {
     startTransition(async () => {
-      const result = await createAssignmentAction(toInput(values));
+      const result = await createAssignmentAction(toInput(values), options);
       if (result.ok) {
         toast.success(t("savedToast"));
         router.push("/admin/volunteers");
+        return;
+      }
+      if (result.error === "WEEK_CONFLICT" && result.conflict) {
+        setConflict({ info: result.conflict, pendingValues: values });
         return;
       }
       if (result.fieldErrors) {
@@ -115,6 +163,17 @@ export function AssignmentForm({
       }
       toast.error(t("errorToast"));
     });
+  }
+
+  function handleSubmit(values: FormValues) {
+    submit(values);
+  }
+
+  function handleForceAssign() {
+    if (!conflict) return;
+    const values = conflict.pendingValues;
+    setConflict(null);
+    submit(values, { forceAssign: true });
   }
 
   return (
@@ -197,6 +256,19 @@ export function AssignmentForm({
                     }}
                   />
                 </FormControl>
+                {pickedMemberWeekConflict ? (
+                  <p className="flex items-start gap-1.5 text-xs text-amber-700 dark:text-amber-300">
+                    <AlertTriangle className="mt-0.5 h-3 w-3 shrink-0" />
+                    <span>
+                      {t("conflictHint", {
+                        teamName: pickedMemberWeekConflict.teamName,
+                        positionLabel: pickedMemberWeekConflict.positionName
+                          ? ` (${pickedMemberWeekConflict.positionName})`
+                          : "",
+                      })}
+                    </span>
+                  </p>
+                ) : null}
                 <FormMessage />
               </FormItem>
             )}
@@ -218,6 +290,28 @@ export function AssignmentForm({
               </FormItem>
             )}
           />
+          {weekBusy.length > 0 ? (
+            <div className="md:col-span-2 flex flex-col gap-2 rounded-md border bg-muted/40 p-3">
+              <p className="text-xs font-medium text-muted-foreground">
+                {t("alreadyScheduled", { count: weekBusy.length })}
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {weekBusy.map((b) => (
+                  <Badge
+                    key={b.id}
+                    variant="outline"
+                    className="text-[11px] font-normal"
+                  >
+                    <span className="font-medium">{b.memberName}</span>
+                    <span className="text-muted-foreground">
+                      &nbsp;·&nbsp;{b.teamName}
+                      {b.positionName ? ` (${b.positionName})` : ""}
+                    </span>
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          ) : null}
           <FormField
             control={form.control}
             name="status"
@@ -269,6 +363,51 @@ export function AssignmentForm({
           </Button>
         </div>
       </form>
+
+      <Dialog
+        open={conflict !== null}
+        onOpenChange={(open) => {
+          if (!open) setConflict(null);
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t("conflict.title")}</DialogTitle>
+            <DialogDescription>
+              {t("conflict.description", {
+                memberName: pickedMemberName ?? "—",
+                teamName: conflict?.info.existingTeamName ?? "",
+                positionLabel: conflict?.info.existingPositionName
+                  ? ` (${conflict.info.existingPositionName})`
+                  : "",
+                date: conflict?.info.existingServiceDate
+                  ? format(
+                      new Date(conflict.info.existingServiceDate),
+                      "EEEE, dd MMM yyyy",
+                    )
+                  : "",
+              })}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setConflict(null)}
+              disabled={pending}
+            >
+              {tCommon("cancel")}
+            </Button>
+            <Button
+              type="button"
+              onClick={handleForceAssign}
+              disabled={pending}
+            >
+              {t("conflict.forceAssign")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </Form>
   );
 }

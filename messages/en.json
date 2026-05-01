@@ -1211,15 +1211,23 @@
     "schedule": {
       "title": "Volunteers",
       "subtitle": "{total} upcoming assignments.",
+      "rangeSubtitle": "{start} – {end} · {total} assignments",
       "manageTeams": "Teams",
       "newAssignment": "New assignment",
-      "empty": "No upcoming assignments.",
+      "empty": "No assignments scheduled for this range.",
       "colDate": "Date",
       "colTeam": "Team",
       "colPosition": "Position",
       "colMember": "Volunteer",
       "colStatus": "Status",
       "colActions": "Actions",
+      "weekHeader": "Sunday, {date}",
+      "totalAssignments": "{count} assignments",
+      "weekConflictCount": "{count} weekly conflicts",
+      "conflictBadge": "Conflict",
+      "prevQuarter": "Previous 3 months",
+      "nextQuarter": "Next 3 months",
+      "today": "Today",
       "statusUpdatedToast": "Status updated.",
       "deletedToast": "Assignment removed.",
       "errorToast": "Action failed.",
@@ -1293,7 +1301,14 @@
           "serviceDate": "Service date",
           "status": "Status",
           "notes": "Notes"
-        }
+        },
+        "conflict": {
+          "title": "Volunteer already scheduled this week",
+          "description": "{memberName} is already assigned to {teamName}{positionLabel} on {date}. Assign to this team as well?",
+          "forceAssign": "Assign anyway"
+        },
+        "alreadyScheduled": "Already scheduled this week ({count})",
+        "conflictHint": "This volunteer is already in {teamName}{positionLabel} this week."
       }
     }
   },

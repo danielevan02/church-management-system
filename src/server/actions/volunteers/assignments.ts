@@ -1,5 +1,6 @@
 "use server";
 
+import { endOfWeek, startOfWeek } from "date-fns";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
@@ -12,12 +13,29 @@ import {
   type AssignmentInput,
 } from "@/lib/validation/volunteer";
 
+/**
+ * Week conflict info returned to the client when a member is already
+ * assigned to a different team in the same Mon–Sun week. The admin can
+ * acknowledge and retry with `forceAssign: true` to override.
+ */
+export type WeekConflict = {
+  existingTeamName: string;
+  existingPositionName: string | null;
+  existingServiceDate: string;
+};
+
 export type AssignmentResult =
   | { ok: true; data: { id: string } }
-  | { ok: false; error: string; fieldErrors?: Record<string, string[]> };
+  | {
+      ok: false;
+      error: string;
+      fieldErrors?: Record<string, string[]>;
+      conflict?: WeekConflict;
+    };
 
 export async function createAssignmentAction(
   input: AssignmentInput,
+  options?: { forceAssign?: boolean },
 ): Promise<AssignmentResult> {
   const session = await auth();
   if (!session?.user) return { ok: false, error: "UNAUTHORIZED" };
@@ -36,6 +54,38 @@ export async function createAssignmentAction(
     };
   }
   const data = parsed.data;
+
+  // Week-conflict check. A member can only serve in one team per week.
+  // Week is Mon–Sun (Indonesian convention). DECLINED assignments don't count
+  // since the member already opted out. Admin can override via forceAssign.
+  if (!options?.forceAssign) {
+    const weekStart = startOfWeek(data.serviceDate, { weekStartsOn: 1 });
+    const weekEnd = endOfWeek(data.serviceDate, { weekStartsOn: 1 });
+    const existing = await prisma.volunteerAssignment.findFirst({
+      where: {
+        memberId: data.memberId,
+        serviceDate: { gte: weekStart, lte: weekEnd },
+        status: { not: "DECLINED" },
+      },
+      select: {
+        serviceDate: true,
+        team: { select: { name: true } },
+        position: { select: { name: true } },
+      },
+    });
+    if (existing) {
+      return {
+        ok: false,
+        error: "WEEK_CONFLICT",
+        conflict: {
+          existingTeamName: existing.team.name,
+          existingPositionName: existing.position?.name ?? null,
+          existingServiceDate: existing.serviceDate.toISOString(),
+        },
+      };
+    }
+  }
+
   try {
     const record = await prisma.volunteerAssignment.create({
       data: {
