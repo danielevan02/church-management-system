@@ -672,9 +672,14 @@
       "subtitle": "{total} households registered.",
       "newButton": "Add household",
       "empty": "No households created yet.",
+      "emptySearch": "No households match your search.",
       "colName": "Name",
       "colAddress": "Address",
       "colMembers": "Members"
+    },
+    "filters": {
+      "searchPlaceholder": "Search by name or address…",
+      "clear": "Clear search"
     },
     "new": {
       "title": "Add household",

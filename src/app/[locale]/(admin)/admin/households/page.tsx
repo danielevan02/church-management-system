@@ -1,6 +1,7 @@
 import { Plus } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
+import { HouseholdFilters } from "@/components/admin/households/household-filters";
 import { Pagination } from "@/components/shared/pagination";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,8 +23,11 @@ export default async function HouseholdsListPage({
 }) {
   const sp = await searchParams;
   const page = parsePageParam(sp.page);
+  const qRaw = sp.q;
+  const q = Array.isArray(qRaw) ? qRaw[0] : qRaw;
   const t = await getTranslations("households");
-  const result = await listHouseholds({ page });
+  const result = await listHouseholds({ page, q });
+  const hasQuery = Boolean(q?.trim());
 
   return (
     <div className="flex flex-col gap-6">
@@ -44,9 +48,13 @@ export default async function HouseholdsListPage({
         </Button>
       </header>
 
+      <HouseholdFilters />
+
       {result.total === 0 ? (
         <div className="rounded-md border border-dashed p-12 text-center">
-          <p className="text-sm text-muted-foreground">{t("list.empty")}</p>
+          <p className="text-sm text-muted-foreground">
+            {hasQuery ? t("list.emptySearch") : t("list.empty")}
+          </p>
         </div>
       ) : (
         <div className="rounded-md border bg-background">

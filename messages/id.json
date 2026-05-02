@@ -672,9 +672,14 @@
       "subtitle": "{total} keluarga terdaftar.",
       "newButton": "Tambah Keluarga",
       "empty": "Belum ada keluarga yang dibuat.",
+      "emptySearch": "Tidak ada keluarga yang cocok dengan pencarian.",
       "colName": "Nama",
       "colAddress": "Alamat",
       "colMembers": "Jumlah anggota"
+    },
+    "filters": {
+      "searchPlaceholder": "Cari berdasarkan nama atau alamat…",
+      "clear": "Hapus pencarian"
     },
     "new": {
       "title": "Tambah Keluarga",
