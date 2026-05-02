@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const empty = z
   .string()
-  .optional()
+  .nullish()
   .transform((v) => (v == null || v.trim() === "" ? null : v.trim()));
 
 const requiredDate = z
@@ -15,7 +15,7 @@ const requiredDate = z
   .refine((v): v is Date => v instanceof Date, { message: "Tanggal tidak valid" });
 
 const optionalDate = z
-  .union([z.string(), z.date()])
+  .union([z.string(), z.date(), z.null()])
   .optional()
   .transform((v) => {
     if (v == null || v === "") return null;

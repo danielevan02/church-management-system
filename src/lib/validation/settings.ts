@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const empty = z
   .string()
-  .optional()
+  .nullish()
   .transform((v) => (v == null || v.trim() === "" ? "" : v.trim()));
 
 export const operationalSettingsSchema = z.object({

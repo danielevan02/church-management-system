@@ -4,7 +4,7 @@ import { normalizePhone } from "@/lib/phone";
 
 const optionalPhone = z
   .string()
-  .optional()
+  .nullish()
   .transform((v) => {
     if (v == null || v.trim() === "") return null;
     return normalizePhone(v);

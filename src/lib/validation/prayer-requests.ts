@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const optionalString = z
   .string()
-  .optional()
+  .nullish()
   .transform((v) => (v == null || v.trim() === "" ? null : v.trim()));
 
 export const prayerStatusEnum = z.enum([
