@@ -108,10 +108,11 @@ export function QrScanner({ onScan, cooldownMs = 2000, paused = false }: Props) 
 
   return (
     <div className="overflow-hidden rounded-md border bg-black">
-      {/* Mirror the video preview. html5-qrcode renders its <video> inside
-          the container; we target it via id selector with !important to
-          beat any inline transform the library may set. */}
-      <style>{`#${elementId} video { transform: scaleX(-1) !important; }`}</style>
+      {/* Force the video preview to render unmirrored. We use the rear
+          ("environment") camera — mirroring is correct only for selfie/front
+          cameras. The !important beats any inline transform html5-qrcode
+          applies on its own. */}
+      <style>{`#${elementId} video { transform: none !important; }`}</style>
       <div
         id={elementId}
         ref={containerRef}
