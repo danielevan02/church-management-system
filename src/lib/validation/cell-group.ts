@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { optionalEnum } from "@/lib/validation/_enum";
+
 const empty = z
   .string()
   .optional()
@@ -14,11 +16,15 @@ const requiredDate = z
   })
   .refine((v): v is Date => v instanceof Date, { message: "Tanggal tidak valid" });
 
-export const meetingDayEnum = z
-  .enum(["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"])
-  .nullable()
-  .optional()
-  .transform((v) => v ?? null);
+export const meetingDayEnum = optionalEnum([
+  "MON",
+  "TUE",
+  "WED",
+  "THU",
+  "FRI",
+  "SAT",
+  "SUN",
+]);
 
 export const cellGroupInputSchema = z.object({
   name: z.string().min(1, "Wajib").max(120),

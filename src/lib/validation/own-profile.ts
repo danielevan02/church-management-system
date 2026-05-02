@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { normalizePhone } from "@/lib/phone";
+import { optionalEnum } from "@/lib/validation/_enum";
 
 const empty = z
   .string()
@@ -25,11 +26,7 @@ export const ownProfileSchema = z.object({
   city: empty,
   province: empty,
   postalCode: empty,
-  maritalStatus: z
-    .enum(["SINGLE", "MARRIED", "DIVORCED", "WIDOWED"])
-    .nullable()
-    .optional()
-    .transform((v) => v ?? null),
+  maritalStatus: optionalEnum(["SINGLE", "MARRIED", "DIVORCED", "WIDOWED"]),
 });
 
 export type OwnProfileInput = z.input<typeof ownProfileSchema>;

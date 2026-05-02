@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { normalizePhone } from "@/lib/phone";
+import { optionalEnum } from "@/lib/validation/_enum";
 
 const empty = z
   .string()
@@ -68,11 +69,7 @@ export const memberInputSchema = z.object({
   phone: requiredPhone,
   gender: z.enum(["MALE", "FEMALE"]),
   birthDate: requiredDate,
-  maritalStatus: z
-    .enum(["SINGLE", "MARRIED", "DIVORCED", "WIDOWED"])
-    .nullable()
-    .optional()
-    .transform((v) => v ?? null),
+  maritalStatus: optionalEnum(["SINGLE", "MARRIED", "DIVORCED", "WIDOWED"]),
   status: z
     .enum(["ACTIVE", "INACTIVE", "TRANSFERRED", "DECEASED", "VISITOR"])
     .default("ACTIVE"),
