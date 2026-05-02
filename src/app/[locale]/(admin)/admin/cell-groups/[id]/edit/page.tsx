@@ -5,6 +5,7 @@ import { notFound, redirect } from "next/navigation";
 import { CellGroupEditForm } from "./cell-group-edit-form";
 import { Button } from "@/components/ui/button";
 import { auth } from "@/lib/auth";
+import { toJakartaInput } from "@/lib/datetime";
 import { Link } from "@/lib/i18n/navigation";
 import { canAccessCellGroup, hasAtLeastRole } from "@/lib/permissions";
 import {
@@ -66,17 +67,11 @@ export default async function EditCellGroupPage({
           description: group.description ?? "",
           leaderId: group.leader.id,
           parentGroupId: group.parentGroup?.id ?? "",
-          meetingDay: (group.meetingDay ?? "") as
-            | ""
-            | "MON"
-            | "TUE"
-            | "WED"
-            | "THU"
-            | "FRI"
-            | "SAT"
-            | "SUN",
-          meetingTime: group.meetingTime ?? "",
-          meetingLocation: group.meetingLocation ?? "",
+          nextMeetingAt: group.nextMeetingAt
+            ? toJakartaInput(group.nextMeetingAt)
+            : "",
+          nextMeetingLocation: group.nextMeetingLocation ?? "",
+          nextMeetingNotes: group.nextMeetingNotes ?? "",
           isActive: group.isActive,
         }}
       />

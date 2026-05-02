@@ -63,9 +63,8 @@ export default async function MemberDashboardPage() {
                 select: {
                   id: true,
                   name: true,
-                  meetingDay: true,
-                  meetingTime: true,
-                  meetingLocation: true,
+                  nextMeetingAt: true,
+                  nextMeetingLocation: true,
                 },
               },
             },
@@ -382,13 +381,14 @@ export default async function MemberDashboardPage() {
                       <UsersRound className="h-4 w-4 text-muted-foreground" />
                       {cellGroup.name}
                     </span>
-                    {cellGroup.meetingDay || cellGroup.meetingTime ? (
+                    {cellGroup.nextMeetingAt ? (
                       <span className="text-xs text-muted-foreground">
-                        {[cellGroup.meetingDay, cellGroup.meetingTime]
-                          .filter(Boolean)
-                          .join(" · ")}
-                        {cellGroup.meetingLocation
-                          ? ` · ${cellGroup.meetingLocation}`
+                        {formatJakarta(
+                          cellGroup.nextMeetingAt,
+                          "EEE dd MMM · HH:mm",
+                        )}
+                        {cellGroup.nextMeetingLocation
+                          ? ` · ${cellGroup.nextMeetingLocation}`
                           : ""}
                       </span>
                     ) : null}

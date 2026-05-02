@@ -401,9 +401,8 @@
       "title": "My cell group",
       "subtitle": "Schedule and members of your cell group.",
       "empty": "You're not in any cell group yet. Talk to your leader if you'd like to join one.",
-      "dayLabel": "Day",
-      "timeLabel": "Time",
-      "locationLabel": "Location",
+      "nextMeetingLabel": "Next meeting",
+      "nextMeetingEmpty": "No upcoming meeting scheduled yet.",
       "leaderLabel": "Leader",
       "memberSince": "Member since {date}",
       "membersTitle": "Members ({count})"
@@ -1078,15 +1077,6 @@
     }
   },
   "cellGroups": {
-    "day": {
-      "MON": "Monday",
-      "TUE": "Tuesday",
-      "WED": "Wednesday",
-      "THU": "Thursday",
-      "FRI": "Friday",
-      "SAT": "Saturday",
-      "SUN": "Sunday"
-    },
     "list": {
       "title": "Cell groups",
       "subtitle": "{total} groups.",
@@ -1095,7 +1085,9 @@
       "leaderLabel": "Leader",
       "membersAbbr": "members",
       "statusActive": "Active",
-      "statusInactive": "Inactive"
+      "statusInactive": "Inactive",
+      "nextMeetingPrefix": "Next:",
+      "noNextMeeting": "No meeting scheduled"
     },
     "new": {
       "title": "New cell group",
@@ -1116,11 +1108,21 @@
         "leaderPlaceholder": "Pick a leader…",
         "parentGroup": "Parent group",
         "noParent": "— No parent —",
-        "meetingDay": "Meeting day",
-        "meetingTime": "Meeting time",
-        "meetingLocation": "Meeting location",
+        "nextMeetingAt": "Next meeting date",
+        "nextMeetingLocation": "Next meeting location",
+        "nextMeetingNotes": "Meeting notes",
         "isActive": "Active"
       }
+    },
+    "nextMeeting": {
+      "dateLabel": "Date & time",
+      "locationLabel": "Location",
+      "notesLabel": "Notes",
+      "saveButton": "Save schedule",
+      "clearButton": "Clear",
+      "savedToast": "Schedule saved.",
+      "clearedToast": "Schedule cleared.",
+      "errorToast": "Save failed."
     },
     "detail": {
       "backToList": "All groups",
@@ -1129,12 +1131,11 @@
       "statusActive": "Active",
       "statusInactive": "Inactive",
       "parentLabel": "Parent",
-      "scheduleTitle": "Schedule",
+      "nextMeetingTitle": "Next meeting",
+      "nextMeetingDescription": "Set when this group will meet next. Members will see it in their portal.",
+      "nextMeetingEmpty": "No upcoming meeting scheduled.",
       "leaderTitle": "Leader",
       "childGroupsTitle": "Child groups",
-      "dayLabel": "Day",
-      "timeLabel": "Time",
-      "locationLabel": "Location",
       "membersTitle": "Members",
       "membersDescription": "{count} active members.",
       "membersEmpty": "No members yet.",

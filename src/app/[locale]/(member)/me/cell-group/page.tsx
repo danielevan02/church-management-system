@@ -11,6 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { auth } from "@/lib/auth";
+import { formatJakarta } from "@/lib/datetime";
 import { getCellGroupsForMember } from "@/server/queries/cell-groups";
 
 export default async function MemberCellGroupPage() {
@@ -20,7 +21,6 @@ export default async function MemberCellGroupPage() {
   if (!memberId) redirect("/me/dashboard");
 
   const t = await getTranslations("memberPortal.cellGroup");
-  const tDay = await getTranslations("cellGroups.day");
 
   const memberships = await getCellGroupsForMember(memberId);
 
@@ -48,23 +48,34 @@ export default async function MemberCellGroupPage() {
                 ) : null}
               </CardHeader>
               <CardContent className="space-y-3 text-sm">
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-                  <Field
-                    label={t("dayLabel")}
-                    value={
-                      cellGroup.meetingDay
-                        ? tDay(cellGroup.meetingDay as never)
-                        : "—"
-                    }
-                  />
-                  <Field
-                    label={t("timeLabel")}
-                    value={cellGroup.meetingTime ?? "—"}
-                  />
-                  <Field
-                    label={t("locationLabel")}
-                    value={cellGroup.meetingLocation ?? "—"}
-                  />
+                <div className="rounded-md border bg-muted/30 p-3">
+                  <div className="text-xs text-muted-foreground">
+                    {t("nextMeetingLabel")}
+                  </div>
+                  {cellGroup.nextMeetingAt ? (
+                    <>
+                      <div className="font-medium">
+                        {formatJakarta(
+                          cellGroup.nextMeetingAt,
+                          "EEEE, d MMM yyyy · HH:mm",
+                        )}
+                      </div>
+                      {cellGroup.nextMeetingLocation ? (
+                        <div className="text-sm text-muted-foreground">
+                          {cellGroup.nextMeetingLocation}
+                        </div>
+                      ) : null}
+                      {cellGroup.nextMeetingNotes ? (
+                        <div className="mt-1 text-xs whitespace-pre-wrap">
+                          {cellGroup.nextMeetingNotes}
+                        </div>
+                      ) : null}
+                    </>
+                  ) : (
+                    <div className="text-sm italic text-muted-foreground">
+                      {t("nextMeetingEmpty")}
+                    </div>
+                  )}
                 </div>
                 <div className="flex items-center gap-3 rounded-md border p-3">
                   <Avatar className="h-10 w-10">
@@ -129,15 +140,6 @@ export default async function MemberCellGroupPage() {
           </div>
         ))
       )}
-    </div>
-  );
-}
-
-function Field({ label, value }: { label: string; value: React.ReactNode }) {
-  return (
-    <div className="rounded-md border p-3">
-      <div className="text-xs text-muted-foreground">{label}</div>
-      <div className="font-medium">{value}</div>
     </div>
   );
 }

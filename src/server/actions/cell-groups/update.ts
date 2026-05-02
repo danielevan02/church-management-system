@@ -71,9 +71,9 @@ export async function updateCellGroupAction(
         description: data.description,
         leaderId: data.leaderId,
         parentGroupId: data.parentGroupId,
-        meetingDay: data.meetingDay,
-        meetingTime: data.meetingTime,
-        meetingLocation: data.meetingLocation,
+        nextMeetingAt: data.nextMeetingAt,
+        nextMeetingLocation: data.nextMeetingLocation,
+        nextMeetingNotes: data.nextMeetingNotes,
         isActive: data.isActive,
       },
     });

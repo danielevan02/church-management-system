@@ -204,9 +204,9 @@ model CellGroup {
   description     String?
   leader          Member  @relation("CellGroupLeader", fields: [leaderId], references: [id])
   leaderId        String
-  meetingDay      String?
-  meetingTime     String?
-  meetingLocation String?
+  nextMeetingAt       DateTime?
+  nextMeetingLocation String?
+  nextMeetingNotes    String?
 
   parentGroup   CellGroup?  @relation("CellGroupHierarchy", fields: [parentGroupId], references: [id])
   parentGroupId String?

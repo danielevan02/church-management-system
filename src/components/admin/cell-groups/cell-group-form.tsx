@@ -36,9 +36,9 @@ type FormValues = {
   description: string;
   leaderId: string;
   parentGroupId: string;
-  meetingDay: "" | "MON" | "TUE" | "WED" | "THU" | "FRI" | "SAT" | "SUN";
-  meetingTime: string;
-  meetingLocation: string;
+  nextMeetingAt: string;
+  nextMeetingLocation: string;
+  nextMeetingNotes: string;
   isActive: boolean;
 };
 
@@ -49,9 +49,9 @@ const emptyDefaults: FormValues = {
   description: "",
   leaderId: "",
   parentGroupId: "",
-  meetingDay: "",
-  meetingTime: "",
-  meetingLocation: "",
+  nextMeetingAt: "",
+  nextMeetingLocation: "",
+  nextMeetingNotes: "",
   isActive: true,
 };
 
@@ -65,9 +65,9 @@ function toCellGroupInput(values: FormValues): CellGroupInput {
     description: values.description,
     leaderId: values.leaderId,
     parentGroupId: values.parentGroupId,
-    meetingDay: values.meetingDay === "" ? null : values.meetingDay,
-    meetingTime: values.meetingTime,
-    meetingLocation: values.meetingLocation,
+    nextMeetingAt: values.nextMeetingAt === "" ? null : values.nextMeetingAt,
+    nextMeetingLocation: values.nextMeetingLocation,
+    nextMeetingNotes: values.nextMeetingNotes,
     isActive: values.isActive,
   };
 }
@@ -95,7 +95,6 @@ export function CellGroupForm({
   onSuccess,
 }: Props) {
   const t = useTranslations("cellGroups.form");
-  const tDay = useTranslations("cellGroups.day");
   const tCommon = useTranslations("common");
   const router = useRouter();
   const [pending, startTransition] = useTransition();
@@ -204,46 +203,12 @@ export function CellGroupForm({
 
           <FormField
             control={form.control}
-            name="meetingDay"
+            name="nextMeetingAt"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t("fields.meetingDay")}</FormLabel>
-                <Select
-                  onValueChange={(v) => field.onChange(v === NONE ? "" : v)}
-                  value={field.value === "" ? NONE : field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value={NONE}>—</SelectItem>
-                    <SelectItem value="MON">{tDay("MON")}</SelectItem>
-                    <SelectItem value="TUE">{tDay("TUE")}</SelectItem>
-                    <SelectItem value="WED">{tDay("WED")}</SelectItem>
-                    <SelectItem value="THU">{tDay("THU")}</SelectItem>
-                    <SelectItem value="FRI">{tDay("FRI")}</SelectItem>
-                    <SelectItem value="SAT">{tDay("SAT")}</SelectItem>
-                    <SelectItem value="SUN">{tDay("SUN")}</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="meetingTime"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("fields.meetingTime")}</FormLabel>
+                <FormLabel>{t("fields.nextMeetingAt")}</FormLabel>
                 <FormControl>
-                  <Input
-                    type="time"
-                    {...field}
-                    placeholder="19:00"
-                  />
+                  <Input type="datetime-local" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -251,12 +216,25 @@ export function CellGroupForm({
           />
           <FormField
             control={form.control}
-            name="meetingLocation"
+            name="nextMeetingLocation"
             render={({ field }) => (
-              <FormItem className="md:col-span-2">
-                <FormLabel>{t("fields.meetingLocation")}</FormLabel>
+              <FormItem>
+                <FormLabel>{t("fields.nextMeetingLocation")}</FormLabel>
                 <FormControl>
                   <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="nextMeetingNotes"
+            render={({ field }) => (
+              <FormItem className="md:col-span-2">
+                <FormLabel>{t("fields.nextMeetingNotes")}</FormLabel>
+                <FormControl>
+                  <Textarea {...field} rows={2} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

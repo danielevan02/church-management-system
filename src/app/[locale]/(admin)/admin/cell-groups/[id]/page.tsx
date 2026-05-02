@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { notFound, redirect } from "next/navigation";
 
 import { AssignCellGroupMemberForm } from "@/components/admin/cell-groups/assign-member-form";
+import { NextMeetingForm } from "@/components/admin/cell-groups/next-meeting-form";
 import { RemoveCellGroupMemberButton } from "@/components/admin/cell-groups/remove-member-button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -16,6 +17,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { auth } from "@/lib/auth";
+import { formatJakarta, toJakartaInput } from "@/lib/datetime";
 import { Link } from "@/lib/i18n/navigation";
 import { canAccessCellGroup } from "@/lib/permissions";
 import {
@@ -48,7 +50,6 @@ export default async function CellGroupDetailPage({
   const reports = await getCellGroupReports(id, 10);
 
   const t = await getTranslations("cellGroups.detail");
-  const tDay = await getTranslations("cellGroups.day");
 
   return (
     <div className="flex flex-col gap-6">
@@ -103,25 +104,44 @@ export default async function CellGroupDetailPage({
       </header>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <Card>
+        <Card className="lg:col-span-2">
           <CardHeader>
-            <CardTitle>{t("scheduleTitle")}</CardTitle>
+            <CardTitle>{t("nextMeetingTitle")}</CardTitle>
+            <CardDescription>{t("nextMeetingDescription")}</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-2 text-sm">
-            <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">{t("dayLabel")}</span>
-              <span className="font-medium">
-                {group.meetingDay ? tDay(group.meetingDay as never) : "—"}
-              </span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">{t("timeLabel")}</span>
-              <span className="font-medium">{group.meetingTime ?? "—"}</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">{t("locationLabel")}</span>
-              <span className="font-medium">{group.meetingLocation ?? "—"}</span>
-            </div>
+          <CardContent className="space-y-3 text-sm">
+            {group.nextMeetingAt ? (
+              <div className="rounded-md border bg-muted/30 p-3 text-sm">
+                <div className="font-medium">
+                  {formatJakarta(group.nextMeetingAt, "EEEE, d MMM yyyy · HH:mm")}
+                </div>
+                {group.nextMeetingLocation ? (
+                  <div className="text-muted-foreground">
+                    {group.nextMeetingLocation}
+                  </div>
+                ) : null}
+                {group.nextMeetingNotes ? (
+                  <div className="mt-1 text-xs whitespace-pre-wrap">
+                    {group.nextMeetingNotes}
+                  </div>
+                ) : null}
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground italic">
+                {t("nextMeetingEmpty")}
+              </p>
+            )}
+            <NextMeetingForm
+              cellGroupId={id}
+              hasExisting={Boolean(group.nextMeetingAt)}
+              initialValues={{
+                nextMeetingAt: group.nextMeetingAt
+                  ? toJakartaInput(group.nextMeetingAt)
+                  : "",
+                nextMeetingLocation: group.nextMeetingLocation ?? "",
+                nextMeetingNotes: group.nextMeetingNotes ?? "",
+              }}
+            />
           </CardContent>
         </Card>
 
