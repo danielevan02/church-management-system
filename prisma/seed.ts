@@ -52,8 +52,8 @@ async function main() {
   });
 
   await prisma.user.upsert({
-    where: { phone: samplePhone },
-    update: { pinHash: samplePinHash },
+    where: { memberId: sampleMember.id },
+    update: { pinHash: samplePinHash, phone: samplePhone },
     create: {
       phone: samplePhone,
       pinHash: samplePinHash,

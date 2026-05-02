@@ -321,6 +321,7 @@
           "invalidCurrent": "Current PIN is wrong.",
           "mismatch": "New PIN confirmation does not match.",
           "sameAsCurrent": "New PIN must be different from the current PIN.",
+          "pinCollision": "This PIN is already used by another account on the same phone. Pick a different PIN.",
           "internal": "Something went wrong. Please try again."
         }
       }
@@ -651,6 +652,7 @@
           "invalidFormat": "PIN must be 4–6 digits.",
           "mismatch": "PIN confirmation does not match.",
           "noPhone": "This member has no phone number.",
+          "pinCollision": "This PIN is already used by another account on the same phone. Pick a different PIN.",
           "forbidden": "You don't have permission to do this.",
           "internal": "Something went wrong. Please try again."
         }

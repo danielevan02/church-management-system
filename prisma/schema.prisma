@@ -31,7 +31,11 @@ model User {
   emailVerified DateTime?
   passwordHash  String?
   pinHash       String?
-  phone         String?   @unique
+  // Phone is NOT unique — multiple member accounts can share the same
+  // number (e.g. an elderly member uses their child's HP). Each account
+  // is distinguished by its PIN; PIN-collision check enforced in
+  // src/lib/pin.ts so two users on the same phone can't have the same PIN.
+  phone         String?
   phoneVerified DateTime?
   role          Role      @default(MEMBER)
   member        Member?   @relation(fields: [memberId], references: [id])
@@ -48,6 +52,7 @@ model User {
   devotionals       Devotional[]
   pushSubscriptions PushSubscription[]
 
+  @@index([phone])
   @@map("users")
 }
 

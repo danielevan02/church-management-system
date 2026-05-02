@@ -16,7 +16,16 @@ const schema = z.object({
 
 export type SetMemberPinResult =
   | { ok: true }
-  | { ok: false; error: "UNAUTHORIZED" | "FORBIDDEN" | "VALIDATION_FAILED" | "NO_PHONE" | "INTERNAL_ERROR" };
+  | {
+      ok: false;
+      error:
+        | "UNAUTHORIZED"
+        | "FORBIDDEN"
+        | "VALIDATION_FAILED"
+        | "NO_PHONE"
+        | "PIN_COLLISION"
+        | "INTERNAL_ERROR";
+    };
 
 export async function setMemberPinAction(
   memberId: string,
@@ -37,6 +46,8 @@ export async function setMemberPinAction(
     const result = await setMemberPin(parsed.data.memberId, parsed.data.pin);
     if (!result.ok) {
       if (result.reason === "NO_PHONE") return { ok: false, error: "NO_PHONE" };
+      if (result.reason === "PIN_COLLISION")
+        return { ok: false, error: "PIN_COLLISION" };
       return { ok: false, error: "INTERNAL_ERROR" };
     }
     revalidatePath(`/admin/members/${memberId}`);

@@ -321,6 +321,7 @@
           "invalidCurrent": "PIN saat ini salah.",
           "mismatch": "Konfirmasi PIN baru tidak cocok.",
           "sameAsCurrent": "PIN baru harus berbeda dari PIN saat ini.",
+          "pinCollision": "PIN ini sudah dipakai akun lain di nomor HP yang sama. Pilih PIN lain.",
           "internal": "Terjadi kesalahan. Coba lagi."
         }
       }
@@ -651,6 +652,7 @@
           "invalidFormat": "PIN harus 4–6 digit angka.",
           "mismatch": "Konfirmasi PIN tidak cocok.",
           "noPhone": "Jemaat ini belum punya nomor HP.",
+          "pinCollision": "PIN ini sudah dipakai akun lain di nomor HP yang sama. Pilih PIN lain.",
           "forbidden": "Anda tidak punya akses untuk ini.",
           "internal": "Terjadi kesalahan. Coba lagi."
         }
