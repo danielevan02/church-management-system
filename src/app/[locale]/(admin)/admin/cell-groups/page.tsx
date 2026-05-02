@@ -10,6 +10,7 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { auth } from "@/lib/auth";
+import { formatJakarta } from "@/lib/datetime";
 import { Link } from "@/lib/i18n/navigation";
 import { listCellGroups } from "@/server/queries/cell-groups";
 import { parsePageParam } from "@/server/queries/_pagination";
@@ -24,7 +25,6 @@ export default async function CellGroupsListPage({
   const session = await auth();
   const role = session?.user.role;
   const t = await getTranslations("cellGroups.list");
-  const tDay = await getTranslations("cellGroups.day");
 
   const result = await listCellGroups({
     scope:
@@ -94,11 +94,17 @@ export default async function CellGroupsListPage({
                   </span>
                 </div>
                 <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-                  {g.meetingDay ? (
-                    <span>{tDay(g.meetingDay as never)}</span>
+                  {g.nextMeetingAt ? (
+                    <span>
+                      {t("nextMeetingPrefix")}{" "}
+                      {formatJakarta(g.nextMeetingAt, "d MMM HH:mm")}
+                    </span>
+                  ) : (
+                    <span className="italic">{t("noNextMeeting")}</span>
+                  )}
+                  {g.nextMeetingLocation ? (
+                    <span>· {g.nextMeetingLocation}</span>
                   ) : null}
-                  {g.meetingTime ? <span>{g.meetingTime}</span> : null}
-                  {g.meetingLocation ? <span>· {g.meetingLocation}</span> : null}
                   <span className="ml-auto">
                     {g._count.members} {t("membersAbbr")}
                   </span>

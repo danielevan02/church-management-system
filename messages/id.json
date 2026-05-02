@@ -401,9 +401,8 @@
       "title": "Komsel Saya",
       "subtitle": "Jadwal dan anggota komsel Anda.",
       "empty": "Anda belum tergabung di komsel manapun. Hubungi pengurus jika ingin gabung.",
-      "dayLabel": "Hari",
-      "timeLabel": "Jam",
-      "locationLabel": "Lokasi",
+      "nextMeetingLabel": "Pertemuan berikutnya",
+      "nextMeetingEmpty": "Jadwal pertemuan berikutnya belum diset.",
       "leaderLabel": "Pemimpin",
       "memberSince": "Bergabung sejak {date}",
       "membersTitle": "Anggota ({count})"
@@ -1078,15 +1077,6 @@
     }
   },
   "cellGroups": {
-    "day": {
-      "MON": "Senin",
-      "TUE": "Selasa",
-      "WED": "Rabu",
-      "THU": "Kamis",
-      "FRI": "Jumat",
-      "SAT": "Sabtu",
-      "SUN": "Minggu"
-    },
     "list": {
       "title": "Komsel",
       "subtitle": "{total} komsel.",
@@ -1095,7 +1085,9 @@
       "leaderLabel": "Pemimpin",
       "membersAbbr": "anggota",
       "statusActive": "Aktif",
-      "statusInactive": "Nonaktif"
+      "statusInactive": "Nonaktif",
+      "nextMeetingPrefix": "Berikutnya:",
+      "noNextMeeting": "Jadwal belum diset"
     },
     "new": {
       "title": "Tambah Komsel",
@@ -1116,11 +1108,21 @@
         "leaderPlaceholder": "Pilih pemimpin…",
         "parentGroup": "Komsel induk",
         "noParent": "— Tidak ada —",
-        "meetingDay": "Hari pertemuan",
-        "meetingTime": "Jam pertemuan",
-        "meetingLocation": "Lokasi pertemuan",
+        "nextMeetingAt": "Tanggal pertemuan berikutnya",
+        "nextMeetingLocation": "Lokasi pertemuan berikutnya",
+        "nextMeetingNotes": "Catatan pertemuan",
         "isActive": "Aktif"
       }
+    },
+    "nextMeeting": {
+      "dateLabel": "Tanggal & jam",
+      "locationLabel": "Lokasi",
+      "notesLabel": "Catatan",
+      "saveButton": "Simpan jadwal",
+      "clearButton": "Kosongkan",
+      "savedToast": "Jadwal tersimpan.",
+      "clearedToast": "Jadwal dikosongkan.",
+      "errorToast": "Gagal menyimpan."
     },
     "detail": {
       "backToList": "Daftar komsel",
@@ -1129,12 +1131,11 @@
       "statusActive": "Aktif",
       "statusInactive": "Nonaktif",
       "parentLabel": "Induk",
-      "scheduleTitle": "Jadwal",
+      "nextMeetingTitle": "Pertemuan berikutnya",
+      "nextMeetingDescription": "Set kapan komsel ini akan bertemu lagi. Jemaat akan melihatnya di portal mereka.",
+      "nextMeetingEmpty": "Belum ada jadwal pertemuan berikutnya.",
       "leaderTitle": "Pemimpin",
       "childGroupsTitle": "Komsel cabang",
-      "dayLabel": "Hari",
-      "timeLabel": "Jam",
-      "locationLabel": "Lokasi",
       "membersTitle": "Anggota",
       "membersDescription": "{count} anggota aktif.",
       "membersEmpty": "Belum ada anggota.",
