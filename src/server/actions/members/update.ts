@@ -53,7 +53,6 @@ export async function updateMemberAction(
         city: data.city,
         province: data.province,
         postalCode: data.postalCode,
-        country: data.country ?? "ID",
         baptismDate: data.baptismDate,
         baptismChurch: data.baptismChurch,
         joinedAt: data.joinedAt,

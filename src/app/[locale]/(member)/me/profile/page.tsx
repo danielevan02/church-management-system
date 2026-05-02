@@ -93,7 +93,6 @@ export default async function MemberProfilePage() {
               city: member.city ?? "",
               province: member.province ?? "",
               postalCode: member.postalCode ?? "",
-              country: member.country ?? "ID",
               maritalStatus: member.maritalStatus ?? "",
             }}
           />

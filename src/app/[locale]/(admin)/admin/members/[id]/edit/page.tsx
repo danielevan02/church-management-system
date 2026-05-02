@@ -52,7 +52,6 @@ export default async function EditMemberPage({
           city: member.city ?? "",
           province: member.province ?? "",
           postalCode: member.postalCode ?? "",
-          country: member.country ?? "ID",
           baptismDate: toDateInput(member.baptismDate),
           baptismChurch: member.baptismChurch ?? "",
           joinedAt: toDateInput(member.joinedAt),

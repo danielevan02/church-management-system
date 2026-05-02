@@ -37,7 +37,6 @@ type FormValues = {
   city: string;
   province: string;
   postalCode: string;
-  country: string;
   maritalStatus: "" | "SINGLE" | "MARRIED" | "DIVORCED" | "WIDOWED";
 };
 
@@ -48,7 +47,6 @@ function toInput(values: FormValues): OwnProfileInput {
     city: values.city,
     province: values.province,
     postalCode: values.postalCode,
-    country: values.country,
     maritalStatus:
       values.maritalStatus === "" ? null : values.maritalStatus,
   };
@@ -158,19 +156,6 @@ export function ProfileEditForm({
             render={({ field }) => (
               <FormItem>
                 <FormLabel>{tForm("fields.postalCode")}</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="country"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{tForm("fields.country")}</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>

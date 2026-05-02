@@ -550,7 +550,6 @@
         "city": "City",
         "province": "Province",
         "postalCode": "Postal code",
-        "country": "Country",
         "joinedAt": "Joined date",
         "baptismDate": "Baptism date",
         "baptismChurch": "Baptism church",

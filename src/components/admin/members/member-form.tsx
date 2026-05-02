@@ -46,7 +46,6 @@ type FormValues = {
   city: string;
   province: string;
   postalCode: string;
-  country: string;
   baptismDate: string;
   baptismChurch: string;
   joinedAt: string;
@@ -67,7 +66,6 @@ const emptyDefaults: FormValues = {
   city: "",
   province: "",
   postalCode: "",
-  country: "ID",
   baptismDate: "",
   baptismChurch: "",
   joinedAt: "",
@@ -96,7 +94,6 @@ function toMemberInput(values: FormValues): MemberInput {
     city: values.city,
     province: values.province,
     postalCode: values.postalCode,
-    country: values.country,
     baptismDate: values.baptismDate,
     baptismChurch: values.baptismChurch,
     joinedAt: values.joinedAt,
@@ -399,19 +396,6 @@ export function MemberForm({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t("fields.postalCode")}</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="country"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("fields.country")}</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>

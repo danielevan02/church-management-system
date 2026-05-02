@@ -41,7 +41,6 @@ export async function updateOwnProfileAction(
         city: data.city,
         province: data.province,
         postalCode: data.postalCode,
-        country: data.country ?? "ID",
         maritalStatus: data.maritalStatus,
       },
     });
