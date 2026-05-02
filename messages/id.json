@@ -65,6 +65,14 @@
     "prayerRequestsAdmin": "Permintaan Doa",
     "myChildren": "Anak saya"
   },
+  "mobileNav": {
+    "ariaLabel": "Navigasi cepat",
+    "home": "Beranda",
+    "devotion": "Renungan",
+    "scan": "Scan",
+    "giving": "Berkat",
+    "profile": "Profil"
+  },
   "auth": {
     "shell": {
       "verse": "Marilah kepada-Ku, semua yang letih lesu dan berbeban berat, Aku akan memberi kelegaan kepadamu.",

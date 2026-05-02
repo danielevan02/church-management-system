@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from "next";
 import { InstallPrompt } from "@/components/member/install-prompt";
 import { MemberHeader } from "@/components/member/member-header";
 import { MemberSidebar } from "@/components/member/member-sidebar";
+import { MobileBottomNav } from "@/components/member/mobile-bottom-nav";
 import { PushBanner } from "@/components/member/push-banner";
 import { PwaRegister } from "@/components/member/pwa-register";
 import { SidebarAutoCloseMobile } from "@/components/shared/sidebar-autoclose-mobile";
@@ -50,7 +51,7 @@ export default async function MemberLayout({
         <MemberSidebar member={member} variant="inset" />
         <SidebarInset className="min-w-0">
           <MemberHeader />
-          <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-4 overflow-x-hidden p-4 sm:p-6 lg:p-8">
+          <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-4 overflow-x-hidden p-4 pb-24 sm:p-6 md:pb-6 lg:p-8">
             <InstallPrompt />
             <PushBanner />
             {children}
@@ -58,6 +59,7 @@ export default async function MemberLayout({
         </SidebarInset>
         <SidebarAutoCloseMobile />
       </SidebarProvider>
+      <MobileBottomNav memberId={session.user.memberId} />
       <PwaRegister />
     </>
   );
