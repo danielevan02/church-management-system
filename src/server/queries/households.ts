@@ -4,12 +4,23 @@ import { prisma } from "@/lib/prisma";
 
 import { clampPage, paginate } from "./_pagination";
 
+import type { Prisma } from "@prisma/client";
+
 export async function listHouseholds(opts?: {
   page?: number;
   pageSize?: number;
+  q?: string;
 }) {
   const { page, pageSize, skip, take } = clampPage(opts ?? {});
-  const where = { deletedAt: null };
+
+  const where: Prisma.HouseholdWhereInput = { deletedAt: null };
+  const q = opts?.q?.trim();
+  if (q) {
+    where.OR = [
+      { name: { contains: q, mode: "insensitive" } },
+      { address: { contains: q, mode: "insensitive" } },
+    ];
+  }
 
   const [items, total] = await Promise.all([
     prisma.household.findMany({
