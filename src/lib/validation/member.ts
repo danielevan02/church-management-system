@@ -4,12 +4,12 @@ import { normalizePhone } from "@/lib/phone";
 
 const empty = z
   .string()
-  .optional()
+  .nullish()
   .transform((v) => (v == null || v.trim() === "" ? null : v.trim()));
 
 const optionalEmail = z
   .string()
-  .optional()
+  .nullish()
   .transform((v) => {
     if (v == null || v.trim() === "") return null;
     return v.trim();
@@ -19,13 +19,14 @@ const optionalEmail = z
     { message: "Email tidak valid" },
   );
 
-const optionalPhone = z
+const requiredPhone = z
   .string()
-  .optional()
+  .nullish()
   .transform((v) => {
     if (v == null || v.trim() === "") return null;
     return normalizePhone(v);
   })
+  .refine((v): v is string => v != null, { message: "Wajib diisi" })
   .refine(
     (v) => v == null || /^\+[1-9]\d{6,14}$/.test(v),
     { message: "Nomor telepon tidak valid" },
@@ -45,14 +46,28 @@ const optionalDate = z
     { message: "Tanggal tidak valid" },
   );
 
+const requiredDate = z
+  .union([z.string(), z.date()])
+  .transform((v) => {
+    if (v instanceof Date) return v;
+    if (v == null || v === "") return null;
+    const d = new Date(v);
+    return Number.isNaN(d.getTime()) ? null : d;
+  })
+  .refine((v): v is Date => v instanceof Date, { message: "Wajib diisi" })
+  .refine(
+    (v) => v == null || (v.getFullYear() >= 1900 && v <= new Date()),
+    { message: "Tanggal tidak valid" },
+  );
+
 export const memberInputSchema = z.object({
   firstName: z.string().min(1, "Wajib").max(80),
   lastName: empty,
   nickname: empty,
   email: optionalEmail,
-  phone: optionalPhone,
+  phone: requiredPhone,
   gender: z.enum(["MALE", "FEMALE"]),
-  birthDate: optionalDate,
+  birthDate: requiredDate,
   maritalStatus: z
     .enum(["SINGLE", "MARRIED", "DIVORCED", "WIDOWED"])
     .nullable()
@@ -65,7 +80,6 @@ export const memberInputSchema = z.object({
   city: empty,
   province: empty,
   postalCode: empty,
-  country: empty,
   baptismDate: optionalDate,
   baptismChurch: empty,
   joinedAt: optionalDate,

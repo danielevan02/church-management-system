@@ -4,12 +4,12 @@ import { normalizePhone } from "@/lib/phone";
 
 const empty = z
   .string()
-  .optional()
+  .nullish()
   .transform((v) => (v == null || v.trim() === "" ? null : v.trim()));
 
 const optionalPhone = z
   .string()
-  .optional()
+  .nullish()
   .transform((v) => {
     if (v == null || v.trim() === "") return null;
     return normalizePhone(v);
@@ -25,7 +25,6 @@ export const ownProfileSchema = z.object({
   city: empty,
   province: empty,
   postalCode: empty,
-  country: empty,
   maritalStatus: z
     .enum(["SINGLE", "MARRIED", "DIVORCED", "WIDOWED"])
     .nullable()
