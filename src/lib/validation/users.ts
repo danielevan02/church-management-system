@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const empty = z
   .string()
-  .optional()
+  .nullish()
   .transform((v) => (v == null || v.trim() === "" ? null : v.trim()));
 
 export const roleEnum = z.enum([

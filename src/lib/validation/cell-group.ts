@@ -4,7 +4,7 @@ import { optionalEnum } from "@/lib/validation/_enum";
 
 const empty = z
   .string()
-  .optional()
+  .nullish()
   .transform((v) => (v == null || v.trim() === "" ? null : v.trim()));
 
 const requiredDate = z
