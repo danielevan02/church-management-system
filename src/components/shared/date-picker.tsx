@@ -30,6 +30,24 @@ type Props = {
 
 const VALUE_FORMAT = "yyyy-MM-dd";
 
+/**
+ * Default year range when fromDate/toDate aren't provided. Wide enough to
+ * cover birthdays, baptism dates (decades back) AND future event dates.
+ */
+const DEFAULT_YEARS_BACK = 100;
+const DEFAULT_YEARS_FORWARD = 5;
+
+function defaultStartMonth(): Date {
+  const d = new Date();
+  d.setFullYear(d.getFullYear() - DEFAULT_YEARS_BACK, 0, 1);
+  return d;
+}
+function defaultEndMonth(): Date {
+  const d = new Date();
+  d.setFullYear(d.getFullYear() + DEFAULT_YEARS_FORWARD, 11, 31);
+  return d;
+}
+
 export function DatePicker({
   value,
   onChange,
@@ -108,6 +126,10 @@ export function DatePicker({
           mode="single"
           selected={parsed ?? undefined}
           onSelect={onSelect}
+          captionLayout="dropdown"
+          startMonth={fromDate ?? defaultStartMonth()}
+          endMonth={toDate ?? defaultEndMonth()}
+          defaultMonth={parsed ?? undefined}
           disabled={(date) => {
             if (fromDate && date < startOfDay(fromDate)) return true;
             if (toDate && date > endOfDay(toDate)) return true;
