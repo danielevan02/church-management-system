@@ -681,6 +681,14 @@
       "searchPlaceholder": "Search by name or address…",
       "clear": "Clear search"
     },
+    "delete": {
+      "button": "Delete",
+      "confirmTitle": "Delete this household?",
+      "confirmDescription": "The household will be deleted. Data can still be restored by an admin.",
+      "confirmDescriptionWithMembers": "{count} members will be unassigned from this household, then it will be deleted. Data can still be restored by an admin.",
+      "deletedToast": "Household deleted.",
+      "errorToast": "Failed to delete."
+    },
     "new": {
       "title": "Add household",
       "submit": "Save"

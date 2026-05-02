@@ -681,6 +681,14 @@
       "searchPlaceholder": "Cari berdasarkan nama atau alamat…",
       "clear": "Hapus pencarian"
     },
+    "delete": {
+      "button": "Hapus",
+      "confirmTitle": "Hapus keluarga ini?",
+      "confirmDescription": "Keluarga akan dihapus. Data masih bisa dipulihkan oleh admin.",
+      "confirmDescriptionWithMembers": "{count} anggota akan dilepas dari keluarga ini, lalu keluarga akan dihapus. Data masih bisa dipulihkan oleh admin.",
+      "deletedToast": "Keluarga dihapus.",
+      "errorToast": "Gagal menghapus."
+    },
     "new": {
       "title": "Tambah Keluarga",
       "submit": "Simpan"

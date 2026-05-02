@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
 import { AssignMemberForm } from "./assign-member-form";
+import { DeleteHouseholdButton } from "./delete-household-button";
 import { RemoveMemberButton } from "./remove-member-button";
 import { Button } from "@/components/ui/button";
 import {
@@ -58,12 +59,18 @@ export default async function HouseholdDetailPage({
             {household.address ?? t("noAddress")}
           </p>
         </div>
-        <Button asChild variant="outline">
-          <Link href={`/admin/households/${id}/edit`}>
-            <Pencil className="h-4 w-4" />
-            {t("edit")}
-          </Link>
-        </Button>
+        <div className="flex flex-wrap items-center gap-2">
+          <Button asChild variant="outline">
+            <Link href={`/admin/households/${id}/edit`}>
+              <Pencil className="h-4 w-4" />
+              {t("edit")}
+            </Link>
+          </Button>
+          <DeleteHouseholdButton
+            id={id}
+            memberCount={household.members.length}
+          />
+        </div>
       </header>
 
       <Card>
