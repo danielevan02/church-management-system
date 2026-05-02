@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { optionalEnum } from "@/lib/validation/_enum";
+
 const empty = z
   .string()
   .optional()
@@ -15,7 +17,7 @@ export type HouseholdRole = (typeof HOUSEHOLD_ROLES)[number];
 
 export const assignMemberSchema = z.object({
   memberId: z.string().min(1),
-  householdRole: z.enum(HOUSEHOLD_ROLES).nullable().optional(),
+  householdRole: optionalEnum(HOUSEHOLD_ROLES),
 });
 
 export type HouseholdInput = z.infer<typeof householdInputSchema>;
