@@ -66,6 +66,9 @@ export function SetPinDialog({ memberId, hasExistingPin, hasPhone }: Props) {
         case "NO_PHONE":
           setError(t("errors.noPhone"));
           break;
+        case "PIN_COLLISION":
+          setError(t("errors.pinCollision"));
+          break;
         case "FORBIDDEN":
         case "UNAUTHORIZED":
           setError(t("errors.forbidden"));

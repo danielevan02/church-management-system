@@ -57,6 +57,9 @@ export function ChangePinForm() {
         case "VALIDATION_FAILED":
           setError(t("errors.invalidFormat"));
           break;
+        case "PIN_COLLISION":
+          setError(t("errors.pinCollision"));
+          break;
         default:
           setError(t("errors.internal"));
       }

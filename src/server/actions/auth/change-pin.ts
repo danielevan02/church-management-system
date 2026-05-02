@@ -27,6 +27,7 @@ export type ChangePinResult =
         | "UNAUTHORIZED"
         | "VALIDATION_FAILED"
         | "INVALID_CURRENT"
+        | "PIN_COLLISION"
         | "INTERNAL_ERROR";
     };
 
@@ -49,6 +50,8 @@ export async function changePinAction(
     if (!result.ok) {
       if (result.reason === "INVALID_CURRENT")
         return { ok: false, error: "INVALID_CURRENT" };
+      if (result.reason === "PIN_COLLISION")
+        return { ok: false, error: "PIN_COLLISION" };
       return { ok: false, error: "INTERNAL_ERROR" };
     }
     return { ok: true };
