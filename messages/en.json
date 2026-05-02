@@ -65,6 +65,14 @@
     "prayerRequestsAdmin": "Prayer requests",
     "myChildren": "My children"
   },
+  "mobileNav": {
+    "ariaLabel": "Quick navigation",
+    "home": "Home",
+    "devotion": "Devotion",
+    "scan": "Scan",
+    "giving": "Give",
+    "profile": "Profile"
+  },
   "auth": {
     "shell": {
       "verse": "Come to me, all you who are weary and burdened, and I will give you rest.",
