@@ -124,8 +124,8 @@
       "badge": "Portal Jemaat",
       "verse": "Aku bersukacita ketika dikatakan kepadaku: 'Mari kita pergi ke rumah TUHAN'.",
       "verseRef": "Mazmur 122:1",
-      "primaryCta": "Masuk Jemaat",
-      "secondaryCta": "Masuk Pengurus"
+      "primaryCta": "Masuk",
+      "staffSignIn": "Pengurus"
     }
   },
   "dashboard": {

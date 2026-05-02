@@ -124,8 +124,8 @@
       "badge": "Member portal",
       "verse": "I rejoiced with those who said to me, \"Let us go to the house of the Lord.\"",
       "verseRef": "Psalm 122:1",
-      "primaryCta": "Member sign in",
-      "secondaryCta": "Staff sign in"
+      "primaryCta": "Sign in",
+      "staffSignIn": "Staff"
     }
   },
   "dashboard": {

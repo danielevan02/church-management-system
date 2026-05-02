@@ -1,4 +1,4 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ShieldCheck } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 
@@ -47,7 +47,16 @@ export default async function Home() {
             {church.shortName}
           </span>
         </div>
-        <LocaleSwitcherStatic />
+        <div className="flex items-center gap-3">
+          <LocaleSwitcherStatic />
+          <Link
+            href="/auth/sign-in"
+            className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
+          >
+            <ShieldCheck className="h-3.5 w-3.5" aria-hidden />
+            <span>{t("hero.staffSignIn")}</span>
+          </Link>
+        </div>
       </header>
 
       <section className="flex flex-1 items-center justify-center px-6 py-12 sm:py-16">
@@ -82,17 +91,12 @@ export default async function Home() {
             }}
           />
 
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <Button asChild size="lg" className="px-7">
-              <Link href="/auth/member">
-                {t("hero.primaryCta")}
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </Button>
-            <Button asChild size="lg" variant="outline" className="px-7">
-              <Link href="/auth/sign-in">{t("hero.secondaryCta")}</Link>
-            </Button>
-          </div>
+          <Button asChild size="lg" className="px-8">
+            <Link href="/auth/member">
+              {t("hero.primaryCta")}
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </Button>
         </div>
       </section>
 
