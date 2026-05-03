@@ -161,7 +161,6 @@ model Member {
 
   cellGroupMembers       CellGroupMember[]
   attendances            AttendanceRecord[]
-  givings                GivingRecord[]
   eventRsvps             EventRsvp[]
   childCheckIns          ChildCheckIn[]          @relation("Child")
   guardianOf             ChildCheckIn[]          @relation("Guardian")
@@ -277,7 +276,8 @@ model Service {
   notes       String?
   isActive    Boolean     @default(true)
 
-  attendances AttendanceRecord[]
+  attendances  AttendanceRecord[]
+  givingEntries GivingEntry[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -316,22 +316,6 @@ enum FundCategory {
   OTHER
 }
 
-enum GivingMethod {
-  QRIS
-  BANK_TRANSFER
-  EWALLET
-  CASH
-  CARD
-  OTHER
-}
-
-enum GivingStatus {
-  PENDING
-  COMPLETED
-  FAILED
-  REFUNDED
-}
-
 model Fund {
   id          String       @id @default(cuid())
   name        String
@@ -339,7 +323,7 @@ model Fund {
   description String?
   isActive    Boolean      @default(true)
 
-  givings GivingRecord[]
+  entries GivingEntry[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -347,33 +331,30 @@ model Fund {
   @@map("funds")
 }
 
-model GivingRecord {
-  id             String       @id @default(cuid())
-  fund           Fund         @relation(fields: [fundId], references: [id])
-  fundId         String
-  member         Member?      @relation(fields: [memberId], references: [id])
-  memberId       String?
-  giverName      String?
-  giverPhone     String?
-  giverEmail     String?
-  amount         Decimal      @db.Decimal(14, 2)
-  currency       String       @default("IDR")
-  method         GivingMethod
-  status         GivingStatus @default(PENDING)
-  externalRef    String?      @unique
-  paymentDetails Json?
-  receivedAt     DateTime     @default(now())
-  notes          String?
+// Aggregate giving ledger. Most rows = total persembahan for one
+// (service, fund) pair recorded by the bookkeeper after the service.
+// Standalone givings (perpuluhan via transfer on Wednesday, building-fund
+// envelope dropped off on a non-Sunday, etc.) are recorded with no
+// service link and just a receivedAt date. No per-giver tracking.
+model GivingEntry {
+  id         String   @id @default(cuid())
+  service    Service? @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+  serviceId  String?
+  fund       Fund     @relation(fields: [fundId], references: [id], onDelete: Restrict)
+  fundId     String
+  amount     Decimal  @db.Decimal(14, 2)
+  receivedAt DateTime
+  notes      String?
 
   recordedBy String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([memberId])
+  @@index([serviceId])
+  @@index([fundId])
   @@index([receivedAt])
-  @@index([status])
-  @@map("giving_records")
+  @@map("giving_entries")
 }
 
 // =====================================================================

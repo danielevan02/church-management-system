@@ -20,7 +20,7 @@ export async function deleteFundAction(id: string): Promise<DeleteFundResult> {
   }
 
   try {
-    const count = await prisma.givingRecord.count({ where: { fundId: id } });
+    const count = await prisma.givingEntry.count({ where: { fundId: id } });
     if (count > 0) {
       return { ok: false, error: "HAS_GIVING" };
     }

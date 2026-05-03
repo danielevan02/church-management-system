@@ -175,20 +175,17 @@ export async function getGivingSnapshot() {
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
 
   const [ytd, lastYear, thisMonth] = await Promise.all([
-    prisma.givingRecord.aggregate({
-      where: { status: "COMPLETED", receivedAt: { gte: yearStart } },
+    prisma.givingEntry.aggregate({
+      where: { receivedAt: { gte: yearStart } },
       _sum: { amount: true },
       _count: { _all: true },
     }),
-    prisma.givingRecord.aggregate({
-      where: {
-        status: "COMPLETED",
-        receivedAt: { gte: lastYearStart, lte: lastYearEnd },
-      },
+    prisma.givingEntry.aggregate({
+      where: { receivedAt: { gte: lastYearStart, lte: lastYearEnd } },
       _sum: { amount: true },
     }),
-    prisma.givingRecord.aggregate({
-      where: { status: "COMPLETED", receivedAt: { gte: monthStart } },
+    prisma.givingEntry.aggregate({
+      where: { receivedAt: { gte: monthStart } },
       _sum: { amount: true },
       _count: { _all: true },
     }),

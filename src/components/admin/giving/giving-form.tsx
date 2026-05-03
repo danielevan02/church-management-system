@@ -2,11 +2,10 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
-import { useState, useTransition } from "react";
+import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { MemberPicker } from "./member-picker";
 import { DatePicker } from "@/components/shared/date-picker";
 import { Button } from "@/components/ui/button";
 import {
@@ -27,76 +26,67 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { formatJakarta, toJakartaDateInput } from "@/lib/datetime";
 import { useRouter } from "@/lib/i18n/navigation";
 import {
-  givingInputSchema,
-  type GivingInput,
+  givingEntryInputSchema,
+  type GivingEntryInput,
 } from "@/lib/validation/giving";
 
+const NONE_SERVICE = "_none";
+
+const RUPIAH_FORMATTER = new Intl.NumberFormat("id-ID", {
+  maximumFractionDigits: 0,
+});
+
+function formatAmountDisplay(raw: string): string {
+  if (!raw) return "";
+  const n = Number(raw);
+  if (!Number.isFinite(n)) return raw;
+  return `Rp ${RUPIAH_FORMATTER.format(n)}`;
+}
+
 type FundOption = { id: string; name: string };
+type ServiceOption = {
+  id: string;
+  name: string;
+  startsAt: Date;
+};
 
 type FormValues = {
+  serviceId: string;
   fundId: string;
-  memberId: string;
-  giverName: string;
-  giverPhone: string;
-  giverEmail: string;
   amount: string;
-  method:
-    | "QRIS"
-    | "BANK_TRANSFER"
-    | "EWALLET"
-    | "CASH"
-    | "CARD"
-    | "OTHER";
-  status: "PENDING" | "COMPLETED" | "FAILED" | "REFUNDED";
   receivedAt: string;
-  externalRef: string;
   notes: string;
 };
 
 function emptyDefaults(): FormValues {
   return {
+    serviceId: NONE_SERVICE,
     fundId: "",
-    memberId: "",
-    giverName: "",
-    giverPhone: "",
-    giverEmail: "",
     amount: "",
-    method: "BANK_TRANSFER",
-    status: "COMPLETED",
-    receivedAt: new Date().toISOString().slice(0, 10),
-    externalRef: "",
+    receivedAt: toJakartaDateInput(new Date()),
     notes: "",
   };
 }
 
-function toFormValues(initial: Partial<FormValues> | undefined): FormValues {
-  return { ...emptyDefaults(), ...initial };
-}
-
-function toGivingInput(values: FormValues): GivingInput {
+function toGivingInput(values: FormValues): GivingEntryInput {
   return {
+    serviceId: values.serviceId === NONE_SERVICE ? "" : values.serviceId,
     fundId: values.fundId,
-    memberId: values.memberId === "" ? undefined : values.memberId,
-    giverName: values.giverName,
-    giverPhone: values.giverPhone,
-    giverEmail: values.giverEmail,
     amount: values.amount,
-    method: values.method,
-    status: values.status,
     receivedAt: values.receivedAt,
-    externalRef: values.externalRef,
     notes: values.notes,
   };
 }
 
 type Props = {
   funds: FundOption[];
+  services: ServiceOption[];
   initialValues?: Partial<FormValues>;
-  initialMemberName?: string | null;
   submitLabel: string;
-  onSubmit: (input: GivingInput) => Promise<
+  onSubmit: (input: GivingEntryInput) => Promise<
     | { ok: true; data?: { id: string } }
     | { ok: false; error: string; fieldErrors?: Record<string, string[]> }
   >;
@@ -105,27 +95,32 @@ type Props = {
 
 export function GivingForm({
   funds,
+  services,
   initialValues,
-  initialMemberName,
   submitLabel,
   onSubmit,
   onSuccess,
 }: Props) {
   const t = useTranslations("giving.record.form");
-  const tMethod = useTranslations("giving.method");
-  const tStatus = useTranslations("giving.status");
   const tCommon = useTranslations("common");
   const router = useRouter();
   const [pending, startTransition] = useTransition();
-  const [pickedMemberName, setPickedMemberName] = useState<string | null>(
-    initialMemberName ?? null,
-  );
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(givingInputSchema as never),
-    defaultValues: toFormValues(initialValues),
+    resolver: zodResolver(givingEntryInputSchema as never),
+    defaultValues: { ...emptyDefaults(), ...initialValues },
     mode: "onSubmit",
   });
+
+  function handleServiceChange(value: string) {
+    form.setValue("serviceId", value);
+    if (value !== NONE_SERVICE) {
+      const service = services.find((s) => s.id === value);
+      if (service) {
+        form.setValue("receivedAt", toJakartaDateInput(service.startsAt));
+      }
+    }
+  }
 
   function handleSubmit(values: FormValues) {
     startTransition(async () => {
@@ -155,6 +150,55 @@ export function GivingForm({
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <FormField
             control={form.control}
+            name="serviceId"
+            render={({ field }) => (
+              <FormItem className="md:col-span-2">
+                <FormLabel>{t("fields.service")}</FormLabel>
+                <Select onValueChange={handleServiceChange} value={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder={t("fields.servicePlaceholder")} />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value={NONE_SERVICE}>
+                      {t("fields.serviceNone")}
+                    </SelectItem>
+                    {services.map((s) => (
+                      <SelectItem key={s.id} value={s.id}>
+                        {s.name} ·{" "}
+                        {formatJakarta(s.startsAt, "dd MMM yyyy HH:mm")}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormDescription>{t("fields.serviceHelp")}</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="receivedAt"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("fields.receivedAt")} *</FormLabel>
+                <FormControl>
+                  <DatePicker
+                    value={field.value}
+                    onChange={(v) => field.onChange(v)}
+                    ariaLabel={t("fields.receivedAt")}
+                  />
+                </FormControl>
+                <FormDescription>{t("fields.receivedAtHelp")}</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
             name="fundId"
             render={({ field }) => (
               <FormItem>
@@ -177,6 +221,7 @@ export function GivingForm({
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
             name="amount"
@@ -186,8 +231,14 @@ export function GivingForm({
                 <FormControl>
                   <Input
                     inputMode="numeric"
-                    placeholder="100000"
-                    {...field}
+                    placeholder="Rp 2.500.000"
+                    value={formatAmountDisplay(field.value)}
+                    onChange={(e) =>
+                      field.onChange(e.target.value.replace(/\D/g, ""))
+                    }
+                    onBlur={field.onBlur}
+                    name={field.name}
+                    ref={field.ref}
                   />
                 </FormControl>
                 <FormDescription>{t("fields.amountHelp")}</FormDescription>
@@ -196,158 +247,6 @@ export function GivingForm({
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="memberId"
-            render={({ field }) => (
-              <FormItem className="md:col-span-2">
-                <FormLabel>{t("fields.member")}</FormLabel>
-                <FormControl>
-                  <MemberPicker
-                    value={field.value === "" ? null : field.value}
-                    initialName={pickedMemberName}
-                    placeholder={t("fields.memberPlaceholder")}
-                    onChange={(id, name) => {
-                      field.onChange(id ?? "");
-                      setPickedMemberName(name);
-                      if (id) {
-                        form.setValue("giverName", "");
-                      }
-                    }}
-                  />
-                </FormControl>
-                <FormDescription>{t("fields.memberHelp")}</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="giverName"
-            render={({ field }) => (
-              <FormItem className="md:col-span-2">
-                <FormLabel>{t("fields.giverName")}</FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    placeholder={t("fields.giverNamePlaceholder")}
-                  />
-                </FormControl>
-                <FormDescription>{t("fields.giverNameHelp")}</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="giverPhone"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("fields.giverPhone")}</FormLabel>
-                <FormControl>
-                  <Input {...field} placeholder="08xxxxxxxxxx" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="giverEmail"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("fields.giverEmail")}</FormLabel>
-                <FormControl>
-                  <Input type="email" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="method"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("fields.method")} *</FormLabel>
-                <Select onValueChange={field.onChange} value={field.value}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="BANK_TRANSFER">
-                      {tMethod("bankTransfer")}
-                    </SelectItem>
-                    <SelectItem value="QRIS">{tMethod("qris")}</SelectItem>
-                    <SelectItem value="EWALLET">{tMethod("ewallet")}</SelectItem>
-                    <SelectItem value="CASH">{tMethod("cash")}</SelectItem>
-                    <SelectItem value="CARD">{tMethod("card")}</SelectItem>
-                    <SelectItem value="OTHER">{tMethod("other")}</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="status"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("fields.status")}</FormLabel>
-                <Select onValueChange={field.onChange} value={field.value}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="COMPLETED">{tStatus("completed")}</SelectItem>
-                    <SelectItem value="PENDING">{tStatus("pending")}</SelectItem>
-                    <SelectItem value="FAILED">{tStatus("failed")}</SelectItem>
-                    <SelectItem value="REFUNDED">{tStatus("refunded")}</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="receivedAt"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("fields.receivedAt")} *</FormLabel>
-                <FormControl>
-                  <DatePicker
-                    value={field.value}
-                    onChange={field.onChange}
-                    ariaLabel={t("fields.receivedAt")}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="externalRef"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("fields.externalRef")}</FormLabel>
-                <FormControl>
-                  <Input {...field} placeholder="BCA-20251215-001" />
-                </FormControl>
-                <FormDescription>{t("fields.externalRefHelp")}</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
           <FormField
             control={form.control}
             name="notes"

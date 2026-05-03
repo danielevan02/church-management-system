@@ -15,12 +15,21 @@ import {
 
 const ALL = "_all";
 
+const SERVICE_TYPES: ReadonlyArray<{ value: string; key: string }> = [
+  { value: "SUNDAY_MORNING", key: "sundayMorning" },
+  { value: "SUNDAY_EVENING", key: "sundayEvening" },
+  { value: "MIDWEEK", key: "midweek" },
+  { value: "YOUTH", key: "youth" },
+  { value: "CHILDREN", key: "children" },
+  { value: "SPECIAL", key: "special" },
+  { value: "OTHER", key: "other" },
+];
+
 type Props = {
   funds: Array<{ id: string; name: string }>;
   current: {
     fundId?: string;
-    method?: string;
-    status?: string;
+    serviceType?: string;
     from?: string;
     to?: string;
   };
@@ -28,8 +37,7 @@ type Props = {
 
 export function GivingFilters({ funds, current }: Props) {
   const t = useTranslations("giving.filters");
-  const tMethod = useTranslations("giving.method");
-  const tStatus = useTranslations("giving.status");
+  const tServiceType = useTranslations("services.type");
   const router = useRouter();
   const pathname = usePathname();
   const sp = useSearchParams();
@@ -47,7 +55,7 @@ export function GivingFilters({ funds, current }: Props) {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-3 rounded-md border p-4 sm:grid-cols-2 lg:grid-cols-5">
+    <div className="grid grid-cols-1 gap-3 rounded-md border p-4 sm:grid-cols-2 lg:grid-cols-4">
       <div className="flex flex-col gap-1">
         <Label className="text-xs">{t("fund")}</Label>
         <Select
@@ -68,40 +76,21 @@ export function GivingFilters({ funds, current }: Props) {
         </Select>
       </div>
       <div className="flex flex-col gap-1">
-        <Label className="text-xs">{t("method")}</Label>
+        <Label className="text-xs">{t("serviceType")}</Label>
         <Select
-          value={current.method ?? ALL}
-          onValueChange={(v) => setParam("method", v)}
+          value={current.serviceType ?? ALL}
+          onValueChange={(v) => setParam("serviceType", v)}
         >
           <SelectTrigger>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value={ALL}>{t("anyMethod")}</SelectItem>
-            <SelectItem value="BANK_TRANSFER">{tMethod("bankTransfer")}</SelectItem>
-            <SelectItem value="QRIS">{tMethod("qris")}</SelectItem>
-            <SelectItem value="EWALLET">{tMethod("ewallet")}</SelectItem>
-            <SelectItem value="CASH">{tMethod("cash")}</SelectItem>
-            <SelectItem value="CARD">{tMethod("card")}</SelectItem>
-            <SelectItem value="OTHER">{tMethod("other")}</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-      <div className="flex flex-col gap-1">
-        <Label className="text-xs">{t("status")}</Label>
-        <Select
-          value={current.status ?? ALL}
-          onValueChange={(v) => setParam("status", v)}
-        >
-          <SelectTrigger>
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value={ALL}>{t("anyStatus")}</SelectItem>
-            <SelectItem value="COMPLETED">{tStatus("completed")}</SelectItem>
-            <SelectItem value="PENDING">{tStatus("pending")}</SelectItem>
-            <SelectItem value="FAILED">{tStatus("failed")}</SelectItem>
-            <SelectItem value="REFUNDED">{tStatus("refunded")}</SelectItem>
+            <SelectItem value={ALL}>{t("anyServiceType")}</SelectItem>
+            {SERVICE_TYPES.map((t) => (
+              <SelectItem key={t.value} value={t.value}>
+                {tServiceType(t.key as never)}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>

@@ -3,7 +3,6 @@ import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 
 import { MonthlyTrendChart } from "@/components/admin/giving/monthly-trend-chart";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -15,29 +14,32 @@ import {
 import { auth } from "@/lib/auth";
 import { formatRupiah } from "@/lib/format";
 import { Link } from "@/lib/i18n/navigation";
-import { hasAtLeastRole } from "@/lib/permissions";
 import {
   getFundBreakdown,
   getMonthlyGivingTrend,
-  getTopGivers,
+  getServiceTypeBreakdown,
 } from "@/server/queries/giving";
+
+import type { ServiceType } from "@prisma/client";
 
 export default async function GivingReportsPage() {
   const session = await auth();
   if (!session?.user) redirect("/auth/sign-in");
 
   const t = await getTranslations("giving.reports");
+  const tList = await getTranslations("giving.list");
   const tCategory = await getTranslations("giving.fund.category");
-  const canSeeTopGivers = hasAtLeastRole(session.user.role, "ADMIN");
+  const tServiceType = await getTranslations("services.type");
 
-  const [trend, breakdown, topGivers] = await Promise.all([
+  const [trend, fundBreakdown, serviceBreakdown] = await Promise.all([
     getMonthlyGivingTrend(12),
     getFundBreakdown(),
-    canSeeTopGivers ? getTopGivers({ limit: 10 }) : Promise.resolve([]),
+    getServiceTypeBreakdown(),
   ]);
 
   const trendTotal = trend.reduce((acc, r) => acc + r.total, 0);
-  const breakdownTotal = breakdown.reduce((acc, r) => acc + r.total, 0);
+  const fundTotal = fundBreakdown.reduce((acc, r) => acc + r.total, 0);
+  const serviceTotal = serviceBreakdown.reduce((acc, r) => acc + r.total, 0);
 
   return (
     <div className="flex flex-col gap-6">
@@ -71,19 +73,19 @@ export default async function GivingReportsPage() {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>{t("breakdownTitle")}</CardTitle>
+            <CardTitle>{t("breakdownByFundTitle")}</CardTitle>
             <CardDescription>
-              {t("breakdownDescription", { total: formatRupiah(breakdownTotal) })}
+              {t("breakdownDescription", { total: formatRupiah(fundTotal) })}
             </CardDescription>
           </CardHeader>
           <CardContent>
-            {breakdown.length === 0 ? (
+            {fundBreakdown.length === 0 ? (
               <p className="text-sm text-muted-foreground">
                 {t("breakdownEmpty")}
               </p>
             ) : (
               <ul className="flex flex-col gap-2 text-sm">
-                {breakdown.map((row) => (
+                {fundBreakdown.map((row) => (
                   <li
                     key={row.fund?.id}
                     className="flex items-center justify-between rounded-md border p-3"
@@ -107,62 +109,64 @@ export default async function GivingReportsPage() {
           </CardContent>
         </Card>
 
-        {canSeeTopGivers ? (
-          <Card>
-            <CardHeader>
-              <CardTitle>{t("topGiversTitle")}</CardTitle>
-              <CardDescription>{t("topGiversDescription")}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              {topGivers.length === 0 ? (
-                <p className="text-sm text-muted-foreground">
-                  {t("topGiversEmpty")}
-                </p>
-              ) : (
-                <ul className="flex flex-col gap-2 text-sm">
-                  {topGivers.map((row, i) => (
-                    <li
-                      key={row.member?.id}
-                      className="flex items-center justify-between rounded-md border p-3"
-                    >
-                      <div className="flex items-center gap-3">
-                        <span className="text-xs tabular-nums text-muted-foreground">
-                          #{i + 1}
-                        </span>
-                        <Avatar className="h-8 w-8">
-                          {row.member?.photoUrl ? (
-                            <AvatarImage
-                              src={row.member.photoUrl}
-                              alt={row.member.fullName}
-                            />
-                          ) : null}
-                          <AvatarFallback className="text-xs">
-                            {row.member?.fullName.charAt(0).toUpperCase() ?? "?"}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="flex flex-col">
-                          <Link
-                            href={`/admin/members/${row.member?.id}`}
-                            className="font-medium hover:underline"
-                          >
-                            {row.member?.fullName}
-                          </Link>
-                          <span className="text-xs text-muted-foreground">
-                            {row.count} {t("recordsAbbr")}
-                          </span>
-                        </div>
-                      </div>
-                      <span className="font-semibold tabular-nums">
-                        {formatRupiah(row.total)}
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("breakdownByServiceTitle")}</CardTitle>
+            <CardDescription>
+              {t("breakdownDescription", { total: formatRupiah(serviceTotal) })}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            {serviceBreakdown.length === 0 ? (
+              <p className="text-sm text-muted-foreground">
+                {t("breakdownEmpty")}
+              </p>
+            ) : (
+              <ul className="flex flex-col gap-2 text-sm">
+                {serviceBreakdown.map((row) => (
+                  <li
+                    key={row.type}
+                    className="flex items-center justify-between rounded-md border p-3"
+                  >
+                    <div className="flex flex-col">
+                      <span className="font-medium">
+                        {row.type === "STANDALONE"
+                          ? tList("standalone")
+                          : tServiceType(serviceTypeKey(row.type))}
                       </span>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </CardContent>
-          </Card>
-        ) : null}
+                      <span className="text-xs text-muted-foreground">
+                        {row.count} {t("recordsAbbr")}
+                      </span>
+                    </div>
+                    <span className="font-semibold tabular-nums">
+                      {formatRupiah(row.total)}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
+}
+
+function serviceTypeKey(t: ServiceType): string {
+  switch (t) {
+    case "SUNDAY_MORNING":
+      return "sundayMorning";
+    case "SUNDAY_EVENING":
+      return "sundayEvening";
+    case "MIDWEEK":
+      return "midweek";
+    case "YOUTH":
+      return "youth";
+    case "CHILDREN":
+      return "children";
+    case "SPECIAL":
+      return "special";
+    default:
+      return "other";
+  }
 }

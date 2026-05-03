@@ -1,50 +1,39 @@
-import { format } from "date-fns";
-import { BarChart3, Layers, Plus } from "lucide-react";
+import { BarChart3, Layers, Pencil, Plus } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
 import { GivingFilters } from "@/components/admin/giving/giving-filters";
-import { Pagination } from "@/components/shared/pagination";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { formatJakarta } from "@/lib/datetime";
 import { formatRupiah } from "@/lib/format";
 import { Link } from "@/lib/i18n/navigation";
 import { listAllFunds } from "@/server/queries/funds";
-import { listGiving, type GivingFilters as Filters } from "@/server/queries/giving";
-import { parsePageParam } from "@/server/queries/_pagination";
+import {
+  getGivingByWeek,
+  type GivingFilters as Filters,
+} from "@/server/queries/giving";
 
-import type { GivingMethod, GivingStatus } from "@prisma/client";
+import type { ServiceType } from "@prisma/client";
 
-const STATUS_VALUES: readonly GivingStatus[] = [
-  "PENDING",
-  "COMPLETED",
-  "FAILED",
-  "REFUNDED",
-];
-const METHOD_VALUES: readonly GivingMethod[] = [
-  "QRIS",
-  "BANK_TRANSFER",
-  "EWALLET",
-  "CASH",
-  "CARD",
+const SERVICE_TYPE_VALUES: readonly ServiceType[] = [
+  "SUNDAY_MORNING",
+  "SUNDAY_EVENING",
+  "MIDWEEK",
+  "YOUTH",
+  "CHILDREN",
+  "SPECIAL",
   "OTHER",
 ];
 
-function parseStatus(v: string | null): GivingStatus | undefined {
-  return v && (STATUS_VALUES as readonly string[]).includes(v)
-    ? (v as GivingStatus)
-    : undefined;
-}
-function parseMethod(v: string | null): GivingMethod | undefined {
-  return v && (METHOD_VALUES as readonly string[]).includes(v)
-    ? (v as GivingMethod)
+function parseServiceType(v: string | null): ServiceType | undefined {
+  return v && (SERVICE_TYPE_VALUES as readonly string[]).includes(v)
+    ? (v as ServiceType)
     : undefined;
 }
 function parseDate(v: string | null): Date | undefined {
@@ -66,21 +55,21 @@ export default async function GivingListPage({
 
   const filters: Filters = {
     fundId: get("fundId") ?? undefined,
-    status: parseStatus(get("status")),
-    method: parseMethod(get("method")),
+    serviceType: parseServiceType(get("serviceType")),
     from: parseDate(get("from")),
     to: parseDate(get("to")),
   };
-  const page = parsePageParam(sp.page);
 
   const t = await getTranslations("giving.list");
-  const tMethod = await getTranslations("giving.method");
-  const tStatus = await getTranslations("giving.status");
+  const tServiceType = await getTranslations("services.type");
 
-  const [funds, result] = await Promise.all([
+  const [funds, weeks] = await Promise.all([
     listAllFunds(),
-    listGiving({ filters, page }),
+    getGivingByWeek({ filters, weeks: 8 }),
   ]);
+
+  const grandTotal = weeks.reduce((sum, w) => sum + w.total, 0);
+  const grandCount = weeks.reduce((sum, w) => sum + w.entries.length, 0);
 
   return (
     <div className="flex flex-col gap-6">
@@ -89,8 +78,8 @@ export default async function GivingListPage({
           <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
           <p className="text-muted-foreground">
             {t("subtitle", {
-              total: result.total,
-              sum: formatRupiah(result.sum),
+              total: grandCount,
+              sum: formatRupiah(grandTotal),
             })}
           </p>
         </div>
@@ -120,118 +109,235 @@ export default async function GivingListPage({
         funds={funds.map((f) => ({ id: f.id, name: f.name }))}
         current={{
           fundId: get("fundId") ?? undefined,
-          method: get("method") ?? undefined,
-          status: get("status") ?? undefined,
+          serviceType: get("serviceType") ?? undefined,
           from: get("from") ?? undefined,
           to: get("to") ?? undefined,
         }}
       />
 
-      {result.items.length === 0 ? (
+      {grandCount === 0 ? (
         <div className="rounded-md border border-dashed p-10 text-center text-sm text-muted-foreground">
           {t("empty")}
         </div>
       ) : (
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>{t("colDate")}</TableHead>
-                <TableHead>{t("colGiver")}</TableHead>
-                <TableHead>{t("colFund")}</TableHead>
-                <TableHead>{t("colMethod")}</TableHead>
-                <TableHead>{t("colStatus")}</TableHead>
-                <TableHead className="text-right">{t("colAmount")}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {result.items.map((g) => (
-                <TableRow key={g.id}>
-                  <TableCell className="text-sm tabular-nums">
-                    <Link
-                      href={`/admin/giving/${g.id}`}
-                      className="hover:underline"
-                    >
-                      {format(g.receivedAt, "dd MMM yyyy")}
-                    </Link>
-                  </TableCell>
-                  <TableCell>
-                    {g.member ? (
-                      <Link
-                        href={`/admin/members/${g.member.id}`}
-                        className="font-medium hover:underline"
-                      >
-                        {g.member.fullName}
-                      </Link>
-                    ) : (
-                      <span className="font-medium">
-                        {g.giverName ?? "—"}
+        <div className="flex flex-col gap-4">
+          {weeks.map((week) => {
+            const grouped = groupByService(week.entries);
+            const isCurrentWeek = week === weeks[0];
+
+            return (
+              <Card key={week.weekStart.toISOString()}>
+                <CardHeader>
+                  <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex items-center gap-2">
+                      <CardTitle className="text-base">
+                        {formatWeekRange(week.weekStart, week.weekEnd)}
+                      </CardTitle>
+                      {isCurrentWeek ? (
+                        <Badge variant="outline" className="text-[10px]">
+                          {t("currentWeek")}
+                        </Badge>
+                      ) : null}
+                    </div>
+                    <div className="text-sm">
+                      <span className="text-muted-foreground">
+                        {t("weekTotal")}:{" "}
                       </span>
-                    )}
-                  </TableCell>
-                  <TableCell className="text-sm">{g.fund.name}</TableCell>
-                  <TableCell className="text-sm">
-                    {tMethod(methodKey(g.method))}
-                  </TableCell>
-                  <TableCell>
-                    <StatusBadge status={g.status} label={tStatus(statusKey(g.status))} />
-                  </TableCell>
-                  <TableCell className="text-right font-medium tabular-nums">
-                    {formatRupiah(g.amount)}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+                      <span className="font-semibold tabular-nums">
+                        {formatRupiah(week.total)}
+                      </span>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  {week.entries.length === 0 ? (
+                    <p className="text-sm text-muted-foreground">
+                      {t("weekEmpty")}
+                    </p>
+                  ) : (
+                    <div className="flex flex-col gap-4">
+                      {grouped.map((g) => (
+                        <div
+                          key={g.key}
+                          className="rounded-md border p-3"
+                        >
+                          <div className="mb-2 flex flex-wrap items-center justify-between gap-2 border-b pb-2">
+                            <div className="flex flex-col">
+                              <span className="font-medium">
+                                {g.kind === "service"
+                                  ? g.serviceName
+                                  : t("standalone")}
+                              </span>
+                              <span className="text-xs text-muted-foreground">
+                                {g.kind === "service" ? (
+                                  <>
+                                    {tServiceType(
+                                      serviceTypeKey(g.serviceType),
+                                    )}
+                                    {" · "}
+                                    {formatJakarta(
+                                      g.serviceStartsAt,
+                                      "EEE dd MMM yyyy, HH:mm",
+                                    )}
+                                  </>
+                                ) : (
+                                  t("standaloneSubtitle")
+                                )}
+                              </span>
+                            </div>
+                            <span className="font-semibold tabular-nums">
+                              {formatRupiah(g.total)}
+                            </span>
+                          </div>
+                          <ul className="flex flex-col gap-1.5 text-sm">
+                            {g.entries.map((entry) => (
+                              <li
+                                key={entry.id}
+                                className="flex items-center justify-between gap-2"
+                              >
+                                <div className="flex items-center gap-2">
+                                  <Badge variant="secondary">
+                                    {entry.fund.name}
+                                  </Badge>
+                                  {g.kind === "standalone" ? (
+                                    <span className="text-xs text-muted-foreground">
+                                      {formatJakarta(
+                                        entry.receivedAt,
+                                        "EEE dd MMM",
+                                      )}
+                                    </span>
+                                  ) : null}
+                                  {entry.notes ? (
+                                    <span
+                                      className="line-clamp-1 text-xs text-muted-foreground"
+                                      title={entry.notes}
+                                    >
+                                      {entry.notes}
+                                    </span>
+                                  ) : null}
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <span className="font-medium tabular-nums">
+                                    {formatRupiah(entry.amount)}
+                                  </span>
+                                  <Button
+                                    asChild
+                                    size="icon"
+                                    variant="ghost"
+                                    className="h-7 w-7"
+                                  >
+                                    <Link href={`/admin/giving/${entry.id}`}>
+                                      <Pencil className="h-3.5 w-3.5" />
+                                    </Link>
+                                  </Button>
+                                </div>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       )}
-
-      <Pagination
-        page={result.page}
-        totalPages={result.totalPages}
-        total={result.total}
-      />
     </div>
   );
 }
 
-function StatusBadge({ status, label }: { status: GivingStatus; label: string }) {
-  const variant: "default" | "secondary" | "outline" | "destructive" =
-    status === "COMPLETED"
-      ? "default"
-      : status === "PENDING"
-        ? "outline"
-        : status === "REFUNDED"
-          ? "secondary"
-          : "destructive";
-  return <Badge variant={variant}>{label}</Badge>;
+type Entry = Awaited<ReturnType<typeof getGivingByWeek>>[number]["entries"][number];
+
+type Group =
+  | {
+      kind: "service";
+      key: string;
+      serviceId: string;
+      serviceName: string;
+      serviceType: ServiceType;
+      serviceStartsAt: Date;
+      total: number;
+      entries: Entry[];
+    }
+  | {
+      kind: "standalone";
+      key: "_standalone";
+      total: number;
+      entries: Entry[];
+    };
+
+function groupByService(entries: Entry[]): Group[] {
+  const services = new Map<string, Group & { kind: "service" }>();
+  let standalone: (Group & { kind: "standalone" }) | null = null;
+
+  for (const entry of entries) {
+    const amount = Number(entry.amount.toString());
+    if (entry.service) {
+      const existing = services.get(entry.service.id);
+      if (existing) {
+        existing.entries.push(entry);
+        existing.total += amount;
+      } else {
+        services.set(entry.service.id, {
+          kind: "service",
+          key: entry.service.id,
+          serviceId: entry.service.id,
+          serviceName: entry.service.name,
+          serviceType: entry.service.type,
+          serviceStartsAt: entry.service.startsAt,
+          total: amount,
+          entries: [entry],
+        });
+      }
+    } else {
+      if (!standalone) {
+        standalone = {
+          kind: "standalone",
+          key: "_standalone",
+          total: 0,
+          entries: [],
+        };
+      }
+      standalone.entries.push(entry);
+      standalone.total += amount;
+    }
+  }
+
+  const sortedServices = Array.from(services.values()).sort(
+    (a, b) => b.serviceStartsAt.getTime() - a.serviceStartsAt.getTime(),
+  );
+  return standalone ? [...sortedServices, standalone] : sortedServices;
 }
 
-function methodKey(m: GivingMethod): string {
-  switch (m) {
-    case "BANK_TRANSFER":
-      return "bankTransfer";
-    case "QRIS":
-      return "qris";
-    case "EWALLET":
-      return "ewallet";
-    case "CASH":
-      return "cash";
-    case "CARD":
-      return "card";
+function formatWeekRange(start: Date, endExclusive: Date): string {
+  const endInclusive = new Date(endExclusive);
+  endInclusive.setDate(endInclusive.getDate() - 1);
+  const sameMonth =
+    start.getMonth() === endInclusive.getMonth() &&
+    start.getFullYear() === endInclusive.getFullYear();
+  if (sameMonth) {
+    return `${formatJakarta(start, "dd")} – ${formatJakarta(endInclusive, "dd MMM yyyy")}`;
+  }
+  return `${formatJakarta(start, "dd MMM")} – ${formatJakarta(endInclusive, "dd MMM yyyy")}`;
+}
+
+function serviceTypeKey(t: ServiceType): string {
+  switch (t) {
+    case "SUNDAY_MORNING":
+      return "sundayMorning";
+    case "SUNDAY_EVENING":
+      return "sundayEvening";
+    case "MIDWEEK":
+      return "midweek";
+    case "YOUTH":
+      return "youth";
+    case "CHILDREN":
+      return "children";
+    case "SPECIAL":
+      return "special";
     default:
       return "other";
-  }
-}
-function statusKey(s: GivingStatus): string {
-  switch (s) {
-    case "COMPLETED":
-      return "completed";
-    case "PENDING":
-      return "pending";
-    case "FAILED":
-      return "failed";
-    default:
-      return "refunded";
   }
 }

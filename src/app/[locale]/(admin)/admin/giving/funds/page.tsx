@@ -81,7 +81,7 @@ export default async function FundsListPage({
                     {tCategory(categoryKey(f.category))}
                   </TableCell>
                   <TableCell className="text-sm tabular-nums">
-                    {f._count.givings}
+                    {f._count.entries}
                   </TableCell>
                   <TableCell>
                     <Badge variant={f.isActive ? "default" : "secondary"}>

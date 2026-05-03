@@ -5,7 +5,10 @@ import { revalidatePath } from "next/cache";
 import { auth } from "@/lib/auth";
 import { requireRole } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
-import { givingInputSchema, type GivingInput } from "@/lib/validation/giving";
+import {
+  givingEntryInputSchema,
+  type GivingEntryInput,
+} from "@/lib/validation/giving";
 
 export type UpdateGivingResult =
   | { ok: true }
@@ -13,7 +16,7 @@ export type UpdateGivingResult =
 
 export async function updateGivingAction(
   id: string,
-  input: GivingInput,
+  input: GivingEntryInput,
 ): Promise<UpdateGivingResult> {
   const session = await auth();
   if (!session?.user) return { ok: false, error: "UNAUTHORIZED" };
@@ -23,7 +26,7 @@ export async function updateGivingAction(
     return { ok: false, error: "FORBIDDEN" };
   }
 
-  const parsed = givingInputSchema.safeParse(input);
+  const parsed = givingEntryInputSchema.safeParse(input);
   if (!parsed.success) {
     return {
       ok: false,
@@ -34,31 +37,38 @@ export async function updateGivingAction(
 
   const data = parsed.data;
   try {
-    await prisma.givingRecord.update({
+    const fund = await prisma.fund.findUnique({
+      where: { id: data.fundId },
+      select: { id: true, isActive: true },
+    });
+    if (!fund) return { ok: false, error: "FUND_NOT_FOUND" };
+    if (!fund.isActive) return { ok: false, error: "FUND_INACTIVE" };
+
+    if (data.serviceId) {
+      const service = await prisma.service.findUnique({
+        where: { id: data.serviceId },
+        select: { id: true },
+      });
+      if (!service) return { ok: false, error: "SERVICE_NOT_FOUND" };
+    }
+
+    await prisma.givingEntry.update({
       where: { id },
       data: {
+        serviceId: data.serviceId,
         fundId: data.fundId,
-        memberId: data.memberId,
-        giverName: data.giverName,
-        giverPhone: data.giverPhone,
-        giverEmail: data.giverEmail,
         amount: data.amount,
-        method: data.method,
-        status: data.status,
         receivedAt: data.receivedAt,
-        externalRef: data.externalRef,
         notes: data.notes,
       },
     });
 
     revalidatePath("/admin/giving");
     revalidatePath(`/admin/giving/${id}`);
-    if (data.memberId) {
-      revalidatePath(`/admin/members/${data.memberId}`);
-    }
+    revalidatePath("/admin/giving/reports");
     return { ok: true };
   } catch (e) {
-    console.error("[updateGiving]", e);
+    console.error("[updateGivingEntry]", e);
     return { ok: false, error: "INTERNAL_ERROR" };
   }
 }

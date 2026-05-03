@@ -563,7 +563,6 @@
         "profile": "Profil",
         "cellGroups": "Komsel",
         "attendance": "Kehadiran",
-        "giving": "Persembahan",
         "events": "Acara",
         "discipleship": "Pemuridan",
         "pastoral": "Penggembalaan"
@@ -596,14 +595,9 @@
       "placeholders": {
         "noCellGroups": "Jemaat ini belum tergabung di komsel manapun.",
         "attendance": "Riwayat kehadiran muncul setelah Phase 4 (Attendance).",
-        "giving": "Belum ada catatan persembahan untuk jemaat ini.",
         "events": "RSVP acara muncul setelah Phase 8 (Events).",
         "discipleship": "Milestone pemuridan muncul setelah Phase 11.",
         "pastoral": "Belum ada kunjungan pastoral."
-      },
-      "giving": {
-        "totalThisYear": "Total tahun ini",
-        "totalAllTime": "Total sepanjang waktu"
       },
       "discipleship": {
         "addMilestone": "Tambah Milestone"
@@ -910,47 +904,30 @@
     }
   },
   "giving": {
-    "method": {
-      "bankTransfer": "Transfer Bank",
-      "qris": "QRIS",
-      "ewallet": "E-wallet",
-      "cash": "Tunai",
-      "card": "Kartu",
-      "other": "Lainnya"
-    },
-    "status": {
-      "completed": "Selesai",
-      "pending": "Tertunda",
-      "failed": "Gagal",
-      "refunded": "Dikembalikan"
-    },
     "filters": {
       "fund": "Pos",
       "anyFund": "Semua pos",
-      "method": "Metode",
-      "anyMethod": "Semua metode",
-      "status": "Status",
-      "anyStatus": "Semua status",
+      "serviceType": "Jenis Ibadah",
+      "anyServiceType": "Semua ibadah",
       "from": "Dari",
       "to": "Sampai"
     },
     "list": {
       "title": "Persembahan",
-      "subtitle": "{total} entri · {sum} terkonfirmasi.",
+      "subtitle": "{total} entri · {sum} dalam 8 minggu terakhir.",
       "newButton": "Catat Persembahan",
       "manageFunds": "Pos Persembahan",
       "reports": "Laporan",
-      "empty": "Belum ada catatan persembahan.",
-      "colDate": "Tanggal",
-      "colGiver": "Pemberi",
-      "colFund": "Pos",
-      "colMethod": "Metode",
-      "colStatus": "Status",
-      "colAmount": "Jumlah"
+      "empty": "Belum ada catatan persembahan dalam rentang ini.",
+      "currentWeek": "Minggu ini",
+      "weekTotal": "Total minggu",
+      "weekEmpty": "Tidak ada catatan minggu ini.",
+      "standalone": "Tanpa ibadah",
+      "standaloneSubtitle": "Pemberian langsung (transfer / amplop di luar ibadah)"
     },
     "new": {
       "title": "Catat Persembahan",
-      "subtitle": "Catat persembahan setelah memverifikasi mutasi bank.",
+      "subtitle": "Catat total persembahan untuk satu ibadah dan satu pos.",
       "submit": "Simpan"
     },
     "edit": {
@@ -962,23 +939,16 @@
         "savedToast": "Persembahan tersimpan.",
         "errorToast": "Gagal menyimpan. Cek isian form.",
         "fields": {
+          "service": "Ibadah",
+          "servicePlaceholder": "Pilih ibadah…",
+          "serviceHelp": "Pilih ibadah jika persembahan diterima saat ibadah, atau pilih \"Tanpa ibadah\" untuk pemberian langsung (transfer / amplop di hari lain).",
+          "serviceNone": "— Tanpa ibadah / pemberian langsung —",
           "fund": "Pos",
           "fundPlaceholder": "Pilih pos…",
-          "amount": "Jumlah (Rp)",
-          "amountHelp": "Masukkan jumlah dalam rupiah, mis. 100000.",
-          "member": "Jemaat",
-          "memberPlaceholder": "Cari jemaat…",
-          "memberHelp": "Kosongkan jika pemberi bukan jemaat terdaftar.",
-          "giverName": "Nama pemberi (jika bukan jemaat)",
-          "giverNamePlaceholder": "mis. Anonim, John Smith",
-          "giverNameHelp": "Gunakan ini untuk tamu atau pemberi anonim.",
-          "giverPhone": "Telepon",
-          "giverEmail": "Email",
-          "method": "Metode",
-          "status": "Status",
+          "amount": "Jumlah",
+          "amountHelp": "Ketik angka saja — format Rupiah otomatis ditambahkan.",
           "receivedAt": "Tanggal diterima",
-          "externalRef": "Referensi eksternal",
-          "externalRefHelp": "Opsional — ID mutasi bank, dsb.",
+          "receivedAtHelp": "Otomatis terisi dari tanggal ibadah saat dipilih.",
           "notes": "Catatan"
         }
       }
@@ -988,17 +958,14 @@
       "edit": "Ubah",
       "delete": "Hapus",
       "details": "Detail",
+      "standalone": "Pemberian langsung (tanpa ibadah)",
       "fields": {
-        "fund": "Pos",
-        "giver": "Pemberi",
-        "giverPhone": "Telepon",
-        "giverEmail": "Email",
-        "amount": "Jumlah",
-        "method": "Metode",
-        "status": "Status",
+        "service": "Ibadah",
         "receivedAt": "Tanggal diterima",
-        "externalRef": "Referensi eksternal",
+        "fund": "Pos",
+        "amount": "Jumlah",
         "recordedBy": "Dicatat oleh",
+        "recordedAt": "Dicatat pada",
         "notes": "Catatan"
       },
       "confirmDelete": "Hapus catatan persembahan ini? Tidak bisa dibatalkan.",
@@ -1053,17 +1020,15 @@
     "reports": {
       "backToList": "Persembahan",
       "title": "Laporan Persembahan",
-      "subtitle": "Tren, breakdown per pos, dan top givers.",
+      "subtitle": "Tren bulanan, breakdown per pos & per ibadah.",
       "trendTitle": "Tren 12 bulan",
       "trendDescription": "Total: {total}",
       "trendEmpty": "Data belum cukup.",
-      "breakdownTitle": "Breakdown per pos (bulan ini)",
+      "breakdownByFundTitle": "Breakdown per pos (bulan ini)",
+      "breakdownByServiceTitle": "Breakdown per ibadah (bulan ini)",
       "breakdownDescription": "Total: {total}",
       "breakdownEmpty": "Belum ada catatan persembahan bulan ini.",
-      "topGiversTitle": "Top Givers (sepanjang waktu)",
-      "topGiversDescription": "Hanya admin yang bisa melihat.",
-      "topGiversEmpty": "Belum ada catatan persembahan.",
-      "recordsAbbr": "catatan",
+      "recordsAbbr": "entri",
       "chart": {
         "total": "Total"
       }
