@@ -26,6 +26,7 @@ type Props = React.ComponentProps<typeof Sidebar> & {
   user: {
     email: string | null;
     role: Role;
+    memberId: string | null;
   };
 };
 

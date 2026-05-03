@@ -53,11 +53,14 @@ export async function signInPinAction(
     }
   }
 
+  const redirectTo =
+    probe.user.role === "MEMBER" ? "/me/dashboard" : "/admin/dashboard";
+
   try {
     await signIn("pin", {
       phone: parsed.data.phone,
       pin: parsed.data.pin,
-      redirectTo: "/me/dashboard",
+      redirectTo,
     });
     return null;
   } catch (e) {

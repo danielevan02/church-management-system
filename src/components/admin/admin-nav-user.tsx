@@ -1,7 +1,7 @@
 "use client";
 
 import type { Role } from "@prisma/client";
-import { LogOut, MoreVertical } from "lucide-react";
+import { LogOut, MoreVertical, UserCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -20,12 +20,13 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { Link } from "@/lib/i18n/navigation";
 import { signOutAction } from "@/server/actions/auth/sign-out";
 
 export function AdminNavUser({
   user,
 }: {
-  user: { email: string | null; role: Role };
+  user: { email: string | null; role: Role; memberId: string | null };
 }) {
   const t = useTranslations("common");
   const { isMobile } = useSidebar();
@@ -77,6 +78,14 @@ export function AdminNavUser({
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
+            {user.memberId ? (
+              <DropdownMenuItem asChild>
+                <Link href="/me/dashboard" className="w-full">
+                  <UserCircle />
+                  {t("switchToMember")}
+                </Link>
+              </DropdownMenuItem>
+            ) : null}
             <form action={signOutAction}>
               <DropdownMenuItem asChild>
                 <button type="submit" className="w-full">

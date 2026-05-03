@@ -11,6 +11,8 @@
     "delete": "Delete",
     "confirm": "Yes",
     "signOut": "Sign out",
+    "switchToAdmin": "Switch to admin",
+    "switchToMember": "Switch to member portal",
     "soon": "Soon",
     "datetime": {
       "placeholder": "Pick date & time",
@@ -1803,7 +1805,7 @@
           "isActiveHint": "Inactive users cannot sign in.",
           "linkMember": "Linked member",
           "linkMemberPlaceholder": "Search a member…",
-          "linkMemberHint": "Optional. Link to a member record so this user appears in directories."
+          "linkMemberHint": "Leave empty for staff who are NOT jemaat (e.g. external accountant). Fill in only if this person is also a jemaat without an account yet — jemaat normally get an account auto-created when their PIN is set."
         },
         "createdToast": "User created.",
         "updatedToast": "User updated.",

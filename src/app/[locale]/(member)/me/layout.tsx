@@ -48,7 +48,11 @@ export default async function MemberLayout({
           } as React.CSSProperties
         }
       >
-        <MemberSidebar member={member} variant="inset" />
+        <MemberSidebar
+          member={member}
+          role={session.user.role}
+          variant="inset"
+        />
         <SidebarInset className="min-w-0">
           <MemberHeader />
           <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-4 overflow-x-hidden p-4 pb-24 sm:p-6 md:pb-6 lg:p-8">
