@@ -224,13 +224,6 @@
       "myCellGroup": "My cell group",
       "noCellGroup": "You are not in any cell group yet.",
       "joinCellGroup": "Learn about cell groups",
-      "giving": {
-        "title": "My Giving",
-        "ytd": "Year-to-date",
-        "lastGift": "Last gift",
-        "noGiving": "No giving recorded this year.",
-        "viewAll": "View all"
-      },
       "discipleship": {
         "title": "Spiritual Journey",
         "completed": "{count} milestones recorded",
@@ -335,22 +328,11 @@
       "warning": "Don't share this QR with anyone — it's for your check-in only."
     },
     "giving": {
-      "title": "My giving",
-      "subtitle": "Your giving history and totals.",
-      "giveNow": "Give now",
-      "totalThisYear": "Total {year}",
-      "totalAllTime": "Total all time",
-      "historyTitle": "History",
-      "historyDescription": "Your last 50 completed givings.",
-      "historyEmpty": "No giving recorded yet."
-    },
-    "giveNow": {
-      "title": "Beri Persembahan",
+      "title": "Give",
       "subtitle": "Transfer to {church} via QRIS or bank.",
-      "backToHistory": "My giving",
-      "noteTitle": "After you transfer",
-      "noteDescription": "Your giving will show up in your history once an administrator records it.",
-      "noteBody": "Admins reconcile transfers against the bank statement and post each entry to your history. If you don't see it after a few days, you can ping the church admin via WhatsApp."
+      "noteTitle": "About your giving",
+      "noteDescription": "May the Lord bless a cheerful giver.",
+      "noteBody": "Your gift goes directly to the church via the bank account or QRIS above. If you have any questions, please reach out to the church admin via WhatsApp."
     },
     "discipleship": {
       "title": "My journey",

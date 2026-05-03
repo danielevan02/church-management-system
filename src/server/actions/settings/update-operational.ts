@@ -65,7 +65,7 @@ export async function updateOperationalSettingsAction(
 
     revalidatePath("/admin/settings");
     revalidatePath("/give");
-    revalidatePath("/me/giving/give");
+    revalidatePath("/me/giving");
     return { ok: true };
   } catch (e) {
     console.error("[updateOperationalSettings]", e);

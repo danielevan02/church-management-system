@@ -55,7 +55,6 @@ export async function updateGivingAction(
     revalidatePath(`/admin/giving/${id}`);
     if (data.memberId) {
       revalidatePath(`/admin/members/${data.memberId}`);
-      revalidatePath("/me/giving");
     }
     return { ok: true };
   } catch (e) {

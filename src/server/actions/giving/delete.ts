@@ -43,7 +43,6 @@ export async function deleteGivingAction(
     revalidatePath("/admin/giving");
     if (record.memberId) {
       revalidatePath(`/admin/members/${record.memberId}`);
-      revalidatePath("/me/giving");
     }
     return { ok: true };
   } catch (e) {
