@@ -1,11 +1,19 @@
 import { z } from "zod";
 
+import { parseJakartaInput } from "@/lib/datetime";
+
+/**
+ * Parse a datetime field from a form. The form sends a wall-clock string
+ * like "2026-05-03T15:00" — we treat that as Jakarta time and store as
+ * UTC. Using raw `new Date(v)` here would interpret the string in the
+ * server's local timezone (UTC on Vercel), shifting every saved time by
+ * 7 hours.
+ */
 const requiredDate = z
   .union([z.string(), z.date()])
   .transform((v) => {
     if (v instanceof Date) return v;
-    const d = new Date(v);
-    return Number.isNaN(d.getTime()) ? null : d;
+    return parseJakartaInput(v);
   })
   .refine((v): v is Date => v instanceof Date, { message: "Tanggal tidak valid" });
 

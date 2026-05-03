@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 
 import { auth } from "@/lib/auth";
+import { parseJakartaInput } from "@/lib/datetime";
 import { requireRole } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
 import {
@@ -35,14 +36,25 @@ export async function createRecurringServicesAction(
   }
 
   const data = parsed.data;
-  const [hh, mm] = data.time.split(":").map((n) => Number.parseInt(n, 10));
+
+  // `firstDate` was parsed via `new Date("yyyy-MM-dd")` which yields
+  // UTC midnight. Use UTC accessors so we read the calendar date the
+  // user picked regardless of server timezone, then build a Jakarta
+  // wall-clock string for each occurrence and convert to UTC via
+  // parseJakartaInput.
+  const baseY = data.firstDate.getUTCFullYear();
+  const baseM = data.firstDate.getUTCMonth();
+  const baseD = data.firstDate.getUTCDate();
 
   const occurrences: Date[] = [];
   for (let i = 0; i < data.count; i += 1) {
-    const d = new Date(data.firstDate);
-    d.setDate(d.getDate() + i * data.intervalDays);
-    d.setHours(hh, mm, 0, 0);
-    occurrences.push(d);
+    const day = new Date(Date.UTC(baseY, baseM, baseD + i * data.intervalDays));
+    const ymd = `${day.getUTCFullYear()}-${String(day.getUTCMonth() + 1).padStart(2, "0")}-${String(day.getUTCDate()).padStart(2, "0")}`;
+    const startsAt = parseJakartaInput(`${ymd}T${data.time}`);
+    if (!startsAt) {
+      return { ok: false, error: "VALIDATION_FAILED" };
+    }
+    occurrences.push(startsAt);
   }
 
   try {
