@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { useTransition } from "react";
 import { toast } from "sonner";
 
+import { ConfirmDialog } from "@/components/shared/confirm-dialog";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "@/lib/i18n/navigation";
 import { deleteMilestoneAction } from "@/server/actions/discipleship/milestones";
@@ -17,11 +18,11 @@ export function DeleteMilestoneButton({
   variant?: "icon" | "destructive";
 }) {
   const t = useTranslations("discipleship.detail");
+  const tCommon = useTranslations("common");
   const router = useRouter();
   const [pending, startTransition] = useTransition();
 
-  function onClick() {
-    if (!confirm(t("confirmDelete"))) return;
+  function onConfirm() {
     startTransition(async () => {
       const result = await deleteMilestoneAction(id);
       if (result.ok) {
@@ -37,28 +38,28 @@ export function DeleteMilestoneButton({
     });
   }
 
-  if (variant === "icon") {
-    return (
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon"
-        onClick={onClick}
-        disabled={pending}
-      >
+  const trigger =
+    variant === "icon" ? (
+      <Button type="button" variant="ghost" size="icon" disabled={pending}>
         <Trash2 className="h-4 w-4" />
       </Button>
+    ) : (
+      <Button type="button" variant="destructive" disabled={pending}>
+        <Trash2 className="h-4 w-4" />
+        {t("delete")}
+      </Button>
     );
-  }
+
   return (
-    <Button
-      type="button"
-      variant="destructive"
-      onClick={onClick}
-      disabled={pending}
-    >
-      <Trash2 className="h-4 w-4" />
-      {t("delete")}
-    </Button>
+    <ConfirmDialog
+      trigger={trigger}
+      title={t("delete")}
+      description={t("confirmDelete")}
+      confirmLabel={t("delete")}
+      cancelLabel={tCommon("cancel")}
+      destructive
+      pending={pending}
+      onConfirm={onConfirm}
+    />
   );
 }
