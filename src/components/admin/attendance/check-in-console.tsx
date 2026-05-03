@@ -121,7 +121,11 @@ export function CheckInConsole({
             </TabsList>
 
             <TabsContent value="qr" className="mt-4">
-              <QrScanner onScan={onQrScan} paused={tab !== "qr"} />
+              <QrScanner
+                onScan={onQrScan}
+                paused={tab !== "qr"}
+                mirrorOnFrontCamera
+              />
               <p className="mt-2 text-xs text-muted-foreground">
                 {t("qrHelp")}
               </p>

@@ -8,6 +8,13 @@ type Props = {
   /** ms to ignore subsequent scans of the same code, defaults to 2000. */
   cooldownMs?: number;
   paused?: boolean;
+  /**
+   * When the active camera is user-facing (e.g. a laptop's selfie cam),
+   * mirror the preview so movement matches the operator's expectation.
+   * No-op when the rear ("environment") camera is in use, so this is safe
+   * to enable on a usher console that may run on either desktop or phone.
+   */
+  mirrorOnFrontCamera?: boolean;
 };
 
 type Html5QrcodeInstance = {
@@ -26,7 +33,12 @@ type Html5QrcodeInstance = {
 const STATE_SCANNING = 2;
 const STATE_PAUSED = 3;
 
-export function QrScanner({ onScan, cooldownMs = 2000, paused = false }: Props) {
+export function QrScanner({
+  onScan,
+  cooldownMs = 2000,
+  paused = false,
+  mirrorOnFrontCamera = false,
+}: Props) {
   const t = useTranslations("attendance.scanner");
   const reactId = useId();
   // html5-qrcode requires a CSS-id-safe string (no colons that React adds).
@@ -37,6 +49,7 @@ export function QrScanner({ onScan, cooldownMs = 2000, paused = false }: Props) 
   const onScanRef = useRef(onScan);
   const [error, setError] = useState<string | null>(null);
   const [starting, setStarting] = useState(true);
+  const [mirrored, setMirrored] = useState(false);
 
   // Keep latest onScan reachable from inside the effect without retriggering it.
   useEffect(() => {
@@ -73,6 +86,17 @@ export function QrScanner({ onScan, cooldownMs = 2000, paused = false }: Props) 
           await safeStop(scanner);
           return;
         }
+        if (mirrorOnFrontCamera) {
+          const video = containerRef.current?.querySelector("video");
+          const stream = video?.srcObject;
+          const track =
+            stream instanceof MediaStream ? stream.getVideoTracks()[0] : null;
+          // Mirror only when the actual active camera is user-facing.
+          // `facingMode` is undefined on most desktop webcams (still the
+          // selfie-cam direction), so treat absent value as user-facing.
+          const facing = track?.getSettings().facingMode;
+          setMirrored(facing !== "environment");
+        }
         setStarting(false);
       } catch (e) {
         console.error("[QrScanner] start failed", e);
@@ -87,7 +111,7 @@ export function QrScanner({ onScan, cooldownMs = 2000, paused = false }: Props) 
       const s = scannerRef.current;
       if (s) void safeStop(s);
     };
-  }, [cooldownMs, paused, elementId]);
+  }, [cooldownMs, paused, elementId, mirrorOnFrontCamera]);
 
   if (paused) {
     return (
@@ -108,11 +132,12 @@ export function QrScanner({ onScan, cooldownMs = 2000, paused = false }: Props) 
 
   return (
     <div className="overflow-hidden rounded-md border bg-black">
-      {/* Force the video preview to render unmirrored. We use the rear
-          ("environment") camera — mirroring is correct only for selfie/front
-          cameras. The !important beats any inline transform html5-qrcode
-          applies on its own. */}
-      <style>{`#${elementId} video { transform: none !important; }`}</style>
+      {/* By default we ask for the rear camera and render unmirrored.
+          When `mirrorOnFrontCamera` is set AND the active camera turns
+          out to be user-facing (e.g. a laptop running the usher console),
+          we flip horizontally so the operator's movements feel natural.
+          The !important beats any inline transform html5-qrcode applies. */}
+      <style>{`#${elementId} video { transform: ${mirrored ? "scaleX(-1)" : "none"} !important; }`}</style>
       <div
         id={elementId}
         ref={containerRef}
