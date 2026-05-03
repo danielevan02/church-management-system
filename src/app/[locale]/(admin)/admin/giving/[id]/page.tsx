@@ -1,10 +1,8 @@
-import { format } from "date-fns";
 import { ArrowLeft, Pencil } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
 import { DeleteGivingButton } from "./delete-giving-button";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,9 +11,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { formatJakarta } from "@/lib/datetime";
 import { formatRupiah } from "@/lib/format";
 import { Link } from "@/lib/i18n/navigation";
-import { getGiving } from "@/server/queries/giving";
+import { getGivingEntry } from "@/server/queries/giving";
 
 export default async function GivingDetailPage({
   params,
@@ -23,12 +22,10 @@ export default async function GivingDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const giving = await getGiving(id);
-  if (!giving) notFound();
+  const entry = await getGivingEntry(id);
+  if (!entry) notFound();
 
   const t = await getTranslations("giving.detail");
-  const tMethod = await getTranslations("giving.method");
-  const tStatus = await getTranslations("giving.status");
 
   return (
     <div className="flex flex-col gap-6">
@@ -42,15 +39,13 @@ export default async function GivingDetailPage({
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div className="flex flex-col gap-1">
             <h1 className="text-3xl font-bold tracking-tight">
-              {formatRupiah(giving.amount)}
+              {formatRupiah(entry.amount)}
             </h1>
-            <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-              <Badge>{tStatus(giving.status.toLowerCase() as never)}</Badge>
-              <span>•</span>
-              <span>{tMethod(methodKey(giving.method))}</span>
-              <span>•</span>
-              <span>{format(giving.receivedAt, "EEE dd MMM yyyy")}</span>
-            </div>
+            <p className="text-sm text-muted-foreground">
+              {entry.service
+                ? `${entry.service.name} · ${formatJakarta(entry.service.startsAt, "EEEE, dd MMM yyyy HH:mm")}`
+                : `${t("standalone")} · ${formatJakarta(entry.receivedAt, "EEEE, dd MMM yyyy")}`}
+            </p>
           </div>
           <div className="flex flex-wrap gap-2">
             <Button asChild variant="outline">
@@ -69,53 +64,48 @@ export default async function GivingDetailPage({
           <CardTitle>{t("details")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2 text-sm">
-          <Field label={t("fields.fund")} value={giving.fund.name} />
           <Field
-            label={t("fields.giver")}
+            label={t("fields.service")}
             value={
-              giving.member ? (
+              entry.service ? (
                 <Link
-                  href={`/admin/members/${giving.member.id}`}
+                  href={`/admin/attendance/services/${entry.service.id}`}
                   className="text-primary hover:underline"
                 >
-                  {giving.member.fullName}
+                  {entry.service.name}
                 </Link>
               ) : (
-                giving.giverName ?? "—"
+                <span className="text-muted-foreground">
+                  {t("standalone")}
+                </span>
               )
             }
           />
-          <Field label={t("fields.giverPhone")} value={giving.giverPhone} />
-          <Field label={t("fields.giverEmail")} value={giving.giverEmail} />
+          <Field
+            label={t("fields.receivedAt")}
+            value={formatJakarta(entry.receivedAt, "EEEE, dd MMM yyyy")}
+          />
+          <Field label={t("fields.fund")} value={entry.fund.name} />
           <Separator />
           <Field
             label={t("fields.amount")}
             value={
               <span className="font-semibold tabular-nums">
-                {formatRupiah(giving.amount)} {giving.currency}
+                {formatRupiah(entry.amount)}
               </span>
             }
           />
+          <Field label={t("fields.recordedBy")} value={entry.recordedBy} />
           <Field
-            label={t("fields.method")}
-            value={tMethod(methodKey(giving.method))}
+            label={t("fields.recordedAt")}
+            value={formatJakarta(entry.createdAt, "dd MMM yyyy HH:mm")}
           />
-          <Field
-            label={t("fields.status")}
-            value={tStatus(giving.status.toLowerCase() as never)}
-          />
-          <Field
-            label={t("fields.receivedAt")}
-            value={format(giving.receivedAt, "EEEE, dd MMM yyyy")}
-          />
-          <Field label={t("fields.externalRef")} value={giving.externalRef} />
-          <Field label={t("fields.recordedBy")} value={giving.recordedBy} />
-          {giving.notes ? (
+          {entry.notes ? (
             <>
               <Separator />
               <div>
                 <div className="text-muted-foreground">{t("fields.notes")}</div>
-                <p className="whitespace-pre-wrap">{giving.notes}</p>
+                <p className="whitespace-pre-wrap">{entry.notes}</p>
               </div>
             </>
           ) : null}
@@ -132,21 +122,4 @@ function Field({ label, value }: { label: string; value: React.ReactNode }) {
       <dd className="col-span-2">{value || "—"}</dd>
     </div>
   );
-}
-
-function methodKey(m: string): string {
-  switch (m) {
-    case "BANK_TRANSFER":
-      return "bankTransfer";
-    case "QRIS":
-      return "qris";
-    case "EWALLET":
-      return "ewallet";
-    case "CASH":
-      return "cash";
-    case "CARD":
-      return "card";
-    default:
-      return "other";
-  }
 }

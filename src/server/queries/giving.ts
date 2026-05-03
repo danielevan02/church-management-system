@@ -1,6 +1,6 @@
 import "server-only";
 
-import type { GivingMethod, GivingStatus, Prisma } from "@prisma/client";
+import type { Prisma, ServiceType } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
 
@@ -8,47 +8,52 @@ import { clampPage } from "./_pagination";
 
 export type GivingFilters = {
   fundId?: string;
-  memberId?: string;
-  status?: GivingStatus;
-  method?: GivingMethod;
+  serviceId?: string;
+  serviceType?: ServiceType;
+  /** When set, includes only entries that have / don't have a service link. */
+  withService?: boolean;
   from?: Date;
   to?: Date;
 };
 
-const givingListSelect = {
+const givingEntrySelect = {
   id: true,
   amount: true,
-  currency: true,
-  method: true,
-  status: true,
   receivedAt: true,
-  giverName: true,
-  giverPhone: true,
-  externalRef: true,
   notes: true,
+  recordedBy: true,
+  createdAt: true,
   fund: { select: { id: true, name: true, category: true } },
-  member: { select: { id: true, fullName: true, phone: true } },
-} as const satisfies Prisma.GivingRecordSelect;
+  service: {
+    select: { id: true, name: true, type: true, startsAt: true },
+  },
+} as const satisfies Prisma.GivingEntrySelect;
 
-export type GivingListItem = Prisma.GivingRecordGetPayload<{
-  select: typeof givingListSelect;
+export type GivingEntryListItem = Prisma.GivingEntryGetPayload<{
+  select: typeof givingEntrySelect;
 }>;
 
-function buildWhere(filters: GivingFilters): Prisma.GivingRecordWhereInput {
-  const where: Prisma.GivingRecordWhereInput = {};
+function buildWhere(filters: GivingFilters): Prisma.GivingEntryWhereInput {
+  const where: Prisma.GivingEntryWhereInput = {};
   if (filters.fundId) where.fundId = filters.fundId;
-  if (filters.memberId) where.memberId = filters.memberId;
-  if (filters.status) where.status = filters.status;
-  if (filters.method) where.method = filters.method;
+  if (filters.serviceId) where.serviceId = filters.serviceId;
+  if (filters.withService === true) where.serviceId = { not: null };
+  if (filters.withService === false) where.serviceId = null;
+
+  if (filters.serviceType) {
+    where.service = { type: filters.serviceType };
+  }
+
   if (filters.from || filters.to) {
     where.receivedAt = {};
     if (filters.from) where.receivedAt.gte = filters.from;
     if (filters.to) where.receivedAt.lte = filters.to;
   }
+
   return where;
 }
 
-export async function listGiving(opts: {
+export async function listGivingEntries(opts: {
   filters?: GivingFilters;
   page?: number;
   pageSize?: number;
@@ -58,18 +63,15 @@ export async function listGiving(opts: {
   const where = buildWhere(filters);
 
   const [items, total, sumResult] = await Promise.all([
-    prisma.givingRecord.findMany({
+    prisma.givingEntry.findMany({
       where,
-      orderBy: { receivedAt: "desc" },
+      orderBy: [{ receivedAt: "desc" }, { createdAt: "desc" }],
       skip,
       take,
-      select: givingListSelect,
+      select: givingEntrySelect,
     }),
-    prisma.givingRecord.count({ where }),
-    prisma.givingRecord.aggregate({
-      where: { ...where, status: "COMPLETED" },
-      _sum: { amount: true },
-    }),
+    prisma.givingEntry.count({ where }),
+    prisma.givingEntry.aggregate({ where, _sum: { amount: true } }),
   ]);
 
   return {
@@ -82,86 +84,107 @@ export async function listGiving(opts: {
   };
 }
 
-export async function getGiving(id: string) {
-  return prisma.givingRecord.findUnique({
+export async function getGivingEntry(id: string) {
+  return prisma.givingEntry.findUnique({
     where: { id },
     include: {
       fund: { select: { id: true, name: true, category: true } },
-      member: { select: { id: true, fullName: true, phone: true } },
+      service: {
+        select: { id: true, name: true, type: true, startsAt: true },
+      },
     },
   });
 }
 
-export async function getGivingForMember(memberId: string, limit = 50) {
-  const [items, sumYear, sumAll] = await Promise.all([
-    prisma.givingRecord.findMany({
-      where: { memberId, status: "COMPLETED" },
-      orderBy: { receivedAt: "desc" },
-      take: limit,
-      select: {
-        id: true,
-        amount: true,
-        currency: true,
-        method: true,
-        receivedAt: true,
-        fund: { select: { id: true, name: true, category: true } },
-      },
-    }),
-    prisma.givingRecord.aggregate({
-      where: {
-        memberId,
-        status: "COMPLETED",
-        receivedAt: { gte: new Date(new Date().getFullYear(), 0, 1) },
-      },
-      _sum: { amount: true },
-    }),
-    prisma.givingRecord.aggregate({
-      where: { memberId, status: "COMPLETED" },
-      _sum: { amount: true },
-    }),
-  ]);
+/**
+ * Sundays anchor the week (Sun 00:00 → next Sun 00:00). Returns last `weeks`
+ * weeks ending in the current week, with each entry attached to its bucket
+ * by `receivedAt`.
+ */
+export async function getGivingByWeek(opts?: {
+  filters?: GivingFilters;
+  weeks?: number;
+}) {
+  const weeks = opts?.weeks ?? 8;
+  const now = new Date();
+  const currentWeekStart = startOfWeekSunday(now);
+  const earliestWeekStart = new Date(currentWeekStart);
+  earliestWeekStart.setDate(earliestWeekStart.getDate() - 7 * (weeks - 1));
 
-  return {
-    items,
-    totalThisYear: sumYear._sum.amount ?? "0",
-    totalAllTime: sumAll._sum.amount ?? "0",
+  const filters = opts?.filters ?? {};
+  const where = buildWhere({
+    ...filters,
+    from:
+      filters.from && filters.from > earliestWeekStart
+        ? filters.from
+        : earliestWeekStart,
+  });
+
+  const items = await prisma.givingEntry.findMany({
+    where,
+    orderBy: [{ receivedAt: "desc" }, { createdAt: "desc" }],
+    select: givingEntrySelect,
+  });
+
+  type Bucket = {
+    weekStart: Date;
+    weekEnd: Date;
+    total: number;
+    entries: GivingEntryListItem[];
   };
+
+  const buckets: Bucket[] = [];
+  for (let i = 0; i < weeks; i += 1) {
+    const weekStart = new Date(currentWeekStart);
+    weekStart.setDate(weekStart.getDate() - 7 * i);
+    const weekEnd = new Date(weekStart);
+    weekEnd.setDate(weekEnd.getDate() + 7);
+    buckets.push({ weekStart, weekEnd, total: 0, entries: [] });
+  }
+
+  for (const entry of items) {
+    const ts = entry.receivedAt.getTime();
+    const bucket = buckets.find(
+      (b) => ts >= b.weekStart.getTime() && ts < b.weekEnd.getTime(),
+    );
+    if (!bucket) continue;
+    bucket.entries.push(entry);
+    bucket.total += Number(entry.amount.toString());
+  }
+
+  return buckets;
 }
 
-/** Last 12 months of completed giving, grouped by month. */
+/** Last 12 months trend, anchored to receivedAt. */
 export async function getMonthlyGivingTrend(months = 12) {
   const now = new Date();
   const start = new Date(now.getFullYear(), now.getMonth() - (months - 1), 1);
 
-  const records = await prisma.givingRecord.findMany({
-    where: { status: "COMPLETED", receivedAt: { gte: start } },
-    select: { receivedAt: true, amount: true },
+  const entries = await prisma.givingEntry.findMany({
+    where: { receivedAt: { gte: start } },
+    select: { amount: true, receivedAt: true },
   });
 
-  const buckets = new Map<string, number>();
+  const bucket = new Map<string, number>();
   for (let i = 0; i < months; i += 1) {
     const d = new Date(now.getFullYear(), now.getMonth() - (months - 1) + i, 1);
-    buckets.set(monthKey(d), 0);
+    bucket.set(monthKey(d), 0);
   }
 
-  for (const r of records) {
-    const key = monthKey(r.receivedAt);
-    if (buckets.has(key)) {
-      buckets.set(key, (buckets.get(key) ?? 0) + Number(r.amount.toString()));
+  for (const e of entries) {
+    const key = monthKey(e.receivedAt);
+    if (bucket.has(key)) {
+      bucket.set(key, (bucket.get(key) ?? 0) + Number(e.amount.toString()));
     }
   }
 
-  return Array.from(buckets.entries()).map(([month, total]) => ({
+  return Array.from(bucket.entries()).map(([month, total]) => ({
     month,
     total,
   }));
 }
 
-function monthKey(d: Date): string {
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
-}
-
-/** Sum of completed giving per fund within a date range (defaults to current month). */
+/** Sum per fund within a date range (default = current month). */
 export async function getFundBreakdown(opts?: { from?: Date; to?: Date }) {
   const now = new Date();
   const from = opts?.from ?? new Date(now.getFullYear(), now.getMonth(), 1);
@@ -169,12 +192,9 @@ export async function getFundBreakdown(opts?: { from?: Date; to?: Date }) {
     opts?.to ??
     new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
 
-  const grouped = await prisma.givingRecord.groupBy({
+  const grouped = await prisma.givingEntry.groupBy({
     by: ["fundId"],
-    where: {
-      status: "COMPLETED",
-      receivedAt: { gte: from, lte: to },
-    },
+    where: { receivedAt: { gte: from, lte: to } },
     _sum: { amount: true },
     _count: { _all: true },
   });
@@ -198,48 +218,50 @@ export async function getFundBreakdown(opts?: { from?: Date; to?: Date }) {
     .sort((a, b) => b.total - a.total);
 }
 
-/** Top givers within a date range. ADMIN-only — caller must enforce. */
-export async function getTopGivers(opts: {
+/**
+ * Sum per service type within a date range (default = current month).
+ * Entries without a service link are bucketed under a synthetic "STANDALONE"
+ * row so the breakdown still totals correctly.
+ */
+export async function getServiceTypeBreakdown(opts?: {
   from?: Date;
   to?: Date;
-  limit?: number;
 }) {
-  const limit = opts.limit ?? 10;
-  const where: Prisma.GivingRecordWhereInput = {
-    status: "COMPLETED",
-    memberId: { not: null },
-  };
-  if (opts.from || opts.to) {
-    where.receivedAt = {};
-    if (opts.from) where.receivedAt.gte = opts.from;
-    if (opts.to) where.receivedAt.lte = opts.to;
-  }
+  const now = new Date();
+  const from = opts?.from ?? new Date(now.getFullYear(), now.getMonth(), 1);
+  const to =
+    opts?.to ??
+    new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
 
-  const grouped = await prisma.givingRecord.groupBy({
-    by: ["memberId"],
-    where,
-    _sum: { amount: true },
-    _count: { _all: true },
-    orderBy: { _sum: { amount: "desc" } },
-    take: limit,
+  const entries = await prisma.givingEntry.findMany({
+    where: { receivedAt: { gte: from, lte: to } },
+    select: {
+      amount: true,
+      service: { select: { type: true } },
+    },
   });
 
-  const memberIds = grouped
-    .map((g) => g.memberId)
-    .filter((id): id is string => id != null);
-  const members = memberIds.length
-    ? await prisma.member.findMany({
-        where: { id: { in: memberIds } },
-        select: { id: true, fullName: true, phone: true, photoUrl: true },
-      })
-    : [];
-  const memberMap = new Map(members.map((m) => [m.id, m]));
+  const totals = new Map<ServiceType | "STANDALONE", { total: number; count: number }>();
+  for (const e of entries) {
+    const key: ServiceType | "STANDALONE" = e.service?.type ?? "STANDALONE";
+    const cur = totals.get(key) ?? { total: 0, count: 0 };
+    cur.total += Number(e.amount.toString());
+    cur.count += 1;
+    totals.set(key, cur);
+  }
 
-  return grouped
-    .map((g) => ({
-      member: g.memberId ? memberMap.get(g.memberId) : undefined,
-      total: Number((g._sum.amount ?? "0").toString()),
-      count: g._count._all,
-    }))
-    .filter((row) => row.member != null);
+  return Array.from(totals.entries())
+    .map(([type, value]) => ({ type, ...value }))
+    .sort((a, b) => b.total - a.total);
+}
+
+function monthKey(d: Date): string {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+}
+
+function startOfWeekSunday(d: Date): Date {
+  const date = new Date(d);
+  date.setHours(0, 0, 0, 0);
+  date.setDate(date.getDate() - date.getDay());
+  return date;
 }

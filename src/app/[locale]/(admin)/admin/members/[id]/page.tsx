@@ -18,12 +18,10 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { auth } from "@/lib/auth";
-import { formatRupiah } from "@/lib/format";
 import { Link } from "@/lib/i18n/navigation";
 import { getAttendanceForMember } from "@/server/queries/attendance";
 import { getMilestonesForMember } from "@/server/queries/discipleship";
 import { getRsvpsForMember } from "@/server/queries/events";
-import { getGivingForMember } from "@/server/queries/giving";
 import { getMember } from "@/server/queries/members";
 import { getVisitsForMember } from "@/server/queries/pastoral";
 import { formatJakarta } from "@/lib/datetime";
@@ -46,17 +44,14 @@ export default async function MemberDetailPage({
   const tStatus = await getTranslations("members.form.status");
   const tMarital = await getTranslations("members.form.marital");
   const tType = await getTranslations("services.type");
-  const tFundCategory = await getTranslations("giving.fund.category");
-  const tMethod = await getTranslations("giving.method");
   const tRsvp = await getTranslations("events.rsvpStatus");
   const tMilestone = await getTranslations("discipleship.type");
   const tVisitType = await getTranslations("pastoral.visitType");
   const canPastoral =
     session?.user.role === "ADMIN" || session?.user.role === "STAFF";
-  const [attendanceHistory, givingHistory, rsvpHistory, milestones, visits] =
+  const [attendanceHistory, rsvpHistory, milestones, visits] =
     await Promise.all([
       getAttendanceForMember(id, 25),
-      getGivingForMember(id, 25),
       getRsvpsForMember(id, 25),
       getMilestonesForMember(id),
       canPastoral ? getVisitsForMember(id, 25) : Promise.resolve([]),
@@ -115,7 +110,6 @@ export default async function MemberDetailPage({
             <TabsTrigger value="attendance">
               {t("tabs.attendance")}
             </TabsTrigger>
-            <TabsTrigger value="giving">{t("tabs.giving")}</TabsTrigger>
             <TabsTrigger value="events">{t("tabs.events")}</TabsTrigger>
             <TabsTrigger value="discipleship">
               {t("tabs.discipleship")}
@@ -330,70 +324,6 @@ export default async function MemberDetailPage({
             </Card>
           )}
         </TabsContent>
-        <TabsContent value="giving" className="mt-6">
-          {givingHistory.items.length === 0 ? (
-            <PlaceholderCard
-              title={t("tabs.giving")}
-              description={t("placeholders.giving")}
-            />
-          ) : (
-            <div className="flex flex-col gap-4">
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <Card>
-                  <CardContent className="pt-6">
-                    <div className="text-sm text-muted-foreground">
-                      {t("giving.totalThisYear")}
-                    </div>
-                    <div className="text-2xl font-bold tabular-nums">
-                      {formatRupiah(givingHistory.totalThisYear)}
-                    </div>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardContent className="pt-6">
-                    <div className="text-sm text-muted-foreground">
-                      {t("giving.totalAllTime")}
-                    </div>
-                    <div className="text-2xl font-bold tabular-nums">
-                      {formatRupiah(givingHistory.totalAllTime)}
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-              <Card>
-                <CardContent className="pt-6">
-                  <ul className="flex flex-col gap-2 text-sm">
-                    {givingHistory.items.map((row) => (
-                      <li
-                        key={row.id}
-                        className="flex items-center justify-between gap-2 rounded-md border p-3"
-                      >
-                        <div className="flex flex-col">
-                          <Link
-                            href={`/admin/giving/${row.id}`}
-                            className="font-medium hover:underline"
-                          >
-                            {row.fund.name}
-                          </Link>
-                          <span className="text-xs text-muted-foreground">
-                            {tFundCategory(
-                              row.fund.category.toLowerCase() as never,
-                            )}{" "}
-                            · {tMethod(givingMethodKey(row.method))} ·{" "}
-                            {format(row.receivedAt, "dd MMM yyyy")}
-                          </span>
-                        </div>
-                        <span className="font-semibold tabular-nums">
-                          {formatRupiah(row.amount)}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-            </div>
-          )}
-        </TabsContent>
         <TabsContent value="events" className="mt-6">
           {rsvpHistory.length === 0 ? (
             <PlaceholderCard
@@ -585,23 +515,6 @@ function serviceTypeKey(t: string): string {
       return "children";
     case "SPECIAL":
       return "special";
-    default:
-      return "other";
-  }
-}
-
-function givingMethodKey(m: string): string {
-  switch (m) {
-    case "BANK_TRANSFER":
-      return "bankTransfer";
-    case "QRIS":
-      return "qris";
-    case "EWALLET":
-      return "ewallet";
-    case "CASH":
-      return "cash";
-    case "CARD":
-      return "card";
     default:
       return "other";
   }

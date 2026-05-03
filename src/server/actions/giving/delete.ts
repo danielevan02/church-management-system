@@ -23,30 +23,28 @@ export async function deleteGivingAction(
   }
 
   try {
-    const record = await prisma.givingRecord.findUnique({
+    const entry = await prisma.givingEntry.findUnique({
       where: { id },
-      select: { memberId: true, amount: true, fundId: true },
+      select: { serviceId: true, fundId: true, amount: true },
     });
-    if (!record) return { ok: false, error: "NOT_FOUND" };
-    await prisma.givingRecord.delete({ where: { id } });
+    if (!entry) return { ok: false, error: "NOT_FOUND" };
+    await prisma.givingEntry.delete({ where: { id } });
     await writeAudit({
       userId: session.user.id,
       action: "giving.delete",
-      entityType: "GivingRecord",
+      entityType: "GivingEntry",
       entityId: id,
       metadata: {
-        memberId: record.memberId,
-        fundId: record.fundId,
-        amount: record.amount.toString(),
+        serviceId: entry.serviceId,
+        fundId: entry.fundId,
+        amount: entry.amount.toString(),
       },
     });
     revalidatePath("/admin/giving");
-    if (record.memberId) {
-      revalidatePath(`/admin/members/${record.memberId}`);
-    }
+    revalidatePath("/admin/giving/reports");
     return { ok: true };
   } catch (e) {
-    console.error("[deleteGiving]", e);
+    console.error("[deleteGivingEntry]", e);
     return { ok: false, error: "INTERNAL_ERROR" };
   }
 }

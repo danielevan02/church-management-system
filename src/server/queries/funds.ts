@@ -12,7 +12,7 @@ const fundListSelect = {
   category: true,
   description: true,
   isActive: true,
-  _count: { select: { givings: true } },
+  _count: { select: { entries: true } },
 } as const satisfies Prisma.FundSelect;
 
 export type FundListItem = Prisma.FundGetPayload<{

@@ -6,19 +6,30 @@ import { createGivingAction } from "@/server/actions/giving/create";
 
 export function GivingCreateForm({
   funds,
+  services,
+  defaultServiceId,
+  defaultReceivedAt,
   submitLabel,
 }: {
   funds: Array<{ id: string; name: string }>;
+  services: Array<{ id: string; name: string; startsAt: Date }>;
+  defaultServiceId?: string;
+  defaultReceivedAt: string;
   submitLabel: string;
 }) {
   const router = useRouter();
   return (
     <GivingForm
       funds={funds}
+      services={services}
+      initialValues={{
+        serviceId: defaultServiceId ?? "_none",
+        receivedAt: defaultReceivedAt,
+      }}
       submitLabel={submitLabel}
       onSubmit={createGivingAction}
-      onSuccess={(result) => {
-        if (result.id) router.push(`/admin/giving/${result.id}`);
+      onSuccess={() => {
+        router.push("/admin/giving");
       }}
     />
   );

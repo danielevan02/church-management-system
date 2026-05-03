@@ -563,7 +563,6 @@
         "profile": "Profile",
         "cellGroups": "Cell groups",
         "attendance": "Attendance",
-        "giving": "Giving",
         "events": "Events",
         "discipleship": "Discipleship",
         "pastoral": "Pastoral"
@@ -596,14 +595,9 @@
       "placeholders": {
         "noCellGroups": "Not in any cell group yet.",
         "attendance": "Attendance history will appear after Phase 4 (Attendance).",
-        "giving": "No giving recorded for this member yet.",
         "events": "Event RSVPs will appear after Phase 8 (Events).",
         "discipleship": "Discipleship milestones will appear after Phase 11.",
         "pastoral": "No pastoral visits recorded yet."
-      },
-      "giving": {
-        "totalThisYear": "Total this year",
-        "totalAllTime": "Total all time"
       },
       "discipleship": {
         "addMilestone": "Add milestone"
@@ -910,47 +904,30 @@
     }
   },
   "giving": {
-    "method": {
-      "bankTransfer": "Bank transfer",
-      "qris": "QRIS",
-      "ewallet": "E-wallet",
-      "cash": "Cash",
-      "card": "Card",
-      "other": "Other"
-    },
-    "status": {
-      "completed": "Completed",
-      "pending": "Pending",
-      "failed": "Failed",
-      "refunded": "Refunded"
-    },
     "filters": {
       "fund": "Fund",
       "anyFund": "Any fund",
-      "method": "Method",
-      "anyMethod": "Any method",
-      "status": "Status",
-      "anyStatus": "Any status",
+      "serviceType": "Service type",
+      "anyServiceType": "Any service",
       "from": "From",
       "to": "To"
     },
     "list": {
       "title": "Giving",
-      "subtitle": "{total} entries · {sum} completed.",
+      "subtitle": "{total} entries · {sum} in the last 8 weeks.",
       "newButton": "Record giving",
       "manageFunds": "Funds",
       "reports": "Reports",
-      "empty": "No giving records yet.",
-      "colDate": "Date",
-      "colGiver": "Giver",
-      "colFund": "Fund",
-      "colMethod": "Method",
-      "colStatus": "Status",
-      "colAmount": "Amount"
+      "empty": "No giving recorded in this range yet.",
+      "currentWeek": "This week",
+      "weekTotal": "Week total",
+      "weekEmpty": "Nothing recorded this week.",
+      "standalone": "Standalone giving",
+      "standaloneSubtitle": "Direct gifts (transfers / envelopes outside a service)"
     },
     "new": {
       "title": "Record giving",
-      "subtitle": "Enter a giving you've verified on the bank statement.",
+      "subtitle": "Record one total per service per fund.",
       "submit": "Save"
     },
     "edit": {
@@ -962,23 +939,16 @@
         "savedToast": "Giving saved.",
         "errorToast": "Save failed. Check the form.",
         "fields": {
+          "service": "Service",
+          "servicePlaceholder": "Pick a service…",
+          "serviceHelp": "Pick a service if collected during one, or \"Standalone\" for direct gifts (transfer / envelope on a non-Sunday).",
+          "serviceNone": "— Standalone / direct gift —",
           "fund": "Fund",
           "fundPlaceholder": "Pick a fund…",
-          "amount": "Amount (IDR)",
-          "amountHelp": "Enter the rupiah amount, e.g. 100000.",
-          "member": "Member",
-          "memberPlaceholder": "Search a member…",
-          "memberHelp": "Leave empty if the giver is not a registered member.",
-          "giverName": "Giver name (if not a member)",
-          "giverNamePlaceholder": "e.g. Anonim, John Smith",
-          "giverNameHelp": "Use this for visitors or anonymous givers.",
-          "giverPhone": "Phone",
-          "giverEmail": "Email",
-          "method": "Method",
-          "status": "Status",
+          "amount": "Amount",
+          "amountHelp": "Just type the digits — Rupiah formatting is added automatically.",
           "receivedAt": "Received at",
-          "externalRef": "External reference",
-          "externalRefHelp": "Optional — bank statement ID, etc.",
+          "receivedAtHelp": "Auto-filled from the service date when one is selected.",
           "notes": "Notes"
         }
       }
@@ -988,17 +958,14 @@
       "edit": "Edit",
       "delete": "Delete",
       "details": "Details",
+      "standalone": "Standalone giving (no service)",
       "fields": {
-        "fund": "Fund",
-        "giver": "Giver",
-        "giverPhone": "Phone",
-        "giverEmail": "Email",
-        "amount": "Amount",
-        "method": "Method",
-        "status": "Status",
+        "service": "Service",
         "receivedAt": "Received at",
-        "externalRef": "External reference",
+        "fund": "Fund",
+        "amount": "Amount",
         "recordedBy": "Recorded by",
+        "recordedAt": "Recorded at",
         "notes": "Notes"
       },
       "confirmDelete": "Delete this giving record? This cannot be undone.",
@@ -1032,7 +999,7 @@
       },
       "new": {
         "title": "New fund",
-        "subtitle": "Funds bucket every giving record. Most churches need 3-5.",
+        "subtitle": "Funds bucket every giving entry. Most churches need 3-5.",
         "submit": "Save"
       },
       "edit": {
@@ -1053,17 +1020,15 @@
     "reports": {
       "backToList": "Giving",
       "title": "Giving reports",
-      "subtitle": "Trends, fund breakdowns, and top givers.",
+      "subtitle": "Monthly trend, breakdown by fund and by service.",
       "trendTitle": "12-month trend",
       "trendDescription": "Total: {total}",
       "trendEmpty": "Not enough data yet.",
-      "breakdownTitle": "Fund breakdown (this month)",
+      "breakdownByFundTitle": "Breakdown by fund (this month)",
+      "breakdownByServiceTitle": "Breakdown by service (this month)",
       "breakdownDescription": "Total: {total}",
       "breakdownEmpty": "No giving recorded this month.",
-      "topGiversTitle": "Top givers (all time)",
-      "topGiversDescription": "Visible to admins only.",
-      "topGiversEmpty": "No giving recorded yet.",
-      "recordsAbbr": "records",
+      "recordsAbbr": "entries",
       "chart": {
         "total": "Total"
       }
