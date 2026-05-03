@@ -1,6 +1,7 @@
 "use client";
 
-import { LogOut, MoreVertical } from "lucide-react";
+import type { Role } from "@prisma/client";
+import { LayoutDashboard, LogOut, MoreVertical } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import * as React from "react";
@@ -31,6 +32,7 @@ import { church } from "@/config/church";
 import { features } from "@/config/features";
 import { memberNav } from "@/config/nav";
 import { Link, usePathname } from "@/lib/i18n/navigation";
+import { hasAtLeastRole } from "@/lib/permissions";
 import { signOutAction } from "@/server/actions/auth/sign-out";
 
 type ShellMember = {
@@ -41,9 +43,10 @@ type ShellMember = {
 
 type Props = React.ComponentProps<typeof Sidebar> & {
   member: ShellMember | null;
+  role: Role;
 };
 
-export function MemberSidebar({ member, ...props }: Props) {
+export function MemberSidebar({ member, role, ...props }: Props) {
   const t = useTranslations();
   const tCommon = useTranslations("common");
   const pathname = usePathname();
@@ -135,17 +138,24 @@ export function MemberSidebar({ member, ...props }: Props) {
       </SidebarContent>
 
       <SidebarFooter>
-        <MemberNavUser member={member} />
+        <MemberNavUser member={member} role={role} />
       </SidebarFooter>
     </Sidebar>
   );
 }
 
-function MemberNavUser({ member }: { member: ShellMember | null }) {
+function MemberNavUser({
+  member,
+  role,
+}: {
+  member: ShellMember | null;
+  role: Role;
+}) {
   const t = useTranslations("common");
   const { isMobile } = useSidebar();
   const initial = (member?.firstName ?? "J").charAt(0).toUpperCase();
   const displayName = member?.fullName ?? "Jemaat";
+  const canAccessAdmin = hasAtLeastRole(role, "LEADER");
 
   return (
     <SidebarMenu>
@@ -198,6 +208,14 @@ function MemberNavUser({ member }: { member: ShellMember | null }) {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
+            {canAccessAdmin ? (
+              <DropdownMenuItem asChild>
+                <Link href="/admin/dashboard" className="w-full">
+                  <LayoutDashboard />
+                  {t("switchToAdmin")}
+                </Link>
+              </DropdownMenuItem>
+            ) : null}
             <form action={signOutAction}>
               <DropdownMenuItem asChild>
                 <button type="submit" className="w-full">

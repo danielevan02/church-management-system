@@ -3,6 +3,8 @@ import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { normalizePhone } from "@/lib/phone";
 
+import type { Role } from "@prisma/client";
+
 export const PIN_MIN_LENGTH = 4;
 export const PIN_MAX_LENGTH = 6;
 
@@ -16,7 +18,7 @@ export type SignInPinResult =
       user: {
         id: string;
         email: string | null;
-        role: "MEMBER";
+        role: Role;
         memberId: string;
       };
     }
@@ -181,7 +183,7 @@ export async function signInWithPin(
     user: {
       id: matched.id,
       email: matched.email,
-      role: "MEMBER",
+      role: matched.role,
       memberId: matched.memberId,
     },
   };

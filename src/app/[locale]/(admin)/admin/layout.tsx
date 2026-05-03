@@ -22,7 +22,11 @@ export default async function AdminLayout({
     >
       <AdminSidebar
         variant="inset"
-        user={{ email: session.user.email ?? null, role: session.user.role }}
+        user={{
+          email: session.user.email ?? null,
+          role: session.user.role,
+          memberId: session.user.memberId ?? null,
+        }}
       />
       <SidebarInset className="min-w-0">
         <AdminHeader />

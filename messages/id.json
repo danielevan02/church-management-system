@@ -11,6 +11,8 @@
     "delete": "Hapus",
     "confirm": "Ya",
     "signOut": "Keluar",
+    "switchToAdmin": "Beralih ke Admin",
+    "switchToMember": "Beralih ke Portal Jemaat",
     "soon": "Soon",
     "datetime": {
       "placeholder": "Pilih tanggal & jam",
@@ -1821,7 +1823,7 @@
           "isActiveHint": "Pengguna nonaktif tidak bisa login.",
           "linkMember": "Tautkan anggota",
           "linkMemberPlaceholder": "Cari anggota…",
-          "linkMemberHint": "Opsional. Tautkan ke record anggota."
+          "linkMemberHint": "Kosongkan untuk staf yang BUKAN jemaat (mis. akuntan eksternal). Isi hanya jika orang ini juga jemaat dan belum punya akun — biasanya jemaat dibuatkan akun otomatis saat PIN-nya diset."
         },
         "createdToast": "Pengguna dibuat.",
         "updatedToast": "Pengguna diperbarui.",
