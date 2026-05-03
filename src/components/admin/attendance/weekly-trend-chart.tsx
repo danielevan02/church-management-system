@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/chart";
 
 type Row = {
-  weekStart: string;
+  sundayDate: string;
   members: number;
   visitors: number;
   total: number;
@@ -32,7 +32,7 @@ export function WeeklyTrendChart({ data }: { data: Row[] }) {
       <BarChart data={data} margin={{ left: 0, right: 8, top: 8 }}>
         <CartesianGrid vertical={false} />
         <XAxis
-          dataKey="weekStart"
+          dataKey="sundayDate"
           tickLine={false}
           axisLine={false}
           tickMargin={8}
