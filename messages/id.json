@@ -830,6 +830,15 @@
       "confirmDeleteRecord": "Hapus catatan kehadiran ini?",
       "deletedToast": "Catatan dihapus.",
       "visitorTag": "tamu"
+    },
+    "delete": {
+      "button": "Hapus",
+      "confirmTitle": "Hapus ibadah ini?",
+      "confirmDescription": "Ibadah akan dihapus permanen. Aksi ini tidak bisa dibatalkan.",
+      "confirmDescriptionBlocked": "Ibadah ini tidak bisa dihapus karena sudah ada {count} catatan kehadiran. Hapus catatan kehadiran terlebih dahulu.",
+      "deletedToast": "Ibadah dihapus.",
+      "hasAttendanceToast": "Tidak bisa dihapus: sudah ada catatan kehadiran.",
+      "errorToast": "Gagal menghapus."
     }
   },
   "attendance": {
