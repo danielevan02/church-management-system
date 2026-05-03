@@ -1,10 +1,17 @@
 import { z } from "zod";
 
+import { parseJakartaInput } from "@/lib/datetime";
+
 const empty = z
   .string()
   .nullish()
   .transform((v) => (v == null || v.trim() === "" ? null : v.trim()));
 
+/**
+ * Date-only field (e.g. cell group meeting date — `<input type="date">`
+ * sends "yyyy-MM-dd"). `new Date("yyyy-MM-dd")` parses as UTC midnight by
+ * spec, regardless of server TZ — safe for date-only.
+ */
 const requiredDate = z
   .union([z.string(), z.date()])
   .transform((v) => {
@@ -14,14 +21,19 @@ const requiredDate = z
   })
   .refine((v): v is Date => v instanceof Date, { message: "Tanggal tidak valid" });
 
+/**
+ * Datetime field from `<input type="datetime-local">` ("yyyy-MM-ddTHH:mm").
+ * Treated as Jakarta wall-clock; stored as UTC. Don't use raw `new Date(v)`
+ * — that interprets the string in the server's local timezone (UTC on
+ * Vercel), shifting every saved time by 7 hours.
+ */
 const optionalDateTime = z
   .union([z.string(), z.date(), z.null()])
   .optional()
   .transform((v) => {
     if (v == null || v === "") return null;
     if (v instanceof Date) return v;
-    const d = new Date(v);
-    return Number.isNaN(d.getTime()) ? null : d;
+    return parseJakartaInput(v);
   });
 
 export const cellGroupInputSchema = z.object({

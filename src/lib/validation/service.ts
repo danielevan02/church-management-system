@@ -3,17 +3,33 @@ import { z } from "zod";
 import { parseJakartaInput } from "@/lib/datetime";
 
 /**
- * Parse a datetime field from a form. The form sends a wall-clock string
- * like "2026-05-03T15:00" — we treat that as Jakarta time and store as
- * UTC. Using raw `new Date(v)` here would interpret the string in the
- * server's local timezone (UTC on Vercel), shifting every saved time by
- * 7 hours.
+ * Datetime field from a form. The form sends a wall-clock string like
+ * "2026-05-03T15:00" — we treat that as Jakarta time and store as UTC.
+ * Using raw `new Date(v)` here would interpret the string in the server's
+ * local timezone (UTC on Vercel), shifting every saved time by 7 hours.
  */
-const requiredDate = z
+const requiredDateTime = z
   .union([z.string(), z.date()])
   .transform((v) => {
     if (v instanceof Date) return v;
     return parseJakartaInput(v);
+  })
+  .refine((v): v is Date => v instanceof Date, { message: "Tanggal tidak valid" });
+
+/**
+ * Date-only field from a form (e.g. `<input type="date">` emits "yyyy-MM-dd").
+ * `new Date("yyyy-MM-dd")` is spec'd to parse as UTC midnight regardless of
+ * server timezone, which is what we want — callers read the calendar date
+ * via UTC accessors. Do NOT use parseJakartaInput here: it treats date-only
+ * input as Jakarta midnight, which is the previous day in UTC and shifts
+ * the picked date by one.
+ */
+const requiredDateOnly = z
+  .union([z.string(), z.date()])
+  .transform((v) => {
+    if (v instanceof Date) return v;
+    const d = new Date(v);
+    return Number.isNaN(d.getTime()) ? null : d;
   })
   .refine((v): v is Date => v instanceof Date, { message: "Tanggal tidak valid" });
 
@@ -35,7 +51,7 @@ export const serviceTypeEnum = z.enum([
 export const serviceInputSchema = z.object({
   name: z.string().min(1, "Wajib").max(120),
   type: serviceTypeEnum,
-  startsAt: requiredDate,
+  startsAt: requiredDateTime,
   durationMin: z.coerce
     .number()
     .int()
@@ -54,7 +70,7 @@ export const recurringServiceSchema = z.object({
   name: z.string().min(1, "Wajib").max(120),
   type: serviceTypeEnum,
   /** Date of the FIRST occurrence; subsequent are computed from it. */
-  firstDate: requiredDate,
+  firstDate: requiredDateOnly,
   /** Time of day in HH:mm (24-hour). */
   time: z
     .string()

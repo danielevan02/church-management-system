@@ -2,6 +2,7 @@ import { ArrowLeft, Pencil, QrCode, ScanLine } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
+import { DeleteServiceButton } from "./delete-service-button";
 import { ServiceDeleteRecordButton } from "./service-delete-record-button";
 import { ServiceTogglePublishButton } from "./service-toggle-publish-button";
 import { Pagination } from "@/components/shared/pagination";
@@ -98,6 +99,7 @@ export default async function ServiceDetailPage({
               </Link>
             </Button>
             <ServiceTogglePublishButton id={id} isActive={service.isActive} />
+            <DeleteServiceButton id={id} attendanceCount={total} />
             <Button asChild disabled={!open}>
               <Link href={`/admin/attendance/check-in/${id}`}>
                 <ScanLine className="h-4 w-4" />

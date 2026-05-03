@@ -830,6 +830,15 @@
       "confirmDeleteRecord": "Remove this attendance record?",
       "deletedToast": "Record removed.",
       "visitorTag": "visitor"
+    },
+    "delete": {
+      "button": "Delete",
+      "confirmTitle": "Delete this service?",
+      "confirmDescription": "The service will be permanently removed. This cannot be undone.",
+      "confirmDescriptionBlocked": "This service has {count} attendance records and can't be deleted. Remove the records first.",
+      "deletedToast": "Service deleted.",
+      "hasAttendanceToast": "Cannot delete: attendance records exist.",
+      "errorToast": "Failed to delete."
     }
   },
   "attendance": {
