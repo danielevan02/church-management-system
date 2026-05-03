@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { useTransition } from "react";
 import { toast } from "sonner";
 
+import { ConfirmDialog } from "@/components/shared/confirm-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -30,6 +31,7 @@ export function AssignmentRowActions({
 }) {
   const t = useTranslations("volunteers.schedule");
   const tStatus = useTranslations("volunteers.assignmentStatus");
+  const tCommon = useTranslations("common");
   const router = useRouter();
   const [pending, startTransition] = useTransition();
 
@@ -47,7 +49,6 @@ export function AssignmentRowActions({
   }
 
   function onDelete() {
-    if (!confirm(t("confirmDelete"))) return;
     startTransition(async () => {
       const result = await deleteAssignmentAction(id);
       if (result.ok) {
@@ -76,15 +77,20 @@ export function AssignmentRowActions({
           <SelectItem value="COMPLETED">{tStatus("completed")}</SelectItem>
         </SelectContent>
       </Select>
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon"
-        onClick={onDelete}
-        disabled={pending}
-      >
-        <Trash2 className="h-4 w-4" />
-      </Button>
+      <ConfirmDialog
+        trigger={
+          <Button type="button" variant="ghost" size="icon" disabled={pending}>
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        }
+        title={tCommon("delete")}
+        description={t("confirmDelete")}
+        confirmLabel={tCommon("delete")}
+        cancelLabel={tCommon("cancel")}
+        destructive
+        pending={pending}
+        onConfirm={onDelete}
+      />
     </div>
   );
 }
