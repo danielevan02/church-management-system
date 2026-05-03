@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { DatePicker } from "@/components/shared/date-picker";
 import { Label } from "@/components/ui/label";
@@ -11,7 +12,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useRouter } from "@/lib/i18n/navigation";
 
 const ALL = "_all";
 
@@ -31,16 +31,19 @@ export function GivingFilters({ funds, current }: Props) {
   const tMethod = useTranslations("giving.method");
   const tStatus = useTranslations("giving.status");
   const router = useRouter();
+  const pathname = usePathname();
+  const sp = useSearchParams();
 
   function setParam(key: string, value: string | null) {
-    const url = new URL(window.location.href);
+    const params = new URLSearchParams(sp.toString());
     if (value == null || value === "" || value === ALL) {
-      url.searchParams.delete(key);
+      params.delete(key);
     } else {
-      url.searchParams.set(key, value);
+      params.set(key, value);
     }
-    url.searchParams.delete("page");
-    router.push(`${url.pathname}${url.search}`);
+    params.delete("page");
+    const qs = params.toString();
+    router.push(qs ? `${pathname}?${qs}` : pathname);
   }
 
   return (
