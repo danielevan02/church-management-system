@@ -224,13 +224,6 @@
       "myCellGroup": "Komsel Saya",
       "noCellGroup": "Anda belum tergabung di komsel manapun.",
       "joinCellGroup": "Pelajari komsel",
-      "giving": {
-        "title": "Persembahan Saya",
-        "ytd": "Total tahun ini",
-        "lastGift": "Persembahan terakhir",
-        "noGiving": "Belum ada catatan persembahan tahun ini.",
-        "viewAll": "Lihat semua"
-      },
       "discipleship": {
         "title": "Perjalanan Rohani",
         "completed": "{count} milestone tercatat",
@@ -335,22 +328,11 @@
       "warning": "Jangan bagikan QR ini ke orang lain — gunakan hanya untuk check-in pribadi."
     },
     "giving": {
-      "title": "Persembahan Saya",
-      "subtitle": "Riwayat dan total persembahan Anda.",
-      "giveNow": "Beri Persembahan",
-      "totalThisYear": "Total {year}",
-      "totalAllTime": "Total Sepanjang Waktu",
-      "historyTitle": "Riwayat",
-      "historyDescription": "50 persembahan tercatat terakhir.",
-      "historyEmpty": "Belum ada riwayat persembahan."
-    },
-    "giveNow": {
       "title": "Beri Persembahan",
       "subtitle": "Transfer ke {church} via QRIS atau rekening bank.",
-      "backToHistory": "Persembahan Saya",
-      "noteTitle": "Setelah transfer",
-      "noteDescription": "Persembahan Anda akan muncul di riwayat setelah admin mencatatnya.",
-      "noteBody": "Admin merekonsiliasi mutasi bank dan mencatat setiap entri ke riwayat Anda. Jika setelah beberapa hari belum muncul, hubungi admin gereja via WhatsApp."
+      "noteTitle": "Tentang persembahan Anda",
+      "noteDescription": "Tuhan memberkati hati yang memberi dengan sukacita.",
+      "noteBody": "Persembahan Anda diterima langsung oleh gereja melalui rekening atau QRIS di atas. Jika ada pertanyaan, silakan hubungi admin gereja via WhatsApp."
     },
     "discipleship": {
       "title": "Perjalanan Saya",

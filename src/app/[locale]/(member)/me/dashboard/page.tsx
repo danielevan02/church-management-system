@@ -30,7 +30,6 @@ import { Button } from "@/components/ui/button";
 import { features } from "@/config/features";
 import { auth } from "@/lib/auth";
 import { formatJakarta } from "@/lib/datetime";
-import { formatRupiah } from "@/lib/format";
 import { Link } from "@/lib/i18n/navigation";
 import { excerpt } from "@/lib/markdown";
 import { prisma } from "@/lib/prisma";
@@ -39,7 +38,6 @@ import { listChildrenForGuardian } from "@/server/queries/children";
 import { getTodayDevotionalForMember } from "@/server/queries/devotionals";
 import { getMilestonesForMember } from "@/server/queries/discipleship";
 import { getRsvpsForMember } from "@/server/queries/events";
-import { getGivingForMember } from "@/server/queries/giving";
 import { getAssignmentsForMember } from "@/server/queries/volunteers";
 
 export default async function MemberDashboardPage() {
@@ -77,7 +75,6 @@ export default async function MemberDashboardPage() {
     upcomingService,
     rsvps,
     volunteerAssignments,
-    giving,
     milestones,
     children,
     todayDevotional,
@@ -92,9 +89,6 @@ export default async function MemberDashboardPage() {
     memberId && features.volunteers
       ? getAssignmentsForMember(memberId, 1)
       : Promise.resolve([]),
-    memberId && features.giving
-      ? getGivingForMember(memberId, 1)
-      : Promise.resolve(null),
     memberId && features.discipleship
       ? getMilestonesForMember(memberId)
       : Promise.resolve([]),
@@ -115,8 +109,6 @@ export default async function MemberDashboardPage() {
         (r.status === "GOING" || r.status === "WAITLIST"),
     ) ?? null;
   const nextAssignment = volunteerAssignments[0] ?? null;
-  const lastGiving = giving?.items[0] ?? null;
-  const ytdGiving = giving ? Number((giving.totalThisYear ?? "0").toString()) : 0;
   const latestMilestone =
     milestones.length > 0 ? milestones[milestones.length - 1] : null;
 
@@ -197,7 +189,7 @@ export default async function MemberDashboardPage() {
         />
         {features.giving ? (
           <QuickAction
-            href="/me/giving/give"
+            href="/me/giving"
             icon={HandCoins}
             label={tQuick("giveNow")}
           />
@@ -400,39 +392,6 @@ export default async function MemberDashboardPage() {
               )}
             </Section>
 
-            {features.giving && giving ? (
-              <Section
-                title={t("giving.title")}
-                cta={{ href: "/me/giving", label: t("giving.viewAll") }}
-              >
-                {ytdGiving > 0 || lastGiving ? (
-                  <div className="grid grid-cols-2 gap-2">
-                    <Stat
-                      label={t("giving.ytd")}
-                      value={formatRupiah(ytdGiving)}
-                    />
-                    <Stat
-                      label={t("giving.lastGift")}
-                      value={
-                        lastGiving
-                          ? formatRupiah(
-                              Number(lastGiving.amount.toString()),
-                            )
-                          : "—"
-                      }
-                      hint={
-                        lastGiving
-                          ? format(lastGiving.receivedAt, "dd MMM yyyy")
-                          : undefined
-                      }
-                    />
-                  </div>
-                ) : (
-                  <EmptyHint text={t("giving.noGiving")} />
-                )}
-              </Section>
-            ) : null}
-
             {features.discipleship ? (
               <Section
                 title={t("discipleship.title")}
@@ -530,24 +489,6 @@ function Section({
       </div>
       {children}
     </section>
-  );
-}
-
-function Stat({
-  label,
-  value,
-  hint,
-}: {
-  label: string;
-  value: React.ReactNode;
-  hint?: string;
-}) {
-  return (
-    <div className="flex flex-col gap-0.5 rounded-md border px-3 py-2">
-      <span className="text-xs text-muted-foreground">{label}</span>
-      <span className="text-base font-semibold tabular-nums">{value}</span>
-      {hint ? <span className="text-xs text-muted-foreground">{hint}</span> : null}
-    </div>
   );
 }
 
