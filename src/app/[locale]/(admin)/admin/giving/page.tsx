@@ -1,6 +1,7 @@
 import { BarChart3, Layers, Pencil, Plus } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
+import { GivingExportButton } from "@/components/admin/giving/giving-export-button";
 import { GivingFilters } from "@/components/admin/giving/giving-filters";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -84,6 +85,7 @@ export default async function GivingListPage({
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
+          <GivingExportButton />
           <Button asChild variant="outline">
             <Link href="/admin/giving/funds">
               <Layers className="h-4 w-4" />
