@@ -2,10 +2,10 @@ import { ArrowRight, ShieldCheck } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 
+import { LoadingLink } from "@/components/shared/loading-link";
+import { LoadingLinkButton } from "@/components/shared/loading-link-button";
 import { LocaleSwitcherStatic } from "@/components/shared/locale-switcher-static";
-import { Button } from "@/components/ui/button";
 import { church } from "@/config/church";
-import { Link } from "@/lib/i18n/navigation";
 
 export default async function Home() {
   const t = await getTranslations("landing");
@@ -49,13 +49,13 @@ export default async function Home() {
         </div>
         <div className="flex items-center gap-3">
           <LocaleSwitcherStatic />
-          <Link
+          <LoadingLink
             href="/auth/sign-in"
-            className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
+            icon={<ShieldCheck className="h-3.5 w-3.5" aria-hidden />}
+            className="text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
-            <ShieldCheck className="h-3.5 w-3.5" aria-hidden />
-            <span>{t("hero.staffSignIn")}</span>
-          </Link>
+            {t("hero.staffSignIn")}
+          </LoadingLink>
         </div>
       </header>
 
@@ -91,12 +91,10 @@ export default async function Home() {
             }}
           />
 
-          <Button asChild size="lg" className="px-8">
-            <Link href="/auth/member">
-              {t("hero.primaryCta")}
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </Button>
+          <LoadingLinkButton href="/auth/member" size="lg" className="px-8">
+            {t("hero.primaryCta")}
+            <ArrowRight className="h-4 w-4" />
+          </LoadingLinkButton>
         </div>
       </section>
 
