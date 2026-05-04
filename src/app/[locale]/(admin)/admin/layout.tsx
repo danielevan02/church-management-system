@@ -2,6 +2,7 @@ import { AdminHeader } from "@/components/admin/admin-header";
 import { AdminSidebar } from "@/components/admin/admin-sidebar";
 import { SidebarAutoCloseMobile } from "@/components/shared/sidebar-autoclose-mobile";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { prisma } from "@/lib/prisma";
 import { requireAdminSession } from "@/lib/session";
 
 export default async function AdminLayout({
@@ -10,6 +11,13 @@ export default async function AdminLayout({
   children: React.ReactNode;
 }) {
   const session = await requireAdminSession();
+
+  const member = session.user.memberId
+    ? await prisma.member.findUnique({
+        where: { id: session.user.memberId },
+        select: { firstName: true, lastName: true, photoUrl: true },
+      })
+    : null;
 
   return (
     <SidebarProvider
@@ -26,6 +34,7 @@ export default async function AdminLayout({
           username: session.user.username ?? null,
           role: session.user.role,
           memberId: session.user.memberId ?? null,
+          member,
         }}
       />
       <SidebarInset className="min-w-0">
