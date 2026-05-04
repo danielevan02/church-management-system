@@ -4,10 +4,10 @@ import { AlertCircle, Eye, EyeOff, Loader2, Lock, User } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useActionState, useState } from "react";
 
+import { LoadingLink } from "@/components/shared/loading-link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Link } from "@/lib/i18n/navigation";
 import { signInCredentialsAction } from "@/server/actions/auth/sign-in-credentials";
 
 export function SignInForm() {
@@ -95,12 +95,12 @@ export function SignInForm() {
         </div>
       </div>
 
-      <Link
+      <LoadingLink
         href="/auth/member"
-        className="text-center text-sm font-medium text-foreground hover:underline"
+        className="justify-center text-center text-sm font-medium text-foreground hover:underline"
       >
         {t("switchToMember")}
-      </Link>
+      </LoadingLink>
     </form>
   );
 }

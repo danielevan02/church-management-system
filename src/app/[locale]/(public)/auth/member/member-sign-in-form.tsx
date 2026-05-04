@@ -4,10 +4,10 @@ import { AlertCircle, Eye, EyeOff, KeyRound, Loader2, Phone } from "lucide-react
 import { useTranslations } from "next-intl";
 import { useActionState, useState } from "react";
 
+import { LoadingLink } from "@/components/shared/loading-link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Link } from "@/lib/i18n/navigation";
 import {
   signInPinAction,
   type SignInPinState,
@@ -113,12 +113,12 @@ export function MemberSignInForm() {
         </div>
       </div>
 
-      <Link
+      <LoadingLink
         href="/auth/sign-in"
-        className="text-center text-sm font-medium text-foreground hover:underline"
+        className="justify-center text-center text-sm font-medium text-foreground hover:underline"
       >
         {t("switchToStaff")}
-      </Link>
+      </LoadingLink>
     </form>
   );
 }
