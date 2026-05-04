@@ -1,6 +1,6 @@
 import "server-only";
 
-import { addMonths, endOfWeek, startOfWeek } from "date-fns";
+import { addDays, addMonths, addWeeks, endOfWeek, startOfWeek } from "date-fns";
 
 import type { Prisma } from "@prisma/client";
 
@@ -51,6 +51,19 @@ export async function getTeam(id: string) {
     where: { id },
     include: {
       positions: { orderBy: { name: "asc" } },
+      defaults: {
+        select: {
+          id: true,
+          positionId: true,
+          member: {
+            select: {
+              id: true,
+              fullName: true,
+              photoUrl: true,
+            },
+          },
+        },
+      },
     },
   });
 }
@@ -161,12 +174,22 @@ function startOfToday(): Date {
 export type WeeklyTeamGroup = {
   teamId: string;
   teamName: string;
+  /** Active positions in the team (for the per-team add picker). */
+  positions: Array<{ id: string; name: string }>;
   assignments: AssignmentListItem[];
+};
+
+export type ActiveTeam = {
+  id: string;
+  name: string;
+  positions: Array<{ id: string; name: string }>;
 };
 
 export type WeekGroup = {
   weekStart: Date;
   weekEnd: Date;
+  /** Sunday in this week — used to pre-fill new assignments. */
+  serviceDate: Date;
   total: number;
   teams: WeeklyTeamGroup[];
   /** Member IDs assigned to 2+ different teams in this week. */
@@ -174,12 +197,13 @@ export type WeekGroup = {
 };
 
 /**
- * Return assignments grouped by Mon–Sun week, then by team within each
- * week, for a window starting at `from` (defaults to current Monday) and
- * lasting `monthsAhead` months (defaults to 3 — quarterly planning).
+ * Return every Mon–Sun week in the planning window with all active teams
+ * as cards — even teams with no assignments yet — so admins can see at a
+ * glance which slots are still empty for each Sunday.
  *
- * Empty weeks are omitted. `conflictMemberIds` flags members who appear in
- * 2+ different teams within a single week — render as warning badges.
+ * Window starts at `from` (defaults to current Monday) and lasts
+ * `monthsAhead` months (defaults to 3). `conflictMemberIds` flags members
+ * who appear in 2+ different teams within a single week.
  */
 export async function listUpcomingByWeek(opts?: {
   from?: Date;
@@ -189,6 +213,8 @@ export async function listUpcomingByWeek(opts?: {
   total: number;
   rangeStart: Date;
   rangeEnd: Date;
+  /** All active teams — passed to the week-level "Add team" dialog. */
+  activeTeams: ActiveTeam[];
 }> {
   const monthsAhead = opts?.monthsAhead ?? 3;
   const baseFrom = opts?.from ?? new Date();
@@ -197,11 +223,26 @@ export async function listUpcomingByWeek(opts?: {
     weekStartsOn: 1,
   });
 
-  const all = await prisma.volunteerAssignment.findMany({
-    where: { serviceDate: { gte: horizonStart, lte: horizonEnd } },
-    orderBy: { serviceDate: "asc" },
-    select: assignmentListSelect,
-  });
+  const [all, activeTeams] = await Promise.all([
+    prisma.volunteerAssignment.findMany({
+      where: { serviceDate: { gte: horizonStart, lte: horizonEnd } },
+      orderBy: { serviceDate: "asc" },
+      select: assignmentListSelect,
+    }),
+    prisma.volunteerTeam.findMany({
+      where: { isActive: true },
+      orderBy: { name: "asc" },
+      select: {
+        id: true,
+        name: true,
+        positions: {
+          where: { isActive: true },
+          orderBy: { name: "asc" },
+          select: { id: true, name: true },
+        },
+      },
+    }),
+  ]);
 
   const byWeek = new Map<string, AssignmentListItem[]>();
   for (const a of all) {
@@ -213,23 +254,21 @@ export async function listUpcomingByWeek(opts?: {
   }
 
   const weeks: WeekGroup[] = [];
-  for (const [key, items] of [...byWeek.entries()].sort()) {
-    const wkStart = new Date(key);
+  for (
+    let wkStart = horizonStart;
+    wkStart <= horizonEnd;
+    wkStart = addWeeks(wkStart, 1)
+  ) {
     const wkEnd = endOfWeek(wkStart, { weekStartsOn: 1 });
+    const sunday = addDays(wkStart, 6);
+    const items = byWeek.get(wkStart.toISOString()) ?? [];
 
-    const byTeam = new Map<
-      string,
-      { teamName: string; items: AssignmentListItem[] }
-    >();
+    const teamItemsById = new Map<string, AssignmentListItem[]>();
     const memberTeams = new Map<string, Set<string>>();
-
     for (const a of items) {
-      const teamBucket = byTeam.get(a.team.id) ?? {
-        teamName: a.team.name,
-        items: [],
-      };
-      teamBucket.items.push(a);
-      byTeam.set(a.team.id, teamBucket);
+      const bucket = teamItemsById.get(a.team.id) ?? [];
+      bucket.push(a);
+      teamItemsById.set(a.team.id, bucket);
 
       const memberSet = memberTeams.get(a.member.id) ?? new Set<string>();
       memberSet.add(a.team.id);
@@ -243,14 +282,16 @@ export async function listUpcomingByWeek(opts?: {
     weeks.push({
       weekStart: wkStart,
       weekEnd: wkEnd,
+      serviceDate: sunday,
       total: items.length,
-      teams: [...byTeam.entries()]
-        .map(([teamId, { teamName, items }]) => ({
-          teamId,
-          teamName,
-          assignments: items,
-        }))
-        .sort((a, b) => a.teamName.localeCompare(b.teamName)),
+      teams: activeTeams
+        .filter((t) => teamItemsById.has(t.id))
+        .map((t) => ({
+          teamId: t.id,
+          teamName: t.name,
+          positions: t.positions,
+          assignments: teamItemsById.get(t.id) ?? [],
+        })),
       conflictMemberIds,
     });
   }
@@ -260,5 +301,6 @@ export async function listUpcomingByWeek(opts?: {
     total: all.length,
     rangeStart: horizonStart,
     rangeEnd: horizonEnd,
+    activeTeams,
   };
 }

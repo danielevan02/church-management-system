@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 
 import { AddPositionForm } from "@/components/admin/volunteers/add-position-form";
 import { DeletePositionButton } from "@/components/admin/volunteers/delete-position-button";
+import { TeamDefaultsSection } from "@/components/admin/volunteers/team-defaults-section";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -107,6 +108,24 @@ export default async function TeamDetailPage({
               ))}
             </ul>
           )}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>{t("defaultsTitle")}</CardTitle>
+          <CardDescription>{t("defaultsDescription")}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <TeamDefaultsSection
+            teamId={id}
+            positions={team.positions.map((p) => ({
+              id: p.id,
+              name: p.name,
+              isActive: p.isActive,
+            }))}
+            defaults={team.defaults}
+          />
         </CardContent>
       </Card>
 

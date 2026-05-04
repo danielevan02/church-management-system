@@ -165,6 +165,47 @@ export async function setAssignmentStatusAction(input: {
   }
 }
 
+const updateMemberSchema = z.object({
+  id: z.string().min(1),
+  memberId: z.string().min(1),
+});
+
+/**
+ * Swap the member on an existing assignment — used for one-week
+ * substitutions. The default roster on the team is unchanged, so the next
+ * "Generate" run still picks up the regular member.
+ */
+export async function updateAssignmentMemberAction(input: {
+  id: string;
+  memberId: string;
+}): Promise<{ ok: true } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user) return { ok: false, error: "UNAUTHORIZED" };
+  try {
+    requireRole(session.user.role, ["ADMIN", "STAFF"]);
+  } catch {
+    return { ok: false, error: "FORBIDDEN" };
+  }
+
+  const parsed = updateMemberSchema.safeParse(input);
+  if (!parsed.success) return { ok: false, error: "VALIDATION_FAILED" };
+
+  try {
+    const record = await prisma.volunteerAssignment.update({
+      where: { id: parsed.data.id },
+      data: { memberId: parsed.data.memberId },
+      select: { teamId: true, memberId: true },
+    });
+    revalidatePath("/admin/volunteers");
+    revalidatePath(`/admin/members/${record.memberId}`);
+    revalidatePath("/me/volunteer");
+    return { ok: true };
+  } catch (e) {
+    console.error("[updateAssignmentMember]", e);
+    return { ok: false, error: "INTERNAL_ERROR" };
+  }
+}
+
 export async function deleteAssignmentAction(
   id: string,
 ): Promise<{ ok: true } | { ok: false; error: string }> {
