@@ -58,7 +58,7 @@ export async function createGivingAction(
         amount: data.amount,
         receivedAt: data.receivedAt,
         notes: data.notes,
-        recordedBy: session.user.email ?? null,
+        recordedBy: session.user.username ?? null,
       },
       select: { id: true },
     });

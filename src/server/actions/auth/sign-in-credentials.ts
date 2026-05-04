@@ -6,7 +6,7 @@ import { z } from "zod";
 import { signIn } from "@/lib/auth";
 
 const schema = z.object({
-  email: z.email(),
+  username: z.string().trim().min(1).max(60),
   password: z.string().min(1),
 });
 
@@ -22,7 +22,7 @@ export async function signInCredentialsAction(
   formData: FormData,
 ): Promise<SignInState> {
   const parsed = schema.safeParse({
-    email: formData.get("email"),
+    username: formData.get("username"),
     password: formData.get("password"),
   });
 
@@ -35,7 +35,7 @@ export async function signInCredentialsAction(
 
   try {
     await signIn("credentials", {
-      email: parsed.data.email,
+      username: parsed.data.username.toLowerCase(),
       password: parsed.data.password,
       redirectTo: "/admin/dashboard",
     });

@@ -149,7 +149,7 @@ pnpm prisma migrate status   # status applied/pending
 DATABASE_URL="postgresql://..."
 AUTH_SECRET="..."
 NEXT_PUBLIC_CHURCH_NAME="..."
-INITIAL_ADMIN_EMAIL="admin@..."
+INITIAL_ADMIN_USERNAME="admin"
 INITIAL_ADMIN_PASSWORD="..."
 ```
 

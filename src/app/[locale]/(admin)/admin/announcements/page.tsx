@@ -96,7 +96,7 @@ export default async function AnnouncementsListPage({
                       )}
                     </TableCell>
                     <TableCell className="text-xs text-muted-foreground">
-                      {a.createdBy?.email ?? "—"}
+                      {a.createdBy?.username ?? "—"}
                     </TableCell>
                   </TableRow>
                 );

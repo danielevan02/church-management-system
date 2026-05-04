@@ -9,7 +9,7 @@ import { PIN_MAX_LENGTH, PIN_MIN_LENGTH, signInWithPin } from "@/lib/pin";
 import { prisma } from "@/lib/prisma";
 
 const credentialsSchema = z.object({
-  email: z.email(),
+  username: z.string().trim().min(1).max(60),
   password: z.string().min(1),
 });
 
@@ -24,20 +24,20 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Credentials({
       id: "credentials",
-      name: "Email & password",
+      name: "Username & password",
       credentials: {
-        email: { label: "Email", type: "email" },
+        username: { label: "Username", type: "text" },
         password: { label: "Password", type: "password" },
       },
       async authorize(raw) {
         const parsed = credentialsSchema.safeParse(raw);
         if (!parsed.success) return null;
 
-        const { email, password } = parsed.data;
-        const user = await prisma.user.findUnique({ where: { email } });
+        const username = parsed.data.username.toLowerCase();
+        const user = await prisma.user.findUnique({ where: { username } });
         if (!user?.passwordHash || !user.isActive) return null;
 
-        const ok = await bcrypt.compare(password, user.passwordHash);
+        const ok = await bcrypt.compare(parsed.data.password, user.passwordHash);
         if (!ok) return null;
 
         await prisma.user.update({
@@ -47,7 +47,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         return {
           id: user.id,
-          email: user.email,
+          username: user.username,
           role: user.role,
           memberId: user.memberId,
         };
@@ -69,7 +69,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         return {
           id: result.user.id,
-          email: result.user.email,
+          username: result.user.username,
           role: result.user.role,
           memberId: result.user.memberId,
         };

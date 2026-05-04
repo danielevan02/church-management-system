@@ -101,7 +101,7 @@ export default async function DevotionalsListPage({
                       )}
                     </TableCell>
                     <TableCell className="text-xs text-muted-foreground">
-                      {d.authorName ?? d.createdBy?.email ?? "—"}
+                      {d.authorName ?? d.createdBy?.username ?? "—"}
                     </TableCell>
                   </TableRow>
                 );

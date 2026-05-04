@@ -82,7 +82,7 @@ export default async function AuditLogPage({
                     {formatJakarta(row.createdAt, "dd MMM yyyy, HH:mm:ss")}
                   </TableCell>
                   <TableCell className="text-xs">
-                    {row.user?.email ?? (
+                    {row.user?.username ?? (
                       <span className="text-muted-foreground italic">
                         {t("system")}
                       </span>

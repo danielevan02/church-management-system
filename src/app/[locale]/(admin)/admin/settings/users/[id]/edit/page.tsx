@@ -44,7 +44,7 @@ export default async function EditUserPage({
           </Link>
         </Button>
         <h1 className="text-3xl font-bold tracking-tight">
-          {user.email ?? user.member?.fullName ?? t("editTitle")}
+          {user.username ?? user.member?.fullName ?? t("editTitle")}
         </h1>
         <p className="text-muted-foreground">{t("editSubtitle")}</p>
       </header>

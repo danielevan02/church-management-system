@@ -13,7 +13,7 @@ const announcementListSelect = {
   publishedAt: true,
   createdAt: true,
   updatedAt: true,
-  createdBy: { select: { id: true, email: true } },
+  createdBy: { select: { id: true, username: true } },
 } as const satisfies Prisma.AnnouncementSelect;
 
 export type AnnouncementListItem = Prisma.AnnouncementGetPayload<{
@@ -82,7 +82,7 @@ export async function getAnnouncement(id: string) {
   return prisma.announcement.findFirst({
     where: { id, deletedAt: null },
     include: {
-      createdBy: { select: { id: true, email: true } },
+      createdBy: { select: { id: true, username: true } },
     },
   });
 }

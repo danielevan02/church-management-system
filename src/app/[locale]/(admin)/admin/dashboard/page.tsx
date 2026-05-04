@@ -78,7 +78,7 @@ export default async function AdminDashboardPage() {
   ]);
 
   const topEvents = upcomingEvents.items;
-  const greetingName = session.user.email?.split("@")[0] ?? "Admin";
+  const greetingName = session.user.username ?? "Admin";
 
   return (
     <div className="flex flex-col gap-6">
@@ -370,7 +370,7 @@ export default async function AdminDashboardPage() {
                         <span className="truncate">{log.entityType}</span>
                       </span>
                       <span className="truncate text-xs text-muted-foreground">
-                        {log.user?.email ?? "system"}
+                        {log.user?.username ?? "system"}
                       </span>
                     </div>
                     <span className="shrink-0 text-xs tabular-nums text-muted-foreground">

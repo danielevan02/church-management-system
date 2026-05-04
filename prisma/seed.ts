@@ -14,19 +14,20 @@ function nextSundayMorning(): Date {
 }
 
 async function main() {
-  const adminEmail = process.env.INITIAL_ADMIN_EMAIL ?? "admin@example.church";
+  const adminUsername = (
+    process.env.INITIAL_ADMIN_USERNAME ?? "admin"
+  ).toLowerCase();
   const adminPassword =
     process.env.INITIAL_ADMIN_PASSWORD ?? "ChangeMe!123";
 
   const adminHash = await bcrypt.hash(adminPassword, 10);
 
   const admin = await prisma.user.upsert({
-    where: { email: adminEmail },
+    where: { username: adminUsername },
     update: {},
     create: {
-      email: adminEmail,
+      username: adminUsername,
       passwordHash: adminHash,
-      emailVerified: new Date(),
       role: "ADMIN",
       isActive: true,
     },
@@ -110,7 +111,7 @@ async function main() {
   });
 
   console.log("Seed complete:");
-  console.log(`  ADMIN:       ${admin.email} / ${adminPassword}`);
+  console.log(`  ADMIN:       ${admin.username} / ${adminPassword}`);
   console.log(`  MEMBER:      phone=${samplePhone} (Budi Santoso) / PIN=${samplePin}`);
   console.log(`  Funds:       ${funds.length} entries`);
   console.log(`  Service:     1 upcoming Sunday morning`);

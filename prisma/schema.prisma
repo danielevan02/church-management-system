@@ -27,8 +27,9 @@ enum Role {
 
 model User {
   id            String    @id @default(cuid())
-  email         String?   @unique
-  emailVerified DateTime?
+  /// Login identifier for staff/admin (Credentials provider). Members
+  /// authenticate by phone+PIN and may have username = null.
+  username      String?   @unique
   passwordHash  String?
   pinHash       String?
   // Phone is NOT unique — multiple member accounts can share the same

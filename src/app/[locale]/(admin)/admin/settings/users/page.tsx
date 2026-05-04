@@ -87,14 +87,14 @@ export default async function UsersListPage({
                             />
                           ) : null}
                           <AvatarFallback className="text-xs">
-                            {(u.email ?? u.member?.fullName ?? "?")
+                            {(u.username ?? u.member?.fullName ?? "?")
                               .charAt(0)
                               .toUpperCase()}
                           </AvatarFallback>
                         </Avatar>
                         <div className="flex flex-col">
                           <span className="text-sm font-medium">
-                            {u.email ?? "—"}
+                            {u.username ?? u.member?.fullName ?? "—"}
                           </span>
                           {u.phone ? (
                             <span className="text-xs text-muted-foreground">

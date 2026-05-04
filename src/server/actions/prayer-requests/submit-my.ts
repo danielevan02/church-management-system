@@ -39,7 +39,7 @@ export async function submitMyPrayerRequestAction(
     const record = await prisma.prayerRequest.create({
       data: {
         memberId,
-        submittedBy: session.user.email ?? "member",
+        submittedBy: session.user.username ?? "member",
         title: data.title,
         body: data.body,
         isAnonymous: data.isAnonymous,

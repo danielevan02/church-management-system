@@ -8,7 +8,7 @@ import { clampPage, paginate } from "./_pagination";
 
 const userListSelect = {
   id: true,
-  email: true,
+  username: true,
   phone: true,
   role: true,
   isActive: true,
@@ -42,7 +42,7 @@ export async function listUsers(opts?: {
   if (f?.search) {
     const q = f.search.trim();
     where.OR = [
-      { email: { contains: q, mode: "insensitive" } },
+      { username: { contains: q, mode: "insensitive" } },
       { phone: { contains: q } },
       { member: { fullName: { contains: q, mode: "insensitive" } } },
     ];
@@ -72,9 +72,9 @@ export async function getUser(id: string) {
   });
 }
 
-export async function isEmailTaken(email: string, exceptId?: string) {
+export async function isUsernameTaken(username: string, exceptId?: string) {
   const found = await prisma.user.findUnique({
-    where: { email },
+    where: { username },
     select: { id: true },
   });
   if (!found) return false;
