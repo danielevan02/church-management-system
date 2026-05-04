@@ -1,8 +1,8 @@
 "use client";
 
-import { Check, X } from "lucide-react";
+import { Check, Loader2, X } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,7 @@ import {
 } from "@/server/actions/events/rsvp";
 
 type Status = "GOING" | "MAYBE" | "NOT_GOING" | "WAITLIST";
+type Action = Status | "CLEAR";
 
 export function MemberRsvpButtons({
   eventId,
@@ -28,8 +29,10 @@ export function MemberRsvpButtons({
   const t = useTranslations("memberPortal.events");
   const router = useRouter();
   const [pending, startTransition] = useTransition();
+  const [active, setActive] = useState<Action | null>(null);
 
   function setStatus(status: Status) {
+    setActive(status);
     startTransition(async () => {
       const result = await memberRsvpAction(eventId, { status });
       if (result.ok) {
@@ -44,11 +47,13 @@ export function MemberRsvpButtons({
       } else {
         toast.error(t("errorToast"));
       }
+      setActive(null);
     });
   }
 
   function clear() {
     if (!rsvpId) return;
+    setActive("CLEAR");
     startTransition(async () => {
       const result = await deleteRsvpAction(rsvpId);
       if (result.ok) {
@@ -57,6 +62,7 @@ export function MemberRsvpButtons({
       } else {
         toast.error(t("errorToast"));
       }
+      setActive(null);
     });
   }
 
@@ -68,6 +74,8 @@ export function MemberRsvpButtons({
     );
   }
 
+  const isLoading = (a: Action) => pending && active === a;
+
   return (
     <div className="flex flex-wrap items-center gap-2">
       <Button
@@ -76,7 +84,11 @@ export function MemberRsvpButtons({
         onClick={() => setStatus("GOING")}
         disabled={pending}
       >
-        <Check className="h-4 w-4" />
+        {isLoading("GOING") ? (
+          <Loader2 className="h-4 w-4 animate-spin" />
+        ) : (
+          <Check className="h-4 w-4" />
+        )}
         {current === "WAITLIST" ? t("waitlistLabel") : t("going")}
       </Button>
       <Button
@@ -85,6 +97,9 @@ export function MemberRsvpButtons({
         onClick={() => setStatus("MAYBE")}
         disabled={pending}
       >
+        {isLoading("MAYBE") ? (
+          <Loader2 className="h-4 w-4 animate-spin" />
+        ) : null}
         {t("maybe")}
       </Button>
       <Button
@@ -93,7 +108,11 @@ export function MemberRsvpButtons({
         onClick={() => setStatus("NOT_GOING")}
         disabled={pending}
       >
-        <X className="h-4 w-4" />
+        {isLoading("NOT_GOING") ? (
+          <Loader2 className="h-4 w-4 animate-spin" />
+        ) : (
+          <X className="h-4 w-4" />
+        )}
         {t("notGoing")}
       </Button>
       {current && rsvpId ? (
@@ -103,6 +122,9 @@ export function MemberRsvpButtons({
           onClick={clear}
           disabled={pending}
         >
+          {isLoading("CLEAR") ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : null}
           {t("clearRsvp")}
         </Button>
       ) : null}

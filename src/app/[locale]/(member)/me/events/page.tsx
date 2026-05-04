@@ -40,32 +40,33 @@ export default async function MemberEventsPage() {
       ) : (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {events.map((e) => (
-            <Card key={e.id}>
-              <CardContent className="flex flex-col gap-3 pt-6">
-                <div className="flex items-start justify-between gap-2">
-                  <Link
-                    href={`/me/events/${e.id}`}
-                    className="text-lg font-semibold tracking-tight hover:underline"
-                  >
-                    {e.title}
-                  </Link>
-                  {e.myRsvp ? (
-                    <Badge>
-                      {tStatus(statusKey(e.myRsvp.status))}
-                    </Badge>
-                  ) : null}
-                </div>
-                <div className="text-sm text-muted-foreground">
-                  {formatJakarta(e.startsAt, "EEE, dd MMM yyyy · HH:mm")}
-                  {e.location ? ` · ${e.location}` : ""}
-                </div>
-                {e.capacity ? (
-                  <div className="text-xs text-muted-foreground">
-                    {e._count.rsvps}/{e.capacity} {t("rsvpsAbbr")}
+            <Link
+              key={e.id}
+              href={`/me/events/${e.id}`}
+              className="rounded-lg outline-none transition-colors hover:bg-accent/40 focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <Card className="h-full">
+                <CardContent className="flex flex-col gap-3 pt-6">
+                  <div className="flex items-start justify-between gap-2">
+                    <span className="text-lg font-semibold tracking-tight">
+                      {e.title}
+                    </span>
+                    {e.myRsvp ? (
+                      <Badge>{tStatus(statusKey(e.myRsvp.status))}</Badge>
+                    ) : null}
                   </div>
-                ) : null}
-              </CardContent>
-            </Card>
+                  <div className="text-sm text-muted-foreground">
+                    {formatJakarta(e.startsAt, "EEE, dd MMM yyyy · HH:mm")}
+                    {e.location ? ` · ${e.location}` : ""}
+                  </div>
+                  {e.capacity ? (
+                    <div className="text-xs text-muted-foreground">
+                      {e._count.rsvps}/{e.capacity} {t("rsvpsAbbr")}
+                    </div>
+                  ) : null}
+                </CardContent>
+              </Card>
+            </Link>
           ))}
         </div>
       )}
