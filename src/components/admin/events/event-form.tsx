@@ -23,6 +23,17 @@ import { Textarea } from "@/components/ui/textarea";
 import { useRouter } from "@/lib/i18n/navigation";
 import { eventInputSchema, type EventInput } from "@/lib/validation/event";
 
+const RUPIAH_FORMATTER = new Intl.NumberFormat("id-ID", {
+  maximumFractionDigits: 0,
+});
+
+function formatAmountDisplay(raw: string): string {
+  if (!raw) return "";
+  const n = Number(raw);
+  if (!Number.isFinite(n)) return raw;
+  return `Rp ${RUPIAH_FORMATTER.format(n)}`;
+}
+
 type FormValues = {
   title: string;
   description: string;
@@ -216,8 +227,14 @@ export function EventForm({
                 <FormControl>
                   <Input
                     inputMode="numeric"
-                    placeholder="0"
-                    {...field}
+                    placeholder="Rp 0"
+                    value={formatAmountDisplay(field.value)}
+                    onChange={(e) =>
+                      field.onChange(e.target.value.replace(/\D/g, ""))
+                    }
+                    onBlur={field.onBlur}
+                    name={field.name}
+                    ref={field.ref}
                   />
                 </FormControl>
                 <FormDescription>{t("fields.feeHelp")}</FormDescription>
