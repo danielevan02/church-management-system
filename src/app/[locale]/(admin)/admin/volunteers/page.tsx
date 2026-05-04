@@ -4,11 +4,13 @@ import {
   ChevronLeft,
   ChevronRight,
   Layers,
-  Plus,
 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
+import { AddAssignmentDialog } from "@/components/admin/volunteers/add-assignment-dialog";
+import { AddTeamForWeekDialog } from "@/components/admin/volunteers/add-team-for-week-dialog";
 import { AssignmentRowActions } from "@/components/admin/volunteers/assignment-row-actions";
+import { GenerateWeekButton } from "@/components/admin/volunteers/generate-week-button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -63,12 +65,7 @@ export default async function VolunteersHomePage({
               {t("manageTeams")}
             </Link>
           </Button>
-          <Button asChild>
-            <Link href="/admin/volunteers/assignments/new">
-              <Plus className="h-4 w-4" />
-              {t("newAssignment")}
-            </Link>
-          </Button>
+          <GenerateWeekButton />
         </div>
       </header>
 
@@ -92,9 +89,9 @@ export default async function VolunteersHomePage({
         </Button>
       </div>
 
-      {result.weeks.length === 0 ? (
+      {result.activeTeams.length === 0 ? (
         <div className="rounded-md border border-dashed p-10 text-center text-sm text-muted-foreground">
-          {t("empty")}
+          {t("noTeamsYet")}
         </div>
       ) : (
         <div className="flex flex-col gap-6">
@@ -102,11 +99,11 @@ export default async function VolunteersHomePage({
             const conflictSet = new Set(week.conflictMemberIds);
             return (
               <Card key={week.weekStart.toISOString()}>
-                <CardHeader className="flex flex-row items-baseline justify-between gap-3 border-b pb-3">
+                <CardHeader className="flex flex-row items-start justify-between gap-3 border-b pb-3">
                   <div className="flex flex-col gap-0.5">
                     <h2 className="text-lg font-semibold">
                       {t("weekHeader", {
-                        date: format(week.weekEnd, "EEEE, dd MMM yyyy"),
+                        date: format(week.serviceDate, "dd MMM yyyy"),
                       })}
                     </h2>
                     <p className="text-xs text-muted-foreground">
@@ -115,15 +112,21 @@ export default async function VolunteersHomePage({
                       {t("totalAssignments", { count: week.total })}
                     </p>
                   </div>
-                  {conflictSet.size > 0 ? (
-                    <Badge
-                      variant="outline"
-                      className="gap-1 border-amber-500/40 bg-amber-50 text-amber-900 dark:bg-amber-950/30 dark:text-amber-200"
-                    >
-                      <AlertTriangle className="h-3 w-3" />
-                      {t("weekConflictCount", { count: conflictSet.size })}
-                    </Badge>
-                  ) : null}
+                  <div className="flex items-center gap-2">
+                    {conflictSet.size > 0 ? (
+                      <Badge
+                        variant="outline"
+                        className="gap-1 border-amber-500/40 bg-amber-50 text-amber-900 dark:bg-amber-950/30 dark:text-amber-200"
+                      >
+                        <AlertTriangle className="h-3 w-3" />
+                        {t("weekConflictCount", { count: conflictSet.size })}
+                      </Badge>
+                    ) : null}
+                    <AddTeamForWeekDialog
+                      teams={result.activeTeams}
+                      serviceDate={week.serviceDate}
+                    />
+                  </div>
                 </CardHeader>
                 <CardContent className="flex flex-col gap-5 pt-5">
                   {week.teams.map((team) => (
@@ -131,75 +134,84 @@ export default async function VolunteersHomePage({
                       key={team.teamId}
                       className="border-l-2 border-primary/20 pl-4"
                     >
-                      <div className="mb-2 flex items-center gap-2">
-                        <h3 className="text-sm font-semibold">
-                          {team.teamName}
-                        </h3>
-                        <span className="text-xs text-muted-foreground">
-                          ({team.assignments.length})
-                        </span>
+                      <div className="mb-2 flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-2">
+                          <h3 className="text-sm font-semibold">
+                            {team.teamName}
+                          </h3>
+                          <span className="text-xs text-muted-foreground">
+                            ({team.assignments.length})
+                          </span>
+                        </div>
+                        <AddAssignmentDialog
+                          teamId={team.teamId}
+                          teamName={team.teamName}
+                          positions={team.positions}
+                          serviceDate={week.serviceDate}
+                        />
                       </div>
                       <ul className="flex flex-col gap-2">
-                        {team.assignments.map((a) => {
-                          const hasConflict = conflictSet.has(a.member.id);
-                          return (
-                            <li
-                              key={a.id}
-                              className="flex flex-col gap-2 rounded-md border bg-card p-3 sm:flex-row sm:items-center sm:justify-between"
-                            >
-                              <div className="flex min-w-0 items-center gap-3">
-                                <Avatar className="h-8 w-8">
-                                  {a.member.photoUrl ? (
-                                    <AvatarImage
-                                      src={a.member.photoUrl}
-                                      alt={a.member.fullName}
-                                    />
-                                  ) : null}
-                                  <AvatarFallback className="text-xs">
-                                    {a.member.fullName.charAt(0).toUpperCase()}
-                                  </AvatarFallback>
-                                </Avatar>
-                                <div className="flex min-w-0 flex-col gap-0.5">
-                                  <div className="flex items-center gap-2">
-                                    <Link
-                                      href={`/admin/members/${a.member.id}`}
-                                      className="truncate text-sm font-medium hover:underline"
-                                    >
-                                      {a.member.fullName}
-                                    </Link>
-                                    {hasConflict ? (
-                                      <Badge
-                                        variant="outline"
-                                        className="gap-1 border-amber-500/40 bg-amber-50 px-1.5 py-0 text-[10px] text-amber-900 dark:bg-amber-950/30 dark:text-amber-200"
+                          {team.assignments.map((a) => {
+                            const hasConflict = conflictSet.has(a.member.id);
+                            return (
+                              <li
+                                key={a.id}
+                                className="flex flex-col gap-2 rounded-md border bg-card p-3 sm:flex-row sm:items-center sm:justify-between"
+                              >
+                                <div className="flex min-w-0 items-center gap-3">
+                                  <Avatar className="h-8 w-8">
+                                    {a.member.photoUrl ? (
+                                      <AvatarImage
+                                        src={a.member.photoUrl}
+                                        alt={a.member.fullName}
+                                      />
+                                    ) : null}
+                                    <AvatarFallback className="text-xs">
+                                      {a.member.fullName.charAt(0).toUpperCase()}
+                                    </AvatarFallback>
+                                  </Avatar>
+                                  <div className="flex min-w-0 flex-col gap-0.5">
+                                    <div className="flex items-center gap-2">
+                                      <Link
+                                        href={`/admin/members/${a.member.id}`}
+                                        className="truncate text-sm font-medium hover:underline"
                                       >
-                                        <AlertTriangle className="h-3 w-3" />
-                                        {t("conflictBadge")}
-                                      </Badge>
-                                    ) : null}
-                                  </div>
-                                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                                    {a.position?.name ? (
-                                      <span className="truncate">
-                                        {a.position.name}
+                                        {a.member.fullName}
+                                      </Link>
+                                      {hasConflict ? (
+                                        <Badge
+                                          variant="outline"
+                                          className="gap-1 border-amber-500/40 bg-amber-50 px-1.5 py-0 text-[10px] text-amber-900 dark:bg-amber-950/30 dark:text-amber-200"
+                                        >
+                                          <AlertTriangle className="h-3 w-3" />
+                                          {t("conflictBadge")}
+                                        </Badge>
+                                      ) : null}
+                                    </div>
+                                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                                      {a.position?.name ? (
+                                        <span className="truncate">
+                                          {a.position.name}
+                                        </span>
+                                      ) : null}
+                                      <span className="tabular-nums">
+                                        {format(a.serviceDate, "EEE, dd MMM")}
                                       </span>
-                                    ) : null}
-                                    <span className="tabular-nums">
-                                      {format(a.serviceDate, "EEE, dd MMM")}
-                                    </span>
-                                    <StatusBadge
-                                      status={a.status}
-                                      label={tStatus(statusKey(a.status))}
-                                    />
+                                      <StatusBadge
+                                        status={a.status}
+                                        label={tStatus(statusKey(a.status))}
+                                      />
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                              <AssignmentRowActions
-                                id={a.id}
-                                status={a.status as never}
-                              />
-                            </li>
-                          );
-                        })}
+                                <AssignmentRowActions
+                                  id={a.id}
+                                  status={a.status as never}
+                                  memberName={a.member.fullName}
+                                />
+                              </li>
+                            );
+                          })}
                       </ul>
                     </div>
                   ))}

@@ -1215,7 +1215,62 @@
       "statusUpdatedToast": "Status diperbarui.",
       "deletedToast": "Jadwal dihapus.",
       "errorToast": "Aksi gagal.",
-      "confirmDelete": "Hapus jadwal ini?"
+      "confirmDelete": "Hapus jadwal ini?",
+      "teamEmpty": "Belum ada pelayan untuk minggu ini.",
+      "noTeamsYet": "Belum ada tim. Buat tim dulu di tab Tim untuk mulai membuat jadwal.",
+      "addTeamForWeek": {
+        "button": "Tambah Tim",
+        "title": "Tambah tim ke minggu ini",
+        "description": "Untuk {date}.",
+        "teamLabel": "Tim",
+        "teamPlaceholder": "Pilih tim…",
+        "positionLabel": "Posisi",
+        "positionPlaceholder": "Pilih posisi…",
+        "memberLabel": "Pelayan",
+        "memberPlaceholder": "Cari jemaat…",
+        "savedToast": "Pelayan ditambahkan.",
+        "weekConflictToast": "Jemaat ini sudah punya jadwal lain di minggu yang sama.",
+        "errorToast": "Gagal menambahkan.",
+        "cancel": "Batal",
+        "save": "Simpan"
+      },
+      "addAssignment": {
+        "button": "Tambah",
+        "title": "Tambah pelayan – {team}",
+        "description": "Untuk {date}.",
+        "positionLabel": "Posisi",
+        "positionPlaceholder": "Pilih posisi…",
+        "memberLabel": "Pelayan",
+        "memberPlaceholder": "Cari jemaat…",
+        "missingMember": "Pilih jemaat dulu.",
+        "savedToast": "Jadwal ditambahkan.",
+        "weekConflictToast": "Jemaat ini sudah punya jadwal lain di minggu yang sama.",
+        "errorToast": "Gagal menambahkan.",
+        "cancel": "Batal",
+        "save": "Simpan"
+      },
+      "swap": {
+        "button": "Ganti pelayan",
+        "title": "Ganti pelayan untuk minggu ini",
+        "description": "Sekarang: {current}. Pilih pengganti — anggota tetap di tim ini tidak berubah.",
+        "placeholder": "Cari jemaat…",
+        "savedToast": "Pelayan diganti.",
+        "errorToast": "Gagal mengganti.",
+        "cancel": "Batal",
+        "save": "Simpan"
+      },
+      "generate": {
+        "button": "Generate dari Default",
+        "title": "Generate Jadwal Mingguan",
+        "description": "Buat jadwal otomatis untuk semua posisi yang punya anggota tetap. Aman dijalankan ulang — yang sudah ada tidak diduplikasi.",
+        "dateLabel": "Tanggal Ibadah",
+        "cancel": "Batal",
+        "confirm": "Generate",
+        "generatedToast": "{created} jadwal dibuat, {skipped} sudah ada.",
+        "allExistToast": "Semua jadwal default untuk tanggal ini sudah ada.",
+        "noDefaultsToast": "Belum ada anggota tetap di tim manapun.",
+        "errorToast": "Gagal generate jadwal."
+      }
     },
     "team": {
       "list": {
@@ -1264,7 +1319,22 @@
         "errorToast": "Aksi gagal.",
         "upcomingTitle": "Akan Datang",
         "upcomingDescription": "20 jadwal mendatang untuk tim ini.",
-        "upcomingEmpty": "Belum ada jadwal mendatang."
+        "upcomingEmpty": "Belum ada jadwal mendatang.",
+        "defaultsTitle": "Anggota Tetap",
+        "defaultsDescription": "Siapa yang biasa di tiap posisi. Dipakai untuk auto-fill saat 'Generate Jadwal' — pengganti minggu tertentu tetap diatur di halaman jadwal."
+      },
+      "defaults": {
+        "noDefault": "Belum diatur",
+        "emptyPositions": "Tambah posisi dulu untuk mengatur anggota tetap.",
+        "add": "Atur",
+        "change": "Ganti",
+        "remove": "Hapus",
+        "pickerPlaceholder": "Cari jemaat…",
+        "savedToast": "Anggota tetap tersimpan.",
+        "removedToast": "Anggota tetap dihapus.",
+        "errorToast": "Aksi gagal.",
+        "removeConfirmTitle": "Hapus anggota tetap?",
+        "removeConfirmDescription": "Hapus {member} dari posisi {position}? Jadwal yang sudah dibuat tidak terpengaruh."
       }
     },
     "assignment": {

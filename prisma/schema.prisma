@@ -169,6 +169,7 @@ model Member {
   prayerRequests         PrayerRequest[]
   discipleshipMilestones DiscipleshipMilestone[]
   volunteerAssignments   VolunteerAssignment[]
+  volunteerDefaults      VolunteerTeamDefault[]
   ledCellGroups          CellGroup[]             @relation("CellGroupLeader")
 
   deletedAt DateTime?
@@ -483,6 +484,7 @@ model VolunteerTeam {
 
   positions   VolunteerPosition[]
   assignments VolunteerAssignment[]
+  defaults    VolunteerTeamDefault[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -498,10 +500,32 @@ model VolunteerPosition {
   isActive Boolean       @default(true)
 
   assignments VolunteerAssignment[]
+  defaults    VolunteerTeamDefault[]
 
   createdAt DateTime @default(now())
 
   @@map("volunteer_positions")
+}
+
+/// Long-running roster: "siapa yang biasa di posisi ini di tim ini".
+/// Used to pre-fill weekly assignments for teams with a stable lineup
+/// (e.g. tim band). Substitutions for a single week happen on the
+/// VolunteerAssignment record, not here.
+model VolunteerTeamDefault {
+  id         String            @id @default(cuid())
+  team       VolunteerTeam     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  teamId     String
+  position   VolunteerPosition @relation(fields: [positionId], references: [id], onDelete: Cascade)
+  positionId String
+  member     Member            @relation(fields: [memberId], references: [id])
+  memberId   String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([teamId, positionId])
+  @@index([memberId])
+  @@map("volunteer_team_defaults")
 }
 
 model VolunteerAssignment {

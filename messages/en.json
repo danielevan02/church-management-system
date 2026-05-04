@@ -1215,7 +1215,62 @@
       "statusUpdatedToast": "Status updated.",
       "deletedToast": "Assignment removed.",
       "errorToast": "Action failed.",
-      "confirmDelete": "Remove this assignment?"
+      "confirmDelete": "Remove this assignment?",
+      "teamEmpty": "No volunteers scheduled for this week yet.",
+      "noTeamsYet": "No teams yet. Create a team in the Teams tab to start scheduling.",
+      "addTeamForWeek": {
+        "button": "Add team",
+        "title": "Add a team to this week",
+        "description": "For {date}.",
+        "teamLabel": "Team",
+        "teamPlaceholder": "Pick a team…",
+        "positionLabel": "Position",
+        "positionPlaceholder": "Pick a position…",
+        "memberLabel": "Volunteer",
+        "memberPlaceholder": "Search member…",
+        "savedToast": "Volunteer added.",
+        "weekConflictToast": "This member is already on another team this week.",
+        "errorToast": "Failed to add.",
+        "cancel": "Cancel",
+        "save": "Save"
+      },
+      "addAssignment": {
+        "button": "Add",
+        "title": "Add volunteer – {team}",
+        "description": "For {date}.",
+        "positionLabel": "Position",
+        "positionPlaceholder": "Pick a position…",
+        "memberLabel": "Volunteer",
+        "memberPlaceholder": "Search member…",
+        "missingMember": "Pick a member first.",
+        "savedToast": "Assignment added.",
+        "weekConflictToast": "This member is already on another team this week.",
+        "errorToast": "Failed to add.",
+        "cancel": "Cancel",
+        "save": "Save"
+      },
+      "swap": {
+        "button": "Swap volunteer",
+        "title": "Swap volunteer for this week",
+        "description": "Currently: {current}. Pick a replacement — the team's default roster is unchanged.",
+        "placeholder": "Search member…",
+        "savedToast": "Volunteer swapped.",
+        "errorToast": "Failed to swap.",
+        "cancel": "Cancel",
+        "save": "Save"
+      },
+      "generate": {
+        "button": "Generate from defaults",
+        "title": "Generate weekly schedule",
+        "description": "Auto-create assignments for every position with a default member. Safe to re-run — existing assignments aren't duplicated.",
+        "dateLabel": "Service date",
+        "cancel": "Cancel",
+        "confirm": "Generate",
+        "generatedToast": "{created} created, {skipped} already existed.",
+        "allExistToast": "All default assignments for this date already exist.",
+        "noDefaultsToast": "No default members set on any team yet.",
+        "errorToast": "Failed to generate."
+      }
     },
     "team": {
       "list": {
@@ -1264,7 +1319,22 @@
         "errorToast": "Action failed.",
         "upcomingTitle": "Upcoming",
         "upcomingDescription": "Next 20 scheduled assignments for this team.",
-        "upcomingEmpty": "No upcoming assignments yet."
+        "upcomingEmpty": "No upcoming assignments yet.",
+        "defaultsTitle": "Default roster",
+        "defaultsDescription": "Who usually serves in each position. Used by 'Generate schedule' to auto-fill — one-week substitutions stay on the schedule page."
+      },
+      "defaults": {
+        "noDefault": "Not set",
+        "emptyPositions": "Add a position first to set default members.",
+        "add": "Set",
+        "change": "Change",
+        "remove": "Remove",
+        "pickerPlaceholder": "Search member…",
+        "savedToast": "Default member saved.",
+        "removedToast": "Default member removed.",
+        "errorToast": "Action failed.",
+        "removeConfirmTitle": "Remove default member?",
+        "removeConfirmDescription": "Remove {member} from {position}? Existing assignments aren't affected."
       }
     },
     "assignment": {

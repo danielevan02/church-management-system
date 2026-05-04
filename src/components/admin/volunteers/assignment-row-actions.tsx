@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { useTransition } from "react";
 import { toast } from "sonner";
 
+import { SwapMemberDialog } from "@/components/admin/volunteers/swap-member-dialog";
 import { ConfirmDialog } from "@/components/shared/confirm-dialog";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,9 +26,11 @@ type Status = "PENDING" | "CONFIRMED" | "DECLINED" | "COMPLETED";
 export function AssignmentRowActions({
   id,
   status,
+  memberName,
 }: {
   id: string;
   status: Status;
+  memberName: string;
 }) {
   const t = useTranslations("volunteers.schedule");
   const tStatus = useTranslations("volunteers.assignmentStatus");
@@ -77,6 +80,7 @@ export function AssignmentRowActions({
           <SelectItem value="COMPLETED">{tStatus("completed")}</SelectItem>
         </SelectContent>
       </Select>
+      <SwapMemberDialog assignmentId={id} currentMemberName={memberName} />
       <ConfirmDialog
         trigger={
           <Button type="button" variant="ghost" size="icon" disabled={pending}>
