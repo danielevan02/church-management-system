@@ -4,8 +4,10 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { auth } from "@/lib/auth";
+import { formatJakarta } from "@/lib/datetime";
 import { requireRole } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
+import { sendPushToMember } from "@/lib/push";
 
 const setDefaultSchema = z.object({
   teamId: z.string().min(1),
@@ -142,6 +144,8 @@ export async function generateWeekAssignmentsAction(input: {
         teamId: true,
         positionId: true,
         memberId: true,
+        team: { select: { name: true } },
+        position: { select: { name: true } },
       },
     });
 
@@ -175,15 +179,38 @@ export async function generateWeekAssignmentsAction(input: {
       };
     }
 
-    await prisma.volunteerAssignment.createMany({
-      data: toCreate.map((d) => ({
-        teamId: d.teamId,
-        positionId: d.positionId,
-        memberId: d.memberId,
-        serviceDate,
-        status: "PENDING",
-      })),
-    });
+    // Create one-by-one (instead of createMany) so we can fan-out a push
+    // per assigned member with the new assignment's id as the tag.
+    const dateLabel = formatJakarta(serviceDate, "EEE, dd MMM yyyy");
+    const created = await Promise.all(
+      toCreate.map((d) =>
+        prisma.volunteerAssignment.create({
+          data: {
+            teamId: d.teamId,
+            positionId: d.positionId,
+            memberId: d.memberId,
+            serviceDate,
+            status: "PENDING",
+          },
+          select: { id: true },
+        }),
+      ),
+    );
+
+    void Promise.all(
+      created.map((rec, i) => {
+        const d = toCreate[i];
+        const bodyParts = [d.team.name];
+        if (d.position?.name) bodyParts.push(d.position.name);
+        bodyParts.push(dateLabel);
+        return sendPushToMember(d.memberId, {
+          title: "Anda dijadwalkan melayani",
+          body: bodyParts.join(" · "),
+          url: "/me/volunteer",
+          tag: `volunteer:${rec.id}`,
+        });
+      }),
+    ).catch((e) => console.error("[volunteer generate push]", e));
 
     revalidatePath("/admin/volunteers");
     return {

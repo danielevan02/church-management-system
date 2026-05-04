@@ -1,11 +1,12 @@
 import type { Role } from "@prisma/client";
 import type { LucideIcon } from "lucide-react";
 import {
+  Baby,
   BarChart3,
   BookOpen,
   Calendar,
   HandCoins,
-  Heart,
+  HandHeart,
   HeartHandshake,
   HelpCircle,
   Home,
@@ -116,7 +117,7 @@ export const adminNav: readonly AdminNavItem[] = [
   {
     href: "/admin/children",
     labelKey: "nav.children",
-    icon: Heart,
+    icon: Baby,
     group: "documents",
     roles: ["ADMIN", "STAFF"],
     feature: "childrensCheckIn",
@@ -132,7 +133,7 @@ export const adminNav: readonly AdminNavItem[] = [
   {
     href: "/admin/prayer-requests",
     labelKey: "nav.prayerRequestsAdmin",
-    icon: Heart,
+    icon: HandHeart,
     group: "documents",
     roles: ["ADMIN", "STAFF"],
   },
@@ -252,12 +253,12 @@ export const memberNav: readonly MemberNavItem[] = [
   {
     href: "/me/prayer-requests",
     labelKey: "nav.prayerRequests",
-    icon: Heart,
+    icon: HandHeart,
   },
   {
     href: "/me/children",
     labelKey: "nav.myChildren",
-    icon: Heart,
+    icon: Baby,
     feature: "childrensCheckIn",
   },
 ] as const;

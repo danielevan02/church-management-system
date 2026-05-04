@@ -102,3 +102,24 @@ export async function sendPushToUser(
   const results = await Promise.all(subs.map((s) => deliver(s, payload)));
   return results.filter(Boolean).length;
 }
+
+/**
+ * Send a push notification to all subscriptions of the User account
+ * linked to the given Member. Used when something targets a member
+ * directly (e.g. they were scheduled to serve on a volunteer team).
+ */
+export async function sendPushToMember(
+  memberId: string,
+  payload: PushPayload,
+): Promise<number> {
+  if (!ensureConfigured()) return 0;
+
+  const subs = await prisma.pushSubscription.findMany({
+    where: { user: { memberId, isActive: true } },
+    select: { id: true, endpoint: true, p256dh: true, auth: true },
+  });
+
+  if (subs.length === 0) return 0;
+  const results = await Promise.all(subs.map((s) => deliver(s, payload)));
+  return results.filter(Boolean).length;
+}
