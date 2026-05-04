@@ -26,12 +26,12 @@ import { signOutAction } from "@/server/actions/auth/sign-out";
 export function AdminNavUser({
   user,
 }: {
-  user: { email: string | null; role: Role; memberId: string | null };
+  user: { username: string | null; role: Role; memberId: string | null };
 }) {
   const t = useTranslations("common");
   const { isMobile } = useSidebar();
-  const initial = (user.email ?? user.role).charAt(0).toUpperCase();
-  const displayName = user.email ?? user.role;
+  const initial = (user.username ?? user.role).charAt(0).toUpperCase();
+  const displayName = user.username ?? user.role;
 
   return (
     <SidebarMenu>

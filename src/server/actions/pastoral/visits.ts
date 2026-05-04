@@ -69,7 +69,7 @@ export async function createPastoralVisitAction(
         memberId: data.memberId,
         visitType: data.visitType,
         visitedAt: data.visitedAt,
-        visitedBy: session.user.email ?? "unknown",
+        visitedBy: session.user.username ?? "unknown",
         notes: data.notes,
         followUp: data.followUp,
         followUpDate: data.followUpDate,

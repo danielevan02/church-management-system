@@ -58,7 +58,7 @@ export async function checkInMemberAction(
     serviceId: data.serviceId,
     memberId: data.memberId,
     source: data.source,
-    actorEmail: session.user.email ?? null,
+    actorUsername: session.user.username ?? null,
     enforceWindow: !isStaff,
   });
 }
@@ -90,7 +90,7 @@ export async function checkInByQrAction(
     serviceId: parsed.data.serviceId,
     memberId,
     source: "qr_usher",
-    actorEmail: session.user.email ?? null,
+    actorUsername: session.user.username ?? null,
     enforceWindow: false,
   });
 }
@@ -130,7 +130,7 @@ export async function checkInVisitorAction(
         visitorName: data.visitorName.trim(),
         visitorPhone: data.visitorPhone,
         source: "visitor_usher",
-        checkedInBy: session.user.email ?? null,
+        checkedInBy: session.user.username ?? null,
       },
       select: { id: true },
     });
@@ -155,7 +155,7 @@ async function performMemberCheckIn(opts: {
   serviceId: string;
   memberId: string;
   source: "qr_usher" | "manual_usher" | "self";
-  actorEmail: string | null;
+  actorUsername: string | null;
   enforceWindow: boolean;
 }): Promise<CheckInResult> {
   const service = await prisma.service.findUnique({
@@ -195,7 +195,7 @@ async function performMemberCheckIn(opts: {
         serviceId: opts.serviceId,
         memberId: opts.memberId,
         source: opts.source,
-        checkedInBy: opts.actorEmail,
+        checkedInBy: opts.actorUsername,
       },
       select: { id: true },
     });

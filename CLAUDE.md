@@ -63,7 +63,7 @@ Do **not** change these without explicit user approval.
     attend/[eventId]/                # Public attendance form (visitor-friendly)
     give/                            # Public giving (anonymous OK)
     auth/                            # Login flows
-      sign-in/                       # Staff email+password OR member phone+PIN
+      sign-in/                       # Staff username+password OR member phone+PIN
   (admin)/                           # Role: ADMIN | STAFF | LEADER (varies by feature)
     admin/
       dashboard/
@@ -103,7 +103,7 @@ Do **not** change these without explicit user approval.
 ### Auth model
 
 Two distinct user-facing login flows, both surface in `/auth/sign-in`:
-1. **Staff / Admin login**: Email + password (Auth.js Credentials provider, bcrypt hash on `User.passwordHash`).
+1. **Staff / Admin login**: Username + password (Auth.js Credentials provider, bcrypt hash on `User.passwordHash`).
 2. **Member (jemaat) login**: Phone + 4–6 digit PIN (Auth.js Credentials provider, bcrypt hash on `User.pinHash`). Lenient throttling via `PinAttempt` table — after 10 failed attempts in 15 minutes, brute-force is throttled with a 30-second backoff (no permanent lockout, designed for elderly users).
 
 The `User` model carries a `role` enum: `ADMIN | STAFF | LEADER | MEMBER`.
@@ -336,7 +336,7 @@ pnpm test:watch                 # Run tests in watch mode
 pnpm icons                      # Regenerate PWA + push badge icons from scripts/source-logo.png
 
 # Emergency operations
-pnpm admin:reset-password --email <email> --password <new>  # See docs/runbook.md §2
+pnpm admin:reset-password --username <username> --password <new>  # See docs/runbook.md §2
 
 # Adding shadcn components
 pnpm dlx shadcn@latest add <component>
@@ -404,9 +404,10 @@ Closed-registration model: a `User` record is always created by an admin (manual
 5. Members set their PIN initially via the admin UI ("Reset PIN" in `/admin/members/[id]` or the user list); they can change their own PIN at `/me/profile`.
 6. Helper functions: `signInWithPin`, `setMemberPin`, `changeOwnPin`, `hashPin`, `isValidPinFormat` — all in `src/lib/pin.ts`.
 
-### Staff / Admin login — Email + password
+### Staff / Admin login — Username + password
 - Auth.js Credentials provider with bcrypt password hashing on `User.passwordHash`.
-- Initial admin created via seed script using `INITIAL_ADMIN_EMAIL` / `INITIAL_ADMIN_PASSWORD` env vars.
+- Username is lower-cased on submit, validated against `[a-z0-9._-]+`, 3–60 chars.
+- Initial admin created via seed script using `INITIAL_ADMIN_USERNAME` / `INITIAL_ADMIN_PASSWORD` env vars.
 
 ### Session
 - Auth.js JWT strategy (no session table by default; can switch to DB sessions later).

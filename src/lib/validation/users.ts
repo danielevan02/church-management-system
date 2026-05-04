@@ -15,7 +15,13 @@ export const roleEnum = z.enum([
 export type RoleInput = z.infer<typeof roleEnum>;
 
 export const userCreateSchema = z.object({
-  email: z.email("Email tidak valid"),
+  username: z
+    .string()
+    .trim()
+    .min(3, "Minimal 3 karakter")
+    .max(60, "Maksimal 60 karakter")
+    .regex(/^[a-z0-9._-]+$/i, "Hanya huruf, angka, titik, garis bawah, atau strip")
+    .transform((v) => v.toLowerCase()),
   password: z.string().min(8, "Minimal 8 karakter"),
   role: roleEnum,
   memberId: empty,

@@ -24,7 +24,7 @@ import { Link } from "@/lib/i18n/navigation";
 
 type Props = React.ComponentProps<typeof Sidebar> & {
   user: {
-    email: string | null;
+    username: string | null;
     role: Role;
     memberId: string | null;
   };

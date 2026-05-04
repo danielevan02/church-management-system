@@ -15,7 +15,7 @@ const auditListSelect = {
   ipAddress: true,
   createdAt: true,
   user: {
-    select: { id: true, email: true, role: true },
+    select: { id: true, username: true, role: true },
   },
 } as const satisfies Prisma.AuditLogSelect;
 

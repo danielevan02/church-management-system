@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertCircle, Eye, EyeOff, Loader2, Lock, Mail } from "lucide-react";
+import { AlertCircle, Eye, EyeOff, Loader2, Lock, User } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useActionState, useState } from "react";
 
@@ -21,16 +21,16 @@ export function SignInForm() {
   return (
     <form action={action} className="flex flex-col gap-5">
       <div className="flex flex-col gap-2">
-        <Label htmlFor="email">{t("emailLabel")}</Label>
+        <Label htmlFor="username">{t("usernameLabel")}</Label>
         <div className="relative">
-          <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <User className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            id="email"
-            name="email"
-            type="email"
-            autoComplete="email"
+            id="username"
+            name="username"
+            type="text"
+            autoComplete="username"
             required
-            placeholder="you@example.com"
+            placeholder={t("usernamePlaceholder")}
             className="pl-9"
           />
         </div>

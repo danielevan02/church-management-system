@@ -83,8 +83,9 @@
     },
     "signIn": {
       "title": "Staff sign in",
-      "subtitle": "Sign in with your staff/admin email and password.",
-      "emailLabel": "Email",
+      "subtitle": "Sign in with your staff/admin username and password.",
+      "usernameLabel": "Username",
+      "usernamePlaceholder": "username",
       "passwordLabel": "Password",
       "submit": "Sign in",
       "or": "or",
@@ -92,7 +93,7 @@
       "hidePassword": "Hide password",
       "switchToMember": "I'm a member — sign in with phone & PIN",
       "errors": {
-        "invalidCredentials": "Wrong email or password.",
+        "invalidCredentials": "Wrong username or password.",
         "accountInactive": "Your account is disabled. Contact an administrator.",
         "internal": "Something went wrong. Please try again."
       }
@@ -1834,7 +1835,8 @@
       },
       "form": {
         "fields": {
-          "email": "Email",
+          "username": "Username",
+          "usernameHint": "3–60 chars, letters/digits/dot/dash. Always lower-cased.",
           "password": "Password",
           "passwordHint": "Minimum 8 characters.",
           "role": "Role",

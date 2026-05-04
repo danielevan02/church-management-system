@@ -4,6 +4,7 @@ import type { Role } from "@prisma/client";
 
 type AppJwt = {
   sub?: string;
+  username?: string | null;
   role?: Role;
   memberId?: string | null;
 };
@@ -57,6 +58,7 @@ export const authConfig = {
     async jwt({ token, user }) {
       const t = token as AppJwt;
       if (user) {
+        t.username = user.username ?? null;
         t.role = user.role;
         t.memberId = user.memberId;
       }
@@ -66,6 +68,7 @@ export const authConfig = {
       const t = token as AppJwt;
       if (t.sub) session.user.id = t.sub;
       if (t.role) session.user.role = t.role;
+      session.user.username = t.username ?? null;
       session.user.memberId = t.memberId ?? null;
       return session;
     },

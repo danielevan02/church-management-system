@@ -54,7 +54,7 @@ export async function createCellGroupReportAction(
         visitorCount: data.visitorCount,
         topic: data.topic,
         notes: data.notes,
-        submittedBy: session.user.email ?? "unknown",
+        submittedBy: session.user.username ?? "unknown",
       },
       select: { id: true },
     });

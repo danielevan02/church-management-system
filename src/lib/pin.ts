@@ -17,7 +17,7 @@ export type SignInPinResult =
       ok: true;
       user: {
         id: string;
-        email: string | null;
+        username: string | null;
         role: Role;
         memberId: string;
       };
@@ -137,7 +137,7 @@ export async function signInWithPin(
     where: { phone },
     select: {
       id: true,
-      email: true,
+      username: true,
       pinHash: true,
       isActive: true,
       memberId: true,
@@ -182,7 +182,7 @@ export async function signInWithPin(
     ok: true,
     user: {
       id: matched.id,
-      email: matched.email,
+      username: matched.username,
       role: matched.role,
       memberId: matched.memberId,
     },
@@ -208,7 +208,7 @@ export async function setMemberPin(
 
   const member = await prisma.member.findFirst({
     where: { id: memberId, deletedAt: null },
-    select: { id: true, phone: true, email: true },
+    select: { id: true, phone: true },
   });
   if (!member) return { ok: false, reason: "INTERNAL" };
   if (!member.phone) return { ok: false, reason: "NO_PHONE" };
@@ -234,7 +234,6 @@ export async function setMemberPin(
       pinHash,
       role: "MEMBER",
       memberId: member.id,
-      email: member.email,
     },
   });
 

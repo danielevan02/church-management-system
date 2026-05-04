@@ -34,14 +34,14 @@ import {
 import { createUserAction } from "@/server/actions/users/create";
 
 type FormValues = {
-  email: string;
+  username: string;
   password: string;
   role: RoleInput;
   memberId: string;
 };
 
 const defaults: FormValues = {
-  email: "",
+  username: "",
   password: "",
   role: "STAFF",
   memberId: "",
@@ -66,7 +66,7 @@ export function UserCreateForm({ submitLabel }: { submitLabel: string }) {
   function handleSubmit(values: FormValues) {
     startTransition(async () => {
       const input: UserCreateInput = {
-        email: values.email,
+        username: values.username,
         password: values.password,
         role: values.role,
         memberId: values.memberId === "" ? undefined : values.memberId,
@@ -97,13 +97,14 @@ export function UserCreateForm({ submitLabel }: { submitLabel: string }) {
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <FormField
             control={form.control}
-            name="email"
+            name="username"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t("fields.email")} *</FormLabel>
+                <FormLabel>{t("fields.username")} *</FormLabel>
                 <FormControl>
-                  <Input type="email" {...field} />
+                  <Input type="text" autoComplete="username" {...field} />
                 </FormControl>
+                <FormDescription>{t("fields.usernameHint")}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}

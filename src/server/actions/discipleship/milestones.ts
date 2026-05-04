@@ -41,7 +41,7 @@ export async function createMilestoneAction(
         type: data.type,
         achievedAt: data.achievedAt,
         notes: data.notes,
-        recordedBy: session.user.email ?? "unknown",
+        recordedBy: session.user.username ?? "unknown",
       },
       select: { id: true },
     });

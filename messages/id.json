@@ -83,8 +83,9 @@
     },
     "signIn": {
       "title": "Masuk Staff",
-      "subtitle": "Masuk dengan email & password staff/admin.",
-      "emailLabel": "Email",
+      "subtitle": "Masuk dengan username & password staff/admin.",
+      "usernameLabel": "Username",
+      "usernamePlaceholder": "username",
       "passwordLabel": "Password",
       "submit": "Masuk",
       "or": "atau",
@@ -92,7 +93,7 @@
       "hidePassword": "Sembunyikan password",
       "switchToMember": "Saya jemaat — masuk pakai nomor HP & PIN",
       "errors": {
-        "invalidCredentials": "Email atau password salah.",
+        "invalidCredentials": "Username atau password salah.",
         "accountInactive": "Akun Anda dinonaktifkan. Hubungi pengurus.",
         "internal": "Terjadi kesalahan. Coba lagi."
       }
@@ -1834,7 +1835,8 @@
       },
       "form": {
         "fields": {
-          "email": "Email",
+          "username": "Username",
+          "usernameHint": "3–60 karakter, huruf/angka/titik/strip. Otomatis diubah ke huruf kecil.",
           "password": "Password",
           "passwordHint": "Minimal 8 karakter.",
           "role": "Peran",

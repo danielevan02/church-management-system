@@ -15,7 +15,7 @@ const devotionalListSelect = {
   publishedAt: true,
   createdAt: true,
   updatedAt: true,
-  createdBy: { select: { id: true, email: true } },
+  createdBy: { select: { id: true, username: true } },
 } as const satisfies Prisma.DevotionalSelect;
 
 export type DevotionalListItem = Prisma.DevotionalGetPayload<{
@@ -85,7 +85,7 @@ export async function getDevotional(id: string) {
   return prisma.devotional.findFirst({
     where: { id, deletedAt: null },
     include: {
-      createdBy: { select: { id: true, email: true } },
+      createdBy: { select: { id: true, username: true } },
     },
   });
 }
