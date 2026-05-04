@@ -93,7 +93,13 @@ export default async function UsersListPage({
                           </AvatarFallback>
                         </Avatar>
                         <div className="flex flex-col">
-                          <span className="text-sm font-medium">
+                          <span
+                            className={
+                              u.username
+                                ? "text-sm font-medium uppercase tracking-wide"
+                                : "text-sm font-medium"
+                            }
+                          >
                             {u.username ?? u.member?.fullName ?? "—"}
                           </span>
                           {u.phone ? (
