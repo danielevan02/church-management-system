@@ -5,7 +5,7 @@ import { LogOut, MoreVertical, UserCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { LanguageMenuItem } from "@/components/shared/language-menu-item";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
@@ -27,12 +27,28 @@ import { signOutAction } from "@/server/actions/auth/sign-out";
 export function AdminNavUser({
   user,
 }: {
-  user: { username: string | null; role: Role; memberId: string | null };
+  user: {
+    username: string | null;
+    role: Role;
+    memberId: string | null;
+    member: {
+      firstName: string;
+      lastName: string | null;
+      photoUrl: string | null;
+    } | null;
+  };
 }) {
   const t = useTranslations("common");
   const { isMobile } = useSidebar();
-  const initial = (user.username ?? user.role).charAt(0).toUpperCase();
-  const displayName = user.username ?? user.role;
+
+  // Prefer the linked member's first+last name when available — that's
+  // the human identifier admins recognise. Fall back to the username for
+  // staff accounts that aren't linked to a member.
+  const displayName = user.member
+    ? [user.member.firstName, user.member.lastName].filter(Boolean).join(" ")
+    : user.username ?? user.role;
+  const initial = displayName.charAt(0).toUpperCase();
+  const photoUrl = user.member?.photoUrl ?? null;
 
   return (
     <SidebarMenu>
@@ -44,6 +60,9 @@ export function AdminNavUser({
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="h-8 w-8 rounded-lg grayscale">
+                {photoUrl ? (
+                  <AvatarImage src={photoUrl} alt={displayName} />
+                ) : null}
                 <AvatarFallback className="rounded-lg">
                   {initial}
                 </AvatarFallback>
@@ -66,6 +85,9 @@ export function AdminNavUser({
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-2 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
+                  {photoUrl ? (
+                    <AvatarImage src={photoUrl} alt={displayName} />
+                  ) : null}
                   <AvatarFallback className="rounded-lg">
                     {initial}
                   </AvatarFallback>
