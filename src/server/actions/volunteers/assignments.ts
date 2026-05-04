@@ -5,13 +5,37 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { auth } from "@/lib/auth";
+import { formatJakarta } from "@/lib/datetime";
 import { requireRole } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
+import { sendPushToMember } from "@/lib/push";
 import {
   assignmentInputSchema,
   assignmentStatusEnum,
   type AssignmentInput,
 } from "@/lib/validation/volunteer";
+
+/**
+ * Push payload for "you've been scheduled to serve". Reused across
+ * create, generate, and swap so the notification body looks the same.
+ */
+function schedulePushPayload(
+  assignmentId: string,
+  teamName: string,
+  positionName: string | null,
+  serviceDate: Date,
+) {
+  const date = formatJakarta(serviceDate, "EEE, dd MMM yyyy");
+  const bodyParts = [teamName];
+  if (positionName) bodyParts.push(positionName);
+  bodyParts.push(date);
+  return {
+    title: "Anda dijadwalkan melayani",
+    body: bodyParts.join(" · "),
+    url: "/me/volunteer",
+    tag: `volunteer:${assignmentId}`,
+  };
+}
 
 /**
  * Week conflict info returned to the client when a member is already
@@ -96,11 +120,27 @@ export async function createAssignmentAction(
         status: data.status,
         notes: data.notes,
       },
-      select: { id: true },
+      select: {
+        id: true,
+        serviceDate: true,
+        team: { select: { name: true } },
+        position: { select: { name: true } },
+      },
     });
     revalidatePath("/admin/volunteers");
     revalidatePath(`/admin/members/${data.memberId}`);
     revalidatePath("/me/volunteer");
+
+    void sendPushToMember(
+      data.memberId,
+      schedulePushPayload(
+        record.id,
+        record.team.name,
+        record.position?.name ?? null,
+        record.serviceDate,
+      ),
+    ).catch((e) => console.error("[volunteer assignment push]", e));
+
     return { ok: true, data: { id: record.id } };
   } catch (e) {
     console.error("[createAssignment]", e);
@@ -194,11 +234,28 @@ export async function updateAssignmentMemberAction(input: {
     const record = await prisma.volunteerAssignment.update({
       where: { id: parsed.data.id },
       data: { memberId: parsed.data.memberId },
-      select: { teamId: true, memberId: true },
+      select: {
+        id: true,
+        memberId: true,
+        serviceDate: true,
+        team: { select: { name: true } },
+        position: { select: { name: true } },
+      },
     });
     revalidatePath("/admin/volunteers");
     revalidatePath(`/admin/members/${record.memberId}`);
     revalidatePath("/me/volunteer");
+
+    void sendPushToMember(
+      record.memberId,
+      schedulePushPayload(
+        record.id,
+        record.team.name,
+        record.position?.name ?? null,
+        record.serviceDate,
+      ),
+    ).catch((e) => console.error("[volunteer swap push]", e));
+
     return { ok: true };
   } catch (e) {
     console.error("[updateAssignmentMember]", e);
