@@ -4,6 +4,7 @@ import type { Role } from "@prisma/client";
 import { LogOut, MoreVertical, UserCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 
+import { LanguageMenuItem } from "@/components/shared/language-menu-item";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -86,6 +87,8 @@ export function AdminNavUser({
                 </Link>
               </DropdownMenuItem>
             ) : null}
+            <LanguageMenuItem />
+            <DropdownMenuSeparator />
             <form action={signOutAction}>
               <DropdownMenuItem asChild>
                 <button type="submit" className="w-full">

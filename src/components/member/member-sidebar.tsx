@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import Image from "next/image";
 import * as React from "react";
 
+import { LanguageMenuItem } from "@/components/shared/language-menu-item";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -216,6 +217,8 @@ function MemberNavUser({
                 </Link>
               </DropdownMenuItem>
             ) : null}
+            <LanguageMenuItem />
+            <DropdownMenuSeparator />
             <form action={signOutMemberAction}>
               <DropdownMenuItem asChild>
                 <button type="submit" className="w-full">
