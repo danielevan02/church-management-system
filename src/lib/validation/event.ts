@@ -5,7 +5,7 @@ import { normalizePhone } from "@/lib/phone";
 
 const empty = z
   .string()
-  .optional()
+  .nullish()
   .transform((v) => (v == null || v.trim() === "" ? null : v.trim()));
 
 /**
@@ -25,7 +25,7 @@ const requiredDateTime = z
 
 const optionalAmount = z
   .union([z.string(), z.number(), z.null()])
-  .optional()
+  .nullish()
   .transform((v) => {
     if (v == null || v === "") return null;
     const cleaned =
@@ -38,7 +38,7 @@ const optionalAmount = z
 
 const optionalPhone = z
   .string()
-  .optional()
+  .nullish()
   .transform((v) => {
     if (v == null || v.trim() === "") return null;
     return normalizePhone(v);

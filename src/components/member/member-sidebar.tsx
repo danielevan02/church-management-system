@@ -33,7 +33,7 @@ import { features } from "@/config/features";
 import { memberNav } from "@/config/nav";
 import { Link, usePathname } from "@/lib/i18n/navigation";
 import { hasAtLeastRole } from "@/lib/permissions";
-import { signOutAction } from "@/server/actions/auth/sign-out";
+import { signOutMemberAction } from "@/server/actions/auth/sign-out";
 
 type ShellMember = {
   firstName: string;
@@ -216,7 +216,7 @@ function MemberNavUser({
                 </Link>
               </DropdownMenuItem>
             ) : null}
-            <form action={signOutAction}>
+            <form action={signOutMemberAction}>
               <DropdownMenuItem asChild>
                 <button type="submit" className="w-full">
                   <LogOut />

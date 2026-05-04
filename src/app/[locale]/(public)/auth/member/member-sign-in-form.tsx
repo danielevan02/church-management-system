@@ -1,10 +1,9 @@
 "use client";
 
-import { Eye, EyeOff, KeyRound, Loader2, Phone } from "lucide-react";
+import { AlertCircle, Eye, EyeOff, KeyRound, Loader2, Phone } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useActionState, useState } from "react";
 
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -75,13 +74,17 @@ export function MemberSignInForm() {
       </div>
 
       {state?.error ? (
-        <Alert variant="destructive">
-          <AlertDescription>
+        <p
+          role="alert"
+          className="flex items-center gap-2 text-sm text-destructive"
+        >
+          <AlertCircle className="h-4 w-4 shrink-0" />
+          <span>
             {state.error === "throttled" && state.retryAfterS
               ? t("errors.throttled", { seconds: state.retryAfterS })
               : t(`errors.${state.error}`)}
-          </AlertDescription>
-        </Alert>
+          </span>
+        </p>
       ) : null}
 
       <Button type="submit" disabled={pending} className="w-full">
