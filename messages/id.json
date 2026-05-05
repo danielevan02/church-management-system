@@ -1332,6 +1332,8 @@
         "change": "Ganti",
         "remove": "Hapus",
         "pickerPlaceholder": "Cari jemaat…",
+        "saving": "Menyimpan…",
+        "removing": "Menghapus…",
         "savedToast": "Anggota tetap tersimpan.",
         "removedToast": "Anggota tetap dihapus.",
         "errorToast": "Aksi gagal.",
