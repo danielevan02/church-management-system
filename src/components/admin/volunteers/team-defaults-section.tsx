@@ -1,6 +1,6 @@
 "use client";
 
-import { Pencil, Plus, X } from "lucide-react";
+import { Loader2, Pencil, Plus, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
@@ -42,6 +42,8 @@ export function TeamDefaultsSection({
   const t = useTranslations("volunteers.team.defaults");
   const tCommon = useTranslations("common");
   const [editingPositionId, setEditingPositionId] = useState<string | null>(null);
+  const [savingPositionId, setSavingPositionId] = useState<string | null>(null);
+  const [removingId, setRemovingId] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
   const defaultByPosition = new Map(defaults.map((d) => [d.positionId, d]));
@@ -49,6 +51,8 @@ export function TeamDefaultsSection({
 
   function handlePick(positionId: string, memberId: string | null) {
     if (!memberId) return;
+    setSavingPositionId(positionId);
+    setRemovingId(null);
     startTransition(async () => {
       const result = await setTeamDefaultAction({
         teamId,
@@ -65,6 +69,8 @@ export function TeamDefaultsSection({
   }
 
   function handleRemove(id: string) {
+    setRemovingId(id);
+    setSavingPositionId(null);
     startTransition(async () => {
       const result = await removeTeamDefaultAction(id);
       if (result.ok) {
@@ -86,6 +92,8 @@ export function TeamDefaultsSection({
       {activePositions.map((p) => {
         const current = defaultByPosition.get(p.id);
         const isEditing = editingPositionId === p.id;
+        const isSaving = pending && savingPositionId === p.id;
+        const isRemoving = pending && current ? removingId === current.id : false;
 
         return (
           <li
@@ -96,7 +104,17 @@ export function TeamDefaultsSection({
               <span className="min-w-[120px] text-sm font-medium">
                 {p.name}
               </span>
-              {isEditing ? (
+              {isSaving ? (
+                <span className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  {t("saving")}
+                </span>
+              ) : isRemoving ? (
+                <span className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  {t("removing")}
+                </span>
+              ) : isEditing ? (
                 <div className="flex-1">
                   <MemberPicker
                     value={null}
@@ -128,7 +146,7 @@ export function TeamDefaultsSection({
               )}
             </div>
             <div className="flex items-center gap-1">
-              {isEditing ? (
+              {isSaving || isRemoving ? null : isEditing ? (
                 <Button
                   type="button"
                   variant="ghost"

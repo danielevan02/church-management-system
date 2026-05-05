@@ -1332,6 +1332,8 @@
         "change": "Change",
         "remove": "Remove",
         "pickerPlaceholder": "Search member…",
+        "saving": "Saving…",
+        "removing": "Removing…",
         "savedToast": "Default member saved.",
         "removedToast": "Default member removed.",
         "errorToast": "Action failed.",
