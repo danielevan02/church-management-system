@@ -596,9 +596,9 @@
       },
       "placeholders": {
         "noCellGroups": "Not in any cell group yet.",
-        "attendance": "Attendance history will appear after Phase 4 (Attendance).",
-        "events": "Event RSVPs will appear after Phase 8 (Events).",
-        "discipleship": "Discipleship milestones will appear after Phase 11.",
+        "attendance": "No attendance history yet.",
+        "events": "No event RSVPs yet.",
+        "discipleship": "No discipleship milestones yet.",
         "pastoral": "No pastoral visits recorded yet."
       },
       "discipleship": {
@@ -719,11 +719,10 @@
   },
   "services": {
     "type": {
-      "sundayMorning": "Sunday morning",
-      "sundayEvening": "Sunday evening",
-      "midweek": "Midweek",
+      "sundayService": "Sunday service",
       "youth": "Youth",
       "children": "Children",
+      "prayerMeeting": "Prayer meeting",
       "special": "Special",
       "other": "Other"
     },
@@ -733,13 +732,24 @@
       "newButton": "New service",
       "recurringButton": "Bulk schedule",
       "empty": "No services scheduled yet.",
+      "emptyFiltered": "No services match your search.",
       "colName": "Name",
       "colType": "Type",
       "colStartsAt": "Starts at",
       "colAttendance": "Check-ins",
       "colStatus": "Status",
       "statusActive": "Active",
-      "statusInactive": "Inactive"
+      "statusInactive": "Inactive",
+      "filters": {
+        "searchPlaceholder": "Search service name…",
+        "search": "Search",
+        "type": "Type",
+        "anyType": "All types",
+        "status": "Status",
+        "anyStatus": "All statuses",
+        "statusActive": "Active",
+        "statusInactive": "Inactive"
+      }
     },
     "new": {
       "title": "New service",

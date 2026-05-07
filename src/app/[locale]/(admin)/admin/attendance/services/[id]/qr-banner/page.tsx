@@ -10,7 +10,7 @@ import { auth } from "@/lib/auth";
 import { Link } from "@/lib/i18n/navigation";
 import { hasAtLeastRole } from "@/lib/permissions";
 import { renderServiceQrDataUrl } from "@/lib/service-qr";
-import { getService } from "@/server/queries/services";
+import { getService, isServiceLive } from "@/server/queries/services";
 import { formatJakarta } from "@/lib/datetime";
 
 export default async function ServiceQrBannerPage({
@@ -25,6 +25,9 @@ export default async function ServiceQrBannerPage({
   const { id, locale } = await params;
   const service = await getService(id);
   if (!service) notFound();
+  if (!isServiceLive(service, new Date())) {
+    redirect(`/admin/attendance/services/${id}`);
+  }
 
   const { url, dataUrl } = await renderServiceQrDataUrl(id, locale);
 

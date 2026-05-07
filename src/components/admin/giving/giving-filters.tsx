@@ -16,9 +16,8 @@ import {
 const ALL = "_all";
 
 const SERVICE_TYPES: ReadonlyArray<{ value: string; key: string }> = [
-  { value: "SUNDAY_MORNING", key: "sundayMorning" },
-  { value: "SUNDAY_EVENING", key: "sundayEvening" },
-  { value: "MIDWEEK", key: "midweek" },
+  { value: "SUNDAY_SERVICE", key: "sundayService" },
+  { value: "PRAYER_MEETING", key: "prayerMeeting" },
   { value: "YOUTH", key: "youth" },
   { value: "CHILDREN", key: "children" },
   { value: "SPECIAL", key: "special" },

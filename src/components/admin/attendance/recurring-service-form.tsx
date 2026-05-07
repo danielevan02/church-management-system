@@ -36,9 +36,8 @@ import { createRecurringServicesAction } from "@/server/actions/services/create-
 type FormValues = {
   name: string;
   type:
-    | "SUNDAY_MORNING"
-    | "SUNDAY_EVENING"
-    | "MIDWEEK"
+    | "SUNDAY_SERVICE"
+    | "PRAYER_MEETING"
     | "YOUTH"
     | "CHILDREN"
     | "SPECIAL"
@@ -54,7 +53,7 @@ type FormValues = {
 
 const defaults: FormValues = {
   name: "Kebaktian Minggu Pagi",
-  type: "SUNDAY_MORNING",
+  type: "SUNDAY_SERVICE",
   firstDate: "",
   time: "09:00",
   count: 12,
@@ -146,13 +145,10 @@ export function RecurringServiceForm() {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="SUNDAY_MORNING">
-                      {tType("sundayMorning")}
+                    <SelectItem value="SUNDAY_SERVICE">
+                      {tType("sundayService")}
                     </SelectItem>
-                    <SelectItem value="SUNDAY_EVENING">
-                      {tType("sundayEvening")}
-                    </SelectItem>
-                    <SelectItem value="MIDWEEK">{tType("midweek")}</SelectItem>
+                    <SelectItem value="PRAYER_MEETING">{tType("prayerMeeting")}</SelectItem>
                     <SelectItem value="YOUTH">{tType("youth")}</SelectItem>
                     <SelectItem value="CHILDREN">{tType("children")}</SelectItem>
                     <SelectItem value="SPECIAL">{tType("special")}</SelectItem>

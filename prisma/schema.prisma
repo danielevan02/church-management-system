@@ -259,11 +259,10 @@ model CellGroupReport {
 // =====================================================================
 
 enum ServiceType {
-  SUNDAY_MORNING
-  SUNDAY_EVENING
-  MIDWEEK
+  SUNDAY_SERVICE
   YOUTH
   CHILDREN
+  PRAYER_MEETING
   SPECIAL
   OTHER
 }

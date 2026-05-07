@@ -89,7 +89,7 @@ async function main() {
     create: {
       id: "seed-service-sunday-morning",
       name: "Ibadah Minggu Pagi",
-      type: ServiceType.SUNDAY_MORNING,
+      type: ServiceType.SUNDAY_SERVICE,
       startsAt: nextSundayMorning(),
       durationMin: 90,
       location: "Gedung Utama",

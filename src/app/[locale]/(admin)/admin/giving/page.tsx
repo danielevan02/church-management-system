@@ -23,9 +23,8 @@ import {
 import type { ServiceType } from "@prisma/client";
 
 const SERVICE_TYPE_VALUES: readonly ServiceType[] = [
-  "SUNDAY_MORNING",
-  "SUNDAY_EVENING",
-  "MIDWEEK",
+  "SUNDAY_SERVICE",
+  "PRAYER_MEETING",
   "YOUTH",
   "CHILDREN",
   "SPECIAL",
@@ -327,12 +326,10 @@ function formatWeekRange(start: Date, endExclusive: Date): string {
 
 function serviceTypeKey(t: ServiceType): string {
   switch (t) {
-    case "SUNDAY_MORNING":
-      return "sundayMorning";
-    case "SUNDAY_EVENING":
-      return "sundayEvening";
-    case "MIDWEEK":
-      return "midweek";
+    case "SUNDAY_SERVICE":
+      return "sundayService";
+    case "PRAYER_MEETING":
+      return "prayerMeeting";
     case "YOUTH":
       return "youth";
     case "CHILDREN":
