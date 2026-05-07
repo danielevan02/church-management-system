@@ -46,6 +46,30 @@ export async function listAllTeams() {
   });
 }
 
+/**
+ * Active teams that have at least one default member set. Surfaced in the
+ * "Generate dari Default" dialog so admins can opt in/out per team for a
+ * given Sunday — useful for rotating teams (e.g. Tim Musik 1 vs 2).
+ */
+export async function listTeamsWithDefaults(): Promise<
+  Array<{ id: string; name: string; defaultCount: number }>
+> {
+  const rows = await prisma.volunteerTeam.findMany({
+    where: { isActive: true, defaults: { some: {} } },
+    orderBy: { name: "asc" },
+    select: {
+      id: true,
+      name: true,
+      _count: { select: { defaults: true } },
+    },
+  });
+  return rows.map((r) => ({
+    id: r.id,
+    name: r.name,
+    defaultCount: r._count.defaults,
+  }));
+}
+
 export async function getTeam(id: string) {
   return prisma.volunteerTeam.findUnique({
     where: { id },

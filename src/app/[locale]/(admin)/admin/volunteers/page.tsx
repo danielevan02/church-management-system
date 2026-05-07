@@ -16,7 +16,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Link } from "@/lib/i18n/navigation";
-import { listUpcomingByWeek } from "@/server/queries/volunteers";
+import {
+  listTeamsWithDefaults,
+  listUpcomingByWeek,
+} from "@/server/queries/volunteers";
 
 const MONTHS_AHEAD = 3;
 
@@ -36,7 +39,10 @@ export default async function VolunteersHomePage({
     { weekStartsOn: 1 },
   );
 
-  const result = await listUpcomingByWeek({ from, monthsAhead: MONTHS_AHEAD });
+  const [result, teamsWithDefaults] = await Promise.all([
+    listUpcomingByWeek({ from, monthsAhead: MONTHS_AHEAD }),
+    listTeamsWithDefaults(),
+  ]);
 
   const prevHref = `/admin/volunteers?from=${format(addMonths(from, -MONTHS_AHEAD), "yyyy-MM-dd")}`;
   const nextHref = `/admin/volunteers?from=${format(addMonths(from, MONTHS_AHEAD), "yyyy-MM-dd")}`;
@@ -65,7 +71,7 @@ export default async function VolunteersHomePage({
               {t("manageTeams")}
             </Link>
           </Button>
-          <GenerateWeekButton />
+          <GenerateWeekButton teams={teamsWithDefaults} />
         </div>
       </header>
 
