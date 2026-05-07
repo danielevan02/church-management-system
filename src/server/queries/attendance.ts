@@ -105,7 +105,7 @@ export async function getWeeklyAttendanceTrend(weeks = 12) {
   const records = await prisma.attendanceRecord.findMany({
     where: {
       checkedInAt: { gte: earliest },
-      service: { type: { in: ["SUNDAY_MORNING", "SUNDAY_EVENING"] } },
+      service: { type: "SUNDAY_SERVICE" },
     },
     select: {
       memberId: true,

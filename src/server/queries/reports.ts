@@ -115,7 +115,7 @@ export async function getAttendanceSnapshot() {
     prisma.attendanceRecord.findMany({
       where: {
         checkedInAt: { gte: fourWeeksAgo },
-        service: { type: { in: ["SUNDAY_MORNING", "SUNDAY_EVENING"] } },
+        service: { type: "SUNDAY_SERVICE" },
       },
       select: {
         service: { select: { id: true, startsAt: true } },

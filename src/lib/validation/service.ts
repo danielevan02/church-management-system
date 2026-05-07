@@ -39,9 +39,8 @@ const empty = z
   .transform((v) => (v == null || v.trim() === "" ? null : v.trim()));
 
 export const serviceTypeEnum = z.enum([
-  "SUNDAY_MORNING",
-  "SUNDAY_EVENING",
-  "MIDWEEK",
+  "SUNDAY_SERVICE",
+  "PRAYER_MEETING",
   "YOUTH",
   "CHILDREN",
   "SPECIAL",

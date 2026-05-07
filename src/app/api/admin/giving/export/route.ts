@@ -9,9 +9,8 @@ import { prisma } from "@/lib/prisma";
 import type { Prisma, ServiceType } from "@prisma/client";
 
 const SERVICE_TYPE_VALUES: readonly ServiceType[] = [
-  "SUNDAY_MORNING",
-  "SUNDAY_EVENING",
-  "MIDWEEK",
+  "SUNDAY_SERVICE",
+  "PRAYER_MEETING",
   "YOUTH",
   "CHILDREN",
   "SPECIAL",

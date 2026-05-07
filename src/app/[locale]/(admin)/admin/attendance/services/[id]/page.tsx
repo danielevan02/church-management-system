@@ -27,7 +27,11 @@ import {
 import { Link } from "@/lib/i18n/navigation";
 import { listAttendanceForService } from "@/server/queries/attendance";
 import { parsePageParam } from "@/server/queries/_pagination";
-import { getService, isCheckInOpen } from "@/server/queries/services";
+import {
+  getService,
+  isCheckInOpen,
+  isServiceLive,
+} from "@/server/queries/services";
 import { formatJakarta } from "@/lib/datetime";
 
 export default async function ServiceDetailPage({
@@ -47,7 +51,9 @@ export default async function ServiceDetailPage({
   const tType = await getTranslations("services.type");
   const result = await listAttendanceForService(id, { page });
   const { items, memberCount, visitorCount, total } = result;
-  const open = service.isActive && isCheckInOpen(service, new Date());
+  const now = new Date();
+  const live = isServiceLive(service, now);
+  const open = service.isActive && isCheckInOpen(service, now);
 
   return (
     <div className="flex flex-col gap-6">
@@ -65,10 +71,8 @@ export default async function ServiceDetailPage({
               {service.name}
             </h1>
             <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-              <Badge variant={service.isActive ? "default" : "secondary"}>
-                {service.isActive
-                  ? t("statusActive")
-                  : t("statusInactive")}
+              <Badge variant={live ? "default" : "secondary"}>
+                {live ? t("statusActive") : t("statusInactive")}
               </Badge>
               <span>•</span>
               <span>{tType(typeKey(service.type))}</span>
@@ -92,7 +96,7 @@ export default async function ServiceDetailPage({
                 {t("edit")}
               </Link>
             </Button>
-            <Button asChild variant="outline">
+            <Button asChild variant="outline" disabled={!live}>
               <Link href={`/admin/attendance/services/${id}/qr-banner`}>
                 <QrCode className="h-4 w-4" />
                 {t("printQrBanner")}
@@ -240,12 +244,10 @@ function sourceLabel(s: string): string {
 
 function typeKey(t: string): string {
   switch (t) {
-    case "SUNDAY_MORNING":
-      return "sundayMorning";
-    case "SUNDAY_EVENING":
-      return "sundayEvening";
-    case "MIDWEEK":
-      return "midweek";
+    case "SUNDAY_SERVICE":
+      return "sundayService";
+    case "PRAYER_MEETING":
+      return "prayerMeeting";
     case "YOUTH":
       return "youth";
     case "CHILDREN":

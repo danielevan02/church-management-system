@@ -10,6 +10,12 @@ export type ServiceFilters = {
   q?: string;
   type?: ServiceType;
   isActive?: boolean;
+  /**
+   * Computed status filter — true for currently-live services (matches
+   * isServiceLive), false for any service outside the live window. Done
+   * in-memory because the precise window depends on per-row durationMin.
+   */
+  live?: boolean;
   /** Inclusive bounds. */
   from?: Date;
   to?: Date;
@@ -46,6 +52,28 @@ export async function listServices(opts: {
     where.startsAt = {};
     if (filters.from) where.startsAt.gte = filters.from;
     if (filters.to) where.startsAt.lte = filters.to;
+  }
+
+  // Precise "live" filter requires per-row durationMin which we can't
+  // express in a single Prisma where clause. For a church-scale services
+  // table (a few hundred rows max) it's fine to fetch all matching the
+  // other filters and slice in-memory after the live check.
+  if (typeof filters.live === "boolean") {
+    const all = await prisma.service.findMany({
+      where,
+      orderBy: { startsAt: "desc" },
+      select: serviceListSelect,
+    });
+    const now = new Date();
+    const filtered = all.filter(
+      (s) => isServiceLive(s, now) === filters.live,
+    );
+    return paginate(
+      filtered.slice(skip, skip + take),
+      filtered.length,
+      page,
+      pageSize,
+    );
   }
 
   const [items, total] = await Promise.all([
@@ -101,6 +129,32 @@ export function isCheckInOpen(
     service.startsAt.getTime() + (service.durationMin + bufferAfterMin) * 60 * 1000,
   );
   return at >= start && at <= end;
+}
+
+const SERVICE_LIVE_BUFFER_BEFORE_MIN = 60;
+const SERVICE_LIVE_BUFFER_AFTER_END_MIN = 60;
+
+/**
+ * Whether a service should be displayed as live and accept live actions
+ * (check-in QR display, the "Aktif" status badge). Admin must have left
+ * it published (isActive) AND now must fall inside [start - 60min,
+ * end + 60min]. Outside that window the service is "Nonaktif" — both
+ * future-but-far-off services and recently-finished ones.
+ */
+export function isServiceLive(
+  service: { isActive: boolean; startsAt: Date; durationMin: number },
+  at: Date,
+  bufferBeforeMin = SERVICE_LIVE_BUFFER_BEFORE_MIN,
+  bufferAfterMin = SERVICE_LIVE_BUFFER_AFTER_END_MIN,
+): boolean {
+  if (!service.isActive) return false;
+  const startsLive = new Date(
+    service.startsAt.getTime() - bufferBeforeMin * 60 * 1000,
+  );
+  const endsLive = new Date(
+    service.startsAt.getTime() + (service.durationMin + bufferAfterMin) * 60 * 1000,
+  );
+  return at >= startsLive && at <= endsLive;
 }
 
 export async function getUpcomingServices(limit = 10) {

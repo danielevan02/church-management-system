@@ -596,9 +596,9 @@
       },
       "placeholders": {
         "noCellGroups": "Jemaat ini belum tergabung di komsel manapun.",
-        "attendance": "Riwayat kehadiran muncul setelah Phase 4 (Attendance).",
-        "events": "RSVP acara muncul setelah Phase 8 (Events).",
-        "discipleship": "Milestone pemuridan muncul setelah Phase 11.",
+        "attendance": "Belum ada riwayat kehadiran.",
+        "events": "Belum ada RSVP acara.",
+        "discipleship": "Belum ada milestone pemuridan.",
         "pastoral": "Belum ada kunjungan pastoral."
       },
       "discipleship": {
@@ -719,11 +719,10 @@
   },
   "services": {
     "type": {
-      "sundayMorning": "Minggu Pagi",
-      "sundayEvening": "Minggu Sore/Malam",
-      "midweek": "Tengah Pekan",
-      "youth": "Pemuda",
+      "sundayService": "Ibadah Minggu",
+      "youth": "Ibadah Pemuda",
       "children": "Sekolah Minggu",
+      "prayerMeeting": "Persekutuan Doa",
       "special": "Khusus",
       "other": "Lainnya"
     },
@@ -733,13 +732,24 @@
       "newButton": "Tambah Ibadah",
       "recurringButton": "Jadwal Berkala",
       "empty": "Belum ada jadwal ibadah.",
+      "emptyFiltered": "Tidak ada ibadah yang cocok dengan pencarian.",
       "colName": "Nama",
       "colType": "Jenis",
       "colStartsAt": "Mulai",
       "colAttendance": "Check-in",
       "colStatus": "Status",
       "statusActive": "Aktif",
-      "statusInactive": "Nonaktif"
+      "statusInactive": "Nonaktif",
+      "filters": {
+        "searchPlaceholder": "Cari nama ibadah…",
+        "search": "Cari",
+        "type": "Jenis",
+        "anyType": "Semua jenis",
+        "status": "Status",
+        "anyStatus": "Semua status",
+        "statusActive": "Aktif",
+        "statusInactive": "Nonaktif"
+      }
     },
     "new": {
       "title": "Tambah Ibadah",
@@ -795,7 +805,7 @@
       "activatedToast": "Ibadah diaktifkan.",
       "errorToast": "Aksi gagal.",
       "openCheckIn": "Buka check-in",
-      "checkInClosed": "Check-in tutup",
+      "checkInClosed": "Check-in ditutup",
       "printQrBanner": "Cetak QR",
       "statTotal": "Total",
       "statMembers": "Jemaat",

@@ -154,12 +154,10 @@ export default async function GivingReportsPage() {
 
 function serviceTypeKey(t: ServiceType): string {
   switch (t) {
-    case "SUNDAY_MORNING":
-      return "sundayMorning";
-    case "SUNDAY_EVENING":
-      return "sundayEvening";
-    case "MIDWEEK":
-      return "midweek";
+    case "SUNDAY_SERVICE":
+      return "sundayService";
+    case "PRAYER_MEETING":
+      return "prayerMeeting";
     case "YOUTH":
       return "youth";
     case "CHILDREN":
