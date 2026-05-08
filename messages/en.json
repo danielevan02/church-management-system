@@ -50,8 +50,7 @@
     "search": "Search",
     "modulesGroup": "Modules",
     "quick": {
-      "create": "Quick Create",
-      "inbox": "Inbox"
+      "create": "Quick Create"
     },
     "myDashboard": "My dashboard",
     "myAnnouncements": "Announcements",
@@ -80,7 +79,8 @@
     "shell": {
       "verse": "Come to me, all you who are weary and burdened, and I will give you rest.",
       "verseRef": "Matthew 11:28",
-      "tagline": "One portal for serving and growing together."
+      "tagline": "One portal for serving and growing together.",
+      "backToHome": "Back to home"
     },
     "signIn": {
       "title": "Staff sign in",
@@ -130,6 +130,21 @@
       "verseRef": "Psalm 122:1",
       "primaryCta": "Sign in",
       "staffSignIn": "Staff"
+    },
+    "visi": {
+      "label": "Vision",
+      "text": "To proclaim the grace of salvation and to mature the congregation in God's love, power, and truth."
+    },
+    "misi": {
+      "label": "Mission",
+      "acronym": "PIKP3",
+      "expansion": "Unity · Worship and Prayer · Small Groups · Discipleship · Evangelism · Social Service",
+      "item1": "Strengthen the unity of GKJ.",
+      "item2": "Guide every member into intimacy with God through worship and prayer.",
+      "item3": "Shepherd the congregation through small groups.",
+      "item4": "Train and equip the congregation through continuous discipleship.",
+      "item5": "Ignite the congregation's passion to proclaim the grace of salvation.",
+      "item6": "Carry out social service in love."
     }
   },
   "dashboard": {

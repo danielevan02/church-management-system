@@ -1,10 +1,9 @@
 "use client";
 
-import { Mail, PlusCircle } from "lucide-react";
+import { PlusCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -29,7 +28,7 @@ export function AdminNavMain({
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2">
         <SidebarMenu>
-          <SidebarMenuItem className="flex items-center gap-2">
+          <SidebarMenuItem>
             <SidebarMenuButton
               asChild
               tooltip={tQuick("create")}
@@ -40,15 +39,6 @@ export function AdminNavMain({
                 <span>{tQuick("create")}</span>
               </Link>
             </SidebarMenuButton>
-            <Button
-              size="icon"
-              className="size-8 group-data-[collapsible=icon]:opacity-0"
-              variant="outline"
-              aria-label={tQuick("inbox")}
-              disabled
-            >
-              <Mail />
-            </Button>
           </SidebarMenuItem>
         </SidebarMenu>
 

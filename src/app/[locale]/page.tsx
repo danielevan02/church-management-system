@@ -1,4 +1,4 @@
-import { ArrowRight, ShieldCheck } from "lucide-react";
+import { ArrowRight, Quote, ShieldCheck } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 
@@ -10,6 +10,8 @@ import { church } from "@/config/church";
 export default async function Home() {
   const t = await getTranslations("landing");
   const primary = church.primaryColor;
+
+  const misiItems = [1, 2, 3, 4, 5, 6].map((n) => t(`misi.item${n}`));
 
   return (
     <main className="relative flex min-h-dvh flex-col overflow-hidden bg-background">
@@ -59,7 +61,7 @@ export default async function Home() {
         </div>
       </header>
 
-      <section className="flex flex-1 items-center justify-center px-6 py-12 sm:py-16">
+      <section className="flex items-center justify-center px-6 py-16 sm:py-20">
         <div className="flex w-full max-w-2xl flex-col items-center gap-8 text-center">
           <span
             className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium uppercase tracking-widest text-muted-foreground"
@@ -98,7 +100,90 @@ export default async function Home() {
         </div>
       </section>
 
-      <footer className="px-6 py-5 text-center text-xs text-muted-foreground sm:px-10">
+      {/* Visi */}
+      <section
+        className="border-t px-6 py-16 sm:py-20"
+        style={{ borderColor: `${primary}1a` }}
+      >
+        <div className="mx-auto flex w-full max-w-3xl flex-col items-center gap-6 text-center">
+          <span
+            className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium uppercase tracking-widest text-muted-foreground"
+            style={{ borderColor: `${primary}33` }}
+          >
+            <span
+              className="h-1.5 w-1.5 rounded-full"
+              style={{ backgroundColor: primary }}
+            />
+            {t("visi.label")}
+          </span>
+          <Quote
+            className="h-6 w-6 opacity-60"
+            style={{ color: primary }}
+            aria-hidden
+          />
+          <p className="text-balance text-2xl font-medium leading-snug text-foreground sm:text-3xl lg:text-4xl">
+            {t("visi.text")}
+          </p>
+        </div>
+      </section>
+
+      {/* Misi */}
+      <section
+        className="border-t px-6 py-16 sm:py-20"
+        style={{ borderColor: `${primary}1a` }}
+      >
+        <div className="mx-auto flex w-full max-w-5xl flex-col gap-10">
+          <div className="flex flex-col items-center gap-4 text-center">
+            <span
+              className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium uppercase tracking-widest text-muted-foreground"
+              style={{ borderColor: `${primary}33` }}
+            >
+              <span
+                className="h-1.5 w-1.5 rounded-full"
+                style={{ backgroundColor: primary }}
+              />
+              {t("misi.label")}
+            </span>
+            <h2
+              className="text-3xl font-bold tracking-[0.15em] sm:text-4xl"
+              style={{ color: primary }}
+            >
+              {t("misi.acronym")}
+            </h2>
+            <p className="max-w-2xl text-balance text-sm text-muted-foreground sm:text-base">
+              {t("misi.expansion")}
+            </p>
+          </div>
+
+          <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {misiItems.map((item, i) => (
+              <li
+                key={i}
+                className="group relative flex flex-col gap-3 rounded-xl border bg-card/40 p-6 transition-colors hover:border-foreground/20"
+                style={{ borderColor: `${primary}1f` }}
+              >
+                <span
+                  className="flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold"
+                  style={{
+                    backgroundColor: `${primary}14`,
+                    color: primary,
+                  }}
+                >
+                  {i + 1}
+                </span>
+                <p className="text-sm leading-relaxed text-foreground sm:text-base">
+                  {item}
+                </p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <footer
+        className="border-t px-6 py-6 text-center text-xs text-muted-foreground sm:px-10"
+        style={{ borderColor: `${primary}1a` }}
+      >
         © {new Date().getFullYear()} {church.name}
       </footer>
     </main>

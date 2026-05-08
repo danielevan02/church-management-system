@@ -50,8 +50,7 @@
     "search": "Cari",
     "modulesGroup": "Modul",
     "quick": {
-      "create": "Tambah Cepat",
-      "inbox": "Kotak Masuk"
+      "create": "Tambah Cepat"
     },
     "myDashboard": "Dasbor Saya",
     "myAnnouncements": "Pengumuman",
@@ -80,7 +79,8 @@
     "shell": {
       "verse": "Marilah kepada-Ku, semua yang letih lesu dan berbeban berat, Aku akan memberi kelegaan kepadamu.",
       "verseRef": "Matius 11:28",
-      "tagline": "Satu portal untuk pelayanan dan persekutuan jemaat."
+      "tagline": "Satu portal untuk pelayanan dan persekutuan jemaat.",
+      "backToHome": "Kembali ke beranda"
     },
     "signIn": {
       "title": "Masuk Staff",
@@ -130,6 +130,21 @@
       "verseRef": "Mazmur 122:1",
       "primaryCta": "Masuk",
       "staffSignIn": "Pengurus"
+    },
+    "visi": {
+      "label": "Visi",
+      "text": "Memberitakan Anugerah Keselamatan dan Mendewasakan Jemaat Dalam Kasih, Kuasa dan Kebenaran Allah."
+    },
+    "misi": {
+      "label": "Misi",
+      "acronym": "PIKP3",
+      "expansion": "Persatuan · Ibadah dan Doa · Kelompok Kecil · Pembinaan · Penginjilan · Pelayanan Sosial",
+      "item1": "Memperkokoh Persatuan dan Kesatuan GKJ.",
+      "item2": "Membimbing setiap jemaat intim dengan Tuhan melalui Ibadah dan Doa.",
+      "item3": "Menggembalakan jemaat melalui Kelompok Kecil.",
+      "item4": "Melatih dan memperlengkapi jemaat melalui pembinaan yang berkesinambungan.",
+      "item5": "Mengobarkan semangat jemaat dalam memberitakan Anugerah keselamatan.",
+      "item6": "Melakukan Pelayanan Sosial dengan kasih."
     }
   },
   "dashboard": {

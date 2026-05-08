@@ -2,6 +2,7 @@ import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 
 import { church } from "@/config/church";
+import { Link } from "@/lib/i18n/navigation";
 
 import type { ReactNode } from "react";
 
@@ -17,17 +18,23 @@ export async function AuthShell({ title, subtitle, children }: AuthShellProps) {
   return (
     <main className="grid min-h-screen lg:grid-cols-2">
       <section className="flex flex-col px-6 py-10 sm:px-10 lg:px-16">
-        <header className="flex items-center gap-2 text-sm font-medium">
-          <Image
-            src="/icon-ui-192.png"
-            alt=""
-            aria-hidden
-            width={32}
-            height={32}
-            priority
-            className="h-8 w-8 object-contain"
-          />
-          <span className="text-foreground">{church.name}</span>
+        <header className="text-sm font-medium">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 rounded-md transition-opacity hover:opacity-80"
+            aria-label={t("backToHome")}
+          >
+            <Image
+              src="/icon-ui-192.png"
+              alt=""
+              aria-hidden
+              width={32}
+              height={32}
+              priority
+              className="h-8 w-8 object-contain"
+            />
+            <span className="text-foreground">{church.name}</span>
+          </Link>
         </header>
 
         <div className="flex flex-1 items-center">
