@@ -97,25 +97,37 @@ async function main() {
     },
   });
 
-  // Sample child class
-  await prisma.childClass.upsert({
-    where: { id: "seed-child-class-kecil" },
-    update: {},
-    create: {
+  // Default Sekolah Minggu classes — match the church's actual setup:
+  // Kelas Kecil = belum sekolah s/d kelas 2 SD; Kelas Besar = kelas 3-6 SD.
+  const childClasses = [
+    {
       id: "seed-child-class-kecil",
       name: "Sekolah Minggu Kelas Kecil",
-      ageMin: 4,
-      ageMax: 7,
-      isActive: true,
+      ageMin: 0,
+      ageMax: 8,
     },
-  });
+    {
+      id: "seed-child-class-besar",
+      name: "Sekolah Minggu Kelas Besar",
+      ageMin: 9,
+      ageMax: 12,
+    },
+  ];
+
+  for (const c of childClasses) {
+    await prisma.childClass.upsert({
+      where: { id: c.id },
+      update: { name: c.name, ageMin: c.ageMin, ageMax: c.ageMax },
+      create: { ...c, isActive: true },
+    });
+  }
 
   console.log("Seed complete:");
   console.log(`  ADMIN:       ${admin.username} / ${adminPassword}`);
   console.log(`  MEMBER:      phone=${samplePhone} (Budi Santoso) / PIN=${samplePin}`);
   console.log(`  Funds:       ${funds.length} entries`);
   console.log(`  Service:     1 upcoming Sunday morning`);
-  console.log(`  Child class: 1 (Kelas Kecil)`);
+  console.log(`  Child class: ${childClasses.length} (Kelas Kecil + Kelas Besar)`);
 }
 
 main()
