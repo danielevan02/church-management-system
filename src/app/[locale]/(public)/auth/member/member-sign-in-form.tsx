@@ -5,9 +5,8 @@ import { useTranslations } from "next-intl";
 import { useActionState, useState } from "react";
 
 import { LoadingLink } from "@/components/shared/loading-link";
+import { TextField } from "@/components/m3/text-field";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   signInPinAction,
   type SignInPinState,
@@ -23,55 +22,50 @@ export function MemberSignInForm() {
 
   return (
     <form action={formAction} className="flex flex-col gap-5">
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="phone">{t("phoneLabel")}</Label>
-        <div className="relative">
-          <Phone className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-on-surface-variant" />
-          <Input
-            id="phone"
-            name="phone"
-            type="tel"
-            autoComplete="tel"
-            placeholder={t("phonePlaceholder")}
-            required
-            className="pl-9"
-          />
-        </div>
-        <p className="text-xs text-on-surface-variant">{t("phoneHint")}</p>
-      </div>
+      <TextField
+        id="phone"
+        name="phone"
+        type="tel"
+        label={t("phoneLabel")}
+        supportingText={t("phoneHint")}
+        autoComplete="tel"
+        required
+        leadingIcon={<Phone className="size-5" />}
+        disabled={pending}
+        error={Boolean(state?.error)}
+      />
 
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="pin">{t("pinLabel")}</Label>
-        <div className="relative">
-          <KeyRound className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-on-surface-variant" />
-          <Input
-            id="pin"
-            name="pin"
-            type={show ? "text" : "password"}
-            inputMode="numeric"
-            autoComplete="current-password"
-            pattern="\d{4,6}"
-            minLength={4}
-            maxLength={6}
-            placeholder={t("pinPlaceholder")}
-            required
-            className="pl-9 pr-10 tracking-[0.3em]"
-          />
+      <TextField
+        id="pin"
+        name="pin"
+        type={show ? "text" : "password"}
+        label={t("pinLabel")}
+        supportingText={t("pinHint")}
+        inputMode="numeric"
+        autoComplete="current-password"
+        pattern="\d{4,6}"
+        minLength={4}
+        maxLength={6}
+        required
+        leadingIcon={<KeyRound className="size-5" />}
+        className="tracking-[0.3em]"
+        trailingIcon={
           <button
             type="button"
             onClick={() => setShow((s) => !s)}
-            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1.5 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface"
+            className="flex size-8 items-center justify-center rounded-full text-on-surface-variant transition-colors hover:bg-surface-container-highest hover:text-on-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             aria-label={show ? t("hidePin") : t("showPin")}
           >
             {show ? (
-              <EyeOff className="h-4 w-4" />
+              <EyeOff className="size-5" />
             ) : (
-              <Eye className="h-4 w-4" />
+              <Eye className="size-5" />
             )}
           </button>
-        </div>
-        <p className="text-xs text-on-surface-variant">{t("pinHint")}</p>
-      </div>
+        }
+        disabled={pending}
+        error={Boolean(state?.error)}
+      />
 
       {state?.error ? (
         <p

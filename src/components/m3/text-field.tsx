@@ -182,9 +182,9 @@ function TextField({
 
         {trailingIcon && (
           <span
-            aria-hidden
             className={cn(
               "pointer-events-none absolute right-3 top-1/2 z-10 -translate-y-1/2 text-on-surface-variant",
+              "[&_button]:pointer-events-auto [&_button]:cursor-pointer",
               "field-error:text-error field-disabled:text-on-surface/38",
               "[&_svg:not([class*='size-'])]:size-6"
             )}

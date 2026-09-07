@@ -5,9 +5,8 @@ import { useTranslations } from "next-intl";
 import { useActionState, useState } from "react";
 
 import { LoadingLink } from "@/components/shared/loading-link";
+import { TextField } from "@/components/m3/text-field";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { signInCredentialsAction } from "@/server/actions/auth/sign-in-credentials";
 
 export function SignInForm() {
@@ -20,48 +19,43 @@ export function SignInForm() {
 
   return (
     <form action={action} className="flex flex-col gap-5">
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="username">{t("usernameLabel")}</Label>
-        <div className="relative">
-          <User className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-on-surface-variant" />
-          <Input
-            id="username"
-            name="username"
-            type="text"
-            autoComplete="username"
-            required
-            placeholder={t("usernamePlaceholder")}
-            className="pl-9"
-          />
-        </div>
-      </div>
+      <TextField
+        id="username"
+        name="username"
+        type="text"
+        label={t("usernameLabel")}
+        autoComplete="username"
+        required
+        leadingIcon={<User className="size-5" />}
+        disabled={pending}
+        error={Boolean(state?.error)}
+      />
 
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="password">{t("passwordLabel")}</Label>
-        <div className="relative">
-          <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-on-surface-variant" />
-          <Input
-            id="password"
-            name="password"
-            type={showPassword ? "text" : "password"}
-            autoComplete="current-password"
-            required
-            className="pl-9 pr-10"
-          />
+      <TextField
+        id="password"
+        name="password"
+        type={showPassword ? "text" : "password"}
+        label={t("passwordLabel")}
+        autoComplete="current-password"
+        required
+        leadingIcon={<Lock className="size-5" />}
+        trailingIcon={
           <button
             type="button"
             onClick={() => setShowPassword((v) => !v)}
             aria-label={showPassword ? t("hidePassword") : t("showPassword")}
-            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1.5 text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface"
+            className="flex size-8 items-center justify-center rounded-full text-on-surface-variant transition-colors hover:bg-surface-container-highest hover:text-on-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
             {showPassword ? (
-              <EyeOff className="h-4 w-4" />
+              <EyeOff className="size-5" />
             ) : (
-              <Eye className="h-4 w-4" />
+              <Eye className="size-5" />
             )}
           </button>
-        </div>
-      </div>
+        }
+        disabled={pending}
+        error={Boolean(state?.error)}
+      />
 
       {state?.error ? (
         <p
