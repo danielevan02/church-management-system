@@ -72,13 +72,24 @@ export function ExpandableAnnouncementCard({
     <ContainerTransform
       title={announcement.title}
       triggerContent={cardPreview}
-      trigger={({ open, ref }) => (
+      trigger={({ open, isOpen, ref }) => (
         <div
           ref={ref}
           onClick={open}
           tabIndex={0}
           role="button"
           aria-haspopup="dialog"
+          data-m3-origin-hidden={isOpen ? "true" : undefined}
+          style={
+            isOpen
+              ? {
+                  visibility: "hidden",
+                  opacity: 0,
+                  transition: "none",
+                  pointerEvents: "none",
+                }
+              : undefined
+          }
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {
               e.preventDefault();

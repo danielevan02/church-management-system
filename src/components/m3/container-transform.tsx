@@ -123,7 +123,10 @@ export function ContainerTransform({
         cancelAnimationFrame(openRafRef.current);
       }
       if (triggerElRef.current) {
-        triggerElRef.current.style.visibility = "visible";
+        triggerElRef.current.removeAttribute("data-m3-origin-hidden");
+        triggerElRef.current.style.removeProperty("visibility");
+        triggerElRef.current.style.removeProperty("opacity");
+        triggerElRef.current.style.removeProperty("transition");
       }
       document.body.style.overflow = "";
     };
@@ -160,8 +163,11 @@ export function ContainerTransform({
     };
     originRectRef.current = origin;
 
-    // Immediately hide original card in DOM flow (zero delay)
-    triggerEl.style.visibility = "hidden";
+    // Immediately hide original card in DOM flow (zero delay) with data attribute and styles
+    triggerEl.setAttribute("data-m3-origin-hidden", "true");
+    triggerEl.style.setProperty("visibility", "hidden", "important");
+    triggerEl.style.setProperty("opacity", "0", "important");
+    triggerEl.style.setProperty("transition", "none", "important");
 
     // Initialize surface bounds exactly over origin card
     setSurfaceBounds({
@@ -196,7 +202,10 @@ export function ContainerTransform({
 
     if (prefersReducedMotion || !triggerEl) {
       if (triggerEl) {
-        triggerEl.style.visibility = "visible";
+        triggerEl.removeAttribute("data-m3-origin-hidden");
+        triggerEl.style.removeProperty("visibility");
+        triggerEl.style.removeProperty("opacity");
+        triggerEl.style.removeProperty("transition");
       }
       setSurfaceBounds(null);
       setPhase("idle");
@@ -236,7 +245,10 @@ export function ContainerTransform({
 
     closeTimerRef.current = setTimeout(() => {
       if (triggerElRef.current) {
-        triggerElRef.current.style.visibility = "visible";
+        triggerElRef.current.removeAttribute("data-m3-origin-hidden");
+        triggerElRef.current.style.removeProperty("visibility");
+        triggerElRef.current.style.removeProperty("opacity");
+        triggerElRef.current.style.removeProperty("transition");
       }
       setSurfaceBounds(null);
       setPhase("idle");
@@ -364,11 +376,26 @@ export function ContainerTransform({
   return (
     <>
       {/* Trigger rendered in normal DOM flow */}
-      {trigger({
-        open: handleOpen,
-        isOpen: isOpenOrAnimating,
-        ref: setTriggerRef,
-      })}
+      <div
+        data-m3-origin-hidden={isOpenOrAnimating ? "true" : undefined}
+        style={
+          isOpenOrAnimating
+            ? {
+                visibility: "hidden",
+                opacity: 0,
+                transition: "none",
+                pointerEvents: "none",
+              }
+            : undefined
+        }
+        className="contents"
+      >
+        {trigger({
+          open: handleOpen,
+          isOpen: isOpenOrAnimating,
+          ref: setTriggerRef,
+        })}
+      </div>
 
       {/* Portal for the flying container */}
       {isOpenOrAnimating && typeof document !== "undefined"

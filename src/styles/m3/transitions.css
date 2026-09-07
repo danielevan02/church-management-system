@@ -272,3 +272,12 @@
   }
 }
 
+/* Ensure the origin container and all descendants vanish instantly with zero transition delay */
+[data-m3-origin-hidden="true"],
+[data-m3-origin-hidden="true"] * {
+  transition: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
