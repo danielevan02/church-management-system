@@ -7,32 +7,25 @@ import {
   HandCoins,
   Heart,
   HeartHandshake,
+  MapPin,
   Megaphone,
   QrCode,
   ScanLine,
   Sprout,
   UserCircle,
-  Users,
   UsersRound,
 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 
+import { ExpandableAnnouncementCard } from "@/components/member/announcements/expandable-announcement-card";
 import { DevotionalHeroCard } from "@/components/member/dashboard/devotional-hero-card";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { features } from "@/config/features";
 import { auth } from "@/lib/auth";
 import { formatJakarta } from "@/lib/datetime";
 import { Link } from "@/lib/i18n/navigation";
-import { excerpt } from "@/lib/markdown";
 import { prisma } from "@/lib/prisma";
 import { getLatestAnnouncementsForMember } from "@/server/queries/announcements";
 import { listChildrenForGuardian } from "@/server/queries/children";
@@ -114,343 +107,408 @@ export default async function MemberDashboardPage() {
     milestones.length > 0 ? milestones[milestones.length - 1] : null;
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1">
-        <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="text-on-surface-variant">
-          {t("welcome", { name: member?.firstName ?? "Jemaat" })}{" "}
-          {t("subtitle", { date: format(new Date(), "EEEE, dd MMM yyyy") })}
-        </p>
+    <div className="flex flex-col gap-6 pb-24 sm:pb-12">
+      {/* 1. Contextual Mobile-First Greeting Header */}
+      <header className="flex items-start justify-between gap-4 pt-1">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary-container px-2.5 py-0.5 text-xs font-semibold text-on-secondary-container">
+              <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+              Jemaat Aktif
+            </span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-on-surface">
+            {t("welcome", { name: member?.firstName ?? "Jemaat" })}
+          </h1>
+          <p className="text-xs sm:text-sm font-medium text-on-surface-variant">
+            {format(new Date(), "EEEE, dd MMMM yyyy")}
+          </p>
+        </div>
+
+        {/* Member Initials Avatar Link */}
+        <Link
+          href="/me/profile"
+          className="group relative flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-surface-container-high text-primary border border-outline-variant/60 shadow-level-0 transition-all hover:bg-surface-container-highest hover:shadow-level-1 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          aria-label="Lihat Profil"
+        >
+          <span className="text-base font-bold">
+            {member?.firstName ? member.firstName[0] : "J"}
+            {member?.lastName ? member.lastName[0] : ""}
+          </span>
+          <span className="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[9px] text-on-primary font-bold shadow-xs">
+            ✓
+          </span>
+        </Link>
       </header>
 
-      {/* Renungan Hari Ini */}
+      {/* 2. Renungan Hari Ini (Hero M3 Container Transform) */}
       {features.devotionals && todayDevotional ? (
         <DevotionalHeroCard devotional={todayDevotional} />
       ) : null}
 
-      {/* Quick actions */}
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-        <QuickAction href="/me/qr" icon={QrCode} label={tQuick("myQr")} />
-        {features.selfCheckIn ? (
-          <QuickAction
-            href="/me/check-in"
-            icon={ScanLine}
-            label={tQuick("checkIn")}
-          />
-        ) : null}
-        <QuickAction
-          href="/me/profile"
-          icon={UserCircle}
-          label={tQuick("myProfile")}
-        />
-        {features.giving ? (
+      {/* 3. Quick Actions (Ergonomic 3x2 Matrix on Mobile, 6x1 on Desktop) */}
+      <section aria-label="Aksi Cepat">
+        <div className="grid grid-cols-3 gap-2.5 sm:gap-3 lg:grid-cols-6">
+          <QuickAction href="/me/qr" icon={QrCode} label={tQuick("myQr")} />
+          {features.selfCheckIn ? (
+            <QuickAction
+              href="/me/check-in"
+              icon={ScanLine}
+              label={tQuick("checkIn")}
+            />
+          ) : null}
           <QuickAction
             href="/me/giving"
             icon={HandCoins}
             label={tQuick("giveNow")}
           />
-        ) : null}
-        <QuickAction
-          href="/me/events"
-          icon={Calendar}
-          label={tQuick("events")}
-        />
-        <QuickAction
-          href="/me/prayer-requests"
-          icon={Heart}
-          label={tQuick("prayer")}
-        />
-      </div>
+          <QuickAction
+            href="/me/events"
+            icon={Calendar}
+            label={tQuick("events")}
+          />
+          <QuickAction
+            href="/me/prayer-requests"
+            icon={Heart}
+            label={tQuick("prayer")}
+          />
+          <QuickAction
+            href="/me/profile"
+            icon={UserCircle}
+            label={tQuick("myProfile")}
+          />
+        </div>
+      </section>
 
-      {/* Pengumuman Terbaru */}
-      {latestAnnouncements.length > 0 ? (
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-base">
-              <Megaphone className="h-5 w-5" />
-              {t("announcements.title")}
-            </CardTitle>
-            <CardDescription>{t("announcements.description")}</CardDescription>
-            <Button asChild variant="outline" size="sm" className="mt-2 w-fit">
-              <Link href="/me/announcements">
-                {t("announcements.viewAll")}
-              </Link>
-            </Button>
-          </CardHeader>
-          <CardContent>
-            <ul className="divide-y flex flex-col gap-1">
-              {latestAnnouncements.map((a) => {
-                const isFresh =
-                  Date.now() - a.publishedAt.getTime() < 24 * 60 * 60 * 1000;
-                return (
-                  <li key={a.id}>
-                    <Link
-                      href={`/me/announcements/${a.id}`}
-                      className="group flex items-start gap-3 py-3 transition-colors hover:bg-surface-container-highest/20"
-                    >
-                      <div className="flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-md border bg-surface-container-high/40">
-                        <span className="text-[10px] font-semibold uppercase tracking-wider text-on-surface-variant">
-                          {formatJakarta(a.publishedAt, "MMM")}
-                        </span>
-                        <span className="text-base font-bold leading-none tabular-nums">
-                          {formatJakarta(a.publishedAt, "dd")}
-                        </span>
-                      </div>
-                      <div className="min-w-0 flex-1 space-y-0.5">
-                        <div className="flex items-center gap-2">
-                          <p className="font-semibold leading-tight line-clamp-1">
-                            {a.title}
-                          </p>
-                          {isFresh ? (
-                            <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-primary">
-                              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" />
-                              {t("announcements.new")}
-                            </span>
-                          ) : null}
-                        </div>
-                        <p className="line-clamp-2 text-sm text-on-surface-variant">
-                          {excerpt(a.body)}
-                        </p>
-                      </div>
-                      <ArrowRight className="mt-1 h-4 w-4 shrink-0 text-on-surface-variant transition-transform group-hover:translate-x-0.5" />
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </CardContent>
-        </Card>
-      ) : null}
-
-      {/* Upcoming + About me */}
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-base">
-              <CalendarDays className="h-5 w-5" />
+      {/* 4. Ibadah & Jadwal Terdekat (Active Sunday Service Ticket & Passes) */}
+      <section className="flex flex-col gap-3" aria-label="Jadwal Mendatang">
+        <div className="flex items-center gap-2">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+            <CalendarDays className="h-4 w-4" />
+          </div>
+          <div>
+            <h2 className="text-base font-bold text-on-surface">
               {t("upcoming.title")}
-            </CardTitle>
-            <CardDescription>{t("upcoming.description")}</CardDescription>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-5">
-            <Section title={t("nextService")}>
-              {upcomingService ? (
-                <div className="flex flex-col gap-1 rounded-md border px-3 py-2 text-sm">
-                  <span className="font-medium">{upcomingService.name}</span>
-                  <span className="text-xs text-on-surface-variant">
-                    {formatJakarta(upcomingService.startsAt, "EEEE, dd MMM yyyy · HH:mm")}
-                    {upcomingService.location ? ` · ${upcomingService.location}` : ""}
-                  </span>
-                </div>
-              ) : (
-                <EmptyHint text={t("noNextService")} />
-              )}
-            </Section>
+            </h2>
+            <p className="text-xs text-on-surface-variant hidden sm:block">
+              {t("upcoming.description")}
+            </p>
+          </div>
+        </div>
 
-            <Section
-              title={t("nextEvent")}
-              cta={{ href: "/me/events", label: t("viewEvents") }}
-            >
+        <div className="flex flex-col gap-3">
+          {/* Sunday Service Pass */}
+          {upcomingService ? (
+            <div className="relative overflow-hidden rounded-2xl border border-primary/20 bg-linear-to-br from-primary/5 via-surface-container-low to-surface-container-low p-4 transition-all hover:border-primary/40 hover:shadow-level-1">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="flex items-start gap-3.5">
+                  {/* Calendar Date Block */}
+                  <div className="flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-xl bg-primary text-on-primary shadow-xs">
+                    <span className="text-[10px] font-semibold uppercase tracking-wider opacity-90">
+                      {formatJakarta(upcomingService.startsAt, "EEE")}
+                    </span>
+                    <span className="text-xl font-bold leading-none tabular-nums">
+                      {formatJakarta(upcomingService.startsAt, "dd")}
+                    </span>
+                    <span className="text-[9px] font-medium uppercase tracking-wider opacity-90">
+                      {formatJakarta(upcomingService.startsAt, "MMM")}
+                    </span>
+                  </div>
+
+                  <div className="space-y-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="inline-flex items-center rounded-md bg-primary/10 px-2 py-0.5 text-[11px] font-semibold text-primary uppercase tracking-wider">
+                        {t("nextService")}
+                      </span>
+                      <span className="text-xs text-on-surface-variant font-medium">
+                        {formatJakarta(upcomingService.startsAt, "HH:mm")} WIB
+                      </span>
+                    </div>
+                    <h3 className="font-bold text-base text-on-surface leading-snug truncate">
+                      {upcomingService.name}
+                    </h3>
+                    {upcomingService.location ? (
+                      <p className="flex items-center gap-1 text-xs text-on-surface-variant truncate">
+                        <MapPin className="h-3.5 w-3.5 text-primary shrink-0" />
+                        <span>{upcomingService.location}</span>
+                      </p>
+                    ) : null}
+                  </div>
+                </div>
+
+                {/* Instant Check-in Action */}
+                {features.selfCheckIn ? (
+                  <Button asChild variant="filled" size="sm" className="w-full sm:w-auto shrink-0 shadow-xs">
+                    <Link href="/me/check-in" className="flex items-center justify-center gap-2">
+                      <ScanLine className="h-4 w-4" />
+                      <span>{tQuick("checkIn")} Mandiri</span>
+                    </Link>
+                  </Button>
+                ) : null}
+              </div>
+            </div>
+          ) : (
+            <EmptyHint text={t("noNextService")} />
+          )}
+
+          {/* Additional Passes (Events & Volunteer in grid) */}
+          {(nextEvent || nextAssignment) && (
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              {/* Event RSVP Pass */}
               {nextEvent ? (
                 <Link
                   href={`/me/events/${nextEvent.event.id}`}
-                  className="flex items-center justify-between rounded-md border px-3 py-2 text-sm transition hover:bg-surface-container-high/60"
+                  className="group flex items-center justify-between gap-3 rounded-2xl border border-outline-variant/60 bg-surface-container-low p-3.5 transition-all hover:bg-surface-container hover:border-primary/30 hover:shadow-level-1"
                 >
-                  <div className="flex flex-col">
-                    <span className="font-medium">{nextEvent.event.title}</span>
-                    <span className="text-xs text-on-surface-variant">
-                      {formatJakarta(nextEvent.event.startsAt, "EEE dd MMM · HH:mm")}
-                      {nextEvent.event.location
-                        ? ` · ${nextEvent.event.location}`
-                        : ""}
-                    </span>
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-secondary-container text-on-secondary-container">
+                      <Calendar className="h-5 w-5" />
+                    </div>
+                    <div className="min-w-0 space-y-0.5">
+                      <p className="text-[11px] font-semibold text-primary uppercase tracking-wider">
+                        {t("nextEvent")}
+                      </p>
+                      <p className="font-semibold text-sm text-on-surface truncate">
+                        {nextEvent.event.title}
+                      </p>
+                      <p className="text-xs text-on-surface-variant truncate">
+                        {formatJakarta(nextEvent.event.startsAt, "EEE, dd MMM · HH:mm")}
+                        {nextEvent.event.location ? ` · ${nextEvent.event.location}` : ""}
+                      </p>
+                    </div>
                   </div>
-                  <ArrowRight className="h-4 w-4 text-on-surface-variant" />
+                  <ArrowRight className="h-4 w-4 text-on-surface-variant transition-transform group-hover:translate-x-0.5 shrink-0" />
                 </Link>
-              ) : (
-                <EmptyHint text={t("noNextEvent")} />
-              )}
-            </Section>
+              ) : null}
 
-            {features.volunteers ? (
-              <Section
-                title={t("nextVolunteer")}
-                cta={{ href: "/me/volunteer", label: t("viewVolunteer") }}
-              >
-                {nextAssignment ? (
-                  <div className="flex items-center justify-between rounded-md border px-3 py-2 text-sm">
-                    <div className="flex flex-col">
-                      <span className="font-medium">
+              {/* Volunteer Service Assignment */}
+              {nextAssignment ? (
+                <div className="flex items-center justify-between gap-3 rounded-2xl border border-outline-variant/60 bg-surface-container-low p-3.5">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-surface-container-high text-primary">
+                      <HeartHandshake className="h-5 w-5" />
+                    </div>
+                    <div className="min-w-0 space-y-0.5">
+                      <p className="text-[11px] font-semibold text-primary uppercase tracking-wider">
+                        {t("nextVolunteer")}
+                      </p>
+                      <p className="font-semibold text-sm text-on-surface truncate">
                         {nextAssignment.team.name}
-                        {nextAssignment.position
-                          ? ` · ${nextAssignment.position.name}`
-                          : ""}
-                      </span>
-                      <span className="text-xs text-on-surface-variant">
-                        {formatJakarta(nextAssignment.serviceDate, "EEE dd MMM · HH:mm")}
-                      </span>
-                    </div>
-                    <span className="text-xs uppercase tracking-wide text-on-surface-variant">
-                      {nextAssignment.status}
-                    </span>
-                  </div>
-                ) : (
-                  <EmptyHint text={t("noNextVolunteer")} />
-                )}
-              </Section>
-            ) : null}
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-base">
-              <Users className="h-5 w-5" />
-              {t("about.title")}
-            </CardTitle>
-            <CardDescription>{t("about.description")}</CardDescription>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-5">
-            <Section
-              title={t("myCellGroup")}
-              cta={
-                cellGroup
-                  ? undefined
-                  : { href: "/me/cell-group", label: t("joinCellGroup") }
-              }
-            >
-              {cellGroup ? (
-                <Link
-                  href="/me/cell-group"
-                  className="flex items-center justify-between rounded-md border px-3 py-2 text-sm transition hover:bg-surface-container-high/60"
-                >
-                  <div className="flex flex-col">
-                    <span className="flex items-center gap-2 font-medium">
-                      <UsersRound className="h-4 w-4 text-on-surface-variant" />
-                      {cellGroup.name}
-                    </span>
-                    {cellGroup.nextMeetingAt ? (
-                      <span className="text-xs text-on-surface-variant">
-                        {formatJakarta(
-                          cellGroup.nextMeetingAt,
-                          "EEE dd MMM · HH:mm",
-                        )}
-                        {cellGroup.nextMeetingLocation
-                          ? ` · ${cellGroup.nextMeetingLocation}`
-                          : ""}
-                      </span>
-                    ) : null}
-                  </div>
-                  <ArrowRight className="h-4 w-4 text-on-surface-variant" />
-                </Link>
-              ) : (
-                <EmptyHint text={t("noCellGroup")} />
-              )}
-            </Section>
-
-            {features.discipleship ? (
-              <Section
-                title={t("discipleship.title")}
-                cta={{
-                  href: "/me/discipleship",
-                  label: t("discipleship.viewAll"),
-                }}
-              >
-                {milestones.length === 0 ? (
-                  <EmptyHint text={t("discipleship.empty")} />
-                ) : (
-                  <div className="flex items-center justify-between rounded-md border px-3 py-2 text-sm">
-                    <div className="flex flex-col">
-                      <span className="flex items-center gap-2 font-medium">
-                        <Sprout className="h-4 w-4 text-on-surface-variant" />
-                        {t("discipleship.completed", {
-                          count: milestones.length,
-                        })}
-                      </span>
-                      {latestMilestone ? (
-                        <span className="text-xs text-on-surface-variant">
-                          {t("discipleship.lastMilestone")}:{" "}
-                          {tType(milestoneTypeKey(latestMilestone.type))} ·{" "}
-                          {format(latestMilestone.achievedAt, "dd MMM yyyy")}
-                        </span>
-                      ) : null}
+                        {nextAssignment.position ? ` · ${nextAssignment.position.name}` : ""}
+                      </p>
+                      <p className="text-xs text-on-surface-variant">
+                        {formatJakarta(nextAssignment.serviceDate, "EEE, dd MMM · HH:mm")}
+                      </p>
                     </div>
                   </div>
-                )}
-              </Section>
-            ) : null}
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Children (only if guardian has children at home) */}
-      {features.childrensCheckIn && children.length > 0 ? (
-        <Card>
-          <CardHeader className="flex flex-row items-start justify-between gap-2">
-            <div className="flex flex-col gap-1">
-              <CardTitle className="flex items-center gap-2 text-base">
-                <Baby className="h-5 w-5" />
-                {t("children.title")}
-              </CardTitle>
-              <CardDescription>{t("children.description")}</CardDescription>
+                  <span className="rounded-full bg-surface-container-high px-2.5 py-1 text-[11px] font-semibold text-on-surface-variant uppercase tracking-wider shrink-0">
+                    {nextAssignment.status}
+                  </span>
+                </div>
+              ) : null}
             </div>
-            <Button asChild variant="ghost" size="sm">
-              <Link href="/me/children">{t("children.viewAll")}</Link>
+          )}
+        </div>
+      </section>
+
+      {/* 5. Warta & Pengumuman Terbaru (Interactive M3 ContainerTransform) */}
+      {latestAnnouncements.length > 0 ? (
+        <section className="flex flex-col gap-3" aria-label="Pengumuman Terbaru">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                <Megaphone className="h-4 w-4" />
+              </div>
+              <div>
+                <h2 className="text-base font-bold text-on-surface">
+                  {t("announcements.title")}
+                </h2>
+                <p className="text-xs text-on-surface-variant hidden sm:block">
+                  {t("announcements.description")}
+                </p>
+              </div>
+            </div>
+            <Button asChild variant="ghost" size="sm" className="text-xs text-primary hover:bg-primary/5">
+              <Link href="/me/announcements" className="flex items-center gap-1">
+                <span>{t("announcements.viewAll")}</span>
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
             </Button>
-          </CardHeader>
-          <CardContent>
-            <ul className="grid grid-cols-1 gap-2 md:grid-cols-2">
-              {children.map((c) => (
-                <li
-                  key={c.id}
-                  className="flex items-center gap-3 rounded-md border px-3 py-2 text-sm"
-                >
-                  <HeartHandshake className="h-4 w-4 text-on-surface-variant" />
-                  <div className="flex flex-col">
-                    <span className="font-medium">{c.fullName}</span>
+          </div>
+
+          <div className="flex flex-col gap-2.5">
+            {latestAnnouncements.map((a) => {
+              const isFresh =
+                Date.now() - a.publishedAt.getTime() < 24 * 60 * 60 * 1000;
+              return (
+                <ExpandableAnnouncementCard
+                  key={a.id}
+                  announcement={a}
+                  isFresh={isFresh}
+                />
+              );
+            })}
+          </div>
+        </section>
+      ) : null}
+
+      {/* 6. Komunitas & Pertumbuhan Rohani (Cell Group & Discipleship) */}
+      <section className="flex flex-col gap-3" aria-label="Komunitas & Pemuridan">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          {/* Cell Group Card */}
+          <div className="flex flex-col justify-between gap-4 rounded-2xl border border-outline-variant/60 bg-surface-container-low p-4 transition-all hover:bg-surface-container">
+            <div className="flex items-start justify-between gap-2">
+              <div className="flex items-center gap-2.5">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary-container text-on-secondary-container">
+                  <UsersRound className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-sm text-on-surface">
+                    {t("myCellGroup")}
+                  </h3>
+                  <p className="text-xs text-on-surface-variant">
+                    {cellGroup ? cellGroup.name : t("noCellGroup")}
+                  </p>
+                </div>
+              </div>
+              {cellGroup ? (
+                <Button asChild variant="tonal" size="sm" className="text-xs h-8 px-3">
+                  <Link href="/me/cell-group">
+                    <span>Buka</span>
+                    <ArrowRight className="h-3 w-3 ml-1" />
+                  </Link>
+                </Button>
+              ) : (
+                <Button asChild variant="outlined" size="sm" className="text-xs h-8 px-3">
+                  <Link href="/me/cell-group">{t("joinCellGroup")}</Link>
+                </Button>
+              )}
+            </div>
+
+            {cellGroup?.nextMeetingAt ? (
+              <div className="flex items-center gap-2 rounded-xl bg-surface-container px-3 py-2 text-xs text-on-surface-variant">
+                <Calendar className="h-4 w-4 text-primary shrink-0" />
+                <span className="truncate">
+                  {formatJakarta(cellGroup.nextMeetingAt, "EEEE, dd MMM · HH:mm")}
+                  {cellGroup.nextMeetingLocation ? ` · ${cellGroup.nextMeetingLocation}` : ""}
+                </span>
+              </div>
+            ) : (
+              <p className="text-xs text-on-surface-variant">
+                {cellGroup
+                  ? "Belum ada jadwal pertemuan komsel berikutnya."
+                  : "Bergabunglah dengan kelompok sel untuk bertumbuh bersama."}
+              </p>
+            )}
+          </div>
+
+          {/* Discipleship Milestone Card */}
+          {features.discipleship ? (
+            <div className="flex flex-col justify-between gap-4 rounded-2xl border border-outline-variant/60 bg-surface-container-low p-4 transition-all hover:bg-surface-container">
+              <div className="flex items-start justify-between gap-2">
+                <div className="flex items-center gap-2.5">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <Sprout className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-sm text-on-surface">
+                      {t("discipleship.title")}
+                    </h3>
+                    <p className="text-xs text-on-surface-variant">
+                      {milestones.length > 0
+                        ? t("discipleship.completed", { count: milestones.length })
+                        : t("discipleship.empty")}
+                    </p>
+                  </div>
+                </div>
+                <Button asChild variant="tonal" size="sm" className="text-xs h-8 px-3">
+                  <Link href="/me/discipleship">
+                    <span>{t("discipleship.viewAll")}</span>
+                    <ArrowRight className="h-3 w-3 ml-1" />
+                  </Link>
+                </Button>
+              </div>
+
+              {latestMilestone ? (
+                <div className="flex items-center justify-between rounded-xl bg-surface-container px-3 py-2 text-xs">
+                  <span className="font-medium text-on-surface truncate">
+                    {tType(milestoneTypeKey(latestMilestone.type))}
+                  </span>
+                  <span className="text-on-surface-variant shrink-0 text-[11px]">
+                    {format(latestMilestone.achievedAt, "dd MMM yyyy")}
+                  </span>
+                </div>
+              ) : (
+                <p className="text-xs text-on-surface-variant">
+                  Mulai perjalanan pemuridan Anda bersama gereja.
+                </p>
+              )}
+            </div>
+          ) : null}
+        </div>
+      </section>
+
+      {/* 7. Children Section for Guardians */}
+      {features.childrensCheckIn && children.length > 0 ? (
+        <section className="flex flex-col gap-3" aria-label="Data Anak">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-container-high text-primary">
+                <Baby className="h-4 w-4" />
+              </div>
+              <div>
+                <h2 className="text-base font-bold text-on-surface">
+                  {t("children.title")}
+                </h2>
+                <p className="text-xs text-on-surface-variant hidden sm:block">
+                  {t("children.description")}
+                </p>
+              </div>
+            </div>
+            <Button asChild variant="ghost" size="sm" className="text-xs text-primary hover:bg-primary/5">
+              <Link href="/me/children" className="flex items-center gap-1">
+                <span>{t("children.viewAll")}</span>
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </Button>
+          </div>
+
+          <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+            {children.map((c) => (
+              <div
+                key={c.id}
+                className="flex items-center justify-between gap-3 rounded-2xl border border-outline-variant/60 bg-surface-container-low p-3.5"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-surface-container-high text-primary">
+                    <HeartHandshake className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-sm text-on-surface">
+                      {c.fullName}
+                    </p>
                     {c.birthDate ? (
-                      <span className="text-xs text-on-surface-variant">
-                        {format(c.birthDate, "dd MMM yyyy")}
-                      </span>
+                      <p className="text-xs text-on-surface-variant">
+                        {format(c.birthDate, "dd MMMM yyyy")}
+                      </p>
                     ) : null}
                   </div>
-                </li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
+                </div>
+                <Button asChild variant="outlined" size="sm" className="h-8 text-xs shrink-0">
+                  <Link href={`/me/children`}>Check-in</Link>
+                </Button>
+              </div>
+            ))}
+          </div>
+        </section>
       ) : null}
     </div>
   );
 }
 
-function Section({
-  title,
-  cta,
-  children,
-}: {
-  title: string;
-  cta?: { href: string; label: string };
-  children: React.ReactNode;
-}) {
-  return (
-    <section className="flex flex-col gap-2">
-      <div className="flex items-center justify-between">
-        <span className="text-sm font-medium">{title}</span>
-        {cta ? (
-          <Button asChild variant="link" size="sm" className="h-auto px-0">
-            <Link href={cta.href}>{cta.label}</Link>
-          </Button>
-        ) : null}
-      </div>
-      {children}
-    </section>
-  );
-}
-
 function EmptyHint({ text }: { text: string }) {
   return (
-    <p className="rounded-md border border-dashed px-3 py-4 text-center text-xs text-on-surface-variant">
+    <p className="rounded-2xl border border-dashed border-outline-variant/60 bg-surface-container-lowest px-4 py-4 text-center text-xs text-on-surface-variant">
       {text}
     </p>
   );
@@ -468,12 +526,12 @@ function QuickAction({
   return (
     <Link
       href={href}
-      className="group flex h-full min-h-[108px] flex-col items-center justify-center gap-2.5 rounded-2xl border border-outline-variant/60 bg-surface-container-low p-3.5 text-center transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-surface-container hover:shadow-level-1 active:translate-y-0 active:rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+      className="group flex h-full min-h-[96px] sm:min-h-[108px] flex-col items-center justify-center gap-2 rounded-2xl border border-outline-variant/60 bg-surface-container-low p-2.5 sm:p-3.5 text-center transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-surface-container hover:shadow-level-1 active:translate-y-0 active:rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
     >
-      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-all duration-200 group-hover:scale-110 group-hover:bg-primary group-hover:text-on-primary group-hover:shadow-sm">
+      <div className="flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-all duration-200 group-hover:scale-105 group-hover:bg-primary group-hover:text-on-primary group-hover:shadow-xs">
         <Icon className="h-5 w-5 transition-transform" />
       </div>
-      <span className="line-clamp-2 text-balance text-xs font-medium leading-tight text-on-surface transition-colors group-hover:text-primary">
+      <span className="line-clamp-2 text-balance text-[11px] sm:text-xs font-medium leading-tight text-on-surface transition-colors group-hover:text-primary">
         {label}
       </span>
     </Link>
