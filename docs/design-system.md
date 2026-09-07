@@ -289,7 +289,7 @@ between two screens**, not a style choice:
 | **fade** | enters/exits within the screen — dialog, menu, tooltip | done |
 | **fade through** | destinations with no strong relationship — top-level nav | done, incoming half |
 | **shared axis** | spatial/navigational — list → detail, back | done, incoming half |
-| **container transform** | a container morphs into the destination | **not done** |
+| **container transform** | a container morphs into the destination | **done** |
 
 `PageTransition` picks between the middle two from route depth — the only
 signal available without annotating every link, and in this app's URL shape it
@@ -311,15 +311,12 @@ tree before the new one commits. Holding it means intercepting every
 navigation and delaying it ~90ms, which pays real latency on every tap to
 render a fade.
 
-**Container transform is not implemented**, and the blocker is a dependency
-decision rather than effort. It needs paired shared elements across a
-navigation, i.e. the View Transitions API driven by the router. Next's
-`experimental.viewTransition` flag exists in 15.5.15, but it requires the React
-**experimental** channel — `unstable_ViewTransition` is not in react 19.1.0
-stable, only in the `react-experimental` build Next bundles. Switching a
-production app's React channel is not a side effect of a restyle. Turning that
-flag on would also upgrade fade-through and shared axis to true two-sided
-transitions, so it is one decision covering three patterns.
+**Container transform is implemented** at two complementary layers:
+1. **Component-level `<M3ContainerTransform>`** ([`src/components/m3/container-transform.tsx`](../src/components/m3/container-transform.tsx)):
+   Uses the FLIP (First, Last, Invert, Play) technique powered by M3's physics-based spatial spring (`--md-sys-motion-spring-default-spatial`) to morph compact containers (cards, FABs) into expanded dialogs/sheets and back with true overshoot and reversible motion.
+2. **CSS View Transitions API**:
+   Standard M3 pseudo-elements (`::view-transition-group(m3-container)`, `::view-transition-old`, `::view-transition-new`) are defined in [`transitions.css`](../src/styles/m3/transitions.css) with spatial and effects spring timing functions for progressive enhancement across browser-native view transitions.
+
 
 ### A note on where these numbers came from
 

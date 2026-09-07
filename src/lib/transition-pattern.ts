@@ -14,6 +14,7 @@ export type TransitionPattern =
   | "m3-axis-forward"
   | "m3-axis-backward"
   | "m3-fade-through"
+  | "m3-container-transform"
   | null;
 
 /** Path segments, ignoring empty ones from leading/trailing slashes. */

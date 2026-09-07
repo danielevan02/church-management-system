@@ -12,6 +12,7 @@ import { notFound } from "next/navigation";
 import { TextField } from "@/components/m3/text-field";
 
 import { NavBarPreview, NavRailPreview } from "./nav-preview";
+import { ContainerTransformPreview } from "./container-transform-preview";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -252,6 +253,19 @@ export default function M3GalleryPage() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
+      </section>
+
+      <section className="space-y-4">
+        <div className="flex items-baseline justify-between">
+          <h2 className="text-headline-sm">Container Transform</h2>
+          <span className="text-label-md text-on-surface-variant">
+            M3 Spatial Spring + FLIP
+          </span>
+        </div>
+        <p className="text-body-md text-on-surface-variant">
+          Transformasi kontainer M3 dari elemen kompak (kartu) menjadi lembar detail secara mulus.
+        </p>
+        <ContainerTransformPreview />
       </section>
 
       <section className="space-y-4">

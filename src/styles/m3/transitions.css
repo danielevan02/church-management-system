@@ -227,10 +227,48 @@
       var(--md-sys-motion-spring-default-spatial) both;
 }
 
+/* ------------------------------------------------------------------------
+ * M3 Container Transform
+ *
+ * Transforms one UI container into another (e.g. card -> detail modal or view).
+ * Spatial properties follow the spatial spring (with overshoot allowed),
+ * while cross-fading content follows the critically damped effects spring.
+ */
+@utility m3-container-transform {
+  view-transition-name: m3-container;
+}
+
+::view-transition-group(m3-container) {
+  animation-duration: var(--md-sys-motion-spring-default-spatial-duration);
+  animation-timing-function: var(--md-sys-motion-spring-default-spatial);
+  overflow: hidden;
+}
+
+::view-transition-old(m3-container) {
+  animation: m3-fade-out var(--md-sys-motion-spring-fast-effects-duration)
+    var(--md-sys-motion-spring-fast-effects) both;
+  height: 100%;
+  width: 100%;
+}
+
+::view-transition-new(m3-container) {
+  animation: m3-fade-in var(--md-sys-motion-spring-default-effects-duration)
+    var(--md-sys-motion-spring-default-effects) both;
+  height: 100%;
+  width: 100%;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .m3-fade-through,
   .m3-axis-forward,
   .m3-axis-backward {
     animation-duration: 1ms;
   }
+
+  ::view-transition-group(m3-container),
+  ::view-transition-old(m3-container),
+  ::view-transition-new(m3-container) {
+    animation: none !important;
+  }
 }
+

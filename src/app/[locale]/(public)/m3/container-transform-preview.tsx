@@ -1,0 +1,108 @@
+"use client";
+
+import * as React from "react";
+import { Calendar, MapPin, UserCheck, X } from "lucide-react";
+
+import { M3ContainerTransform } from "@/components/m3/container-transform";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardEyebrow,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
+export function ContainerTransformPreview() {
+  return (
+    <div className="grid gap-4 sm:grid-cols-2">
+      <M3ContainerTransform
+        title="Detail Ibadah Raya"
+        trigger={({ open, ref }) => (
+          <div ref={ref}>
+            <Card
+              interactive
+              onClick={open}
+              className="group h-full transition-shadow hover:shadow-level-2"
+            >
+              <CardHeader>
+                <CardEyebrow>Ibadah Raya</CardEyebrow>
+                <CardTitle>Minggu Pagi 09:00 WIB</CardTitle>
+              </CardHeader>
+              <CardContent className="flex flex-col gap-2 text-body-md text-on-surface-variant">
+                <div className="flex items-center gap-2">
+                  <MapPin className="h-4 w-4 text-primary" />
+                  <span>Gedung Utama Lt. 2</span>
+                </div>
+                <p className="text-body-sm text-outline">
+                  Klik untuk membuka detail lengkap dengan animasi M3 Container Transform...
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+      >
+        {({ close }) => (
+          <div className="flex flex-col gap-5 p-6">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <span className="text-label-md font-semibold tracking-wider text-primary uppercase">
+                  Ibadah Raya · Minggu
+                </span>
+                <h3 className="text-headline-md mt-1 font-semibold">
+                  Minggu Pagi 09:00 WIB
+                </h3>
+              </div>
+              <Button
+                variant="text"
+                size="icon"
+                onClick={close}
+                aria-label="Tutup detail"
+              >
+                <X className="h-5 w-5" />
+              </Button>
+            </div>
+
+            <div className="h-px bg-outline-variant/60" />
+
+            <div className="space-y-3 text-body-md text-on-surface-variant">
+              <div className="flex items-center gap-2">
+                <Calendar className="h-4 w-4 text-primary" />
+                <span>Minggu, 13 September 2026 · 09:00 - 11:00 WIB</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <MapPin className="h-4 w-4 text-primary" />
+                <span>Gedung Utama Lt. 2 (Kapasitas 450 jemaat)</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <UserCheck className="h-4 w-4 text-primary" />
+                <span>Pengkhotbah: Pdt. Budi Santoso, S.Th.</span>
+              </div>
+
+              <div className="mt-4 rounded-xl bg-surface-container-highest/70 p-4 text-body-sm">
+                <p className="font-medium text-on-surface">
+                  Tentang Pola Transisi M3:
+                </p>
+                <p className="mt-1 text-on-surface-variant">
+                  Kontainer kartu di latar belakang bertransformasi secara mulus
+                  menjadi lembar permukaan ini menggunakan pegas spasial
+                  (<em>spatial spring</em>). Saat ditutup, kontainer akan
+                  menyusut kembali ke koordinat aslinya.
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-2 flex justify-end gap-2">
+              <Button variant="outlined" onClick={close}>
+                Tutup
+              </Button>
+              <Button variant="filled" onClick={close}>
+                Konfirmasi Kehadiran
+              </Button>
+            </div>
+          </div>
+        )}
+      </M3ContainerTransform>
+    </div>
+  );
+}
