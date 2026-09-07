@@ -46,7 +46,8 @@ type TransformPhase =
   | "measuring"
   | "animating-open"
   | "open"
-  | "animating-close";
+  | "animating-close"
+  | "settling";
 
 /**
  * Material 3 Container Transform Component
@@ -124,6 +125,7 @@ export function ContainerTransform({
       }
       if (triggerElRef.current) {
         triggerElRef.current.removeAttribute("data-m3-origin-hidden");
+        triggerElRef.current.removeAttribute("data-m3-origin-settling");
         triggerElRef.current.style.removeProperty("visibility");
         triggerElRef.current.style.removeProperty("opacity");
         triggerElRef.current.style.removeProperty("transition");
@@ -203,6 +205,7 @@ export function ContainerTransform({
     if (prefersReducedMotion || !triggerEl) {
       if (triggerEl) {
         triggerEl.removeAttribute("data-m3-origin-hidden");
+        triggerEl.removeAttribute("data-m3-origin-settling");
         triggerEl.style.removeProperty("visibility");
         triggerEl.style.removeProperty("opacity");
         triggerEl.style.removeProperty("transition");
@@ -225,7 +228,7 @@ export function ContainerTransform({
     };
     originRectRef.current = origin;
 
-    // Animate bounds back to card slot
+    // Animate bounds back to card slot with M3 emphasized deceleration
     setSurfaceBounds({
       top: origin.top,
       left: origin.left,
@@ -234,26 +237,45 @@ export function ContainerTransform({
       borderRadius: "16px",
       boxShadow: "var(--shadow-level-1)",
       transition: `
-        top 220ms var(--md-sys-motion-easing-emphasized-accelerate),
-        left 220ms var(--md-sys-motion-easing-emphasized-accelerate),
-        width 220ms var(--md-sys-motion-easing-emphasized-accelerate),
-        height 220ms var(--md-sys-motion-easing-emphasized-accelerate),
-        border-radius 220ms var(--md-sys-motion-easing-emphasized-accelerate),
-        box-shadow 220ms var(--md-sys-motion-easing-emphasized-accelerate)
+        top 280ms var(--md-sys-motion-easing-emphasized),
+        left 280ms var(--md-sys-motion-easing-emphasized),
+        width 280ms var(--md-sys-motion-easing-emphasized),
+        height 280ms var(--md-sys-motion-easing-emphasized),
+        border-radius 280ms var(--md-sys-motion-easing-emphasized),
+        box-shadow 280ms var(--md-sys-motion-easing-emphasized)
       `,
     });
 
     closeTimerRef.current = setTimeout(() => {
-      if (triggerElRef.current) {
-        triggerElRef.current.removeAttribute("data-m3-origin-hidden");
-        triggerElRef.current.style.removeProperty("visibility");
-        triggerElRef.current.style.removeProperty("opacity");
-        triggerElRef.current.style.removeProperty("transition");
+      const el = triggerElRef.current;
+      if (el) {
+        // Phase 1: Reveal origin element underneath the landed container with transitions disabled
+        el.removeAttribute("data-m3-origin-hidden");
+        el.setAttribute("data-m3-origin-settling", "true");
+        el.style.setProperty("visibility", "visible", "important");
+        el.style.setProperty("opacity", "1", "important");
+        el.style.setProperty("transition", "none", "important");
       }
-      setSurfaceBounds(null);
-      setPhase("idle");
-      triggerElRef.current?.focus();
-    }, 230);
+
+      setPhase("settling");
+
+      // Phase 2: Next frame guarantees the origin element is rasterized & painted underneath
+      requestAnimationFrame(() => {
+        setSurfaceBounds(null);
+        setPhase("idle");
+        triggerElRef.current?.focus();
+
+        // Clean up temporary settling overrides on subsequent frame so hover effects resume
+        requestAnimationFrame(() => {
+          if (triggerElRef.current) {
+            triggerElRef.current.removeAttribute("data-m3-origin-settling");
+            triggerElRef.current.style.removeProperty("visibility");
+            triggerElRef.current.style.removeProperty("opacity");
+            triggerElRef.current.style.removeProperty("transition");
+          }
+        });
+      });
+    }, 280);
   }, [prefersReducedMotion]);
 
   // Lock body scroll while open
@@ -370,6 +392,8 @@ export function ContainerTransform({
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [phase, handleClose]);
 
+  const isTriggerHidden = phase !== "idle" && phase !== "settling";
+  const isSettling = phase === "settling";
   const isOpenOrAnimating = phase !== "idle";
   const isExpanded = phase === "animating-open" || phase === "open";
 
@@ -377,9 +401,10 @@ export function ContainerTransform({
     <>
       {/* Trigger rendered in normal DOM flow */}
       <div
-        data-m3-origin-hidden={isOpenOrAnimating ? "true" : undefined}
+        data-m3-origin-hidden={isTriggerHidden ? "true" : undefined}
+        data-m3-origin-settling={isSettling ? "true" : undefined}
         style={
-          isOpenOrAnimating
+          isTriggerHidden
             ? {
                 visibility: "hidden",
                 opacity: 0,
@@ -392,7 +417,7 @@ export function ContainerTransform({
       >
         {trigger({
           open: handleOpen,
-          isOpen: isOpenOrAnimating,
+          isOpen: isTriggerHidden,
           ref: setTriggerRef,
         })}
       </div>
@@ -419,8 +444,10 @@ export function ContainerTransform({
               {/* Scrim backdrop */}
               <div
                 className={cn(
-                  "fixed inset-0 bg-scrim/32 backdrop-blur-[2px] transition-opacity duration-300",
-                  isExpanded ? "opacity-100" : "opacity-0 pointer-events-none"
+                  "fixed inset-0 bg-scrim/32 backdrop-blur-[2px] transition-opacity",
+                  isExpanded
+                    ? "opacity-100 duration-300"
+                    : "opacity-0 pointer-events-none duration-[280ms] ease-out"
                 )}
                 onClick={handleClose}
                 aria-hidden="true"
@@ -450,12 +477,16 @@ export function ContainerTransform({
                   className
                 )}
               >
-                {/* Compact Card Layer (cross-fades out during expansion) */}
+                {/* Compact Card Layer (cross-fades out during expansion, fades in on return) */}
                 {triggerContent && (
                   <div
                     className={cn(
-                      "absolute inset-0 pointer-events-none transition-opacity duration-150",
-                      isExpanded ? "opacity-0 invisible" : "opacity-100 visible"
+                      "absolute inset-0 pointer-events-none transition-opacity",
+                      phase === "measuring" && "opacity-100 visible",
+                      phase === "animating-open" && "opacity-0 invisible duration-[120ms] ease-out",
+                      phase === "open" && "opacity-0 invisible",
+                      phase === "animating-close" && "opacity-100 visible delay-[90ms] duration-[150ms] ease-in-out",
+                      phase === "settling" && "opacity-100 visible"
                     )}
                     aria-hidden={isExpanded}
                   >
@@ -463,12 +494,15 @@ export function ContainerTransform({
                   </div>
                 )}
 
-                {/* Expanded Detail Layer (cross-fades in during expansion) */}
+                {/* Expanded Detail Layer (cross-fades in during expansion, fades out on return) */}
                 <div
                   className={cn(
                     "h-full w-full transition-opacity",
-                    isExpanded ? "opacity-100" : "opacity-0",
-                    isExpanded ? "duration-300 delay-75" : "duration-100"
+                    phase === "measuring" && "opacity-0 invisible",
+                    phase === "animating-open" && "opacity-100 visible duration-300 delay-75",
+                    phase === "open" && "opacity-100 visible",
+                    phase === "animating-close" && "opacity-0 duration-[90ms] ease-out",
+                    phase === "settling" && "opacity-0 invisible"
                   )}
                 >
                   {children({ close: handleClose })}

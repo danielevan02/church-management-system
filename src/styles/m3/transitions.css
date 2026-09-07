@@ -281,3 +281,11 @@
   pointer-events: none !important;
 }
 
+/* Ensure the origin container restores instantly with zero transition delay during landing hand-off */
+[data-m3-origin-settling="true"],
+[data-m3-origin-settling="true"] * {
+  transition: none !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
