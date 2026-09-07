@@ -62,6 +62,9 @@ type TransformPhase =
  * - On close, it flies straight back into the card's slot in the grid,
  *   settles down, and the original card reappears.
  */
+const useIsomorphicLayoutEffect =
+  typeof window !== "undefined" ? React.useLayoutEffect : React.useEffect;
+
 export function ContainerTransform({
   trigger,
   triggerContent,
@@ -71,6 +74,7 @@ export function ContainerTransform({
   title,
 }: ContainerTransformProps) {
   const [phase, setPhase] = React.useState<TransformPhase>("idle");
+  const [originRect, setOriginRect] = React.useState<Rect | null>(null);
 
   const triggerElRef = React.useRef<HTMLElement | null>(null);
   const surfaceElRef = React.useRef<HTMLDivElement | null>(null);
@@ -78,6 +82,7 @@ export function ContainerTransform({
   const originRectRef = React.useRef<Rect | null>(null);
   const targetRectRef = React.useRef<Rect | null>(null);
   const closeTimerRef = React.useRef<NodeJS.Timeout | null>(null);
+  const openRafRef = React.useRef<number | null>(null);
 
   // Check prefers-reduced-motion
   const prefersReducedMotion = React.useSyncExternalStore(
@@ -94,12 +99,19 @@ export function ContainerTransform({
     () => false
   );
 
-  // Clean up any pending close timer on unmount
+  // Clean up any pending animation frame or timer on unmount
   React.useEffect(() => {
     return () => {
       if (closeTimerRef.current) {
         clearTimeout(closeTimerRef.current);
       }
+      if (openRafRef.current) {
+        cancelAnimationFrame(openRafRef.current);
+      }
+      if (triggerElRef.current) {
+        triggerElRef.current.style.visibility = "visible";
+      }
+      document.body.style.overflow = "";
     };
   }, []);
 
@@ -109,20 +121,31 @@ export function ContainerTransform({
 
   // Open: Hide original card from grid, measure, and initiate flight
   const handleOpen = React.useCallback(() => {
-    if (!triggerElRef.current) return;
+    const triggerEl = triggerElRef.current;
+    if (!triggerEl) return;
 
     if (closeTimerRef.current) {
       clearTimeout(closeTimerRef.current);
       closeTimerRef.current = null;
     }
+    if (openRafRef.current) {
+      cancelAnimationFrame(openRafRef.current);
+      openRafRef.current = null;
+    }
 
-    const rect = triggerElRef.current.getBoundingClientRect();
-    originRectRef.current = {
+    const rect = triggerEl.getBoundingClientRect();
+    const origin: Rect = {
       left: Math.round(rect.left),
       top: Math.round(rect.top),
       width: Math.round(rect.width),
       height: Math.round(rect.height),
     };
+    originRectRef.current = origin;
+    setOriginRect(origin);
+
+    // CRITICAL: Instantly hide original card in grid flow at the exact click timestamp
+    // (preserves layout box, eliminates lingering visible container)
+    triggerEl.style.visibility = "hidden";
 
     setPhase("measuring");
   }, []);
@@ -133,29 +156,34 @@ export function ContainerTransform({
       clearTimeout(closeTimerRef.current);
       closeTimerRef.current = null;
     }
+    if (openRafRef.current) {
+      cancelAnimationFrame(openRafRef.current);
+      openRafRef.current = null;
+    }
 
-    if (prefersReducedMotion || !surfaceElRef.current || !triggerElRef.current) {
-      if (triggerElRef.current) {
-        triggerElRef.current.style.visibility = "visible";
+    const triggerEl = triggerElRef.current;
+    const surface = surfaceElRef.current;
+
+    if (prefersReducedMotion || !surface || !triggerEl) {
+      if (triggerEl) {
+        triggerEl.style.visibility = "visible";
       }
       setPhase("idle");
-      triggerElRef.current?.focus();
+      triggerEl?.focus();
       return;
     }
 
     setPhase("animating-close");
 
     // Re-measure latest trigger position
-    const rect = triggerElRef.current.getBoundingClientRect();
-    originRectRef.current = {
+    const rect = triggerEl.getBoundingClientRect();
+    const origin: Rect = {
       left: Math.round(rect.left),
       top: Math.round(rect.top),
       width: Math.round(rect.width),
       height: Math.round(rect.height),
     };
-
-    const surface = surfaceElRef.current;
-    const origin = originRectRef.current;
+    originRectRef.current = origin;
 
     // Animate bounds back to card slot
     surface.style.transition = `
@@ -193,16 +221,15 @@ export function ContainerTransform({
     }
   }, [phase]);
 
-  // Start forward flight once measured
-  React.useEffect(() => {
+  // Start forward flight once measured — use isomorphic layout effect for zero visual delay
+  useIsomorphicLayoutEffect(() => {
     if (phase !== "measuring") return;
 
     const surface = surfaceElRef.current;
-    const triggerEl = triggerElRef.current;
     const measureEl = measureElRef.current;
     const origin = originRectRef.current;
 
-    if (!surface || !triggerEl || !measureEl || !origin) return;
+    if (!surface || !measureEl || !origin) return;
 
     // 1. Calculate destination bounds
     const measuredHeight = measureEl.scrollHeight || 420;
@@ -210,10 +237,7 @@ export function ContainerTransform({
     const target = calculateCenteredTargetRect(viewport, measuredHeight, maxWidth, 16);
     targetRectRef.current = target;
 
-    // 2. Hide original card in grid (preserves layout box)
-    triggerEl.style.visibility = "hidden";
-
-    // 3. If user prefers reduced motion, position directly without spring flight
+    // 2. If user prefers reduced motion, position directly without spring flight
     if (prefersReducedMotion) {
       surface.style.transition = "none";
       surface.style.top = `${target.top}px`;
@@ -227,46 +251,39 @@ export function ContainerTransform({
       return;
     }
 
-    // 4. Position surface exactly on top of original card
-    surface.style.transition = "none";
-    surface.style.top = `${origin.top}px`;
-    surface.style.left = `${origin.left}px`;
-    surface.style.width = `${origin.width}px`;
-    surface.style.height = `${origin.height}px`;
-    surface.style.borderRadius = "16px";
-    surface.style.boxShadow = "var(--shadow-level-1)";
+    // 3. Force browser layout commit of start rect
+    void surface.offsetHeight;
 
-    // 5. Double rAF to ensure browser renders start state, then play spring flight
-    let timer: NodeJS.Timeout;
-    const rafId = requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        setPhase("animating-open");
+    // 4. Launch spatial spring flight on the very next refresh frame
+    openRafRef.current = requestAnimationFrame(() => {
+      setPhase("animating-open");
 
-        surface.style.transition = `
-          top var(--md-sys-motion-spring-default-spatial-duration) var(--md-sys-motion-spring-default-spatial),
-          left var(--md-sys-motion-spring-default-spatial-duration) var(--md-sys-motion-spring-default-spatial),
-          width var(--md-sys-motion-spring-default-spatial-duration) var(--md-sys-motion-spring-default-spatial),
-          height var(--md-sys-motion-spring-default-spatial-duration) var(--md-sys-motion-spring-default-spatial),
-          border-radius var(--md-sys-motion-spring-default-spatial-duration) var(--md-sys-motion-spring-default-spatial),
-          box-shadow var(--md-sys-motion-spring-default-effects-duration) var(--md-sys-motion-spring-default-effects)
-        `;
-        surface.style.top = `${target.top}px`;
-        surface.style.left = `${target.left}px`;
-        surface.style.width = `${target.width}px`;
-        surface.style.height = `${target.height}px`;
-        surface.style.borderRadius = "28px";
-        surface.style.boxShadow = "var(--shadow-level-3)";
+      surface.style.transition = `
+        top var(--md-sys-motion-spring-default-spatial-duration) var(--md-sys-motion-spring-default-spatial),
+        left var(--md-sys-motion-spring-default-spatial-duration) var(--md-sys-motion-spring-default-spatial),
+        width var(--md-sys-motion-spring-default-spatial-duration) var(--md-sys-motion-spring-default-spatial),
+        height var(--md-sys-motion-spring-default-spatial-duration) var(--md-sys-motion-spring-default-spatial),
+        border-radius var(--md-sys-motion-spring-default-spatial-duration) var(--md-sys-motion-spring-default-spatial),
+        box-shadow var(--md-sys-motion-spring-default-effects-duration) var(--md-sys-motion-spring-default-effects)
+      `;
+      surface.style.top = `${target.top}px`;
+      surface.style.left = `${target.left}px`;
+      surface.style.width = `${target.width}px`;
+      surface.style.height = `${target.height}px`;
+      surface.style.borderRadius = "28px";
+      surface.style.boxShadow = "var(--shadow-level-3)";
 
-        timer = setTimeout(() => {
-          setPhase("open");
-          surface.focus();
-        }, 500);
-      });
+      closeTimerRef.current = setTimeout(() => {
+        setPhase("open");
+        surface.focus();
+      }, 500);
     });
 
     return () => {
-      cancelAnimationFrame(rafId);
-      clearTimeout(timer);
+      if (openRafRef.current) {
+        cancelAnimationFrame(openRafRef.current);
+        openRafRef.current = null;
+      }
     };
   }, [phase, maxWidth, prefersReducedMotion]);
 
@@ -329,6 +346,19 @@ export function ContainerTransform({
                 ref={surfaceElRef}
                 tabIndex={-1}
                 data-phase={phase}
+                style={
+                  originRect && phase === "measuring"
+                    ? {
+                        top: `${originRect.top}px`,
+                        left: `${originRect.left}px`,
+                        width: `${originRect.width}px`,
+                        height: `${originRect.height}px`,
+                        borderRadius: "16px",
+                        boxShadow: "var(--shadow-level-1)",
+                        transition: "none",
+                      }
+                    : undefined
+                }
                 className={cn(
                   "fixed z-10 overflow-hidden bg-surface-container-high text-on-surface outline-none will-change-[top,left,width,height,transform]",
                   phase === "open" ? "overflow-y-auto" : "overflow-hidden",
