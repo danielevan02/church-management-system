@@ -2,15 +2,10 @@ import { Calendar } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 
-import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-} from "@/components/ui/card";
+import { ExpandableEventCard } from "@/components/member/events/expandable-event-card";
+import { Card, CardContent } from "@/components/ui/card";
 import { auth } from "@/lib/auth";
-import { Link } from "@/lib/i18n/navigation";
 import { getUpcomingPublishedEventsForMember } from "@/server/queries/events";
-import { formatJakarta } from "@/lib/datetime";
 
 export default async function MemberEventsPage() {
   const session = await auth();
@@ -19,8 +14,6 @@ export default async function MemberEventsPage() {
   if (!memberId) redirect("/me/dashboard");
 
   const t = await getTranslations("memberPortal.events");
-  const tStatus = await getTranslations("events.rsvpStatus");
-
   const events = await getUpcomingPublishedEventsForMember(memberId);
 
   return (
@@ -40,51 +33,10 @@ export default async function MemberEventsPage() {
       ) : (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {events.map((e) => (
-            <Link
-              key={e.id}
-              href={`/me/events/${e.id}`}
-              className="rounded-lg outline-none transition-colors hover:bg-surface-container-highest/40 focus-visible:ring-2 focus-visible:ring-primary"
-            >
-              <Card className="h-full">
-                <CardContent className="flex flex-col gap-3 pt-6">
-                  <div className="flex items-start justify-between gap-2">
-                    <span className="text-lg font-semibold tracking-tight">
-                      {e.title}
-                    </span>
-                    {e.myRsvp ? (
-                      <Badge>{tStatus(statusKey(e.myRsvp.status))}</Badge>
-                    ) : null}
-                  </div>
-                  <div className="text-sm text-on-surface-variant">
-                    {formatJakarta(e.startsAt, "EEE, dd MMM yyyy · HH:mm")}
-                    {e.location ? ` · ${e.location}` : ""}
-                  </div>
-                  {e.capacity ? (
-                    <div className="text-xs text-on-surface-variant">
-                      {e._count.rsvps}/{e.capacity} {t("rsvpsAbbr")}
-                    </div>
-                  ) : null}
-                </CardContent>
-              </Card>
-            </Link>
+            <ExpandableEventCard key={e.id} event={e} />
           ))}
         </div>
       )}
     </div>
   );
-}
-
-function statusKey(s: string): string {
-  switch (s) {
-    case "GOING":
-      return "going";
-    case "MAYBE":
-      return "maybe";
-    case "NOT_GOING":
-      return "notGoing";
-    case "WAITLIST":
-      return "waitlist";
-    default:
-      return s.toLowerCase();
-  }
 }

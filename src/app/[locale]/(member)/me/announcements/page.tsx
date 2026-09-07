@@ -1,11 +1,8 @@
-import { ArrowRight, Megaphone } from "lucide-react";
+import { Megaphone } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
+import { ExpandableAnnouncementCard } from "@/components/member/announcements/expandable-announcement-card";
 import { Pagination } from "@/components/shared/pagination";
-import { Card, CardContent } from "@/components/ui/card";
-import { formatJakarta } from "@/lib/datetime";
-import { Link } from "@/lib/i18n/navigation";
-import { excerpt } from "@/lib/markdown";
 import { parsePageParam } from "@/server/queries/_pagination";
 import { listAnnouncementsForMember } from "@/server/queries/announcements";
 
@@ -37,49 +34,11 @@ export default async function MemberAnnouncementsPage({
             const isFresh =
               Date.now() - a.publishedAt.getTime() < 24 * 60 * 60 * 1000;
             return (
-              <Link
+              <ExpandableAnnouncementCard
                 key={a.id}
-                href={`/me/announcements/${a.id}`}
-                className="group block focus-visible:outline-none"
-              >
-                <Card className="overflow-hidden transition-all hover:border-primary/40 hover:shadow-md">
-                  <CardContent className="flex items-stretch gap-0 p-0">
-                    <div className="flex w-20 shrink-0 flex-col items-center justify-center gap-0.5 border-r bg-surface-container-high/40 p-3">
-                      <span className="text-[10px] font-semibold uppercase tracking-wider text-on-surface-variant">
-                        {formatJakarta(a.publishedAt, "EEE")}
-                      </span>
-                      <span className="text-2xl font-bold leading-none tabular-nums text-on-surface">
-                        {formatJakarta(a.publishedAt, "dd")}
-                      </span>
-                      <span className="text-[10px] font-medium uppercase tracking-wider text-on-surface-variant">
-                        {formatJakarta(a.publishedAt, "MMM")}
-                      </span>
-                    </div>
-                    <div className="flex min-w-0 flex-1 items-center gap-3 p-4">
-                      <div className="min-w-0 flex-1 space-y-1">
-                        <div className="flex items-center gap-2">
-                          <h3 className="font-semibold leading-tight line-clamp-1">
-                            {a.title}
-                          </h3>
-                          {isFresh ? (
-                            <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-primary">
-                              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" />
-                              {t("new")}
-                            </span>
-                          ) : null}
-                        </div>
-                        <p className="text-xs text-on-surface-variant">
-                          {formatJakarta(a.publishedAt, "HH:mm")} WIB
-                        </p>
-                        <p className="line-clamp-2 text-sm text-on-surface-variant">
-                          {excerpt(a.body)}
-                        </p>
-                      </div>
-                      <ArrowRight className="h-5 w-5 shrink-0 text-on-surface-variant transition-transform group-hover:translate-x-0.5 group-hover:text-primary" />
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
+                announcement={a}
+                isFresh={isFresh}
+              />
             );
           })}
         </div>

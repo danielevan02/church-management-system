@@ -77,6 +77,7 @@ export function ContainerTransform({
   const measureElRef = React.useRef<HTMLDivElement | null>(null);
   const originRectRef = React.useRef<Rect | null>(null);
   const targetRectRef = React.useRef<Rect | null>(null);
+  const closeTimerRef = React.useRef<NodeJS.Timeout | null>(null);
 
   // Check prefers-reduced-motion
   const prefersReducedMotion = React.useSyncExternalStore(
@@ -93,6 +94,15 @@ export function ContainerTransform({
     () => false
   );
 
+  // Clean up any pending close timer on unmount
+  React.useEffect(() => {
+    return () => {
+      if (closeTimerRef.current) {
+        clearTimeout(closeTimerRef.current);
+      }
+    };
+  }, []);
+
   const setTriggerRef = React.useCallback((node: HTMLElement | null) => {
     triggerElRef.current = node;
   }, []);
@@ -100,6 +110,11 @@ export function ContainerTransform({
   // Open: Hide original card from grid, measure, and initiate flight
   const handleOpen = React.useCallback(() => {
     if (!triggerElRef.current) return;
+
+    if (closeTimerRef.current) {
+      clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
 
     const rect = triggerElRef.current.getBoundingClientRect();
     originRectRef.current = {
@@ -109,16 +124,16 @@ export function ContainerTransform({
       height: Math.round(rect.height),
     };
 
-    if (prefersReducedMotion) {
-      setPhase("open");
-      return;
-    }
-
     setPhase("measuring");
-  }, [prefersReducedMotion]);
+  }, []);
 
   // Close: Fly back to original card's slot
   const handleClose = React.useCallback(() => {
+    if (closeTimerRef.current) {
+      clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+
     if (prefersReducedMotion || !surfaceElRef.current || !triggerElRef.current) {
       if (triggerElRef.current) {
         triggerElRef.current.style.visibility = "visible";
@@ -158,15 +173,13 @@ export function ContainerTransform({
     surface.style.borderRadius = "16px";
     surface.style.boxShadow = "var(--shadow-level-1)";
 
-    const timer = setTimeout(() => {
+    closeTimerRef.current = setTimeout(() => {
       if (triggerElRef.current) {
         triggerElRef.current.style.visibility = "visible";
       }
       setPhase("idle");
       triggerElRef.current?.focus();
     }, 230);
-
-    return () => clearTimeout(timer);
   }, [prefersReducedMotion]);
 
   // Lock body scroll while open
@@ -200,7 +213,21 @@ export function ContainerTransform({
     // 2. Hide original card in grid (preserves layout box)
     triggerEl.style.visibility = "hidden";
 
-    // 3. Position surface exactly on top of original card
+    // 3. If user prefers reduced motion, position directly without spring flight
+    if (prefersReducedMotion) {
+      surface.style.transition = "none";
+      surface.style.top = `${target.top}px`;
+      surface.style.left = `${target.left}px`;
+      surface.style.width = `${target.width}px`;
+      surface.style.height = `${target.height}px`;
+      surface.style.borderRadius = "28px";
+      surface.style.boxShadow = "var(--shadow-level-3)";
+      setPhase("open");
+      surface.focus();
+      return;
+    }
+
+    // 4. Position surface exactly on top of original card
     surface.style.transition = "none";
     surface.style.top = `${origin.top}px`;
     surface.style.left = `${origin.left}px`;
@@ -209,7 +236,7 @@ export function ContainerTransform({
     surface.style.borderRadius = "16px";
     surface.style.boxShadow = "var(--shadow-level-1)";
 
-    // 4. Double rAF to ensure browser renders start state, then play spring flight
+    // 5. Double rAF to ensure browser renders start state, then play spring flight
     let timer: NodeJS.Timeout;
     const rafId = requestAnimationFrame(() => {
       requestAnimationFrame(() => {
@@ -241,7 +268,7 @@ export function ContainerTransform({
       cancelAnimationFrame(rafId);
       clearTimeout(timer);
     };
-  }, [phase, maxWidth]);
+  }, [phase, maxWidth, prefersReducedMotion]);
 
   // Escape key to close
   React.useEffect(() => {

@@ -2,7 +2,6 @@ import { format } from "date-fns";
 import {
   ArrowRight,
   Baby,
-  BookOpen,
   Calendar,
   CalendarDays,
   HandCoins,
@@ -18,6 +17,8 @@ import {
 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
+
+import { DevotionalHeroCard } from "@/components/member/dashboard/devotional-hero-card";
 
 import {
   Card,
@@ -124,52 +125,7 @@ export default async function MemberDashboardPage() {
 
       {/* Renungan Hari Ini */}
       {features.devotionals && todayDevotional ? (
-        <Link
-          href={`/me/devotionals/${todayDevotional.id}`}
-          className="group block focus-visible:outline-none"
-        >
-          <Card className="relative overflow-hidden border-primary/20 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent transition-all hover:shadow-md">
-            <BookOpen
-              aria-hidden
-              className="pointer-events-none absolute -right-4 -top-4 h-32 w-32 text-primary/5 transition-transform group-hover:scale-110"
-            />
-            <CardHeader className="relative space-y-2 pb-3">
-              <div className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-primary px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-on-primary">
-                  <BookOpen className="h-3 w-3" />
-                  {t("devotionalToday.label")}
-                </span>
-                <span className="text-xs text-on-surface-variant">
-                  {formatJakarta(todayDevotional.publishedAt, "EEE, dd MMM yyyy")}
-                </span>
-              </div>
-              <CardTitle className="text-2xl leading-tight">
-                {todayDevotional.title}
-              </CardTitle>
-              {todayDevotional.verseRef || todayDevotional.authorName ? (
-                <CardDescription className="flex flex-wrap items-center gap-x-3 gap-y-1">
-                  {todayDevotional.verseRef ? (
-                    <span className="inline-flex items-center gap-1 rounded border border-primary/30 bg-surface/60 px-2 py-0.5 text-xs font-medium text-primary">
-                      {todayDevotional.verseRef}
-                    </span>
-                  ) : null}
-                  {todayDevotional.authorName ? (
-                    <span className="text-xs">— {todayDevotional.authorName}</span>
-                  ) : null}
-                </CardDescription>
-              ) : null}
-            </CardHeader>
-            <CardContent className="relative">
-              <p className="line-clamp-3 text-sm leading-relaxed text-on-surface/80">
-                {excerpt(todayDevotional.body, 220)}
-              </p>
-              <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-primary transition-transform group-hover:translate-x-0.5">
-                {t("devotionalToday.read")}
-                <ArrowRight className="h-4 w-4" />
-              </span>
-            </CardContent>
-          </Card>
-        </Link>
+        <DevotionalHeroCard devotional={todayDevotional} />
       ) : null}
 
       {/* Quick actions */}
