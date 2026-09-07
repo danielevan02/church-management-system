@@ -65,6 +65,16 @@ type TransformPhase =
 const useIsomorphicLayoutEffect =
   typeof window !== "undefined" ? React.useLayoutEffect : React.useEffect;
 
+type SurfaceBounds = {
+  top: number;
+  left: number;
+  width: number;
+  height: number;
+  borderRadius: string;
+  boxShadow: string;
+  transition?: string;
+};
+
 export function ContainerTransform({
   trigger,
   triggerContent,
@@ -74,7 +84,7 @@ export function ContainerTransform({
   title,
 }: ContainerTransformProps) {
   const [phase, setPhase] = React.useState<TransformPhase>("idle");
-  const [originRect, setOriginRect] = React.useState<Rect | null>(null);
+  const [surfaceBounds, setSurfaceBounds] = React.useState<SurfaceBounds | null>(null);
 
   const triggerElRef = React.useRef<HTMLElement | null>(null);
   const surfaceElRef = React.useRef<HTMLDivElement | null>(null);
@@ -82,6 +92,7 @@ export function ContainerTransform({
   const originRectRef = React.useRef<Rect | null>(null);
   const targetRectRef = React.useRef<Rect | null>(null);
   const closeTimerRef = React.useRef<NodeJS.Timeout | null>(null);
+  const openTimerRef = React.useRef<NodeJS.Timeout | null>(null);
   const openRafRef = React.useRef<number | null>(null);
 
   // Check prefers-reduced-motion
@@ -104,6 +115,9 @@ export function ContainerTransform({
     return () => {
       if (closeTimerRef.current) {
         clearTimeout(closeTimerRef.current);
+      }
+      if (openTimerRef.current) {
+        clearTimeout(openTimerRef.current);
       }
       if (openRafRef.current) {
         cancelAnimationFrame(openRafRef.current);
@@ -128,6 +142,10 @@ export function ContainerTransform({
       clearTimeout(closeTimerRef.current);
       closeTimerRef.current = null;
     }
+    if (openTimerRef.current) {
+      clearTimeout(openTimerRef.current);
+      openTimerRef.current = null;
+    }
     if (openRafRef.current) {
       cancelAnimationFrame(openRafRef.current);
       openRafRef.current = null;
@@ -141,11 +159,20 @@ export function ContainerTransform({
       height: Math.round(rect.height),
     };
     originRectRef.current = origin;
-    setOriginRect(origin);
 
-    // CRITICAL: Instantly hide original card in grid flow at the exact click timestamp
-    // (preserves layout box, eliminates lingering visible container)
+    // Immediately hide original card in DOM flow (zero delay)
     triggerEl.style.visibility = "hidden";
+
+    // Initialize surface bounds exactly over origin card
+    setSurfaceBounds({
+      top: origin.top,
+      left: origin.left,
+      width: origin.width,
+      height: origin.height,
+      borderRadius: "16px",
+      boxShadow: "var(--shadow-level-1)",
+      transition: "none",
+    });
 
     setPhase("measuring");
   }, []);
@@ -156,18 +183,22 @@ export function ContainerTransform({
       clearTimeout(closeTimerRef.current);
       closeTimerRef.current = null;
     }
+    if (openTimerRef.current) {
+      clearTimeout(openTimerRef.current);
+      openTimerRef.current = null;
+    }
     if (openRafRef.current) {
       cancelAnimationFrame(openRafRef.current);
       openRafRef.current = null;
     }
 
     const triggerEl = triggerElRef.current;
-    const surface = surfaceElRef.current;
 
-    if (prefersReducedMotion || !surface || !triggerEl) {
+    if (prefersReducedMotion || !triggerEl) {
       if (triggerEl) {
         triggerEl.style.visibility = "visible";
       }
+      setSurfaceBounds(null);
       setPhase("idle");
       triggerEl?.focus();
       return;
@@ -186,25 +217,28 @@ export function ContainerTransform({
     originRectRef.current = origin;
 
     // Animate bounds back to card slot
-    surface.style.transition = `
-      top 220ms var(--md-sys-motion-easing-emphasized-accelerate),
-      left 220ms var(--md-sys-motion-easing-emphasized-accelerate),
-      width 220ms var(--md-sys-motion-easing-emphasized-accelerate),
-      height 220ms var(--md-sys-motion-easing-emphasized-accelerate),
-      border-radius 220ms var(--md-sys-motion-easing-emphasized-accelerate),
-      box-shadow 220ms var(--md-sys-motion-easing-emphasized-accelerate)
-    `;
-    surface.style.top = `${origin.top}px`;
-    surface.style.left = `${origin.left}px`;
-    surface.style.width = `${origin.width}px`;
-    surface.style.height = `${origin.height}px`;
-    surface.style.borderRadius = "16px";
-    surface.style.boxShadow = "var(--shadow-level-1)";
+    setSurfaceBounds({
+      top: origin.top,
+      left: origin.left,
+      width: origin.width,
+      height: origin.height,
+      borderRadius: "16px",
+      boxShadow: "var(--shadow-level-1)",
+      transition: `
+        top 220ms var(--md-sys-motion-easing-emphasized-accelerate),
+        left 220ms var(--md-sys-motion-easing-emphasized-accelerate),
+        width 220ms var(--md-sys-motion-easing-emphasized-accelerate),
+        height 220ms var(--md-sys-motion-easing-emphasized-accelerate),
+        border-radius 220ms var(--md-sys-motion-easing-emphasized-accelerate),
+        box-shadow 220ms var(--md-sys-motion-easing-emphasized-accelerate)
+      `,
+    });
 
     closeTimerRef.current = setTimeout(() => {
       if (triggerElRef.current) {
         triggerElRef.current.style.visibility = "visible";
       }
+      setSurfaceBounds(null);
       setPhase("idle");
       triggerElRef.current?.focus();
     }, 230);
@@ -221,15 +255,40 @@ export function ContainerTransform({
     }
   }, [phase]);
 
-  // Start forward flight once measured — use isomorphic layout effect for zero visual delay
+  // Keep dialog centered on window resize while open
+  React.useEffect(() => {
+    if (phase !== "open") return;
+    const onResize = () => {
+      const measureEl = measureElRef.current;
+      if (!measureEl) return;
+      const measuredHeight = measureEl.scrollHeight || 420;
+      const viewport = { width: window.innerWidth, height: window.innerHeight };
+      const target = calculateCenteredTargetRect(viewport, measuredHeight, maxWidth, 16);
+      targetRectRef.current = target;
+      setSurfaceBounds((prev) =>
+        prev
+          ? {
+              ...prev,
+              top: target.top,
+              left: target.left,
+              width: target.width,
+              height: target.height,
+              transition: "none",
+            }
+          : null
+      );
+    };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [phase, maxWidth]);
+
+  // Start forward flight once measured
   useIsomorphicLayoutEffect(() => {
     if (phase !== "measuring") return;
 
-    const surface = surfaceElRef.current;
     const measureEl = measureElRef.current;
     const origin = originRectRef.current;
-
-    if (!surface || !measureEl || !origin) return;
+    if (!measureEl || !origin) return;
 
     // 1. Calculate destination bounds
     const measuredHeight = measureEl.scrollHeight || 420;
@@ -237,45 +296,44 @@ export function ContainerTransform({
     const target = calculateCenteredTargetRect(viewport, measuredHeight, maxWidth, 16);
     targetRectRef.current = target;
 
-    // 2. If user prefers reduced motion, position directly without spring flight
+    // 2. Reduced motion: jump straight to target without flight
     if (prefersReducedMotion) {
-      surface.style.transition = "none";
-      surface.style.top = `${target.top}px`;
-      surface.style.left = `${target.left}px`;
-      surface.style.width = `${target.width}px`;
-      surface.style.height = `${target.height}px`;
-      surface.style.borderRadius = "28px";
-      surface.style.boxShadow = "var(--shadow-level-3)";
+      setSurfaceBounds({
+        top: target.top,
+        left: target.left,
+        width: target.width,
+        height: target.height,
+        borderRadius: "28px",
+        boxShadow: "var(--shadow-level-3)",
+        transition: "none",
+      });
       setPhase("open");
-      surface.focus();
       return;
     }
 
-    // 3. Force browser layout commit of start rect
-    void surface.offsetHeight;
-
-    // 4. Launch spatial spring flight on the very next refresh frame
+    // 3. Launch spatial spring flight on the next animation frame
     openRafRef.current = requestAnimationFrame(() => {
+      setSurfaceBounds({
+        top: target.top,
+        left: target.left,
+        width: target.width,
+        height: target.height,
+        borderRadius: "28px",
+        boxShadow: "var(--shadow-level-3)",
+        transition: `
+          top var(--md-sys-motion-spring-default-spatial-duration) var(--md-sys-motion-spring-default-spatial),
+          left var(--md-sys-motion-spring-default-spatial-duration) var(--md-sys-motion-spring-default-spatial),
+          width var(--md-sys-motion-spring-default-spatial-duration) var(--md-sys-motion-spring-default-spatial),
+          height var(--md-sys-motion-spring-default-spatial-duration) var(--md-sys-motion-spring-default-spatial),
+          border-radius var(--md-sys-motion-spring-default-spatial-duration) var(--md-sys-motion-spring-default-spatial),
+          box-shadow var(--md-sys-motion-spring-default-effects-duration) var(--md-sys-motion-spring-default-effects)
+        `,
+      });
       setPhase("animating-open");
 
-      surface.style.transition = `
-        top var(--md-sys-motion-spring-default-spatial-duration) var(--md-sys-motion-spring-default-spatial),
-        left var(--md-sys-motion-spring-default-spatial-duration) var(--md-sys-motion-spring-default-spatial),
-        width var(--md-sys-motion-spring-default-spatial-duration) var(--md-sys-motion-spring-default-spatial),
-        height var(--md-sys-motion-spring-default-spatial-duration) var(--md-sys-motion-spring-default-spatial),
-        border-radius var(--md-sys-motion-spring-default-spatial-duration) var(--md-sys-motion-spring-default-spatial),
-        box-shadow var(--md-sys-motion-spring-default-effects-duration) var(--md-sys-motion-spring-default-effects)
-      `;
-      surface.style.top = `${target.top}px`;
-      surface.style.left = `${target.left}px`;
-      surface.style.width = `${target.width}px`;
-      surface.style.height = `${target.height}px`;
-      surface.style.borderRadius = "28px";
-      surface.style.boxShadow = "var(--shadow-level-3)";
-
-      closeTimerRef.current = setTimeout(() => {
+      openTimerRef.current = setTimeout(() => {
         setPhase("open");
-        surface.focus();
+        surfaceElRef.current?.focus();
       }, 500);
     });
 
@@ -347,15 +405,15 @@ export function ContainerTransform({
                 tabIndex={-1}
                 data-phase={phase}
                 style={
-                  originRect && phase === "measuring"
+                  surfaceBounds
                     ? {
-                        top: `${originRect.top}px`,
-                        left: `${originRect.left}px`,
-                        width: `${originRect.width}px`,
-                        height: `${originRect.height}px`,
-                        borderRadius: "16px",
-                        boxShadow: "var(--shadow-level-1)",
-                        transition: "none",
+                        top: `${surfaceBounds.top}px`,
+                        left: `${surfaceBounds.left}px`,
+                        width: `${surfaceBounds.width}px`,
+                        height: `${surfaceBounds.height}px`,
+                        borderRadius: surfaceBounds.borderRadius,
+                        boxShadow: surfaceBounds.boxShadow,
+                        transition: surfaceBounds.transition,
                       }
                     : undefined
                 }
