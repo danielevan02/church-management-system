@@ -1,0 +1,236 @@
+/*
+ * M3 enter/exit transitions for overlay surfaces.
+ *
+ * ## Why these are hand-rolled instead of tw-animate-css
+ *
+ * M3 is explicit that spatial properties and effect properties get *different*
+ * springs: position/size/scale may overshoot, opacity and colour must not.
+ * `animate-in fade-in-0 zoom-in-95` composes both into a single keyframe
+ * animation, which can only carry one easing and one duration — so either the
+ * scale loses its bounce or the opacity gains one. A bouncing opacity reads as
+ * a rendering fault.
+ *
+ * CSS allows a comma-separated animation list, so each property gets its own
+ * spring. That is the whole trick here.
+ *
+ * ## Axis, not uniform scale
+ *
+ * Menus, selects and dropdowns grow along their major axis from the anchor —
+ * `scaleY` with `transform-origin` set to Radix's reported origin — rather
+ * than zooming uniformly. That is what makes a menu look like it unfolds out
+ * of its trigger instead of appearing on top of it.
+ *
+ * Exits are deliberately not springs. Things leave fast and do not overshoot;
+ * a bounce on the way out looks like the surface is reluctant to close.
+ */
+
+@keyframes m3-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes m3-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes m3-grow-y {
+  from {
+    transform: scaleY(0.75);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes m3-shrink-y {
+  from {
+    transform: scaleY(1);
+  }
+  to {
+    transform: scaleY(0.95);
+  }
+}
+
+@keyframes m3-scale-in {
+  from {
+    transform: scale(0.9);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes m3-scale-out {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(0.95);
+  }
+}
+
+/* Menus, selects, dropdowns: unfold along the major axis from the anchor. */
+@utility m3-menu-enter {
+  animation:
+    m3-fade-in var(--md-sys-motion-spring-fast-effects-duration)
+      var(--md-sys-motion-spring-fast-effects) both,
+    m3-grow-y var(--md-sys-motion-spring-fast-spatial-duration)
+      var(--md-sys-motion-spring-fast-spatial) both;
+}
+
+@utility m3-menu-exit {
+  animation:
+    m3-fade-out 100ms var(--md-sys-motion-easing-standard-accelerate) both,
+    m3-shrink-y 100ms var(--md-sys-motion-easing-standard-accelerate) both;
+}
+
+/* Dialogs and popovers: scale uniformly, they have no anchor edge to grow from. */
+@utility m3-dialog-enter {
+  animation:
+    m3-fade-in var(--md-sys-motion-spring-default-effects-duration)
+      var(--md-sys-motion-spring-default-effects) both,
+    m3-scale-in var(--md-sys-motion-spring-default-spatial-duration)
+      var(--md-sys-motion-spring-default-spatial) both;
+}
+
+@utility m3-dialog-exit {
+  animation:
+    m3-fade-out 150ms var(--md-sys-motion-easing-emphasized-accelerate) both,
+    m3-scale-out 150ms var(--md-sys-motion-easing-emphasized-accelerate) both;
+}
+
+/* Scrims only ever fade. */
+@utility m3-scrim-enter {
+  animation: m3-fade-in var(--md-sys-motion-spring-default-effects-duration)
+    var(--md-sys-motion-spring-default-effects) both;
+}
+
+@utility m3-scrim-exit {
+  animation: m3-fade-out 150ms var(--md-sys-motion-easing-standard-accelerate) both;
+}
+
+/* These utilities are always applied through a `data-[state=...]` variant, so
+ * the class in the HTML is `data-[state=open]:m3-menu-enter`, not
+ * `m3-menu-enter`. Matching on the bare class name — which the first version
+ * did — silently never fired, and reduced-motion was ignored for every
+ * overlay. Match the attribute-prefixed classes too. */
+@media (prefers-reduced-motion: reduce) {
+  [class*="m3-menu-enter"],
+  [class*="m3-menu-exit"],
+  [class*="m3-dialog-enter"],
+  [class*="m3-dialog-exit"],
+  [class*="m3-scrim-enter"],
+  [class*="m3-scrim-exit"] {
+    animation-duration: 1ms !important;
+  }
+}
+
+/* ------------------------------------------------------------------------
+ * M3 transition patterns (navigation)
+ *
+ * M3 defines four. Which one applies is a statement about the *relationship*
+ * between the two screens, not a style choice:
+ *
+ *   fade            enter/exit within the screen — dialogs, menus, tooltips
+ *   fade through    destinations with no strong relationship — top-level nav
+ *   shared axis     a spatial/navigational relationship — list -> detail
+ *   container       a persistent container morphs into the destination
+ *
+ * `fade` is handled above. These two cover fade-through and shared-axis.
+ * Container transform is not here: it needs paired shared elements across a
+ * navigation, which on the web means the View Transitions API driven by the
+ * router — see the note in docs/design-system.md.
+ *
+ * ## Incoming half only
+ *
+ * M3's fade-through is sequential: the outgoing screen fades over the first
+ * ~30% of the duration, then the incoming one fades and scales 92% -> 100%
+ * over the rest. Only the incoming half is implemented, because React unmounts
+ * the outgoing tree before the new one commits — holding it would mean
+ * intercepting every navigation and delaying it by ~90ms, and paying real
+ * latency on every tap to render a fade is the wrong trade.
+ *
+ * Scale is spatial and opacity is an effect, so they get their own springs,
+ * same rule as everywhere else. M3's published 300ms/emphasized figures belong
+ * to the legacy duration tier; the spring tier supersedes them.
+ */
+
+@keyframes m3-fade-through-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes m3-fade-through-scale {
+  from {
+    transform: scale(0.92);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes m3-axis-x-forward {
+  from {
+    transform: translateX(30px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes m3-axis-x-backward {
+  from {
+    transform: translateX(-30px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@utility m3-fade-through {
+  animation:
+    m3-fade-through-in var(--md-sys-motion-spring-default-effects-duration)
+      var(--md-sys-motion-spring-default-effects) both,
+    m3-fade-through-scale var(--md-sys-motion-spring-default-spatial-duration)
+      var(--md-sys-motion-spring-default-spatial) both;
+}
+
+/* Shared axis moves 30dp along x. Forward comes from the trailing edge,
+ * backward from the leading edge — the direction is what carries the sense of
+ * going deeper versus coming back. */
+@utility m3-axis-forward {
+  animation:
+    m3-fade-through-in var(--md-sys-motion-spring-default-effects-duration)
+      var(--md-sys-motion-spring-default-effects) both,
+    m3-axis-x-forward var(--md-sys-motion-spring-default-spatial-duration)
+      var(--md-sys-motion-spring-default-spatial) both;
+}
+
+@utility m3-axis-backward {
+  animation:
+    m3-fade-through-in var(--md-sys-motion-spring-default-effects-duration)
+      var(--md-sys-motion-spring-default-effects) both,
+    m3-axis-x-backward var(--md-sys-motion-spring-default-spatial-duration)
+      var(--md-sys-motion-spring-default-spatial) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .m3-fade-through,
+  .m3-axis-forward,
+  .m3-axis-backward {
+    animation-duration: 1ms;
+  }
+}

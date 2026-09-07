@@ -34,7 +34,7 @@ export default async function ServiceQrBannerPage({
   const t = await getTranslations("attendance.qrBanner");
 
   return (
-    <div className="flex min-h-screen flex-col bg-background">
+    <div className="flex min-h-screen flex-col bg-surface">
       {/* Hide admin chrome (sidebar + admin header) when printing */}
       <style>{`
         @media print {
@@ -58,11 +58,11 @@ export default async function ServiceQrBannerPage({
       {/* Banner — printable */}
       <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col items-center justify-center gap-6 p-8 text-center">
         <div className="flex flex-col items-center gap-1">
-          <p className="text-sm uppercase tracking-widest text-muted-foreground">
+          <p className="text-sm uppercase tracking-widest text-on-surface-variant">
             {church.name}
           </p>
           <h1 className="text-4xl font-bold tracking-tight">{service.name}</h1>
-          <p className="text-lg text-muted-foreground">
+          <p className="text-lg text-on-surface-variant">
             {formatJakarta(
               service.startsAt,
               "EEEE, dd MMMM yyyy · HH:mm",
@@ -72,7 +72,7 @@ export default async function ServiceQrBannerPage({
           </p>
         </div>
 
-        <div className="rounded-2xl border-4 border-foreground/10 bg-white p-6 shadow-lg print:shadow-none">
+        <div className="rounded-2xl border-4 border-on-surface/10 bg-white p-6 shadow-lg print:shadow-none">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={dataUrl}
@@ -83,10 +83,10 @@ export default async function ServiceQrBannerPage({
 
         <div className="flex flex-col items-center gap-1">
           <p className="text-2xl font-semibold">{t("instruction")}</p>
-          <p className="text-sm text-muted-foreground">{t("howTo")}</p>
+          <p className="text-sm text-on-surface-variant">{t("howTo")}</p>
         </div>
 
-        <p className="break-all text-xs text-muted-foreground">{url}</p>
+        <p className="break-all text-xs text-on-surface-variant">{url}</p>
       </main>
     </div>
   );

@@ -43,7 +43,7 @@ export default async function FeaturesPage() {
           </Link>
         </Button>
         <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="text-muted-foreground">{t("subtitle")}</p>
+        <p className="text-on-surface-variant">{t("subtitle")}</p>
       </header>
 
       <Card>
@@ -62,7 +62,7 @@ export default async function FeaturesPage() {
                 >
                   <div className="flex flex-col">
                     <span className="font-medium">{tFlag(`${flag}.label` as never)}</span>
-                    <span className="text-xs text-muted-foreground">
+                    <span className="text-xs text-on-surface-variant">
                       {tFlag(`${flag}.description` as never)}
                     </span>
                   </div>
@@ -87,8 +87,8 @@ export default async function FeaturesPage() {
           <CardDescription>{t("howToDescription")}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-3 text-sm">
-          <p className="text-muted-foreground">{t("howToBody")}</p>
-          <pre className="overflow-x-auto rounded-md bg-muted p-3 text-xs">
+          <p className="text-on-surface-variant">{t("howToBody")}</p>
+          <pre className="overflow-x-auto rounded-md bg-surface-container-high p-3 text-xs">
 {`// src/config/features.ts
 export const features = {
   childrensCheckIn: true,

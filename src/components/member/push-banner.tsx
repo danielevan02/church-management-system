@@ -119,10 +119,10 @@ export function PushBanner() {
 
   if (state === "denied") {
     return (
-      <div className="flex items-center justify-between gap-3 rounded-md border border-muted bg-muted/30 px-4 py-3 text-sm">
+      <div className="flex items-center justify-between gap-3 rounded-md border border-surface-container-high bg-surface-container-high/30 px-4 py-3 text-sm">
         <div className="flex flex-col">
           <span className="font-medium">{t("deniedTitle")}</span>
-          <span className="text-xs text-muted-foreground">
+          <span className="text-xs text-on-surface-variant">
             {t("deniedDescription")}
           </span>
         </div>
@@ -142,7 +142,7 @@ export function PushBanner() {
     <div className="flex items-center justify-between gap-3 rounded-md border border-primary/30 bg-primary/5 px-4 py-3 text-sm">
       <div className="flex flex-col">
         <span className="font-medium">{t("enableTitle")}</span>
-        <span className="text-xs text-muted-foreground">
+        <span className="text-xs text-on-surface-variant">
           {t("enableDescription")}
         </span>
       </div>
@@ -218,7 +218,7 @@ export function PushUnsubscribeRow() {
     <div className="flex items-center justify-between gap-3 rounded-md border px-4 py-3 text-sm">
       <div className="flex flex-col">
         <span className="font-medium">{t("subscribedTitle")}</span>
-        <span className="text-xs text-muted-foreground">
+        <span className="text-xs text-on-surface-variant">
           {t("subscribedDescription")}
         </span>
       </div>

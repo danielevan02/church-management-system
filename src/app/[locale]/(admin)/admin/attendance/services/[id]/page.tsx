@@ -70,7 +70,7 @@ export default async function ServiceDetailPage({
             <h1 className="text-3xl font-bold tracking-tight">
               {service.name}
             </h1>
-            <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+            <div className="flex flex-wrap items-center gap-2 text-sm text-on-surface-variant">
               <Badge variant={live ? "default" : "secondary"}>
                 {live ? t("statusActive") : t("statusInactive")}
               </Badge>
@@ -127,7 +127,7 @@ export default async function ServiceDetailPage({
         </CardHeader>
         <CardContent>
           {items.length === 0 ? (
-            <p className="text-sm text-muted-foreground">{t("rosterEmpty")}</p>
+            <p className="text-sm text-on-surface-variant">{t("rosterEmpty")}</p>
           ) : (
             <div className="rounded-md border">
               <Table>
@@ -168,12 +168,12 @@ export default async function ServiceDetailPage({
                             ) : (
                               <span className="font-medium">
                                 {row.visitorName}{" "}
-                                <span className="text-xs text-muted-foreground">
+                                <span className="text-xs text-on-surface-variant">
                                   ({t("visitorTag")})
                                 </span>
                               </span>
                             )}
-                            <span className="text-xs text-muted-foreground">
+                            <span className="text-xs text-on-surface-variant">
                               {row.member?.phone ?? row.visitorPhone ?? "—"}
                             </span>
                           </div>
@@ -211,7 +211,7 @@ function StatCard({ label, value }: { label: string; value: number }) {
     <Card>
       <CardContent className="pt-6">
         <div className="text-3xl font-bold tabular-nums">{value}</div>
-        <div className="text-sm text-muted-foreground">{label}</div>
+        <div className="text-sm text-on-surface-variant">{label}</div>
       </CardContent>
     </Card>
   );

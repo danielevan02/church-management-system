@@ -26,7 +26,7 @@ export function MemberSignInForm() {
       <div className="flex flex-col gap-2">
         <Label htmlFor="phone">{t("phoneLabel")}</Label>
         <div className="relative">
-          <Phone className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Phone className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-on-surface-variant" />
           <Input
             id="phone"
             name="phone"
@@ -37,13 +37,13 @@ export function MemberSignInForm() {
             className="pl-9"
           />
         </div>
-        <p className="text-xs text-muted-foreground">{t("phoneHint")}</p>
+        <p className="text-xs text-on-surface-variant">{t("phoneHint")}</p>
       </div>
 
       <div className="flex flex-col gap-2">
         <Label htmlFor="pin">{t("pinLabel")}</Label>
         <div className="relative">
-          <KeyRound className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <KeyRound className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-on-surface-variant" />
           <Input
             id="pin"
             name="pin"
@@ -60,7 +60,7 @@ export function MemberSignInForm() {
           <button
             type="button"
             onClick={() => setShow((s) => !s)}
-            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground"
+            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1.5 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface"
             aria-label={show ? t("hidePin") : t("showPin")}
           >
             {show ? (
@@ -70,13 +70,13 @@ export function MemberSignInForm() {
             )}
           </button>
         </div>
-        <p className="text-xs text-muted-foreground">{t("pinHint")}</p>
+        <p className="text-xs text-on-surface-variant">{t("pinHint")}</p>
       </div>
 
       {state?.error ? (
         <p
           role="alert"
-          className="flex items-center gap-2 text-sm text-destructive"
+          className="flex items-center gap-2 text-sm text-error"
         >
           <AlertCircle className="h-4 w-4 shrink-0" />
           <span>
@@ -98,7 +98,7 @@ export function MemberSignInForm() {
         )}
       </Button>
 
-      <p className="text-center text-xs text-muted-foreground">
+      <p className="text-center text-xs text-on-surface-variant">
         {t("forgotPin")}
       </p>
 
@@ -107,7 +107,7 @@ export function MemberSignInForm() {
           <span className="w-full border-t" />
         </div>
         <div className="relative flex justify-center">
-          <span className="bg-background px-3 text-xs uppercase tracking-widest text-muted-foreground">
+          <span className="bg-surface px-3 text-xs uppercase tracking-widest text-on-surface-variant">
             {t("or")}
           </span>
         </div>
@@ -115,7 +115,7 @@ export function MemberSignInForm() {
 
       <LoadingLink
         href="/auth/sign-in"
-        className="justify-center text-center text-sm font-medium text-foreground hover:underline"
+        className="justify-center text-center text-sm font-medium text-on-surface hover:underline"
       >
         {t("switchToStaff")}
       </LoadingLink>

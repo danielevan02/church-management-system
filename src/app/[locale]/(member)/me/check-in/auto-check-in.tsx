@@ -66,9 +66,9 @@ export function AutoCheckIn({
     <Card
       className={
         status === "ok" || status === "alreadyCheckedIn"
-          ? "border-emerald-500/40 bg-emerald-500/5"
+          ? "border-success/40 bg-success/5"
           : status === "error"
-            ? "border-destructive/40 bg-destructive/5"
+            ? "border-error/40 bg-error/5"
             : ""
       }
     >
@@ -78,13 +78,13 @@ export function AutoCheckIn({
             <Loader2 className="h-5 w-5 animate-spin" />
           ) : null}
           {status === "ok" ? (
-            <CheckCircle2 className="h-5 w-5 text-emerald-600" />
+            <CheckCircle2 className="h-5 w-5 text-success" />
           ) : null}
           {status === "alreadyCheckedIn" ? (
-            <CheckCircle2 className="h-5 w-5 text-emerald-600" />
+            <CheckCircle2 className="h-5 w-5 text-success" />
           ) : null}
           {status === "error" ? (
-            <XCircle className="h-5 w-5 text-destructive" />
+            <XCircle className="h-5 w-5 text-error" />
           ) : null}
           {status === "pending"
             ? t("autoPendingTitle")

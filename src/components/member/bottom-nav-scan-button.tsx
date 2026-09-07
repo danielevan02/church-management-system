@@ -5,7 +5,9 @@ import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 
+import { Ripple } from "@/components/m3/ripple";
 import { QrScanner } from "@/components/shared/qr-scanner";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -14,14 +16,17 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useRouter } from "@/lib/i18n/navigation";
-import { cn } from "@/lib/utils";
 import { checkInMemberAction } from "@/server/actions/attendance/check-in";
 
 /**
- * Center "scan" button used by MobileBottomNav. Opens the QR scanner
- * dialog directly — no navigation to /me/check-in first. Mirrors the
- * scanner flow from check-in/scan-banner-button.tsx but styled as a
- * floating circular tab-bar button.
+ * Scan action for the member portal. Opens the QR scanner dialog directly —
+ * no navigation to /me/check-in first. Mirrors the scanner flow from
+ * check-in/scan-banner-button.tsx.
+ *
+ * Rendered as an M3 FAB (56dp, `primary-container`, level 3) sitting above the
+ * navigation bar, rather than the old centre-of-the-tab-bar circle. It gets a
+ * real ripple: it is the portal's primary action and already a client
+ * component, so the press feedback is worth the island.
  */
 export function BottomNavScanButton({
   memberId,
@@ -71,17 +76,17 @@ export function BottomNavScanButton({
 
   return (
     <>
-      <button
+      <Button
         type="button"
+        variant="fab"
+        size="fab"
         aria-label={ariaLabel}
         onClick={() => setOpen(true)}
-        className={cn(
-          "flex size-12 items-center justify-center rounded-full transition-all active:scale-95",
-          "bg-primary text-primary-foreground shadow-md shadow-primary/30",
-        )}
+        className="ripple-host"
       >
-        <ScanLine className="size-[22px]" strokeWidth={2} aria-hidden />
-      </button>
+        <Ripple />
+        <ScanLine aria-hidden />
+      </Button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>

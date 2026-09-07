@@ -47,7 +47,7 @@ export default async function CheckInDashboardPage() {
           </Link>
         </Button>
         <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="text-muted-foreground">{t("subtitle")}</p>
+        <p className="text-on-surface-variant">{t("subtitle")}</p>
       </header>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -59,7 +59,7 @@ export default async function CheckInDashboardPage() {
           </CardHeader>
           <CardContent>
             {classes.length === 0 ? (
-              <div className="rounded-md border border-dashed p-6 text-center text-sm text-muted-foreground">
+              <div className="rounded-md border border-dashed p-6 text-center text-sm text-on-surface-variant">
                 {t("noClasses")}
                 <div className="mt-3">
                   <Button asChild size="sm" variant="outline">
@@ -97,7 +97,7 @@ export default async function CheckInDashboardPage() {
         </CardHeader>
         <CardContent>
           {active.length === 0 ? (
-            <div className="rounded-md border border-dashed p-6 text-center text-sm text-muted-foreground">
+            <div className="rounded-md border border-dashed p-6 text-center text-sm text-on-surface-variant">
               {t("activeEmpty")}
             </div>
           ) : (
@@ -123,24 +123,24 @@ export default async function CheckInDashboardPage() {
                       <span className="text-sm font-medium">
                         {row.child.fullName}
                       </span>
-                      <span className="text-xs text-muted-foreground">
+                      <span className="text-xs text-on-surface-variant">
                         {row.childClass.name}
                       </span>
                     </div>
                   </div>
-                  <div className="flex items-center justify-between rounded-sm bg-muted/40 px-2 py-1.5">
-                    <span className="text-xs text-muted-foreground">
+                  <div className="flex items-center justify-between rounded-sm bg-surface-container-high/40 px-2 py-1.5">
+                    <span className="text-xs text-on-surface-variant">
                       {t("activeCard.code")}
                     </span>
                     <code className="font-mono text-base font-bold tracking-widest tabular-nums">
                       {row.securityCode}
                     </code>
                   </div>
-                  <div className="text-xs text-muted-foreground">
+                  <div className="text-xs text-on-surface-variant">
                     {t("activeCard.guardian")}: {row.guardian.fullName}
                     {row.guardian.phone ? ` · ${row.guardian.phone}` : ""}
                   </div>
-                  <div className="text-xs tabular-nums text-muted-foreground">
+                  <div className="text-xs tabular-nums text-on-surface-variant">
                     {t("activeCard.checkedInAt")}:{" "}
                     {formatJakarta(row.checkedInAt, "HH:mm")}
                   </div>

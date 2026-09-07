@@ -1,0 +1,113 @@
+/*
+ * M3 elevation — tonal first, shadows only where something truly floats.
+ *
+ * ## Why this file is mostly zeroes
+ *
+ * M3 defines six elevation levels, and it does specify shadows for them. But
+ * the *dominant* M3 pattern since 2023 is that hierarchy comes from a surface's
+ * tone, not from a shadow: that is the entire reason M3 replaced M2's elevation
+ * overlays with five discrete `surface-container-*` roles. A card is a
+ * different colour than the page, so it needs no shadow to read as a card.
+ *
+ * So resting surfaces here are level 0 — cards, the nav drawer, sheets, inputs,
+ * tables. Only things that genuinely overlay unrelated content keep a shadow:
+ * menus, dialogs, FABs, snackbars. Without *some* separation a menu opened over
+ * a card is 92-on-96 tone and effectively invisible.
+ *
+ * ## And why the shadows that remain are soft
+ *
+ * M3's published shadow values are a two-layer recipe at 30% and 15% black.
+ * That is heavy — it is what makes a "Material" implementation look like 2015
+ * Material Design rather than M3. The values below keep M3's two-layer
+ * structure and geometry but at roughly a third of the opacity, which is what
+ * current Google surfaces actually look like.
+ *
+ * ## The switch
+ *
+ * `<html data-elevation="flat">` zeroes every level, for a fully flat build.
+ * `data-elevation="material"` restores M3's published (heavy) values. Default
+ * is the soft set. Nothing in the app reads these directly — components use
+ * `shadow-level-*`, so the switch works without touching a component.
+ */
+
+:root {
+  --md-sys-shadow-rgb: 0 0 0;
+
+  --md-sys-elevation-level0: none;
+  --md-sys-elevation-level1:
+    0 1px 2px 0 rgb(var(--md-sys-shadow-rgb) / 0.08),
+    0 1px 3px 1px rgb(var(--md-sys-shadow-rgb) / 0.04);
+  --md-sys-elevation-level2:
+    0 1px 2px 0 rgb(var(--md-sys-shadow-rgb) / 0.09),
+    0 2px 8px 2px rgb(var(--md-sys-shadow-rgb) / 0.05);
+  --md-sys-elevation-level3:
+    0 1px 3px 0 rgb(var(--md-sys-shadow-rgb) / 0.1),
+    0 6px 14px 4px rgb(var(--md-sys-shadow-rgb) / 0.06);
+  --md-sys-elevation-level4:
+    0 2px 3px 0 rgb(var(--md-sys-shadow-rgb) / 0.1),
+    0 8px 18px 6px rgb(var(--md-sys-shadow-rgb) / 0.07);
+  --md-sys-elevation-level5:
+    0 4px 4px 0 rgb(var(--md-sys-shadow-rgb) / 0.11),
+    0 12px 24px 8px rgb(var(--md-sys-shadow-rgb) / 0.08);
+}
+
+/* Dark surfaces swallow a black shadow, so M3 leans on brighter container
+ * roles there. Keep a trace of shadow for overlays and let tone do the rest. */
+.dark {
+  --md-sys-elevation-level1: none;
+  --md-sys-elevation-level2:
+    0 2px 8px 2px rgb(var(--md-sys-shadow-rgb) / 0.28);
+  --md-sys-elevation-level3:
+    0 6px 14px 4px rgb(var(--md-sys-shadow-rgb) / 0.34);
+  --md-sys-elevation-level4:
+    0 8px 18px 6px rgb(var(--md-sys-shadow-rgb) / 0.38);
+  --md-sys-elevation-level5:
+    0 12px 24px 8px rgb(var(--md-sys-shadow-rgb) / 0.42);
+}
+
+/* Fully flat: tone carries everything. */
+[data-elevation="flat"] {
+  --md-sys-elevation-level1: none;
+  --md-sys-elevation-level2: none;
+  --md-sys-elevation-level3: none;
+  --md-sys-elevation-level4: none;
+  --md-sys-elevation-level5: none;
+}
+
+/* M3's published values, for comparison or a deliberately heavier build. */
+[data-elevation="material"] {
+  --md-sys-elevation-level1:
+    0 1px 2px 0 rgb(var(--md-sys-shadow-rgb) / 0.3),
+    0 1px 3px 1px rgb(var(--md-sys-shadow-rgb) / 0.15);
+  --md-sys-elevation-level2:
+    0 1px 2px 0 rgb(var(--md-sys-shadow-rgb) / 0.3),
+    0 2px 6px 2px rgb(var(--md-sys-shadow-rgb) / 0.15);
+  --md-sys-elevation-level3:
+    0 1px 3px 0 rgb(var(--md-sys-shadow-rgb) / 0.3),
+    0 4px 8px 3px rgb(var(--md-sys-shadow-rgb) / 0.15);
+  --md-sys-elevation-level4:
+    0 2px 3px 0 rgb(var(--md-sys-shadow-rgb) / 0.3),
+    0 6px 10px 4px rgb(var(--md-sys-shadow-rgb) / 0.15);
+  --md-sys-elevation-level5:
+    0 4px 4px 0 rgb(var(--md-sys-shadow-rgb) / 0.3),
+    0 8px 12px 6px rgb(var(--md-sys-shadow-rgb) / 0.15);
+}
+
+@theme inline {
+  --shadow-level-0: var(--md-sys-elevation-level0);
+  --shadow-level-1: var(--md-sys-elevation-level1);
+  --shadow-level-2: var(--md-sys-elevation-level2);
+  --shadow-level-3: var(--md-sys-elevation-level3);
+  --shadow-level-4: var(--md-sys-elevation-level4);
+  --shadow-level-5: var(--md-sys-elevation-level5);
+
+  /* Legacy Tailwind shadow scale, re-pointed so no stray `shadow-md` reads as
+   * a 2015-era drop shadow. */
+  --shadow-2xs: var(--md-sys-elevation-level0);
+  --shadow-xs: var(--md-sys-elevation-level0);
+  --shadow-sm: var(--md-sys-elevation-level1);
+  --shadow-md: var(--md-sys-elevation-level2);
+  --shadow-lg: var(--md-sys-elevation-level3);
+  --shadow-xl: var(--md-sys-elevation-level4);
+  --shadow-2xl: var(--md-sys-elevation-level5);
+}

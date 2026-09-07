@@ -69,7 +69,7 @@ export function AdminNavUser({
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{displayName}</span>
-                <span className="truncate text-xs text-muted-foreground">
+                <span className="truncate text-xs text-on-surface-variant">
                   {user.role}
                 </span>
               </div>

@@ -14,7 +14,7 @@ All public-facing branding is driven by `NEXT_PUBLIC_CHURCH_*` env vars. Set the
 | `NEXT_PUBLIC_CHURCH_SHORT_NAME` | Compact name, sidebar header, PWA icon text, fallback OG title | `GKI` |
 | `NEXT_PUBLIC_CHURCH_DOMAIN` | Public domain reference | `gki-jakarta.id` |
 | `NEXT_PUBLIC_DEFAULT_LOCALE` | `id` or `en` — decides which locale is the prefix-less default | `id` |
-| `NEXT_PUBLIC_PRIMARY_COLOR` | Hex theme color, used in PWA manifest, generated icons, browser theme bar | `#0F766E` |
+| `NEXT_PUBLIC_PRIMARY_COLOR` | Hex seed color. Drives the **entire Material 3 palette** (all six tonal palettes, light + dark) via `scripts/build-theme.cjs`, plus the PWA manifest, generated icons and browser theme bar. See [design-system.md](./design-system.md). | `#0F766E` |
 
 Restart the dev server (or redeploy) after changing these.
 

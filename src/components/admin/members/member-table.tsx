@@ -32,13 +32,13 @@ export async function MemberTable({ items }: { items: MemberListItem[] }) {
   if (items.length === 0) {
     return (
       <div className="rounded-md border border-dashed p-12 text-center">
-        <p className="text-sm text-muted-foreground">{t("empty")}</p>
+        <p className="text-sm text-on-surface-variant">{t("empty")}</p>
       </div>
     );
   }
 
   return (
-    <div className="rounded-md border bg-background">
+    <div className="rounded-md border bg-surface">
       <Table>
         <TableHeader>
           <TableRow>
@@ -74,13 +74,13 @@ export async function MemberTable({ items }: { items: MemberListItem[] }) {
                   </Avatar>
                   <div className="flex flex-col">
                     <span>{m.fullName}</span>
-                    <span className="text-xs text-muted-foreground md:hidden">
+                    <span className="text-xs text-on-surface-variant md:hidden">
                       {m.phone ?? m.email ?? ""}
                     </span>
                   </div>
                 </Link>
               </TableCell>
-              <TableCell className="hidden text-sm text-muted-foreground md:table-cell">
+              <TableCell className="hidden text-sm text-on-surface-variant md:table-cell">
                 <div className="flex flex-col">
                   {m.phone ? <span>{m.phone}</span> : null}
                   {m.email ? (
@@ -88,13 +88,13 @@ export async function MemberTable({ items }: { items: MemberListItem[] }) {
                   ) : null}
                 </div>
               </TableCell>
-              <TableCell className="hidden text-sm text-muted-foreground lg:table-cell">
+              <TableCell className="hidden text-sm text-on-surface-variant lg:table-cell">
                 {m.household?.name ?? "—"}
               </TableCell>
               <TableCell>
                 <Badge variant={STATUS_VARIANT[m.status]}>{m.status}</Badge>
               </TableCell>
-              <TableCell className="hidden text-sm text-muted-foreground md:table-cell">
+              <TableCell className="hidden text-sm text-on-surface-variant md:table-cell">
                 {m.joinedAt
                   ? format(new Date(m.joinedAt), "yyyy-MM-dd")
                   : "—"}
@@ -102,7 +102,7 @@ export async function MemberTable({ items }: { items: MemberListItem[] }) {
               <TableCell>
                 <Link
                   href={`/admin/members/${m.id}`}
-                  className="text-muted-foreground transition group-hover:text-foreground"
+                  className="text-on-surface-variant transition group-hover:text-on-surface"
                 >
                   <ChevronRight className="h-4 w-4" />
                 </Link>

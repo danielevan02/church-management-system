@@ -4,6 +4,12 @@ import { Slot } from "radix-ui"
 
 import { cn } from "@/lib/utils"
 
+/**
+ * Breadcrumbs. M3 has no breadcrumb component, so this follows M3's general
+ * text rules instead: trail in `on-surface-variant` at `body-medium`, current
+ * page promoted to `on-surface`, and the ellipsis affordance gets a real 40dp
+ * state layer since it is a control.
+ */
 function Breadcrumb({ ...props }: React.ComponentProps<"nav">) {
   return <nav aria-label="breadcrumb" data-slot="breadcrumb" {...props} />
 }
@@ -13,7 +19,7 @@ function BreadcrumbList({ className, ...props }: React.ComponentProps<"ol">) {
     <ol
       data-slot="breadcrumb-list"
       className={cn(
-        "flex flex-wrap items-center gap-1.5 text-sm break-words text-muted-foreground sm:gap-2.5",
+        "flex flex-wrap items-center gap-1.5 text-body-md break-words text-on-surface-variant sm:gap-2.5",
         className
       )}
       {...props}
@@ -43,7 +49,10 @@ function BreadcrumbLink({
   return (
     <Comp
       data-slot="breadcrumb-link"
-      className={cn("transition-colors hover:text-foreground", className)}
+      className={cn(
+        "m3-focus-ring rounded-xs transition-colors duration-150 ease-standard hover:text-on-surface",
+        className
+      )}
       {...props}
     />
   )
@@ -56,7 +65,7 @@ function BreadcrumbPage({ className, ...props }: React.ComponentProps<"span">) {
       role="link"
       aria-disabled="true"
       aria-current="page"
-      className={cn("font-normal text-foreground", className)}
+      className={cn("text-on-surface", className)}
       {...props}
     />
   )
@@ -72,7 +81,7 @@ function BreadcrumbSeparator({
       data-slot="breadcrumb-separator"
       role="presentation"
       aria-hidden="true"
-      className={cn("[&>svg]:size-3.5", className)}
+      className={cn("[&>svg]:size-4", className)}
       {...props}
     >
       {children ?? <ChevronRight />}
@@ -89,10 +98,13 @@ function BreadcrumbEllipsis({
       data-slot="breadcrumb-ellipsis"
       role="presentation"
       aria-hidden="true"
-      className={cn("flex size-9 items-center justify-center", className)}
+      className={cn(
+        "state-layer flex size-10 items-center justify-center rounded-full",
+        className
+      )}
       {...props}
     >
-      <MoreHorizontal className="size-4" />
+      <MoreHorizontal className="size-5" />
       <span className="sr-only">More</span>
     </span>
   )

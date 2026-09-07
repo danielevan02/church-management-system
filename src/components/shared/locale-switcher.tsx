@@ -28,7 +28,7 @@ export function LocaleSwitcher() {
     <DropdownMenu>
       <DropdownMenuTrigger
         disabled={pending}
-        className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground"
+        className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm font-medium text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface"
       >
         <Globe className="h-4 w-4" />
         <span className="uppercase">{locale}</span>
@@ -44,7 +44,7 @@ export function LocaleSwitcher() {
             }
             className={l === locale ? "font-medium" : undefined}
           >
-            <span className="mr-2 uppercase text-muted-foreground">{l}</span>
+            <span className="mr-2 uppercase text-on-surface-variant">{l}</span>
             {labels[l]}
           </DropdownMenuItem>
         ))}

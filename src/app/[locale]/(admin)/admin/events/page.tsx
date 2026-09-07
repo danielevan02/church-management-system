@@ -29,7 +29,7 @@ export default async function EventsListPage({
       <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex flex-col gap-1">
           <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-          <p className="text-muted-foreground">
+          <p className="text-on-surface-variant">
             {t("subtitle", { total: result.total })}
           </p>
         </div>
@@ -42,7 +42,7 @@ export default async function EventsListPage({
       </header>
 
       {result.total === 0 ? (
-        <div className="rounded-md border border-dashed p-10 text-center text-sm text-muted-foreground">
+        <div className="rounded-md border border-dashed p-10 text-center text-sm text-on-surface-variant">
           {t("empty")}
         </div>
       ) : (
@@ -70,17 +70,17 @@ export default async function EventsListPage({
                       ) : null}
                     </div>
                   </div>
-                  <div className="text-sm text-muted-foreground">
+                  <div className="text-sm text-on-surface-variant">
                     {formatJakarta(e.startsAt, "EEE, dd MMM yyyy · HH:mm")}
                     {e.location ? ` · ${e.location}` : ""}
                   </div>
-                  <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                  <div className="flex flex-wrap items-center gap-2 text-xs text-on-surface-variant">
                     <span>
                       {e._count.rsvps}
                       {e.capacity ? `/${e.capacity}` : ""} {t("rsvpsAbbr")}
                     </span>
                     {e.fee ? (
-                      <span className="ml-auto font-medium text-foreground">
+                      <span className="ml-auto font-medium text-on-surface">
                         {formatRupiah(e.fee)}
                       </span>
                     ) : null}

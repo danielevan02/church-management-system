@@ -84,7 +84,7 @@ export default async function ReportsPage() {
     <div className="flex flex-col gap-6">
       <header className="flex flex-col gap-1">
         <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="text-muted-foreground">
+        <p className="text-on-surface-variant">
           {t("subtitle", { date: format(new Date(), "dd MMM yyyy") })}
         </p>
       </header>
@@ -118,7 +118,7 @@ export default async function ReportsPage() {
           <div>
             <h3 className="mb-2 text-sm font-medium">{t("membership.growthTitle")}</h3>
             {growth.length === 0 ? (
-              <p className="text-sm text-muted-foreground">{t("membership.empty")}</p>
+              <p className="text-sm text-on-surface-variant">{t("membership.empty")}</p>
             ) : (
               <MembershipGrowthChart data={growth} />
             )}
@@ -144,7 +144,7 @@ export default async function ReportsPage() {
             <div>
               <h3 className="mb-2 text-sm font-medium">{t("membership.topCitiesTitle")}</h3>
               {cities.length === 0 ? (
-                <p className="text-sm text-muted-foreground">{t("membership.noCities")}</p>
+                <p className="text-sm text-on-surface-variant">{t("membership.noCities")}</p>
               ) : (
                 <ul className="flex flex-col gap-1 text-sm">
                   {cities.map((c) => (
@@ -195,7 +195,7 @@ export default async function ReportsPage() {
           <div>
             <h3 className="mb-2 text-sm font-medium">{t("attendance.trendTitle")}</h3>
             {weeklyTrend.length === 0 ? (
-              <p className="text-sm text-muted-foreground">{t("attendance.empty")}</p>
+              <p className="text-sm text-on-surface-variant">{t("attendance.empty")}</p>
             ) : (
               <WeeklyTrendChart data={weeklyTrend} />
             )}
@@ -240,7 +240,7 @@ export default async function ReportsPage() {
             <div>
               <h3 className="mb-2 text-sm font-medium">{t("giving.trendTitle")}</h3>
               {monthlyGiving.length === 0 ? (
-                <p className="text-sm text-muted-foreground">{t("giving.empty")}</p>
+                <p className="text-sm text-on-surface-variant">{t("giving.empty")}</p>
               ) : (
                 <MonthlyTrendChart data={monthlyGiving} />
               )}
@@ -258,7 +258,7 @@ export default async function ReportsPage() {
                     >
                       <div className="flex flex-col">
                         <span className="font-medium">{row.fund?.name}</span>
-                        <span className="text-xs text-muted-foreground">
+                        <span className="text-xs text-on-surface-variant">
                           {row.fund
                             ? tFundCategory(row.fund.category.toLowerCase() as never)
                             : ""}{" "}
@@ -330,7 +330,7 @@ export default async function ReportsPage() {
             />
           </div>
           {discipleship.byType.length === 0 ? (
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-on-surface-variant">
               {t("discipleship.empty")}
             </p>
           ) : (
@@ -341,7 +341,7 @@ export default async function ReportsPage() {
                   className="flex items-center justify-between rounded-md border px-3 py-2"
                 >
                   <span className="flex items-center gap-2">
-                    <HeartHandshake className="h-4 w-4 text-muted-foreground" />
+                    <HeartHandshake className="h-4 w-4 text-on-surface-variant" />
                     {tMilestone(milestoneTypeKey(row.type))}
                   </span>
                   <span className="font-semibold tabular-nums">{row.count}</span>
@@ -368,10 +368,10 @@ function Stat({
 }) {
   return (
     <div className="flex flex-col gap-1 rounded-md border p-3">
-      <div className="text-xs text-muted-foreground">{label}</div>
+      <div className="text-xs text-on-surface-variant">{label}</div>
       <div className="text-2xl font-bold tabular-nums">{value}</div>
       {hint ? (
-        <div className="text-xs text-muted-foreground">{hint}</div>
+        <div className="text-xs text-on-surface-variant">{hint}</div>
       ) : null}
       {children ? <div className="mt-1">{children}</div> : null}
     </div>

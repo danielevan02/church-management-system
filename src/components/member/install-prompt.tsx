@@ -52,7 +52,7 @@ export function InstallPrompt() {
     <div className="flex items-center justify-between gap-3 rounded-md border border-primary/30 bg-primary/5 px-4 py-3 text-sm">
       <div className="flex flex-col">
         <span className="font-medium">{t("title")}</span>
-        <span className="text-xs text-muted-foreground">{t("description")}</span>
+        <span className="text-xs text-on-surface-variant">{t("description")}</span>
       </div>
       <div className="flex shrink-0 items-center gap-1">
         <Button size="sm" onClick={onInstall} className="gap-1.5">

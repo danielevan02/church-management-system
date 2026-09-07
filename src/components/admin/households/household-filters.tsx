@@ -41,9 +41,9 @@ export function HouseholdFilters() {
   return (
     <div className="relative max-w-md">
       {pending ? (
-        <Loader2 className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin text-muted-foreground" />
+        <Loader2 className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin text-on-surface-variant" />
       ) : (
-        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-on-surface-variant" />
       )}
       <Input
         type="text"
@@ -57,7 +57,7 @@ export function HouseholdFilters() {
           type="button"
           onClick={() => setQ("")}
           aria-label={t("clear")}
-          className="absolute right-2 top-1/2 -translate-y-1/2 rounded-sm p-1 text-muted-foreground hover:bg-accent hover:text-foreground"
+          className="absolute right-2 top-1/2 -translate-y-1/2 rounded-sm p-1 text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface"
         >
           <X className="h-4 w-4" />
         </button>

@@ -63,7 +63,7 @@ export default async function CellGroupDetailPage({
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div className="flex flex-col gap-1">
             <h1 className="text-3xl font-bold tracking-tight">{group.name}</h1>
-            <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+            <div className="flex flex-wrap items-center gap-2 text-sm text-on-surface-variant">
               <Badge variant={group.isActive ? "default" : "secondary"}>
                 {group.isActive ? t("statusActive") : t("statusInactive")}
               </Badge>
@@ -83,7 +83,7 @@ export default async function CellGroupDetailPage({
               ) : null}
             </div>
             {group.description ? (
-              <p className="text-sm text-muted-foreground">{group.description}</p>
+              <p className="text-sm text-on-surface-variant">{group.description}</p>
             ) : null}
           </div>
           <div className="flex flex-wrap gap-2">
@@ -111,12 +111,12 @@ export default async function CellGroupDetailPage({
           </CardHeader>
           <CardContent className="space-y-3 text-sm">
             {group.nextMeetingAt ? (
-              <div className="rounded-md border bg-muted/30 p-3 text-sm">
+              <div className="rounded-md border bg-surface-container-high/30 p-3 text-sm">
                 <div className="font-medium">
                   {formatJakarta(group.nextMeetingAt, "EEEE, d MMM yyyy · HH:mm")}
                 </div>
                 {group.nextMeetingLocation ? (
-                  <div className="text-muted-foreground">
+                  <div className="text-on-surface-variant">
                     {group.nextMeetingLocation}
                   </div>
                 ) : null}
@@ -127,7 +127,7 @@ export default async function CellGroupDetailPage({
                 ) : null}
               </div>
             ) : (
-              <p className="text-sm text-muted-foreground italic">
+              <p className="text-sm text-on-surface-variant italic">
                 {t("nextMeetingEmpty")}
               </p>
             )}
@@ -169,7 +169,7 @@ export default async function CellGroupDetailPage({
                 >
                   {group.leader.fullName}
                 </Link>
-                <span className="text-xs text-muted-foreground">
+                <span className="text-xs text-on-surface-variant">
                   {group.leader.phone ?? "—"}
                 </span>
               </div>
@@ -193,7 +193,7 @@ export default async function CellGroupDetailPage({
                       {c.name}
                     </Link>
                     {!c.isActive ? (
-                      <span className="ml-2 text-xs text-muted-foreground">
+                      <span className="ml-2 text-xs text-on-surface-variant">
                         ({t("statusInactive")})
                       </span>
                     ) : null}
@@ -215,7 +215,7 @@ export default async function CellGroupDetailPage({
         <CardContent className="flex flex-col gap-4">
           <AssignCellGroupMemberForm cellGroupId={id} />
           {group.members.length === 0 ? (
-            <p className="text-sm text-muted-foreground">{t("membersEmpty")}</p>
+            <p className="text-sm text-on-surface-variant">{t("membersEmpty")}</p>
           ) : (
             <ul className="flex flex-col gap-2 text-sm">
               {group.members.map((m) => (
@@ -242,7 +242,7 @@ export default async function CellGroupDetailPage({
                       >
                         {m.member.fullName}
                       </Link>
-                      <span className="text-xs text-muted-foreground">
+                      <span className="text-xs text-on-surface-variant">
                         {t("joinedOn")}: {format(m.joinedAt, "dd MMM yyyy")}
                       </span>
                     </div>
@@ -265,7 +265,7 @@ export default async function CellGroupDetailPage({
         </CardHeader>
         <CardContent>
           {reports.length === 0 ? (
-            <p className="text-sm text-muted-foreground">{t("reportsEmpty")}</p>
+            <p className="text-sm text-on-surface-variant">{t("reportsEmpty")}</p>
           ) : (
             <ul className="flex flex-col gap-2 text-sm">
               {reports.map((r) => (
@@ -278,7 +278,7 @@ export default async function CellGroupDetailPage({
                       {format(r.meetingDate, "EEEE, dd MMM yyyy")}
                     </span>
                     {r.topic ? (
-                      <span className="text-xs text-muted-foreground">
+                      <span className="text-xs text-on-surface-variant">
                         {r.topic}
                       </span>
                     ) : null}
@@ -293,7 +293,7 @@ export default async function CellGroupDetailPage({
                       {r.attendeeCount} {t("attendeesAbbr")}
                     </div>
                     {r.visitorCount > 0 ? (
-                      <div className="text-muted-foreground tabular-nums">
+                      <div className="text-on-surface-variant tabular-nums">
                         +{r.visitorCount} {t("visitorsAbbr")}
                       </div>
                     ) : null}

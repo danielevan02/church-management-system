@@ -115,7 +115,7 @@ export function QrScanner({
 
   if (paused) {
     return (
-      <div className="flex h-72 items-center justify-center rounded-md border border-dashed bg-muted text-sm text-muted-foreground">
+      <div className="flex h-72 items-center justify-center rounded-md border border-dashed bg-surface-container-high text-sm text-on-surface-variant">
         {t("paused")}
       </div>
     );
@@ -123,7 +123,7 @@ export function QrScanner({
 
   if (error) {
     return (
-      <div className="flex h-72 flex-col items-center justify-center gap-2 rounded-md border border-dashed bg-destructive/5 px-6 text-center text-sm text-destructive">
+      <div className="flex h-72 flex-col items-center justify-center gap-2 rounded-md border border-dashed bg-error/5 px-6 text-center text-sm text-error">
         <p className="font-medium">{t("cameraUnavailable")}</p>
         <p className="text-xs opacity-80">{error}</p>
       </div>
@@ -144,7 +144,7 @@ export function QrScanner({
         className="aspect-square w-full"
       />
       {starting ? (
-        <p className="border-t bg-muted px-3 py-2 text-center text-xs text-muted-foreground">
+        <p className="border-t bg-surface-container-high px-3 py-2 text-center text-xs text-on-surface-variant">
           {t("startingCamera")}
         </p>
       ) : null}

@@ -71,7 +71,7 @@ export function ChangePinForm() {
       <div className="flex flex-col gap-2">
         <Label htmlFor="currentPin">{t("currentLabel")}</Label>
         <div className="relative">
-          <KeyRound className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <KeyRound className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-on-surface-variant" />
           <Input
             id="currentPin"
             type={show ? "text" : "password"}
@@ -89,7 +89,7 @@ export function ChangePinForm() {
           <button
             type="button"
             onClick={() => setShow((s) => !s)}
-            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground"
+            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1.5 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface"
           >
             {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
           </button>
@@ -112,7 +112,7 @@ export function ChangePinForm() {
           className="tracking-[0.3em]"
           autoComplete="new-password"
         />
-        <p className="text-xs text-muted-foreground">{t("hint")}</p>
+        <p className="text-xs text-on-surface-variant">{t("hint")}</p>
       </div>
 
       <div className="flex flex-col gap-2">
@@ -134,7 +134,7 @@ export function ChangePinForm() {
       </div>
 
       {error ? (
-        <p className="rounded-md border border-destructive/50 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+        <p className="rounded-md border border-error/50 bg-error/10 px-3 py-2 text-sm text-error">
           {error}
         </p>
       ) : null}

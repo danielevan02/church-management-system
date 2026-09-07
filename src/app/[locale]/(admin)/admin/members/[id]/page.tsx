@@ -75,7 +75,7 @@ export default async function MemberDetailPage({
             <h1 className="text-3xl font-bold tracking-tight">
               {member.fullName}
             </h1>
-            <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+            <div className="flex flex-wrap items-center gap-2 text-sm text-on-surface-variant">
               <Badge>{tStatus(member.status.toLowerCase() as never)}</Badge>
               <span>•</span>
               <span>{member.gender === "MALE" ? "Pria" : "Wanita"}</span>
@@ -204,7 +204,7 @@ export default async function MemberDetailPage({
                     />
                   </>
                 ) : (
-                  <p className="text-muted-foreground">
+                  <p className="text-on-surface-variant">
                     {t("profile.noHousehold")}
                   </p>
                 )}
@@ -241,7 +241,7 @@ export default async function MemberDetailPage({
                   hasPhone={Boolean(member.phone)}
                 />
                 {!member.phone ? (
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-xs text-on-surface-variant">
                     {t("login.noPhoneHint")}
                   </p>
                 ) : null}
@@ -309,12 +309,12 @@ export default async function MemberDetailPage({
                         >
                           {row.service.name}
                         </Link>
-                        <span className="text-xs text-muted-foreground">
+                        <span className="text-xs text-on-surface-variant">
                           {tType(serviceTypeKey(row.service.type))} ·{" "}
                           {formatJakarta(row.service.startsAt, "EEE dd MMM yyyy, HH:mm")}
                         </span>
                       </div>
-                      <span className="text-xs text-muted-foreground tabular-nums">
+                      <span className="text-xs text-on-surface-variant tabular-nums">
                         {formatJakarta(row.checkedInAt, "HH:mm")}
                       </span>
                     </li>
@@ -346,7 +346,7 @@ export default async function MemberDetailPage({
                         >
                           {row.event.title}
                         </Link>
-                        <span className="text-xs text-muted-foreground">
+                        <span className="text-xs text-on-surface-variant">
                           {formatJakarta(row.event.startsAt, "EEE dd MMM yyyy, HH:mm")}
                           {row.event.location ? ` · ${row.event.location}` : ""}
                         </span>
@@ -379,12 +379,12 @@ export default async function MemberDetailPage({
                           {tMilestone(milestoneTypeKey(m.type))}
                         </span>
                         {m.notes ? (
-                          <span className="text-xs text-muted-foreground">
+                          <span className="text-xs text-on-surface-variant">
                             {m.notes}
                           </span>
                         ) : null}
                       </div>
-                      <span className="text-xs tabular-nums text-muted-foreground">
+                      <span className="text-xs tabular-nums text-on-surface-variant">
                         {format(m.achievedAt, "dd MMM yyyy")}
                       </span>
                     </li>
@@ -431,17 +431,17 @@ export default async function MemberDetailPage({
                             <Badge variant="outline">
                               {tVisitType(visitTypeKey(v.visitType))}
                             </Badge>
-                            <span className="text-xs text-muted-foreground tabular-nums">
+                            <span className="text-xs text-on-surface-variant tabular-nums">
                               {format(v.visitedAt, "dd MMM yyyy")}
                             </span>
                           </div>
-                          <span className="text-xs text-muted-foreground">
+                          <span className="text-xs text-on-surface-variant">
                             {v.visitedBy}
                           </span>
                         </div>
                         <p className="whitespace-pre-wrap text-sm">{v.notes}</p>
                         {v.followUp ? (
-                          <div className="mt-1 rounded-md bg-muted px-2 py-1 text-xs">
+                          <div className="mt-1 rounded-md bg-surface-container-high px-2 py-1 text-xs">
                             <span className="font-medium">
                               {t("pastoral.followUpLabel")}:
                             </span>{" "}
@@ -478,7 +478,7 @@ function Field({
 }) {
   return (
     <div className="grid grid-cols-3 gap-2">
-      <dt className="text-muted-foreground">{label}</dt>
+      <dt className="text-on-surface-variant">{label}</dt>
       <dd className="col-span-2">{value || "—"}</dd>
     </div>
   );

@@ -81,7 +81,7 @@ export default async function MembersListPage({
           <h1 className="text-3xl font-bold tracking-tight">
             {t("list.title")}
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-on-surface-variant">
             {t("list.subtitle", { total: result.total })}
           </p>
         </div>

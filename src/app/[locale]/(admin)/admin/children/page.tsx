@@ -37,7 +37,7 @@ export default async function ChildrenHubPage() {
     <div className="flex flex-col gap-6">
       <header className="flex flex-col gap-1">
         <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="text-muted-foreground">{t("subtitle")}</p>
+        <p className="text-on-surface-variant">{t("subtitle")}</p>
       </header>
 
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
@@ -86,7 +86,7 @@ function Stat({
     <div
       className={`flex flex-col gap-1 rounded-md border p-3 ${accent ? "border-primary bg-primary/5" : ""}`}
     >
-      <div className="text-xs text-muted-foreground">{label}</div>
+      <div className="text-xs text-on-surface-variant">{label}</div>
       <div className="text-2xl font-bold tabular-nums">{value}</div>
     </div>
   );

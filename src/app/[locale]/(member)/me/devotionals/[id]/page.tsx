@@ -40,11 +40,11 @@ export default async function MemberDevotionalDetailPage({
         {/* Hero header */}
         <header className="relative border-b bg-linear-to-br from-primary/10 via-primary/5 to-transparent px-6 py-8 sm:px-8">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-primary px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-primary-foreground">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-primary px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-on-primary">
               <BookOpen className="h-3 w-3" />
               {tDash("label")}
             </span>
-            <span className="text-xs uppercase tracking-wider text-muted-foreground">
+            <span className="text-xs uppercase tracking-wider text-on-surface-variant">
               {formatJakarta(devotional.publishedAt, "EEEE, dd MMMM yyyy")}
             </span>
           </div>
@@ -52,7 +52,7 @@ export default async function MemberDevotionalDetailPage({
             {devotional.title}
           </h1>
           {devotional.authorName ? (
-            <p className="mt-2 text-sm italic text-muted-foreground">
+            <p className="mt-2 text-sm italic text-on-surface-variant">
               — {devotional.authorName}
             </p>
           ) : null}
@@ -70,7 +70,7 @@ export default async function MemberDevotionalDetailPage({
                 </p>
               ) : null}
               {devotional.verseText ? (
-                <p className="mt-2 whitespace-pre-wrap text-sm italic leading-relaxed text-muted-foreground">
+                <p className="mt-2 whitespace-pre-wrap text-sm italic leading-relaxed text-on-surface-variant">
                   {devotional.verseText}
                 </p>
               ) : null}

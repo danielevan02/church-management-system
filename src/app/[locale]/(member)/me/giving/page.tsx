@@ -18,7 +18,7 @@ export default async function MemberGivingPage() {
     <div className="flex flex-col gap-6">
       <header className="flex flex-col gap-1">
         <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="text-muted-foreground">
+        <p className="text-on-surface-variant">
           {t("subtitle", { church: church.name })}
         </p>
       </header>
@@ -42,7 +42,7 @@ export default async function MemberGivingPage() {
           <CardTitle>{t("noteTitle")}</CardTitle>
           <CardDescription>{t("noteDescription")}</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-2 text-sm text-muted-foreground">
+        <CardContent className="space-y-2 text-sm text-on-surface-variant">
           <p>{t("noteBody")}</p>
         </CardContent>
       </Card>

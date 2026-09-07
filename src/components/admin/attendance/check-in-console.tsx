@@ -126,7 +126,7 @@ export function CheckInConsole({
                 paused={tab !== "qr"}
                 mirrorOnFrontCamera
               />
-              <p className="mt-2 text-xs text-muted-foreground">
+              <p className="mt-2 text-xs text-on-surface-variant">
                 {t("qrHelp")}
               </p>
             </TabsContent>
@@ -155,7 +155,7 @@ export function CheckInConsole({
         </CardHeader>
         <CardContent>
           {recent.length === 0 ? (
-            <p className="text-sm text-muted-foreground">{t("recentEmpty")}</p>
+            <p className="text-sm text-on-surface-variant">{t("recentEmpty")}</p>
           ) : (
             <ul className="flex flex-col gap-2 text-sm">
               {recent.map((r) => (
@@ -166,13 +166,13 @@ export function CheckInConsole({
                   <CheckCircle2
                     className={
                       r.alreadyCheckedIn
-                        ? "h-4 w-4 text-muted-foreground"
-                        : "h-4 w-4 text-emerald-600"
+                        ? "h-4 w-4 text-on-surface-variant"
+                        : "h-4 w-4 text-success"
                     }
                   />
                   <div className="flex flex-1 flex-col">
                     <span className="font-medium">{r.name}</span>
-                    <span className="text-xs text-muted-foreground">
+                    <span className="text-xs text-on-surface-variant">
                       {formatJakarta(r.at, "HH:mm:ss")} · {r.source}
                       {r.alreadyCheckedIn ? ` · ${t("alreadyTag")}` : ""}
                     </span>
@@ -255,10 +255,10 @@ function ManualSearch({
         placeholder={t("searchPlaceholder")}
       />
       {q.trim().length > 0 && q.trim().length < 2 ? (
-        <p className="text-xs text-muted-foreground">{t("searchMinChars")}</p>
+        <p className="text-xs text-on-surface-variant">{t("searchMinChars")}</p>
       ) : null}
       {results.length === 0 && q.trim().length >= 2 ? (
-        <p className="text-xs text-muted-foreground">{t("searchEmpty")}</p>
+        <p className="text-xs text-on-surface-variant">{t("searchEmpty")}</p>
       ) : null}
       {results.length > 0 ? (
         <ul className="flex flex-col gap-1">
@@ -268,10 +268,10 @@ function ManualSearch({
                 type="button"
                 onClick={() => pick(m.id, m.fullName)}
                 disabled={pendingId === m.id}
-                className="flex w-full items-center justify-between rounded-md border px-3 py-2 text-left hover:bg-muted disabled:opacity-50"
+                className="flex w-full items-center justify-between rounded-md border px-3 py-2 text-left hover:bg-surface-container-high disabled:opacity-50"
               >
                 <span className="font-medium">{m.fullName}</span>
-                <span className="text-xs text-muted-foreground">
+                <span className="text-xs text-on-surface-variant">
                   {m.phone ?? "—"}
                 </span>
               </button>

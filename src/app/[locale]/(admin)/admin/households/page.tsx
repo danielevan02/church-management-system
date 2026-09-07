@@ -36,7 +36,7 @@ export default async function HouseholdsListPage({
           <h1 className="text-3xl font-bold tracking-tight">
             {t("list.title")}
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-on-surface-variant">
             {t("list.subtitle", { total: result.total })}
           </p>
         </div>
@@ -52,12 +52,12 @@ export default async function HouseholdsListPage({
 
       {result.total === 0 ? (
         <div className="rounded-md border border-dashed p-12 text-center">
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-on-surface-variant">
             {hasQuery ? t("list.emptySearch") : t("list.empty")}
           </p>
         </div>
       ) : (
-        <div className="rounded-md border bg-background">
+        <div className="rounded-md border bg-surface">
           <Table>
             <TableHeader>
               <TableRow>
@@ -79,7 +79,7 @@ export default async function HouseholdsListPage({
                       {h.name}
                     </Link>
                   </TableCell>
-                  <TableCell className="text-sm text-muted-foreground">
+                  <TableCell className="text-sm text-on-surface-variant">
                     {h.address ?? "—"}
                   </TableCell>
                   <TableCell className="text-right text-sm">

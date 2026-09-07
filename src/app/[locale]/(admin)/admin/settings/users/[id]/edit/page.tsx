@@ -52,7 +52,7 @@ export default async function EditUserPage({
         >
           {user.username ?? user.member?.fullName ?? t("editTitle")}
         </h1>
-        <p className="text-muted-foreground">{t("editSubtitle")}</p>
+        <p className="text-on-surface-variant">{t("editSubtitle")}</p>
       </header>
 
       <Card>

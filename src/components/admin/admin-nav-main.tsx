@@ -32,7 +32,7 @@ export function AdminNavMain({
             <SidebarMenuButton
               asChild
               tooltip={tQuick("create")}
-              className="bg-primary text-primary-foreground duration-200 ease-linear hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8"
+              className="bg-primary text-on-primary duration-200 ease-linear hover:bg-primary/90 hover:text-on-primary active:bg-primary/90 active:text-on-primary min-w-8"
             >
               <Link href="/admin/members/new">
                 <PlusCircle />

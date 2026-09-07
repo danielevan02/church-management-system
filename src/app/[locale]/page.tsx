@@ -14,7 +14,7 @@ export default async function Home() {
   const misiItems = [1, 2, 3, 4, 5, 6].map((n) => t(`misi.item${n}`));
 
   return (
-    <main className="relative flex min-h-dvh flex-col overflow-hidden bg-background">
+    <main className="relative flex min-h-dvh flex-col overflow-hidden bg-surface">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10"
@@ -45,7 +45,7 @@ export default async function Home() {
             priority
             className="h-8 w-8 object-contain"
           />
-          <span className="text-sm font-medium text-foreground">
+          <span className="text-sm font-medium text-on-surface">
             {church.shortName}
           </span>
         </div>
@@ -54,7 +54,7 @@ export default async function Home() {
           <LoadingLink
             href="/auth/sign-in"
             icon={<ShieldCheck className="h-3.5 w-3.5" aria-hidden />}
-            className="text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
+            className="text-xs font-medium text-on-surface-variant transition-colors hover:text-on-surface"
           >
             {t("hero.staffSignIn")}
           </LoadingLink>
@@ -64,7 +64,7 @@ export default async function Home() {
       <section className="flex items-center justify-center px-6 py-16 sm:py-20">
         <div className="flex w-full max-w-2xl flex-col items-center gap-8 text-center">
           <span
-            className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium uppercase tracking-widest text-muted-foreground"
+            className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium uppercase tracking-widest text-on-surface-variant"
             style={{ borderColor: `${primary}33` }}
           >
             <span
@@ -74,11 +74,11 @@ export default async function Home() {
             {t("hero.badge")}
           </span>
 
-          <h1 className="text-balance text-4xl font-semibold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+          <h1 className="text-balance text-4xl font-semibold tracking-tight text-on-surface sm:text-5xl lg:text-6xl">
             {church.name}
           </h1>
 
-          <blockquote className="max-w-xl text-balance text-base italic text-muted-foreground sm:text-lg">
+          <blockquote className="max-w-xl text-balance text-base italic text-on-surface-variant sm:text-lg">
             &ldquo;{t("hero.verse")}&rdquo;
             <cite className="mt-3 block text-xs uppercase tracking-[0.2em] not-italic opacity-70">
               {t("hero.verseRef")}
@@ -107,7 +107,7 @@ export default async function Home() {
       >
         <div className="mx-auto flex w-full max-w-3xl flex-col items-center gap-6 text-center">
           <span
-            className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium uppercase tracking-widest text-muted-foreground"
+            className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium uppercase tracking-widest text-on-surface-variant"
             style={{ borderColor: `${primary}33` }}
           >
             <span
@@ -121,7 +121,7 @@ export default async function Home() {
             style={{ color: primary }}
             aria-hidden
           />
-          <p className="text-balance text-2xl font-medium leading-snug text-foreground sm:text-3xl lg:text-4xl">
+          <p className="text-balance text-2xl font-medium leading-snug text-on-surface sm:text-3xl lg:text-4xl">
             {t("visi.text")}
           </p>
         </div>
@@ -135,7 +135,7 @@ export default async function Home() {
         <div className="mx-auto flex w-full max-w-5xl flex-col gap-10">
           <div className="flex flex-col items-center gap-4 text-center">
             <span
-              className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium uppercase tracking-widest text-muted-foreground"
+              className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium uppercase tracking-widest text-on-surface-variant"
               style={{ borderColor: `${primary}33` }}
             >
               <span
@@ -150,7 +150,7 @@ export default async function Home() {
             >
               {t("misi.acronym")}
             </h2>
-            <p className="max-w-2xl text-balance text-sm text-muted-foreground sm:text-base">
+            <p className="max-w-2xl text-balance text-sm text-on-surface-variant sm:text-base">
               {t("misi.expansion")}
             </p>
           </div>
@@ -159,7 +159,7 @@ export default async function Home() {
             {misiItems.map((item, i) => (
               <li
                 key={i}
-                className="group relative flex flex-col gap-3 rounded-xl border bg-card/40 p-6 transition-colors hover:border-foreground/20"
+                className="group relative flex flex-col gap-3 rounded-xl border bg-surface-container-low/40 p-6 transition-colors hover:border-on-surface/20"
                 style={{ borderColor: `${primary}1f` }}
               >
                 <span
@@ -171,7 +171,7 @@ export default async function Home() {
                 >
                   {i + 1}
                 </span>
-                <p className="text-sm leading-relaxed text-foreground sm:text-base">
+                <p className="text-sm leading-relaxed text-on-surface sm:text-base">
                   {item}
                 </p>
               </li>
@@ -181,7 +181,7 @@ export default async function Home() {
       </section>
 
       <footer
-        className="border-t px-6 py-6 text-center text-xs text-muted-foreground sm:px-10"
+        className="border-t px-6 py-6 text-center text-xs text-on-surface-variant sm:px-10"
         style={{ borderColor: `${primary}1a` }}
       >
         © {new Date().getFullYear()} {church.name}

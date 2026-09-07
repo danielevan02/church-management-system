@@ -78,7 +78,7 @@ export function ChildPicker({
         <div className="flex flex-col">
           <span className="text-sm font-medium">{selectedName}</span>
           {selectedAge != null ? (
-            <span className="text-xs text-muted-foreground">
+            <span className="text-xs text-on-surface-variant">
               {selectedAge} thn
             </span>
           ) : null}
@@ -93,7 +93,7 @@ export function ChildPicker({
   return (
     <div className="flex flex-col gap-2">
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-on-surface-variant" />
         <Input
           value={q}
           onChange={(e) => {
@@ -112,10 +112,10 @@ export function ChildPicker({
               <button
                 type="button"
                 onClick={() => pick(c)}
-                className="flex w-full items-center justify-between rounded-sm px-3 py-2 text-left text-sm hover:bg-muted"
+                className="flex w-full items-center justify-between rounded-sm px-3 py-2 text-left text-sm hover:bg-surface-container-high"
               >
                 <span className="font-medium">{c.fullName}</span>
-                <span className="text-xs text-muted-foreground">
+                <span className="text-xs text-on-surface-variant">
                   {c.age != null ? `${c.age} thn` : ""}
                 </span>
               </button>

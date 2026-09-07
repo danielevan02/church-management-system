@@ -26,7 +26,7 @@ export default async function NewAnnouncementPage() {
           </Link>
         </Button>
         <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="text-muted-foreground">{t("subtitle")}</p>
+        <p className="text-on-surface-variant">{t("subtitle")}</p>
       </header>
       <AnnouncementForm
         submitLabel={t("submit")}

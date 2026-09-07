@@ -18,7 +18,7 @@ export default async function NewMemberPage() {
           </Link>
         </Button>
         <h1 className="text-3xl font-bold tracking-tight">{t("new.title")}</h1>
-        <p className="text-muted-foreground">{t("new.subtitle")}</p>
+        <p className="text-on-surface-variant">{t("new.subtitle")}</p>
       </header>
 
       <MemberCreateForm submitLabel={t("new.submit")} />

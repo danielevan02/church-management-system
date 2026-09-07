@@ -78,9 +78,9 @@ export function WysiwygEditor({ value, onChange, placeholder }: Props) {
       attributes: {
         class: cn(
           "prose prose-sm max-w-none min-h-[240px] px-3 py-2 focus:outline-none",
-          "prose-headings:text-foreground prose-strong:text-foreground prose-a:text-primary",
+          "prose-headings:text-on-surface prose-strong:text-on-surface prose-a:text-primary",
           "prose-p:my-2 prose-headings:my-3 prose-ul:my-2 prose-ol:my-2 prose-li:my-0.5",
-          "prose-blockquote:border-l-2 prose-blockquote:border-primary/30 prose-blockquote:pl-3 prose-blockquote:italic prose-blockquote:text-muted-foreground",
+          "prose-blockquote:border-l-2 prose-blockquote:border-primary/30 prose-blockquote:pl-3 prose-blockquote:italic prose-blockquote:text-on-surface-variant",
         ),
       },
     },
@@ -104,9 +104,9 @@ export function WysiwygEditor({ value, onChange, placeholder }: Props) {
   if (!editor) return null;
 
   return (
-    <div className="overflow-hidden rounded-md border border-input">
+    <div className="overflow-hidden rounded-md border border-outline">
       <TooltipProvider delayDuration={200}>
-        <div className="flex flex-wrap items-center gap-0.5 border-b border-input bg-muted/30 p-1">
+        <div className="flex flex-wrap items-center gap-0.5 border-b border-outline bg-surface-container-high/30 p-1">
           <ToolbarButton
             tooltip={t("tools.bold")}
             active={editor.isActive("bold")}
@@ -187,7 +187,7 @@ function promptLink(editor: Editor, placeholder: string) {
 }
 
 function Separator() {
-  return <span className="mx-0.5 h-5 w-px bg-border" aria-hidden />;
+  return <span className="mx-0.5 h-5 w-px bg-outline-variant" aria-hidden />;
 }
 
 function ToolbarButton({
@@ -234,7 +234,7 @@ function HelpDialog() {
           <DialogTitle>{t("title")}</DialogTitle>
           <DialogDescription>{t("subtitleWysiwyg")}</DialogDescription>
         </DialogHeader>
-        <ul className="space-y-2 text-sm text-muted-foreground">
+        <ul className="space-y-2 text-sm text-on-surface-variant">
           <li>{t("tipsWysiwyg.select")}</li>
           <li>{t("tipsWysiwyg.list")}</li>
           <li>{t("tipsWysiwyg.link")}</li>

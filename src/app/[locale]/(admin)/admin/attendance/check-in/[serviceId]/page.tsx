@@ -48,7 +48,7 @@ export default async function UsherCheckInPage({
             <h1 className="text-3xl font-bold tracking-tight">
               {t("pageTitle")}
             </h1>
-            <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+            <div className="flex flex-wrap items-center gap-2 text-sm text-on-surface-variant">
               <span>{service.name}</span>
               <span>•</span>
               <span>{tType(typeKey(service.type))}</span>
@@ -63,7 +63,7 @@ export default async function UsherCheckInPage({
             <Badge variant={open ? "default" : "secondary"}>
               {open ? t("statusOpen") : t("statusClosed")}
             </Badge>
-            <span className="tabular-nums text-muted-foreground">
+            <span className="tabular-nums text-on-surface-variant">
               {total} ({memberCount}M / {visitorCount}V)
             </span>
           </div>
@@ -71,7 +71,7 @@ export default async function UsherCheckInPage({
       </header>
 
       {!open ? (
-        <div className="rounded-md border border-dashed bg-muted/40 p-6 text-sm text-muted-foreground">
+        <div className="rounded-md border border-dashed bg-surface-container-high/40 p-6 text-sm text-on-surface-variant">
           {t("closedNotice")}
         </div>
       ) : (

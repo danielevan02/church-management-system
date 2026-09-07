@@ -1,0 +1,21 @@
+/*
+ * Material 3 design system entry point.
+ *
+ * Import order matters: palette (ref tones) must land before roles (which
+ * reference them), and state.css reads the motion tokens.
+ *
+ * palette.generated.css is produced by scripts/build-theme.cjs from
+ * NEXT_PUBLIC_PRIMARY_COLOR and is gitignored — it is per-deployment output,
+ * regenerated on postinstall / predev / prebuild, exactly like public/sw.js.
+ */
+
+@import "./palette.generated.css";
+@import "./roles.css";
+@import "./variants.css";
+@import "./typography.css";
+@import "./shape.css";
+@import "./elevation.css";
+@import "./spring.css";
+@import "./motion.css";
+@import "./transitions.css";
+@import "./state.css";

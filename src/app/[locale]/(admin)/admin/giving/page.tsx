@@ -76,7 +76,7 @@ export default async function GivingListPage({
       <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex flex-col gap-1">
           <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-          <p className="text-muted-foreground">
+          <p className="text-on-surface-variant">
             {t("subtitle", {
               total: grandCount,
               sum: formatRupiah(grandTotal),
@@ -117,7 +117,7 @@ export default async function GivingListPage({
       />
 
       {grandCount === 0 ? (
-        <div className="rounded-md border border-dashed p-10 text-center text-sm text-muted-foreground">
+        <div className="rounded-md border border-dashed p-10 text-center text-sm text-on-surface-variant">
           {t("empty")}
         </div>
       ) : (
@@ -141,7 +141,7 @@ export default async function GivingListPage({
                       ) : null}
                     </div>
                     <div className="text-sm">
-                      <span className="text-muted-foreground">
+                      <span className="text-on-surface-variant">
                         {t("weekTotal")}:{" "}
                       </span>
                       <span className="font-semibold tabular-nums">
@@ -152,7 +152,7 @@ export default async function GivingListPage({
                 </CardHeader>
                 <CardContent>
                   {week.entries.length === 0 ? (
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-on-surface-variant">
                       {t("weekEmpty")}
                     </p>
                   ) : (
@@ -169,7 +169,7 @@ export default async function GivingListPage({
                                   ? g.serviceName
                                   : t("standalone")}
                               </span>
-                              <span className="text-xs text-muted-foreground">
+                              <span className="text-xs text-on-surface-variant">
                                 {g.kind === "service" ? (
                                   <>
                                     {tServiceType(
@@ -201,7 +201,7 @@ export default async function GivingListPage({
                                     {entry.fund.name}
                                   </Badge>
                                   {g.kind === "standalone" ? (
-                                    <span className="text-xs text-muted-foreground">
+                                    <span className="text-xs text-on-surface-variant">
                                       {formatJakarta(
                                         entry.receivedAt,
                                         "EEE dd MMM",
@@ -210,7 +210,7 @@ export default async function GivingListPage({
                                   ) : null}
                                   {entry.notes ? (
                                     <span
-                                      className="line-clamp-1 text-xs text-muted-foreground"
+                                      className="line-clamp-1 text-xs text-on-surface-variant"
                                       title={entry.notes}
                                     >
                                       {entry.notes}

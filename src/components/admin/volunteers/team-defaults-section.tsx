@@ -83,7 +83,7 @@ export function TeamDefaultsSection({
 
   if (activePositions.length === 0) {
     return (
-      <p className="text-sm text-muted-foreground">{t("emptyPositions")}</p>
+      <p className="text-sm text-on-surface-variant">{t("emptyPositions")}</p>
     );
   }
 
@@ -105,12 +105,12 @@ export function TeamDefaultsSection({
                 {p.name}
               </span>
               {isSaving ? (
-                <span className="flex items-center gap-2 text-sm text-muted-foreground">
+                <span className="flex items-center gap-2 text-sm text-on-surface-variant">
                   <Loader2 className="h-4 w-4 animate-spin" />
                   {t("saving")}
                 </span>
               ) : isRemoving ? (
-                <span className="flex items-center gap-2 text-sm text-muted-foreground">
+                <span className="flex items-center gap-2 text-sm text-on-surface-variant">
                   <Loader2 className="h-4 w-4 animate-spin" />
                   {t("removing")}
                 </span>
@@ -140,7 +140,7 @@ export function TeamDefaultsSection({
                   </span>
                 </div>
               ) : (
-                <span className="text-xs text-muted-foreground">
+                <span className="text-xs text-on-surface-variant">
                   {t("noDefault")}
                 </span>
               )}

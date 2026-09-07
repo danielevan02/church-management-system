@@ -67,7 +67,7 @@ export default async function PrayerRequestDetailPage({
           <CardContent className="flex flex-col gap-3 text-sm">
             <Field label={t("detail.submittedBy")}>
               {item.isAnonymous ? (
-                <span className="italic text-muted-foreground">
+                <span className="italic text-on-surface-variant">
                   {t("list.anonymous")}
                 </span>
               ) : item.member ? (
@@ -91,7 +91,7 @@ export default async function PrayerRequestDetailPage({
                   </Link>
                 </div>
               ) : (
-                <span className="italic text-muted-foreground">
+                <span className="italic text-on-surface-variant">
                   {item.submittedBy ?? "—"}
                 </span>
               )}
@@ -119,7 +119,7 @@ export default async function PrayerRequestDetailPage({
                   </Badge>
                 ) : null}
                 {!item.isAnonymous && !item.isPublic ? (
-                  <span className="text-xs text-muted-foreground">
+                  <span className="text-xs text-on-surface-variant">
                     {t("detail.privateOnly")}
                   </span>
                 ) : null}
@@ -147,7 +147,7 @@ function Field({
 }) {
   return (
     <div className="grid grid-cols-3 gap-2">
-      <dt className="text-muted-foreground">{label}</dt>
+      <dt className="text-on-surface-variant">{label}</dt>
       <dd className="col-span-2">{children}</dd>
     </div>
   );

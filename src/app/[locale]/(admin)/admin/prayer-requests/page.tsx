@@ -60,7 +60,7 @@ export default async function AdminPrayerRequestsPage({
       <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex flex-col gap-1">
           <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-          <p className="text-muted-foreground">
+          <p className="text-on-surface-variant">
             {t("subtitle", { total: result.total })}
           </p>
         </div>
@@ -91,7 +91,7 @@ export default async function AdminPrayerRequestsPage({
       </div>
 
       {result.total === 0 ? (
-        <div className="rounded-md border border-dashed p-10 text-center text-sm text-muted-foreground">
+        <div className="rounded-md border border-dashed p-10 text-center text-sm text-on-surface-variant">
           {t("empty")}
         </div>
       ) : (
@@ -112,7 +112,7 @@ export default async function AdminPrayerRequestsPage({
                 <TableRow key={p.id}>
                   <TableCell>
                     {p.isAnonymous ? (
-                      <span className="text-sm italic text-muted-foreground">
+                      <span className="text-sm italic text-on-surface-variant">
                         {t("anonymous")}
                       </span>
                     ) : p.member ? (
@@ -136,7 +136,7 @@ export default async function AdminPrayerRequestsPage({
                         </Link>
                       </div>
                     ) : (
-                      <span className="text-sm italic text-muted-foreground">
+                      <span className="text-sm italic text-on-surface-variant">
                         {p.submittedBy ?? "—"}
                       </span>
                     )}
@@ -147,12 +147,12 @@ export default async function AdminPrayerRequestsPage({
                       className="text-sm font-medium hover:underline"
                     >
                       {p.title || (
-                        <span className="text-muted-foreground">
+                        <span className="text-on-surface-variant">
                           {t("untitled")}
                         </span>
                       )}
                     </Link>
-                    <p className="line-clamp-1 text-xs text-muted-foreground">
+                    <p className="line-clamp-1 text-xs text-on-surface-variant">
                       {p.body}
                     </p>
                   </TableCell>
@@ -172,7 +172,7 @@ export default async function AdminPrayerRequestsPage({
                       ) : null}
                     </div>
                   </TableCell>
-                  <TableCell className="text-xs tabular-nums text-muted-foreground">
+                  <TableCell className="text-xs tabular-nums text-on-surface-variant">
                     {format(p.createdAt, "dd MMM yyyy")}
                   </TableCell>
                   <TableCell>

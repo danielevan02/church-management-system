@@ -29,7 +29,7 @@ export default async function MemberDiscipleshipPage() {
     <div className="flex flex-col gap-6">
       <header className="flex flex-col gap-1">
         <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="text-muted-foreground">{t("subtitle")}</p>
+        <p className="text-on-surface-variant">{t("subtitle")}</p>
       </header>
 
       <Card>
@@ -39,15 +39,15 @@ export default async function MemberDiscipleshipPage() {
         </CardHeader>
         <CardContent>
           {items.length === 0 ? (
-            <div className="flex flex-col items-center gap-2 py-6 text-center text-sm text-muted-foreground">
+            <div className="flex flex-col items-center gap-2 py-6 text-center text-sm text-on-surface-variant">
               <Sprout className="h-8 w-8" />
               {t("empty")}
             </div>
           ) : (
-            <ol className="relative ml-3 flex flex-col gap-4 border-l border-muted pl-6">
+            <ol className="relative ml-3 flex flex-col gap-4 border-l border-surface-container-high pl-6">
               {items.map((m) => (
                 <li key={m.id} className="relative">
-                  <span className="absolute -left-[31px] flex h-5 w-5 items-center justify-center rounded-full border bg-background">
+                  <span className="absolute -left-[31px] flex h-5 w-5 items-center justify-center rounded-full border bg-surface">
                     <Sprout className="h-3 w-3" />
                   </span>
                   <div className="flex flex-col gap-1">
@@ -58,7 +58,7 @@ export default async function MemberDiscipleshipPage() {
                       {tType(typeKey(m.type))}
                     </span>
                     {m.notes ? (
-                      <p className="text-sm text-muted-foreground">{m.notes}</p>
+                      <p className="text-sm text-on-surface-variant">{m.notes}</p>
                     ) : null}
                   </div>
                 </li>

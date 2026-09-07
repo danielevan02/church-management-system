@@ -49,7 +49,7 @@ export default async function ChildClassesListPage({
             </Link>
           </Button>
           <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-          <p className="text-muted-foreground">
+          <p className="text-on-surface-variant">
             {t("subtitle", { total: result.total })}
           </p>
         </div>
@@ -62,7 +62,7 @@ export default async function ChildClassesListPage({
       </header>
 
       {result.total === 0 ? (
-        <div className="rounded-md border border-dashed p-10 text-center text-sm text-muted-foreground">
+        <div className="rounded-md border border-dashed p-10 text-center text-sm text-on-surface-variant">
           {t("empty")}
         </div>
       ) : (

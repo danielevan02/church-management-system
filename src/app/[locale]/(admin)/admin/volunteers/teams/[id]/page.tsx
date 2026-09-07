@@ -53,7 +53,7 @@ export default async function TeamDetailPage({
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div className="flex flex-col gap-1">
             <h1 className="text-3xl font-bold tracking-tight">{team.name}</h1>
-            <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+            <div className="flex flex-wrap items-center gap-2 text-sm text-on-surface-variant">
               <Badge variant={team.isActive ? "default" : "secondary"}>
                 {team.isActive ? t("statusActive") : t("statusInactive")}
               </Badge>
@@ -87,7 +87,7 @@ export default async function TeamDetailPage({
         <CardContent className="flex flex-col gap-4">
           <AddPositionForm teamId={id} />
           {team.positions.length === 0 ? (
-            <p className="text-sm text-muted-foreground">{t("positionsEmpty")}</p>
+            <p className="text-sm text-on-surface-variant">{t("positionsEmpty")}</p>
           ) : (
             <ul className="flex flex-col gap-2 text-sm">
               {team.positions.map((p) => (
@@ -136,7 +136,7 @@ export default async function TeamDetailPage({
         </CardHeader>
         <CardContent>
           {recent.length === 0 ? (
-            <p className="text-sm text-muted-foreground">{t("upcomingEmpty")}</p>
+            <p className="text-sm text-on-surface-variant">{t("upcomingEmpty")}</p>
           ) : (
             <ul className="flex flex-col gap-2 text-sm">
               {recent.map((a) => (
@@ -151,7 +151,7 @@ export default async function TeamDetailPage({
                     >
                       {a.member.fullName}
                     </Link>
-                    <span className="text-xs text-muted-foreground">
+                    <span className="text-xs text-on-surface-variant">
                       {format(a.serviceDate, "EEE dd MMM yyyy")}
                       {a.position ? ` · ${a.position.name}` : ""}
                     </span>

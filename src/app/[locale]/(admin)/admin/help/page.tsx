@@ -66,7 +66,7 @@ export default async function HelpPage() {
           <HelpCircle className="h-7 w-7" />
           {t("title")}
         </h1>
-        <p className="text-muted-foreground">{t("subtitle")}</p>
+        <p className="text-on-surface-variant">{t("subtitle")}</p>
       </header>
 
       <Card>
@@ -95,12 +95,12 @@ export default async function HelpPage() {
                 key={m.key}
                 className="flex items-start gap-3 rounded-md border p-3"
               >
-                <m.icon className="mt-0.5 h-5 w-5 shrink-0 text-muted-foreground" />
+                <m.icon className="mt-0.5 h-5 w-5 shrink-0 text-on-surface-variant" />
                 <div className="flex flex-1 flex-col gap-1">
                   <span className="font-medium">
                     {tModule(`${m.key}.title` as never)}
                   </span>
-                  <span className="text-xs text-muted-foreground">
+                  <span className="text-xs text-on-surface-variant">
                     {tModule(`${m.key}.description` as never)}
                   </span>
                   <Button
@@ -152,7 +152,7 @@ export default async function HelpPage() {
           <CardTitle className="text-base">{t("supportTitle")}</CardTitle>
           <CardDescription>{t("supportDescription")}</CardDescription>
         </CardHeader>
-        <CardContent className="text-sm text-muted-foreground">
+        <CardContent className="text-sm text-on-surface-variant">
           {t("supportBody")}
         </CardContent>
       </Card>
@@ -169,8 +169,8 @@ function Section({
 }) {
   return (
     <div className="space-y-1">
-      <p className="font-medium text-foreground">{title}</p>
-      <p className="text-muted-foreground">{description}</p>
+      <p className="font-medium text-on-surface">{title}</p>
+      <p className="text-on-surface-variant">{description}</p>
     </div>
   );
 }

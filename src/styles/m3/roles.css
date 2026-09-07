@@ -1,0 +1,215 @@
+/*
+ * M3 system colour roles, plus the compatibility bridge that maps shadcn's
+ * semantic aliases onto them.
+ *
+ * Layer 1 (ref)  palette.generated.css — raw tones, never consumed directly.
+ * Layer 2 (sys)  this file — semantic roles. Everything in the app reads these.
+ * Layer 3 (comp)  the --sidebar-* / --chart-* block at the bottom. Component
+ *         tokens, in M3's sense: a component names what it needs, and the name
+ *         resolves to a sys role. The migration's shadcn alias bridge used to
+ *         live here and has been removed — every call site reads a sys role
+ *         directly now.
+ *
+ * on-*-container uses tone 10/90 rather than the 30/70 of the 2024 spec
+ * revision. Higher contrast, and this app's audience skews elderly (see the
+ * deliberately lenient PIN throttling) — worth the small loss of fidelity.
+ */
+
+:root {
+  /* ---- accent roles ---- */
+  --md-sys-color-primary: var(--md-ref-primary-40);
+  --md-sys-color-on-primary: var(--md-ref-primary-100);
+  --md-sys-color-primary-container: var(--md-ref-primary-90);
+  --md-sys-color-on-primary-container: var(--md-ref-primary-10);
+
+  --md-sys-color-secondary: var(--md-ref-secondary-40);
+  --md-sys-color-on-secondary: var(--md-ref-secondary-100);
+  --md-sys-color-secondary-container: var(--md-ref-secondary-90);
+  --md-sys-color-on-secondary-container: var(--md-ref-secondary-10);
+
+  --md-sys-color-tertiary: var(--md-ref-tertiary-40);
+  --md-sys-color-on-tertiary: var(--md-ref-tertiary-100);
+  --md-sys-color-tertiary-container: var(--md-ref-tertiary-90);
+  --md-sys-color-on-tertiary-container: var(--md-ref-tertiary-10);
+
+  --md-sys-color-error: var(--md-ref-error-40);
+  --md-sys-color-on-error: var(--md-ref-error-100);
+  --md-sys-color-error-container: var(--md-ref-error-90);
+  --md-sys-color-on-error-container: var(--md-ref-error-10);
+
+  /* M3 custom colours. The baseline scheme has roles for "wrong" (error) but
+   * none for "went well" or "needs attention", which every records UI needs.
+   * Same role shape as error so they compose identically. */
+  --md-sys-color-success: var(--md-ref-success-40);
+  --md-sys-color-on-success: var(--md-ref-success-100);
+  --md-sys-color-success-container: var(--md-ref-success-90);
+  --md-sys-color-on-success-container: var(--md-ref-success-10);
+
+  --md-sys-color-warning: var(--md-ref-warning-40);
+  --md-sys-color-on-warning: var(--md-ref-warning-100);
+  --md-sys-color-warning-container: var(--md-ref-warning-90);
+  --md-sys-color-on-warning-container: var(--md-ref-warning-10);
+
+  /* ---- surfaces ----
+   * M3 replaced elevation *overlays* with five discrete container roles.
+   * Reach for a container role to express hierarchy; reach for a shadow only
+   * when something genuinely floats above the page. */
+  --md-sys-color-surface: var(--md-ref-neutral-98);
+  --md-sys-color-on-surface: var(--md-ref-neutral-10);
+  --md-sys-color-surface-variant: var(--md-ref-neutral-variant-90);
+  --md-sys-color-on-surface-variant: var(--md-ref-neutral-variant-30);
+
+  --md-sys-color-surface-dim: var(--md-ref-neutral-87);
+  --md-sys-color-surface-bright: var(--md-ref-neutral-98);
+  --md-sys-color-surface-container-lowest: var(--md-ref-neutral-100);
+  --md-sys-color-surface-container-low: var(--md-ref-neutral-96);
+  --md-sys-color-surface-container: var(--md-ref-neutral-94);
+  --md-sys-color-surface-container-high: var(--md-ref-neutral-92);
+  --md-sys-color-surface-container-highest: var(--md-ref-neutral-90);
+
+  --md-sys-color-inverse-surface: var(--md-ref-neutral-20);
+  --md-sys-color-inverse-on-surface: var(--md-ref-neutral-95);
+  --md-sys-color-inverse-primary: var(--md-ref-primary-80);
+
+  /* ---- outlines & scrim ---- */
+  --md-sys-color-outline: var(--md-ref-neutral-variant-50);
+  --md-sys-color-outline-variant: var(--md-ref-neutral-variant-80);
+  --md-sys-color-scrim: var(--md-ref-neutral-0);
+  --md-sys-color-shadow: var(--md-ref-neutral-0);
+  --md-sys-color-surface-tint: var(--md-sys-color-primary);
+
+  /* Shadow strength is expressed as an rgb triple so elevation.css can build
+   * the two-layer M3 shadows and deepen them in dark mode. */
+  --md-sys-shadow-rgb: 0 0 0;
+  --md-sys-shadow-key-opacity: 0.3;
+  --md-sys-shadow-ambient-opacity: 0.15;
+}
+
+.dark {
+  --md-sys-color-primary: var(--md-ref-primary-80);
+  --md-sys-color-on-primary: var(--md-ref-primary-20);
+  --md-sys-color-primary-container: var(--md-ref-primary-30);
+  --md-sys-color-on-primary-container: var(--md-ref-primary-90);
+
+  --md-sys-color-secondary: var(--md-ref-secondary-80);
+  --md-sys-color-on-secondary: var(--md-ref-secondary-20);
+  --md-sys-color-secondary-container: var(--md-ref-secondary-30);
+  --md-sys-color-on-secondary-container: var(--md-ref-secondary-90);
+
+  --md-sys-color-tertiary: var(--md-ref-tertiary-80);
+  --md-sys-color-on-tertiary: var(--md-ref-tertiary-20);
+  --md-sys-color-tertiary-container: var(--md-ref-tertiary-30);
+  --md-sys-color-on-tertiary-container: var(--md-ref-tertiary-90);
+
+  --md-sys-color-error: var(--md-ref-error-80);
+  --md-sys-color-on-error: var(--md-ref-error-20);
+  --md-sys-color-error-container: var(--md-ref-error-30);
+  --md-sys-color-on-error-container: var(--md-ref-error-90);
+
+  --md-sys-color-success: var(--md-ref-success-80);
+  --md-sys-color-on-success: var(--md-ref-success-20);
+  --md-sys-color-success-container: var(--md-ref-success-30);
+  --md-sys-color-on-success-container: var(--md-ref-success-90);
+
+  --md-sys-color-warning: var(--md-ref-warning-80);
+  --md-sys-color-on-warning: var(--md-ref-warning-20);
+  --md-sys-color-warning-container: var(--md-ref-warning-30);
+  --md-sys-color-on-warning-container: var(--md-ref-warning-90);
+
+  --md-sys-color-surface: var(--md-ref-neutral-6);
+  --md-sys-color-on-surface: var(--md-ref-neutral-90);
+  --md-sys-color-surface-variant: var(--md-ref-neutral-variant-30);
+  --md-sys-color-on-surface-variant: var(--md-ref-neutral-variant-80);
+
+  --md-sys-color-surface-dim: var(--md-ref-neutral-6);
+  --md-sys-color-surface-bright: var(--md-ref-neutral-24);
+  --md-sys-color-surface-container-lowest: var(--md-ref-neutral-4);
+  --md-sys-color-surface-container-low: var(--md-ref-neutral-10);
+  --md-sys-color-surface-container: var(--md-ref-neutral-12);
+  --md-sys-color-surface-container-high: var(--md-ref-neutral-17);
+  --md-sys-color-surface-container-highest: var(--md-ref-neutral-22);
+
+  --md-sys-color-inverse-surface: var(--md-ref-neutral-90);
+  --md-sys-color-inverse-on-surface: var(--md-ref-neutral-20);
+  --md-sys-color-inverse-primary: var(--md-ref-primary-40);
+
+  --md-sys-color-outline: var(--md-ref-neutral-variant-60);
+  --md-sys-color-outline-variant: var(--md-ref-neutral-variant-30);
+
+  /* Dark surfaces are already dark, so a 30% shadow is nearly invisible.
+   * M3 compensates with brighter container roles; we also deepen the shadow. */
+  --md-sys-shadow-key-opacity: 0.45;
+  --md-sys-shadow-ambient-opacity: 0.3;
+}
+
+/* ------------------------------------------------------------------------
+ * Component tokens
+ *
+ * M3's own token system has three tiers — ref, sys, and *comp* — and these are
+ * the comp tier. They exist because the sidebar shell needs to name "the
+ * navigation drawer's surface" independently of which sys role currently fills
+ * it, so a deployment can retint navigation without touching every surface in
+ * the app.
+ *
+ * This is all that survives of the migration's alias bridge. Everything else
+ * (--background, --muted-foreground, --card, ...) was deleted once the last
+ * call site moved to a sys role; these are kept deliberately, not by inertia.
+ * ------------------------------------------------------------------------ */
+:root,
+.dark {
+  /* The nav drawer is a tonal panel, one step off the page it sits beside —
+   * that one step is what separates it, in place of a border or a shadow. */
+  --sidebar: var(--md-sys-color-surface-container-low);
+  --sidebar-foreground: var(--md-sys-color-on-surface);
+  --sidebar-primary: var(--md-sys-color-primary);
+  --sidebar-primary-foreground: var(--md-sys-color-on-primary);
+  --sidebar-accent: var(--md-sys-color-secondary-container);
+  --sidebar-accent-foreground: var(--md-sys-color-on-secondary-container);
+  --sidebar-border: var(--md-sys-color-outline-variant);
+  --sidebar-ring: var(--md-sys-color-primary);
+}
+
+/* ------------------------------------------------------------------------
+ * Chart series colours
+ *
+ * These are NOT tones of the tonal palettes, and that is a measured decision
+ * rather than a stylistic one. The obvious move — chart-1 = primary-40 — was
+ * tried first and fails: at the vibrant scheme's `primary-40` (#006a63) the
+ * OKLCH chroma is 0.082, below the 0.1 floor where a mark stops reading as
+ * coloured and starts reading as grey. M3 accent roles are tuned for *large
+ * areas and text*, where restraint is correct; a 4px bar segment needs more
+ * chroma than a button fill.
+ *
+ * So slot 1 is the brand hue re-stepped to a chromatic step (#0f8f7a, the same
+ * teal family as the #0F766E seed) and the rest are a warm/cool alternation
+ * chosen so adjacent pairs survive colour-vision deficiency.
+ *
+ * Both columns are validated, not eyeballed, against the card surface each
+ * mode actually uses (`surface-container-low`: #e8f7f3 light, #111e1c dark):
+ *
+ *   light  5 slots pass adjacent — worst CVD dE 11.2 (protan), normal-vision 19.6
+ *          first 3 pass all-pairs with every slot >= 3:1 contrast
+ *   dark   5 slots pass everything, all >= 3:1 contrast
+ *
+ * Slots 4 and 5 sit below 3:1 on the light surface, so a chart that reaches
+ * them owes the reader visible labels or a table view. Nothing in the app does
+ * yet — the three charts here use at most two series.
+ *
+ * Assign slots in fixed order and never cycle. A sixth series folds into
+ * "Other" or becomes small multiples; it does not get a generated hue.
+ * ------------------------------------------------------------------------ */
+:root {
+  --chart-1: #0f8f7a;
+  --chart-2: #d95926;
+  --chart-3: #2a78d6;
+  --chart-4: #eda100;
+  --chart-5: #e87ba4;
+}
+
+.dark {
+  --chart-1: #0d9488;
+  --chart-2: #d95926;
+  --chart-3: #3987e5;
+  --chart-4: #c98500;
+  --chart-5: #d55181;
+}

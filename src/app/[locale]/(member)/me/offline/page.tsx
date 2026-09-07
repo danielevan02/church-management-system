@@ -11,9 +11,9 @@ export default async function OfflinePage() {
   return (
     <Card>
       <CardContent className="flex flex-col items-center gap-3 py-10 text-center">
-        <WifiOff className="h-10 w-10 text-muted-foreground" />
+        <WifiOff className="h-10 w-10 text-on-surface-variant" />
         <h1 className="text-xl font-bold">{t("title")}</h1>
-        <p className="max-w-md text-sm text-muted-foreground">
+        <p className="max-w-md text-sm text-on-surface-variant">
           {t("description")}
         </p>
         <Button asChild className="mt-2">

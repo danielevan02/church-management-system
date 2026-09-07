@@ -39,7 +39,7 @@ export function GiveInfoCard({ title, description, bank, labels }: Props) {
       <CardContent>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <div className="flex flex-col items-center gap-3">
-            <div className="text-sm font-medium text-muted-foreground">
+            <div className="text-sm font-medium text-on-surface-variant">
               {labels.qrisLabel}
             </div>
             <div className="overflow-hidden rounded-md border bg-white p-3">
@@ -48,7 +48,7 @@ export function GiveInfoCard({ title, description, bank, labels }: Props) {
           </div>
 
           <div className="flex flex-col gap-3">
-            <div className="text-sm font-medium text-muted-foreground">
+            <div className="text-sm font-medium text-on-surface-variant">
               {labels.bankAccount}
             </div>
             {hasBank ? (
@@ -63,12 +63,12 @@ export function GiveInfoCard({ title, description, bank, labels }: Props) {
                     label={labels.accountNumberCopy}
                   />
                 </div>
-                <div className="text-sm text-muted-foreground">
+                <div className="text-sm text-on-surface-variant">
                   {labels.accountHolder}: {bank.accountHolder}
                 </div>
               </div>
             ) : (
-              <div className="rounded-md border border-dashed p-4 text-sm text-muted-foreground">
+              <div className="rounded-md border border-dashed p-4 text-sm text-on-surface-variant">
                 {labels.notConfigured}
               </div>
             )}

@@ -116,7 +116,7 @@ export default async function MemberDashboardPage() {
     <div className="flex flex-col gap-6">
       <header className="flex flex-col gap-1">
         <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="text-muted-foreground">
+        <p className="text-on-surface-variant">
           {t("welcome", { name: member?.firstName ?? "Jemaat" })}{" "}
           {t("subtitle", { date: format(new Date(), "EEEE, dd MMM yyyy") })}
         </p>
@@ -135,11 +135,11 @@ export default async function MemberDashboardPage() {
             />
             <CardHeader className="relative space-y-2 pb-3">
               <div className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-primary px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-primary-foreground">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-primary px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-on-primary">
                   <BookOpen className="h-3 w-3" />
                   {t("devotionalToday.label")}
                 </span>
-                <span className="text-xs text-muted-foreground">
+                <span className="text-xs text-on-surface-variant">
                   {formatJakarta(todayDevotional.publishedAt, "EEE, dd MMM yyyy")}
                 </span>
               </div>
@@ -149,7 +149,7 @@ export default async function MemberDashboardPage() {
               {todayDevotional.verseRef || todayDevotional.authorName ? (
                 <CardDescription className="flex flex-wrap items-center gap-x-3 gap-y-1">
                   {todayDevotional.verseRef ? (
-                    <span className="inline-flex items-center gap-1 rounded border border-primary/30 bg-background/60 px-2 py-0.5 text-xs font-medium text-primary">
+                    <span className="inline-flex items-center gap-1 rounded border border-primary/30 bg-surface/60 px-2 py-0.5 text-xs font-medium text-primary">
                       {todayDevotional.verseRef}
                     </span>
                   ) : null}
@@ -160,7 +160,7 @@ export default async function MemberDashboardPage() {
               ) : null}
             </CardHeader>
             <CardContent className="relative">
-              <p className="line-clamp-3 text-sm leading-relaxed text-foreground/80">
+              <p className="line-clamp-3 text-sm leading-relaxed text-on-surface/80">
                 {excerpt(todayDevotional.body, 220)}
               </p>
               <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-primary transition-transform group-hover:translate-x-0.5">
@@ -230,10 +230,10 @@ export default async function MemberDashboardPage() {
                   <li key={a.id}>
                     <Link
                       href={`/me/announcements/${a.id}`}
-                      className="group flex items-start gap-3 py-3 transition-colors hover:bg-accent/20"
+                      className="group flex items-start gap-3 py-3 transition-colors hover:bg-surface-container-highest/20"
                     >
-                      <div className="flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-md border bg-muted/40">
-                        <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                      <div className="flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-md border bg-surface-container-high/40">
+                        <span className="text-[10px] font-semibold uppercase tracking-wider text-on-surface-variant">
                           {formatJakarta(a.publishedAt, "MMM")}
                         </span>
                         <span className="text-base font-bold leading-none tabular-nums">
@@ -252,11 +252,11 @@ export default async function MemberDashboardPage() {
                             </span>
                           ) : null}
                         </div>
-                        <p className="line-clamp-2 text-sm text-muted-foreground">
+                        <p className="line-clamp-2 text-sm text-on-surface-variant">
                           {excerpt(a.body)}
                         </p>
                       </div>
-                      <ArrowRight className="mt-1 h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+                      <ArrowRight className="mt-1 h-4 w-4 shrink-0 text-on-surface-variant transition-transform group-hover:translate-x-0.5" />
                     </Link>
                   </li>
                 );
@@ -281,7 +281,7 @@ export default async function MemberDashboardPage() {
               {upcomingService ? (
                 <div className="flex flex-col gap-1 rounded-md border px-3 py-2 text-sm">
                   <span className="font-medium">{upcomingService.name}</span>
-                  <span className="text-xs text-muted-foreground">
+                  <span className="text-xs text-on-surface-variant">
                     {formatJakarta(upcomingService.startsAt, "EEEE, dd MMM yyyy · HH:mm")}
                     {upcomingService.location ? ` · ${upcomingService.location}` : ""}
                   </span>
@@ -298,18 +298,18 @@ export default async function MemberDashboardPage() {
               {nextEvent ? (
                 <Link
                   href={`/me/events/${nextEvent.event.id}`}
-                  className="flex items-center justify-between rounded-md border px-3 py-2 text-sm transition hover:bg-muted/60"
+                  className="flex items-center justify-between rounded-md border px-3 py-2 text-sm transition hover:bg-surface-container-high/60"
                 >
                   <div className="flex flex-col">
                     <span className="font-medium">{nextEvent.event.title}</span>
-                    <span className="text-xs text-muted-foreground">
+                    <span className="text-xs text-on-surface-variant">
                       {formatJakarta(nextEvent.event.startsAt, "EEE dd MMM · HH:mm")}
                       {nextEvent.event.location
                         ? ` · ${nextEvent.event.location}`
                         : ""}
                     </span>
                   </div>
-                  <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                  <ArrowRight className="h-4 w-4 text-on-surface-variant" />
                 </Link>
               ) : (
                 <EmptyHint text={t("noNextEvent")} />
@@ -330,11 +330,11 @@ export default async function MemberDashboardPage() {
                           ? ` · ${nextAssignment.position.name}`
                           : ""}
                       </span>
-                      <span className="text-xs text-muted-foreground">
+                      <span className="text-xs text-on-surface-variant">
                         {formatJakarta(nextAssignment.serviceDate, "EEE dd MMM · HH:mm")}
                       </span>
                     </div>
-                    <span className="text-xs uppercase tracking-wide text-muted-foreground">
+                    <span className="text-xs uppercase tracking-wide text-on-surface-variant">
                       {nextAssignment.status}
                     </span>
                   </div>
@@ -366,15 +366,15 @@ export default async function MemberDashboardPage() {
               {cellGroup ? (
                 <Link
                   href="/me/cell-group"
-                  className="flex items-center justify-between rounded-md border px-3 py-2 text-sm transition hover:bg-muted/60"
+                  className="flex items-center justify-between rounded-md border px-3 py-2 text-sm transition hover:bg-surface-container-high/60"
                 >
                   <div className="flex flex-col">
                     <span className="flex items-center gap-2 font-medium">
-                      <UsersRound className="h-4 w-4 text-muted-foreground" />
+                      <UsersRound className="h-4 w-4 text-on-surface-variant" />
                       {cellGroup.name}
                     </span>
                     {cellGroup.nextMeetingAt ? (
-                      <span className="text-xs text-muted-foreground">
+                      <span className="text-xs text-on-surface-variant">
                         {formatJakarta(
                           cellGroup.nextMeetingAt,
                           "EEE dd MMM · HH:mm",
@@ -385,7 +385,7 @@ export default async function MemberDashboardPage() {
                       </span>
                     ) : null}
                   </div>
-                  <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                  <ArrowRight className="h-4 w-4 text-on-surface-variant" />
                 </Link>
               ) : (
                 <EmptyHint text={t("noCellGroup")} />
@@ -406,13 +406,13 @@ export default async function MemberDashboardPage() {
                   <div className="flex items-center justify-between rounded-md border px-3 py-2 text-sm">
                     <div className="flex flex-col">
                       <span className="flex items-center gap-2 font-medium">
-                        <Sprout className="h-4 w-4 text-muted-foreground" />
+                        <Sprout className="h-4 w-4 text-on-surface-variant" />
                         {t("discipleship.completed", {
                           count: milestones.length,
                         })}
                       </span>
                       {latestMilestone ? (
-                        <span className="text-xs text-muted-foreground">
+                        <span className="text-xs text-on-surface-variant">
                           {t("discipleship.lastMilestone")}:{" "}
                           {tType(milestoneTypeKey(latestMilestone.type))} ·{" "}
                           {format(latestMilestone.achievedAt, "dd MMM yyyy")}
@@ -449,11 +449,11 @@ export default async function MemberDashboardPage() {
                   key={c.id}
                   className="flex items-center gap-3 rounded-md border px-3 py-2 text-sm"
                 >
-                  <HeartHandshake className="h-4 w-4 text-muted-foreground" />
+                  <HeartHandshake className="h-4 w-4 text-on-surface-variant" />
                   <div className="flex flex-col">
                     <span className="font-medium">{c.fullName}</span>
                     {c.birthDate ? (
-                      <span className="text-xs text-muted-foreground">
+                      <span className="text-xs text-on-surface-variant">
                         {format(c.birthDate, "dd MMM yyyy")}
                       </span>
                     ) : null}
@@ -494,7 +494,7 @@ function Section({
 
 function EmptyHint({ text }: { text: string }) {
   return (
-    <p className="rounded-md border border-dashed px-3 py-4 text-center text-xs text-muted-foreground">
+    <p className="rounded-md border border-dashed px-3 py-4 text-center text-xs text-on-surface-variant">
       {text}
     </p>
   );

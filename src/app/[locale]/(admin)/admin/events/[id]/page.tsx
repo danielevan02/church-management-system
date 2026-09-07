@@ -59,7 +59,7 @@ export default async function EventDetailPage({
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div className="flex flex-col gap-1">
             <h1 className="text-3xl font-bold tracking-tight">{event.title}</h1>
-            <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+            <div className="flex flex-wrap items-center gap-2 text-sm text-on-surface-variant">
               <Badge variant={event.isPublished ? "default" : "secondary"}>
                 {event.isPublished ? t("statusPublished") : t("statusDraft")}
               </Badge>
@@ -124,7 +124,7 @@ export default async function EventDetailPage({
         </CardHeader>
         <CardContent>
           {event.rsvps.length === 0 ? (
-            <p className="text-sm text-muted-foreground">{t("rosterEmpty")}</p>
+            <p className="text-sm text-on-surface-variant">{t("rosterEmpty")}</p>
           ) : (
             <div className="rounded-md border">
               <Table>
@@ -166,12 +166,12 @@ export default async function EventDetailPage({
                             ) : (
                               <span className="font-medium">
                                 {r.guestName}{" "}
-                                <span className="text-xs text-muted-foreground">
+                                <span className="text-xs text-on-surface-variant">
                                   ({t("guestTag")})
                                 </span>
                               </span>
                             )}
-                            <span className="text-xs text-muted-foreground">
+                            <span className="text-xs text-on-surface-variant">
                               {r.member?.phone ?? r.guestPhone ?? "—"}
                             </span>
                           </div>
@@ -186,7 +186,7 @@ export default async function EventDetailPage({
                       <TableCell className="text-sm tabular-nums">
                         {r.guestCount}
                       </TableCell>
-                      <TableCell className="text-xs text-muted-foreground">
+                      <TableCell className="text-xs text-on-surface-variant">
                         {r.notes ?? ""}
                       </TableCell>
                       <TableCell className="text-right">
@@ -221,12 +221,12 @@ function StatCard({
         <div className="text-3xl font-bold tabular-nums">
           {value !== undefined ? value : textValue ?? "—"}
           {children ? (
-            <span className="ml-1 text-base font-medium text-muted-foreground">
+            <span className="ml-1 text-base font-medium text-on-surface-variant">
               {children}
             </span>
           ) : null}
         </div>
-        <div className="text-sm text-muted-foreground">{label}</div>
+        <div className="text-sm text-on-surface-variant">{label}</div>
       </CardContent>
     </Card>
   );

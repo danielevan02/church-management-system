@@ -33,7 +33,7 @@ export default async function MyPrayerRequestsPage() {
       <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex flex-col gap-1">
           <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-          <p className="text-muted-foreground">{t("subtitle")}</p>
+          <p className="text-on-surface-variant">{t("subtitle")}</p>
         </div>
         <Button asChild>
           <Link href="/me/prayer-requests/new">
@@ -46,8 +46,8 @@ export default async function MyPrayerRequestsPage() {
       {items.length === 0 ? (
         <Card>
           <CardContent className="flex flex-col items-center gap-3 py-10 text-center">
-            <Heart className="h-8 w-8 text-muted-foreground" />
-            <p className="text-sm text-muted-foreground">{t("empty")}</p>
+            <Heart className="h-8 w-8 text-on-surface-variant" />
+            <p className="text-sm text-on-surface-variant">{t("empty")}</p>
             <Button asChild size="sm">
               <Link href="/me/prayer-requests/new">{t("emptyCta")}</Link>
             </Button>

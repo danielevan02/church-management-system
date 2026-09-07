@@ -67,7 +67,7 @@ export function MemberPicker({ value, onChange, placeholder, initialName }: Prop
   return (
     <div className="flex flex-col gap-2">
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-on-surface-variant" />
         <Input
           value={q}
           onChange={(e) => {
@@ -86,10 +86,10 @@ export function MemberPicker({ value, onChange, placeholder, initialName }: Prop
               <button
                 type="button"
                 onClick={() => pick(m.id, m.fullName)}
-                className="flex w-full items-center justify-between rounded-sm px-3 py-2 text-left text-sm hover:bg-muted"
+                className="flex w-full items-center justify-between rounded-sm px-3 py-2 text-left text-sm hover:bg-surface-container-high"
               >
                 <span className="font-medium">{m.fullName}</span>
-                <span className="text-xs text-muted-foreground">
+                <span className="text-xs text-on-surface-variant">
                   {m.phone ?? ""}
                 </span>
               </button>

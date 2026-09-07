@@ -41,7 +41,7 @@ export default async function GivingDetailPage({
             <h1 className="text-3xl font-bold tracking-tight">
               {formatRupiah(entry.amount)}
             </h1>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-on-surface-variant">
               {entry.service
                 ? `${entry.service.name} · ${formatJakarta(entry.service.startsAt, "EEEE, dd MMM yyyy HH:mm")}`
                 : `${t("standalone")} · ${formatJakarta(entry.receivedAt, "EEEE, dd MMM yyyy")}`}
@@ -75,7 +75,7 @@ export default async function GivingDetailPage({
                   {entry.service.name}
                 </Link>
               ) : (
-                <span className="text-muted-foreground">
+                <span className="text-on-surface-variant">
                   {t("standalone")}
                 </span>
               )
@@ -104,7 +104,7 @@ export default async function GivingDetailPage({
             <>
               <Separator />
               <div>
-                <div className="text-muted-foreground">{t("fields.notes")}</div>
+                <div className="text-on-surface-variant">{t("fields.notes")}</div>
                 <p className="whitespace-pre-wrap">{entry.notes}</p>
               </div>
             </>
@@ -118,7 +118,7 @@ export default async function GivingDetailPage({
 function Field({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div className="grid grid-cols-3 gap-2">
-      <dt className="text-muted-foreground">{label}</dt>
+      <dt className="text-on-surface-variant">{label}</dt>
       <dd className="col-span-2">{value || "—"}</dd>
     </div>
   );

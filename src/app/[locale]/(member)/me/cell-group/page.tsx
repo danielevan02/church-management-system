@@ -28,12 +28,12 @@ export default async function MemberCellGroupPage() {
     <div className="flex flex-col gap-6">
       <header className="flex flex-col gap-1">
         <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="text-muted-foreground">{t("subtitle")}</p>
+        <p className="text-on-surface-variant">{t("subtitle")}</p>
       </header>
 
       {memberships.length === 0 ? (
         <Card>
-          <CardContent className="py-10 text-center text-sm text-muted-foreground">
+          <CardContent className="py-10 text-center text-sm text-on-surface-variant">
             {t("empty")}
           </CardContent>
         </Card>
@@ -48,8 +48,8 @@ export default async function MemberCellGroupPage() {
                 ) : null}
               </CardHeader>
               <CardContent className="space-y-3 text-sm">
-                <div className="rounded-md border bg-muted/30 p-3">
-                  <div className="text-xs text-muted-foreground">
+                <div className="rounded-md border bg-surface-container-high/30 p-3">
+                  <div className="text-xs text-on-surface-variant">
                     {t("nextMeetingLabel")}
                   </div>
                   {cellGroup.nextMeetingAt ? (
@@ -61,7 +61,7 @@ export default async function MemberCellGroupPage() {
                         )}
                       </div>
                       {cellGroup.nextMeetingLocation ? (
-                        <div className="text-sm text-muted-foreground">
+                        <div className="text-sm text-on-surface-variant">
                           {cellGroup.nextMeetingLocation}
                         </div>
                       ) : null}
@@ -72,7 +72,7 @@ export default async function MemberCellGroupPage() {
                       ) : null}
                     </>
                   ) : (
-                    <div className="text-sm italic text-muted-foreground">
+                    <div className="text-sm italic text-on-surface-variant">
                       {t("nextMeetingEmpty")}
                     </div>
                   )}
@@ -90,18 +90,18 @@ export default async function MemberCellGroupPage() {
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex flex-col">
-                    <span className="text-xs text-muted-foreground">
+                    <span className="text-xs text-on-surface-variant">
                       {t("leaderLabel")}
                     </span>
                     <span className="font-medium">{cellGroup.leader.fullName}</span>
                     {cellGroup.leader.phone ? (
-                      <span className="text-xs text-muted-foreground">
+                      <span className="text-xs text-on-surface-variant">
                         {cellGroup.leader.phone}
                       </span>
                     ) : null}
                   </div>
                 </div>
-                <div className="text-xs text-muted-foreground">
+                <div className="text-xs text-on-surface-variant">
                   {t("memberSince", { date: format(joinedAt, "dd MMM yyyy") })}
                 </div>
               </CardContent>

@@ -1,0 +1,45 @@
+/*
+ * Custom variants for M3 components whose styling depends on the state of a
+ * *descendant* control rather than the styled element itself.
+ *
+ * The M3 text field is the motivating case: the label, the notched outline and
+ * the supporting text all have to react to focus, to whether the control holds
+ * a value, and to the error state. Expressing that with Tailwind's built-in
+ * peer/group variants means the label can only react to a preceding sibling,
+ * which the <legend> inside the outline fieldset is not. Declaring four
+ * variants instead keeps the JSX readable — `field-focus:text-primary` rather
+ * than `group-focus-within/field:...` chains — and puts the selector logic in
+ * one auditable place.
+ *
+ * `field-populated` leans on `:placeholder-shown`, which is why the text field
+ * always renders `placeholder=" "`: it is the only CSS-only way to ask "does
+ * this input have a value" without a controlled component or an effect.
+ *
+ * ## Do not wrap these in :where()
+ *
+ * The first version did, copying the `dark` variant's shape, and the notched
+ * outline silently never opened. `:where()` contributes *zero* specificity, and
+ * `:is(:where(X) *)` inherits that zero — so `field-populated:max-w-full` tied
+ * with the base `max-w-[0.01px]` at (0,1,0) and lost on source order. The
+ * label happened to float and the notch happened not to, which looked like a
+ * strikethrough through the label.
+ *
+ * Bare `:is(...)` carries the specificity of its argument, so these land at
+ * (0,2,0) and reliably beat the base utility. Any variant that has to override
+ * a plain utility on the same property needs specificity, not just a selector:
+ * Tailwind's `--tw-*` fallback trick only exists for a handful of properties
+ * (font-weight, tracking, leading), never for `top` or `max-width`.
+ */
+
+@custom-variant field-focus (&:is(.m3-field:focus-within *));
+
+@custom-variant field-populated (
+  &:is(
+    .m3-field:has(:where(input, textarea):not(:placeholder-shown)) *,
+    .m3-field[data-populated="true"] *
+  )
+);
+
+@custom-variant field-error (&:is(.m3-field[data-error="true"] *));
+
+@custom-variant field-disabled (&:is(.m3-field:has(:where(input, textarea):disabled) *));

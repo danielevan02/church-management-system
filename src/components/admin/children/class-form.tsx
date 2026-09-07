@@ -162,7 +162,7 @@ export function ChildClassForm({
                   <FormLabel className="cursor-pointer">
                     {t("fields.isActive")}
                   </FormLabel>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-xs text-on-surface-variant">
                     {t("fields.isActiveHint")}
                   </p>
                 </div>

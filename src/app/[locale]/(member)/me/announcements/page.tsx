@@ -23,13 +23,13 @@ export default async function MemberAnnouncementsPage({
     <div className="flex flex-col gap-6">
       <header className="flex flex-col gap-1">
         <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="text-muted-foreground">{t("subtitle")}</p>
+        <p className="text-on-surface-variant">{t("subtitle")}</p>
       </header>
 
       {result.total === 0 ? (
         <div className="rounded-md border border-dashed p-10 text-center">
-          <Megaphone className="mx-auto mb-2 h-8 w-8 text-muted-foreground" />
-          <p className="text-sm text-muted-foreground">{t("empty")}</p>
+          <Megaphone className="mx-auto mb-2 h-8 w-8 text-on-surface-variant" />
+          <p className="text-sm text-on-surface-variant">{t("empty")}</p>
         </div>
       ) : (
         <div className="flex flex-col gap-3">
@@ -44,14 +44,14 @@ export default async function MemberAnnouncementsPage({
               >
                 <Card className="overflow-hidden transition-all hover:border-primary/40 hover:shadow-md">
                   <CardContent className="flex items-stretch gap-0 p-0">
-                    <div className="flex w-20 shrink-0 flex-col items-center justify-center gap-0.5 border-r bg-muted/40 p-3">
-                      <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                    <div className="flex w-20 shrink-0 flex-col items-center justify-center gap-0.5 border-r bg-surface-container-high/40 p-3">
+                      <span className="text-[10px] font-semibold uppercase tracking-wider text-on-surface-variant">
                         {formatJakarta(a.publishedAt, "EEE")}
                       </span>
-                      <span className="text-2xl font-bold leading-none tabular-nums text-foreground">
+                      <span className="text-2xl font-bold leading-none tabular-nums text-on-surface">
                         {formatJakarta(a.publishedAt, "dd")}
                       </span>
-                      <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+                      <span className="text-[10px] font-medium uppercase tracking-wider text-on-surface-variant">
                         {formatJakarta(a.publishedAt, "MMM")}
                       </span>
                     </div>
@@ -68,14 +68,14 @@ export default async function MemberAnnouncementsPage({
                             </span>
                           ) : null}
                         </div>
-                        <p className="text-xs text-muted-foreground">
+                        <p className="text-xs text-on-surface-variant">
                           {formatJakarta(a.publishedAt, "HH:mm")} WIB
                         </p>
-                        <p className="line-clamp-2 text-sm text-muted-foreground">
+                        <p className="line-clamp-2 text-sm text-on-surface-variant">
                           {excerpt(a.body)}
                         </p>
                       </div>
-                      <ArrowRight className="h-5 w-5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-primary" />
+                      <ArrowRight className="h-5 w-5 shrink-0 text-on-surface-variant transition-transform group-hover:translate-x-0.5 group-hover:text-primary" />
                     </div>
                   </CardContent>
                 </Card>

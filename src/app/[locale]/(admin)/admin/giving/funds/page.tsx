@@ -38,7 +38,7 @@ export default async function FundsListPage({
             </Link>
           </Button>
           <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-          <p className="text-muted-foreground">
+          <p className="text-on-surface-variant">
             {t("subtitle", { total: result.total })}
           </p>
         </div>
@@ -51,7 +51,7 @@ export default async function FundsListPage({
       </header>
 
       {result.total === 0 ? (
-        <div className="rounded-md border border-dashed p-10 text-center text-sm text-muted-foreground">
+        <div className="rounded-md border border-dashed p-10 text-center text-sm text-on-surface-variant">
           {t("empty")}
         </div>
       ) : (
@@ -72,7 +72,7 @@ export default async function FundsListPage({
                   <TableCell>
                     <span className="font-medium">{f.name}</span>
                     {f.description ? (
-                      <div className="text-xs text-muted-foreground">
+                      <div className="text-xs text-on-surface-variant">
                         {f.description}
                       </div>
                     ) : null}

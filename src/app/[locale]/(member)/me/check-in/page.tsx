@@ -65,7 +65,7 @@ export default async function MemberCheckInPage({
       <header className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex flex-col gap-1">
           <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-          <p className="text-muted-foreground">{t("subtitle")}</p>
+          <p className="text-on-surface-variant">{t("subtitle")}</p>
         </div>
         <ScanBannerButton memberId={memberId} />
       </header>
@@ -85,7 +85,7 @@ export default async function MemberCheckInPage({
         </CardHeader>
         <CardContent>
           {open.length === 0 ? (
-            <p className="text-sm text-muted-foreground">{t("noOpen")}</p>
+            <p className="text-sm text-on-surface-variant">{t("noOpen")}</p>
           ) : (
             <ul className="flex flex-col gap-3">
               {open.map((s) => {
@@ -97,14 +97,14 @@ export default async function MemberCheckInPage({
                   >
                     <div className="flex flex-col">
                       <span className="font-medium">{s.name}</span>
-                      <span className="text-xs text-muted-foreground">
+                      <span className="text-xs text-on-surface-variant">
                         {tType(typeKey(s.type))} ·{" "}
                         {formatJakarta(s.startsAt, "EEE dd MMM, HH:mm")}
                         {s.location ? ` · ${s.location}` : ""}
                       </span>
                     </div>
                     {already ? (
-                      <span className="flex items-center gap-1 text-sm text-emerald-600">
+                      <span className="flex items-center gap-1 text-sm text-success">
                         <CheckCircle2 className="h-4 w-4" />
                         {t("alreadyCheckedIn")}
                       </span>
@@ -129,13 +129,13 @@ export default async function MemberCheckInPage({
         </CardHeader>
         <CardContent>
           {upcoming.length === 0 ? (
-            <p className="text-sm text-muted-foreground">{t("noUpcoming")}</p>
+            <p className="text-sm text-on-surface-variant">{t("noUpcoming")}</p>
           ) : (
             <ul className="flex flex-col gap-2 text-sm">
               {upcoming.map((s) => (
                 <li key={s.id} className="flex flex-col gap-1 rounded-md border p-3">
                   <span className="font-medium">{s.name}</span>
-                  <span className="text-xs text-muted-foreground">
+                  <span className="text-xs text-on-surface-variant">
                     {tType(typeKey(s.type))} ·{" "}
                     {formatJakarta(s.startsAt, "EEE dd MMM yyyy, HH:mm")}
                   </span>

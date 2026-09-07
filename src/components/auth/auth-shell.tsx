@@ -33,23 +33,23 @@ export async function AuthShell({ title, subtitle, children }: AuthShellProps) {
               priority
               className="h-8 w-8 object-contain"
             />
-            <span className="text-foreground">{church.name}</span>
+            <span className="text-on-surface">{church.name}</span>
           </Link>
         </header>
 
         <div className="flex flex-1 items-center">
           <div className="mx-auto w-full max-w-sm">
             <div className="mb-8 space-y-2">
-              <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+              <h1 className="text-2xl font-semibold tracking-tight text-on-surface">
                 {title}
               </h1>
-              <p className="text-sm text-muted-foreground">{subtitle}</p>
+              <p className="text-sm text-on-surface-variant">{subtitle}</p>
             </div>
             {children}
           </div>
         </div>
 
-        <footer className="text-xs text-muted-foreground">
+        <footer className="text-xs text-on-surface-variant">
           © {new Date().getFullYear()} {church.name}
         </footer>
       </section>
@@ -71,7 +71,7 @@ export async function AuthShell({ title, subtitle, children }: AuthShellProps) {
 
         <div className="relative flex h-full flex-col justify-between p-12 text-white">
           <div className="flex items-center gap-3">
-            <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/95 p-1 shadow-sm backdrop-blur">
+            <span className="flex h-10 w-10 items-center justify-center rounded-md bg-surface-container-lowest p-1">
               <Image
                 src="/icon-ui-192.png"
                 alt=""

@@ -51,7 +51,7 @@ export default async function GivingReportsPage() {
           </Link>
         </Button>
         <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="text-muted-foreground">{t("subtitle")}</p>
+        <p className="text-on-surface-variant">{t("subtitle")}</p>
       </header>
 
       <Card>
@@ -63,7 +63,7 @@ export default async function GivingReportsPage() {
         </CardHeader>
         <CardContent>
           {trend.length === 0 || trendTotal === 0 ? (
-            <p className="text-sm text-muted-foreground">{t("trendEmpty")}</p>
+            <p className="text-sm text-on-surface-variant">{t("trendEmpty")}</p>
           ) : (
             <MonthlyTrendChart data={trend} />
           )}
@@ -80,7 +80,7 @@ export default async function GivingReportsPage() {
           </CardHeader>
           <CardContent>
             {fundBreakdown.length === 0 ? (
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-on-surface-variant">
                 {t("breakdownEmpty")}
               </p>
             ) : (
@@ -92,7 +92,7 @@ export default async function GivingReportsPage() {
                   >
                     <div className="flex flex-col">
                       <span className="font-medium">{row.fund?.name}</span>
-                      <span className="text-xs text-muted-foreground">
+                      <span className="text-xs text-on-surface-variant">
                         {row.fund
                           ? tCategory(row.fund.category.toLowerCase() as never)
                           : ""}{" "}
@@ -118,7 +118,7 @@ export default async function GivingReportsPage() {
           </CardHeader>
           <CardContent>
             {serviceBreakdown.length === 0 ? (
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-on-surface-variant">
                 {t("breakdownEmpty")}
               </p>
             ) : (
@@ -134,7 +134,7 @@ export default async function GivingReportsPage() {
                           ? tList("standalone")
                           : tServiceType(serviceTypeKey(row.type))}
                       </span>
-                      <span className="text-xs text-muted-foreground">
+                      <span className="text-xs text-on-surface-variant">
                         {row.count} {t("recordsAbbr")}
                       </span>
                     </div>

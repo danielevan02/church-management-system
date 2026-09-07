@@ -257,7 +257,7 @@ export function AssignmentForm({
                   />
                 </FormControl>
                 {pickedMemberWeekConflict ? (
-                  <p className="flex items-start gap-1.5 text-xs text-amber-700 dark:text-amber-300">
+                  <p className="flex items-start gap-1.5 text-xs text-warning">
                     <AlertTriangle className="mt-0.5 h-3 w-3 shrink-0" />
                     <span>
                       {t("conflictHint", {
@@ -291,8 +291,8 @@ export function AssignmentForm({
             )}
           />
           {weekBusy.length > 0 ? (
-            <div className="md:col-span-2 flex flex-col gap-2 rounded-md border bg-muted/40 p-3">
-              <p className="text-xs font-medium text-muted-foreground">
+            <div className="md:col-span-2 flex flex-col gap-2 rounded-md border bg-surface-container-high/40 p-3">
+              <p className="text-xs font-medium text-on-surface-variant">
                 {t("alreadyScheduled", { count: weekBusy.length })}
               </p>
               <div className="flex flex-wrap gap-1.5">
@@ -303,7 +303,7 @@ export function AssignmentForm({
                     className="text-[11px] font-normal"
                   >
                     <span className="font-medium">{b.memberName}</span>
-                    <span className="text-muted-foreground">
+                    <span className="text-on-surface-variant">
                       &nbsp;·&nbsp;{b.teamName}
                       {b.positionName ? ` (${b.positionName})` : ""}
                     </span>

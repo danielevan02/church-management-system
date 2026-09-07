@@ -3,14 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "predev": "node scripts/build-sw.cjs",
+    "predev": "node scripts/build-sw.cjs && node scripts/build-theme.cjs",
     "dev": "next dev --turbopack",
-    "prebuild": "node scripts/build-sw.cjs",
+    "prebuild": "node scripts/build-sw.cjs && node scripts/build-theme.cjs",
     "build": "prisma migrate deploy && prisma generate && next build --turbopack",
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "postinstall": "prisma generate",
+    "postinstall": "prisma generate && node scripts/build-theme.cjs",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:deploy": "prisma migrate deploy",
@@ -20,7 +20,9 @@
     "icons": "node scripts/generate-icons.cjs",
     "admin:reset-password": "tsx scripts/reset-admin-password.ts",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "theme": "node scripts/build-theme.cjs",
+    "motion": "node scripts/build-motion.cjs"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
@@ -73,6 +75,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@material/material-color-utilities": "^0.3.0",
     "@tailwindcss/postcss": "^4",
     "@tailwindcss/typography": "^0.5.19",
     "@types/node": "^20",

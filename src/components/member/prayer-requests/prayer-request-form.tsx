@@ -144,7 +144,7 @@ export function PrayerRequestForm({
                 <FormLabel className="cursor-pointer">
                   {t("fields.isAnonymous")}
                 </FormLabel>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-on-surface-variant">
                   {t("fields.isAnonymousHint")}
                 </p>
               </div>
@@ -166,7 +166,7 @@ export function PrayerRequestForm({
                 <FormLabel className="cursor-pointer">
                   {t("fields.isPublic")}
                 </FormLabel>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-on-surface-variant">
                   {t("fields.isPublicHint")}
                 </p>
               </div>

@@ -17,11 +17,11 @@ export function MarkdownContent({ source, className }: Props) {
   return (
     <div
       className={cn(
-        "prose prose-sm max-w-none break-words leading-relaxed text-foreground",
+        "prose prose-sm max-w-none break-words leading-relaxed text-on-surface",
         // tame prose colors so it works on both light and dark inboxes
-        "prose-headings:text-foreground prose-strong:text-foreground prose-a:text-primary",
+        "prose-headings:text-on-surface prose-strong:text-on-surface prose-a:text-primary",
         "prose-p:my-2 prose-headings:my-3 prose-ul:my-2 prose-ol:my-2 prose-li:my-0.5",
-        "prose-blockquote:border-l-2 prose-blockquote:border-primary/30 prose-blockquote:pl-3 prose-blockquote:italic prose-blockquote:text-muted-foreground",
+        "prose-blockquote:border-l-2 prose-blockquote:border-primary/30 prose-blockquote:pl-3 prose-blockquote:italic prose-blockquote:text-on-surface-variant",
         className,
       )}
     >

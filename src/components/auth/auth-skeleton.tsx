@@ -22,7 +22,7 @@ export function AuthSkeleton() {
             priority
             className="h-8 w-8 object-contain"
           />
-          <span className="text-foreground">{church.name}</span>
+          <span className="text-on-surface">{church.name}</span>
         </header>
 
         <div className="flex flex-1 items-center">

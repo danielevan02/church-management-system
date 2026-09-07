@@ -71,7 +71,7 @@ export default async function MemberEventDetailPage({
       <Card>
         <CardContent className="flex flex-col gap-3 pt-6 text-sm">
           <div className="flex items-start gap-3">
-            <Calendar className="mt-0.5 h-4 w-4 text-muted-foreground" />
+            <Calendar className="mt-0.5 h-4 w-4 text-on-surface-variant" />
             <div>
               {format(event.startsAt, "EEEE, dd MMM yyyy")} ·{" "}
               {formatJakarta(event.startsAt, "HH:mm")}
@@ -81,12 +81,12 @@ export default async function MemberEventDetailPage({
           </div>
           {event.location ? (
             <div className="flex items-start gap-3">
-              <MapPin className="mt-0.5 h-4 w-4 text-muted-foreground" />
+              <MapPin className="mt-0.5 h-4 w-4 text-on-surface-variant" />
               <div>{event.location}</div>
             </div>
           ) : null}
           <div className="flex items-start gap-3">
-            <Users className="mt-0.5 h-4 w-4 text-muted-foreground" />
+            <Users className="mt-0.5 h-4 w-4 text-on-surface-variant" />
             <div>
               {goingCount}
               {event.capacity ? `/${event.capacity}` : ""} {t("goingLabel")}
@@ -94,7 +94,7 @@ export default async function MemberEventDetailPage({
           </div>
           {event.fee ? (
             <div className="text-sm">
-              <span className="text-muted-foreground">{t("feeLabel")}: </span>
+              <span className="text-on-surface-variant">{t("feeLabel")}: </span>
               <span className="font-semibold">{formatRupiah(event.fee)}</span>
             </div>
           ) : null}

@@ -123,20 +123,20 @@ export function GenerateWeekButton({ teams }: { teams: TeamOption[] }) {
                     setSelectedTeamIds(new Set(teams.map((tm) => tm.id)));
                   }
                 }}
-                className="text-xs text-muted-foreground hover:text-foreground"
+                className="text-xs text-on-surface-variant hover:text-on-surface"
               >
                 {selectedTeamIds.size === teams.length
                   ? t("unselectAll")
                   : t("selectAll")}
               </button>
             </div>
-            <p className="text-xs text-muted-foreground">{t("teamsHint")}</p>
+            <p className="text-xs text-on-surface-variant">{t("teamsHint")}</p>
             <ul className="flex max-h-60 flex-col gap-1 overflow-y-auto rounded-md border p-2">
               {teams.map((team) => {
                 const checked = selectedTeamIds.has(team.id);
                 return (
                   <li key={team.id}>
-                    <label className="flex cursor-pointer items-center justify-between gap-3 rounded-sm px-2 py-1.5 hover:bg-accent">
+                    <label className="flex cursor-pointer items-center justify-between gap-3 rounded-sm px-2 py-1.5 hover:bg-surface-container-highest">
                       <div className="flex items-center gap-2">
                         <Checkbox
                           checked={checked}
@@ -144,7 +144,7 @@ export function GenerateWeekButton({ teams }: { teams: TeamOption[] }) {
                         />
                         <span className="text-sm font-medium">{team.name}</span>
                       </div>
-                      <span className="text-xs text-muted-foreground">
+                      <span className="text-xs text-on-surface-variant">
                         {t("positionsCount", { count: team.defaultCount })}
                       </span>
                     </label>
@@ -154,7 +154,7 @@ export function GenerateWeekButton({ teams }: { teams: TeamOption[] }) {
             </ul>
           </div>
         ) : (
-          <p className="rounded-md border bg-muted/50 p-3 text-sm text-muted-foreground">
+          <p className="rounded-md border bg-surface-container-high/50 p-3 text-sm text-on-surface-variant">
             {t("noTeamsAvailable")}
           </p>
         )}

@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 export async function LocaleSwitcherStatic() {
   const current = await getLocale();
   return (
-    <div className="inline-flex items-center gap-0.5 rounded-full border bg-background/60 p-0.5 text-xs font-medium backdrop-blur">
+    <div className="inline-flex items-center gap-0.5 rounded-full bg-surface-container-high p-0.5 text-label-md">
       <LocaleLink locale="id" current={current} label="ID" />
       <LocaleLink locale="en" current={current} label="EN" />
     </div>
@@ -35,8 +35,8 @@ function LocaleLink({
       className={cn(
         "rounded-full px-2.5 py-1 transition-colors",
         active
-          ? "bg-foreground text-background"
-          : "text-muted-foreground hover:text-foreground",
+          ? "bg-on-surface text-surface"
+          : "text-on-surface-variant hover:text-on-surface",
       )}
     >
       {label}

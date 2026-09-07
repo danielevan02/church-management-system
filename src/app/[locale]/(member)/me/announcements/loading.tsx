@@ -12,7 +12,7 @@ export default function Loading() {
         {Array.from({ length: 4 }).map((_, i) => (
           <Card key={i} className="overflow-hidden">
             <CardContent className="flex items-stretch gap-0 p-0">
-              <div className="flex w-20 shrink-0 flex-col items-center justify-center gap-1 border-r bg-muted/40 p-3">
+              <div className="flex w-20 shrink-0 flex-col items-center justify-center gap-1 border-r bg-surface-container-high/40 p-3">
                 <Skeleton className="h-3 w-8" />
                 <Skeleton className="h-7 w-10" />
                 <Skeleton className="h-3 w-8" />

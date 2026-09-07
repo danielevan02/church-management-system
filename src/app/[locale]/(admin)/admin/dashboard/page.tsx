@@ -84,7 +84,7 @@ export default async function AdminDashboardPage() {
     <div className="flex flex-col gap-6">
       <header className="flex flex-col gap-1">
         <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="text-muted-foreground">
+        <p className="text-on-surface-variant">
           {t("welcome", { name: greetingName })}{" "}
           {t("subtitle", { date: format(new Date(), "EEEE, dd MMM yyyy") })}
         </p>
@@ -163,16 +163,16 @@ export default async function AdminDashboardPage() {
                     <li key={s.id}>
                       <Link
                         href={`/admin/attendance/services/${s.id}`}
-                        className="flex items-center justify-between rounded-md border px-3 py-2 text-sm transition hover:bg-muted/60"
+                        className="flex items-center justify-between rounded-md border px-3 py-2 text-sm transition hover:bg-surface-container-high/60"
                       >
                         <div className="flex flex-col">
                           <span className="font-medium">{s.name}</span>
-                          <span className="text-xs text-muted-foreground">
+                          <span className="text-xs text-on-surface-variant">
                             {formatJakarta(s.startsAt, "EEE dd MMM · HH:mm")}
                             {s.location ? ` · ${s.location}` : ""}
                           </span>
                         </div>
-                        <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                        <ArrowRight className="h-4 w-4 text-on-surface-variant" />
                       </Link>
                     </li>
                   ))}
@@ -194,7 +194,7 @@ export default async function AdminDashboardPage() {
                     <li key={e.id}>
                       <Link
                         href={`/admin/events/${e.id}`}
-                        className="flex items-center justify-between rounded-md border px-3 py-2 text-sm transition hover:bg-muted/60"
+                        className="flex items-center justify-between rounded-md border px-3 py-2 text-sm transition hover:bg-surface-container-high/60"
                       >
                         <div className="flex flex-col">
                           <span className="flex items-center gap-2 font-medium">
@@ -205,12 +205,12 @@ export default async function AdminDashboardPage() {
                               </Badge>
                             ) : null}
                           </span>
-                          <span className="text-xs text-muted-foreground">
+                          <span className="text-xs text-on-surface-variant">
                             {formatJakarta(e.startsAt, "EEE dd MMM · HH:mm")}
                             {e.location ? ` · ${e.location}` : ""}
                           </span>
                         </div>
-                        <span className="text-xs tabular-nums text-muted-foreground">
+                        <span className="text-xs tabular-nums text-on-surface-variant">
                           {e._count.rsvps} RSVP
                         </span>
                       </Link>
@@ -250,13 +250,13 @@ export default async function AdminDashboardPage() {
                         <div className="flex flex-col">
                           <span className="font-medium">{f.member.fullName}</span>
                           {f.followUp ? (
-                            <span className="line-clamp-1 text-xs text-muted-foreground">
+                            <span className="line-clamp-1 text-xs text-on-surface-variant">
                               {f.followUp}
                             </span>
                           ) : null}
                         </div>
                         {f.followUpDate ? (
-                          <span className="text-xs tabular-nums text-muted-foreground">
+                          <span className="text-xs tabular-nums text-on-surface-variant">
                             {format(f.followUpDate, "dd MMM")}
                           </span>
                         ) : null}
@@ -278,10 +278,10 @@ export default async function AdminDashboardPage() {
               ) : (
                 <Link
                   href="/admin/prayer-requests"
-                  className="flex items-center justify-between rounded-md border px-3 py-2 text-sm transition hover:bg-muted/60"
+                  className="flex items-center justify-between rounded-md border px-3 py-2 text-sm transition hover:bg-surface-container-high/60"
                 >
                   <span className="flex items-center gap-2">
-                    <HeartHandshake className="h-4 w-4 text-muted-foreground" />
+                    <HeartHandshake className="h-4 w-4 text-on-surface-variant" />
                     {t("kpi.openPrayer")}
                   </span>
                   <span className="font-semibold tabular-nums">
@@ -369,11 +369,11 @@ export default async function AdminDashboardPage() {
                         </Badge>
                         <span className="truncate">{log.entityType}</span>
                       </span>
-                      <span className="truncate text-xs text-muted-foreground">
+                      <span className="truncate text-xs text-on-surface-variant">
                         {log.user?.username ?? "system"}
                       </span>
                     </div>
-                    <span className="shrink-0 text-xs tabular-nums text-muted-foreground">
+                    <span className="shrink-0 text-xs tabular-nums text-on-surface-variant">
                       {formatJakarta(log.createdAt, "dd MMM HH:mm")}
                     </span>
                   </li>
@@ -401,12 +401,12 @@ function KpiCard({
   return (
     <Card>
       <CardContent className="flex flex-col gap-1 p-4">
-        <div className="flex items-center justify-between text-muted-foreground">
+        <div className="flex items-center justify-between text-on-surface-variant">
           <span className="text-xs">{label}</span>
           <Icon className="h-4 w-4" />
         </div>
         <div className="text-2xl font-bold tabular-nums">{value}</div>
-        {hint ? <div className="text-xs text-muted-foreground">{hint}</div> : null}
+        {hint ? <div className="text-xs text-on-surface-variant">{hint}</div> : null}
       </CardContent>
     </Card>
   );
@@ -433,7 +433,7 @@ function SectionLabel({
 
 function EmptyHint({ text }: { text: string }) {
   return (
-    <p className="rounded-md border border-dashed px-3 py-4 text-center text-xs text-muted-foreground">
+    <p className="rounded-md border border-dashed px-3 py-4 text-center text-xs text-on-surface-variant">
       {text}
     </p>
   );

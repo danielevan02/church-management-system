@@ -17,7 +17,7 @@ export default async function PublicGivePage() {
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 p-6">
       <header className="flex flex-col gap-1 text-center">
         <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="text-muted-foreground">
+        <p className="text-on-surface-variant">
           {t("subtitle", { church: church.name })}
         </p>
       </header>

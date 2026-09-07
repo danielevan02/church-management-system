@@ -36,7 +36,7 @@ export default async function MemberVolunteerPage() {
     <div className="flex flex-col gap-6">
       <header className="flex flex-col gap-1">
         <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="text-muted-foreground">{t("subtitle")}</p>
+        <p className="text-on-surface-variant">{t("subtitle")}</p>
       </header>
 
       <Card>
@@ -46,7 +46,7 @@ export default async function MemberVolunteerPage() {
         </CardHeader>
         <CardContent>
           {upcoming.length === 0 ? (
-            <div className="flex flex-col items-center gap-2 py-6 text-center text-sm text-muted-foreground">
+            <div className="flex flex-col items-center gap-2 py-6 text-center text-sm text-on-surface-variant">
               <HeartHandshake className="h-8 w-8" />
               {t("upcomingEmpty")}
             </div>
@@ -59,7 +59,7 @@ export default async function MemberVolunteerPage() {
                 >
                   <div className="flex flex-col">
                     <span className="font-medium">{a.team.name}</span>
-                    <span className="text-xs text-muted-foreground">
+                    <span className="text-xs text-on-surface-variant">
                       {format(a.serviceDate, "EEE dd MMM yyyy")}
                       {a.position ? ` · ${a.position.name}` : ""}
                     </span>
@@ -94,7 +94,7 @@ export default async function MemberVolunteerPage() {
                 >
                   <div className="flex flex-col">
                     <span className="font-medium">{a.team.name}</span>
-                    <span className="text-xs text-muted-foreground">
+                    <span className="text-xs text-on-surface-variant">
                       {format(a.serviceDate, "EEE dd MMM yyyy")}
                       {a.position ? ` · ${a.position.name}` : ""}
                     </span>

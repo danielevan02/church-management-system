@@ -41,7 +41,7 @@ export default async function AnnouncementsListPage({
       <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex flex-col gap-1">
           <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-          <p className="text-muted-foreground">
+          <p className="text-on-surface-variant">
             {t("subtitle", { total: result.total })}
           </p>
         </div>
@@ -55,8 +55,8 @@ export default async function AnnouncementsListPage({
 
       {result.total === 0 ? (
         <div className="rounded-md border border-dashed p-10 text-center">
-          <Megaphone className="mx-auto mb-2 h-8 w-8 text-muted-foreground" />
-          <p className="text-sm text-muted-foreground">{t("empty")}</p>
+          <Megaphone className="mx-auto mb-2 h-8 w-8 text-on-surface-variant" />
+          <p className="text-sm text-on-surface-variant">{t("empty")}</p>
         </div>
       ) : (
         <div className="rounded-md border">
@@ -81,7 +81,7 @@ export default async function AnnouncementsListPage({
                       >
                         {a.title}
                       </Link>
-                      <p className="line-clamp-1 text-xs text-muted-foreground">
+                      <p className="line-clamp-1 text-xs text-on-surface-variant">
                         {stripMarkdown(a.body)}
                       </p>
                     </TableCell>
@@ -95,7 +95,7 @@ export default async function AnnouncementsListPage({
                         <Badge>{t("statusPublished")}</Badge>
                       )}
                     </TableCell>
-                    <TableCell className="text-xs text-muted-foreground">
+                    <TableCell className="text-xs text-on-surface-variant">
                       {a.createdBy?.username ?? "—"}
                     </TableCell>
                   </TableRow>

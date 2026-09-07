@@ -90,7 +90,7 @@ export function DatePicker({
           aria-label={ariaLabel}
           className={cn(
             "w-full justify-start text-left font-normal",
-            !parsed && "text-muted-foreground",
+            !parsed && "text-on-surface-variant",
             className,
           )}
         >
@@ -103,7 +103,7 @@ export function DatePicker({
               role="button"
               tabIndex={0}
               aria-label={t("clear")}
-              className="ml-auto inline-flex h-5 w-5 items-center justify-center rounded-sm text-muted-foreground hover:bg-muted hover:text-foreground"
+              className="ml-auto inline-flex h-5 w-5 items-center justify-center rounded-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface"
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();

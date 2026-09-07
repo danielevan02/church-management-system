@@ -6,23 +6,53 @@ import { Toggle as TogglePrimitive } from "radix-ui"
 
 import { cn } from "@/lib/utils"
 
+/**
+ * M3 toggle button.
+ *
+ * A standalone toggle in M3 is an *icon button in toggle mode*: 40dp, fully
+ * round, and selection is expressed by filling the container — `standard`
+ * fills to `primary`/`on-primary`, `outlined` fills to `inverse-surface`,
+ * `tonal` to `secondary-container`. shadcn's `data-[state=on]:bg-surface-container-highest` (a
+ * faint grey tint) reads as "hovered", not "selected", which is the whole
+ * problem M3's filled-when-selected rule solves.
+ *
+ * Inside a `ToggleGroup` these are restyled into a segmented button — see
+ * toggle-group.tsx.
+ */
 const toggleVariants = cva(
-  "inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-[state=on]:bg-accent data-[state=on]:text-accent-foreground dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  [
+    "state-layer m3-focus-ring shape-morph",
+    "inline-flex items-center justify-center gap-2 rounded-full whitespace-nowrap",
+    "text-label-lg",
+    "active:rounded-md",
+    "motion-effects-fast transition-[background-color,border-color,color,border-radius]",
+    "disabled:pointer-events-none disabled:text-on-surface/38",
+    "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-6",
+  ],
   {
     variants: {
       variant: {
-        default: "bg-transparent",
+        standard:
+          "bg-transparent text-on-surface-variant data-[state=on]:bg-primary data-[state=on]:text-on-primary",
+        outlined:
+          "border border-outline bg-transparent text-on-surface-variant data-[state=on]:border-transparent data-[state=on]:bg-inverse-surface data-[state=on]:text-inverse-on-surface disabled:border-on-surface/12",
+        tonal:
+          "bg-surface-container-highest text-on-surface-variant data-[state=on]:bg-secondary-container data-[state=on]:text-on-secondary-container disabled:bg-on-surface/12",
+
+        // deprecated shadcn aliases
+        default:
+          "bg-transparent text-on-surface-variant data-[state=on]:bg-primary data-[state=on]:text-on-primary",
         outline:
-          "border border-input bg-transparent shadow-xs hover:bg-accent hover:text-accent-foreground",
+          "border border-outline bg-transparent text-on-surface-variant data-[state=on]:border-transparent data-[state=on]:bg-inverse-surface data-[state=on]:text-inverse-on-surface disabled:border-on-surface/12",
       },
       size: {
-        default: "h-9 min-w-9 px-2",
-        sm: "h-8 min-w-8 px-1.5",
-        lg: "h-10 min-w-10 px-2.5",
+        default: "size-10 px-2",
+        sm: "size-8 px-1.5 [&_svg:not([class*='size-'])]:size-5",
+        lg: "size-14 px-3",
       },
     },
     defaultVariants: {
-      variant: "default",
+      variant: "standard",
       size: "default",
     },
   }

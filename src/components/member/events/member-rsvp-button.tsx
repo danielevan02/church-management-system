@@ -68,7 +68,7 @@ export function MemberRsvpButtons({
 
   if (!registrationOpen) {
     return (
-      <div className="rounded-md border border-dashed p-3 text-sm text-muted-foreground">
+      <div className="rounded-md border border-dashed p-3 text-sm text-on-surface-variant">
         {t("registrationClosed")}
       </div>
     );

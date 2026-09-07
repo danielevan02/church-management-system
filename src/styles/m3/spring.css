@@ -1,0 +1,77 @@
+/*
+ * GENERATED FILE — do not edit. Source: scripts/build-motion.cjs
+ *
+ * Material 3 spring motion, as CSS `linear()` easings plus the matching
+ * settle durations. Each pair must be used together: the easing describes
+ * the shape of the spring, the duration is how long that spring actually
+ * takes to come to rest. Using one without the other gives you a curve
+ * played at the wrong speed.
+ *
+ * Spatial springs (position, size, corner radius) overshoot past their
+ * target — their `linear()` values go above 1. Effects springs (opacity,
+ * colour) are critically damped and never overshoot, because a flickering
+ * opacity reads as a bug rather than as liveliness.
+ */
+
+/* ---- expressive scheme (default) ---- */
+:root {
+  /* damping 0.8, stiffness 380, overshoots to 1.015 */
+  --md-sys-motion-spring-default-spatial-duration: 435ms;
+  --md-sys-motion-spring-default-spatial: linear(0, 0.039, 0.1323, 0.2524, 0.3803, 0.5038, 0.6156, 0.7123, 0.7925, 0.857, 0.907, 0.9445, 0.9716, 0.9903, 1.0026, 1.0099, 1.0137, 1.0151, 1.0149, 1.0136, 1.0119, 1.01, 1.0081, 1.0063, 1.0048, 1.0035, 1.0024, 1.0016, 1);
+  /* damping 0.6, stiffness 800, overshoots to 1.095 */
+  --md-sys-motion-spring-fast-spatial-duration: 360ms;
+  --md-sys-motion-spring-fast-spatial: linear(0, 0.0569, 0.1936, 0.3674, 0.5468, 0.7108, 0.8475, 0.952, 1.0246, 1.069, 1.0903, 1.0945, 1.0872, 1.0733, 1.0565, 1.0397, 1.0246, 1.0122, 1.0029, 0.9966, 0.9929, 0.9912, 0.9911, 0.992, 0.9934, 0.995, 0.9965, 0.9979, 1);
+  /* damping 0.8, stiffness 200, overshoots to 1.015 */
+  --md-sys-motion-spring-slow-spatial-duration: 600ms;
+  --md-sys-motion-spring-slow-spatial: linear(0, 0.039, 0.1325, 0.2526, 0.3806, 0.5042, 0.6161, 0.7127, 0.7929, 0.8573, 0.9072, 0.9447, 0.9717, 0.9905, 1.0027, 1.01, 1.0138, 1.0151, 1.0148, 1.0136, 1.0119, 1.0099, 1.008, 1.0063, 1.0047, 1.0035, 1.0024, 1.0016, 1);
+  /* damping 1, stiffness 1600, no overshoot */
+  --md-sys-motion-spring-default-effects-duration: 231ms;
+  --md-sys-motion-spring-default-effects: linear(0, 0.0438, 0.142, 0.2606, 0.3802, 0.4911, 0.5886, 0.6714, 0.7402, 0.7963, 0.8414, 0.8772, 0.9054, 0.9275, 0.9446, 0.9579, 0.968, 0.9758, 0.9817, 0.9862, 0.9897, 0.9922, 0.9942, 0.9957, 0.9968, 0.9976, 0.9982, 0.9987, 1);
+  /* damping 1, stiffness 3800, no overshoot */
+  --md-sys-motion-spring-fast-effects-duration: 150ms;
+  --md-sys-motion-spring-fast-effects: linear(0, 0.0439, 0.1422, 0.2608, 0.3806, 0.4914, 0.5889, 0.6718, 0.7406, 0.7966, 0.8417, 0.8775, 0.9057, 0.9277, 0.9448, 0.958, 0.9681, 0.9759, 0.9818, 0.9863, 0.9897, 0.9923, 0.9942, 0.9957, 0.9968, 0.9976, 0.9982, 0.9987, 1);
+  /* damping 1, stiffness 800, no overshoot */
+  --md-sys-motion-spring-slow-effects-duration: 327ms;
+  --md-sys-motion-spring-slow-effects: linear(0, 0.0439, 0.1422, 0.2609, 0.3807, 0.4916, 0.5891, 0.672, 0.7407, 0.7968, 0.8418, 0.8776, 0.9057, 0.9277, 0.9448, 0.958, 0.9682, 0.9759, 0.9818, 0.9863, 0.9897, 0.9923, 0.9942, 0.9957, 0.9968, 0.9976, 0.9982, 0.9987, 1);
+}
+
+/* ---- standard scheme ---- */
+:root[data-motion="standard"] {
+  /* damping 0.9, stiffness 700, overshoots to 1.002 */
+  --md-sys-motion-spring-default-spatial-duration: 317ms;
+  --md-sys-motion-spring-default-spatial: linear(0, 0.0375, 0.1256, 0.2372, 0.3548, 0.4678, 0.5704, 0.6597, 0.7353, 0.7976, 0.8478, 0.8876, 0.9186, 0.9422, 0.96, 0.9731, 0.9826, 0.9894, 0.994, 0.9972, 0.9992, 1.0004, 1.0011, 1.0014, 1.0015, 1.0015, 1.0013, 1.0012, 1);
+  /* damping 0.9, stiffness 1400, overshoots to 1.002 */
+  --md-sys-motion-spring-fast-spatial-duration: 224ms;
+  --md-sys-motion-spring-fast-spatial: linear(0, 0.0375, 0.1255, 0.237, 0.3545, 0.4675, 0.57, 0.6593, 0.7349, 0.7972, 0.8475, 0.8874, 0.9184, 0.942, 0.9599, 0.973, 0.9825, 0.9893, 0.994, 0.9971, 0.9992, 1.0004, 1.0011, 1.0014, 1.0015, 1.0015, 1.0013, 1.0012, 1);
+  /* damping 0.9, stiffness 300, overshoots to 1.002 */
+  --md-sys-motion-spring-slow-spatial-duration: 484ms;
+  --md-sys-motion-spring-slow-spatial: linear(0, 0.0375, 0.1255, 0.2371, 0.3546, 0.4676, 0.5701, 0.6595, 0.735, 0.7973, 0.8476, 0.8875, 0.9184, 0.9421, 0.9599, 0.973, 0.9826, 0.9893, 0.994, 0.9971, 0.9992, 1.0004, 1.0011, 1.0014, 1.0015, 1.0015, 1.0013, 1.0012, 1);
+  /* damping 1, stiffness 1600, no overshoot */
+  --md-sys-motion-spring-default-effects-duration: 231ms;
+  --md-sys-motion-spring-default-effects: linear(0, 0.0438, 0.142, 0.2606, 0.3802, 0.4911, 0.5886, 0.6714, 0.7402, 0.7963, 0.8414, 0.8772, 0.9054, 0.9275, 0.9446, 0.9579, 0.968, 0.9758, 0.9817, 0.9862, 0.9897, 0.9922, 0.9942, 0.9957, 0.9968, 0.9976, 0.9982, 0.9987, 1);
+  /* damping 1, stiffness 3800, no overshoot */
+  --md-sys-motion-spring-fast-effects-duration: 150ms;
+  --md-sys-motion-spring-fast-effects: linear(0, 0.0439, 0.1422, 0.2608, 0.3806, 0.4914, 0.5889, 0.6718, 0.7406, 0.7966, 0.8417, 0.8775, 0.9057, 0.9277, 0.9448, 0.958, 0.9681, 0.9759, 0.9818, 0.9863, 0.9897, 0.9923, 0.9942, 0.9957, 0.9968, 0.9976, 0.9982, 0.9987, 1);
+  /* damping 1, stiffness 800, no overshoot */
+  --md-sys-motion-spring-slow-effects-duration: 327ms;
+  --md-sys-motion-spring-slow-effects: linear(0, 0.0439, 0.1422, 0.2609, 0.3807, 0.4916, 0.5891, 0.672, 0.7407, 0.7968, 0.8418, 0.8776, 0.9057, 0.9277, 0.9448, 0.958, 0.9682, 0.9759, 0.9818, 0.9863, 0.9897, 0.9923, 0.9942, 0.9957, 0.9968, 0.9976, 0.9982, 0.9987, 1);
+}
+
+/* Springs are decorative. Under reduced-motion, collapse them to a short
+ * linear fade so state changes stay legible without any travel or bounce. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --md-sys-motion-spring-default-spatial-duration: 1ms;
+    --md-sys-motion-spring-default-spatial: linear;
+    --md-sys-motion-spring-fast-spatial-duration: 1ms;
+    --md-sys-motion-spring-fast-spatial: linear;
+    --md-sys-motion-spring-slow-spatial-duration: 1ms;
+    --md-sys-motion-spring-slow-spatial: linear;
+    --md-sys-motion-spring-default-effects-duration: 1ms;
+    --md-sys-motion-spring-default-effects: linear;
+    --md-sys-motion-spring-fast-effects-duration: 1ms;
+    --md-sys-motion-spring-fast-effects: linear;
+    --md-sys-motion-spring-slow-effects-duration: 1ms;
+    --md-sys-motion-spring-slow-effects: linear;
+  }
+}

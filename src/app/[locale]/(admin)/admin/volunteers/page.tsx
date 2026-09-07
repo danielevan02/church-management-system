@@ -56,7 +56,7 @@ export default async function VolunteersHomePage({
       <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex flex-col gap-1">
           <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-          <p className="text-muted-foreground">
+          <p className="text-on-surface-variant">
             {t("rangeSubtitle", {
               start: format(result.rangeStart, "dd MMM yyyy"),
               end: format(result.rangeEnd, "dd MMM yyyy"),
@@ -96,7 +96,7 @@ export default async function VolunteersHomePage({
       </div>
 
       {result.activeTeams.length === 0 ? (
-        <div className="rounded-md border border-dashed p-10 text-center text-sm text-muted-foreground">
+        <div className="rounded-md border border-dashed p-10 text-center text-sm text-on-surface-variant">
           {t("noTeamsYet")}
         </div>
       ) : (
@@ -112,7 +112,7 @@ export default async function VolunteersHomePage({
                         date: format(week.serviceDate, "dd MMM yyyy"),
                       })}
                     </h2>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-xs text-on-surface-variant">
                       {format(week.weekStart, "dd MMM")} —{" "}
                       {format(week.weekEnd, "dd MMM yyyy")} ·{" "}
                       {t("totalAssignments", { count: week.total })}
@@ -120,10 +120,7 @@ export default async function VolunteersHomePage({
                   </div>
                   <div className="flex items-center gap-2">
                     {conflictSet.size > 0 ? (
-                      <Badge
-                        variant="outline"
-                        className="gap-1 border-amber-500/40 bg-amber-50 text-amber-900 dark:bg-amber-950/30 dark:text-amber-200"
-                      >
+                      <Badge variant="warning" className="gap-1">
                         <AlertTriangle className="h-3 w-3" />
                         {t("weekConflictCount", { count: conflictSet.size })}
                       </Badge>
@@ -145,7 +142,7 @@ export default async function VolunteersHomePage({
                           <h3 className="text-sm font-semibold">
                             {team.teamName}
                           </h3>
-                          <span className="text-xs text-muted-foreground">
+                          <span className="text-xs text-on-surface-variant">
                             ({team.assignments.length})
                           </span>
                         </div>
@@ -162,7 +159,7 @@ export default async function VolunteersHomePage({
                             return (
                               <li
                                 key={a.id}
-                                className="flex flex-col gap-2 rounded-md border bg-card p-3 sm:flex-row sm:items-center sm:justify-between"
+                                className="flex flex-col gap-2 rounded-md border bg-surface-container-low p-3 sm:flex-row sm:items-center sm:justify-between"
                               >
                                 <div className="flex min-w-0 items-center gap-3">
                                   <Avatar className="h-8 w-8">
@@ -186,15 +183,15 @@ export default async function VolunteersHomePage({
                                       </Link>
                                       {hasConflict ? (
                                         <Badge
-                                          variant="outline"
-                                          className="gap-1 border-amber-500/40 bg-amber-50 px-1.5 py-0 text-[10px] text-amber-900 dark:bg-amber-950/30 dark:text-amber-200"
+                                          variant="warning"
+                                          className="h-5 gap-1 px-1.5 text-label-sm"
                                         >
                                           <AlertTriangle className="h-3 w-3" />
                                           {t("conflictBadge")}
                                         </Badge>
                                       ) : null}
                                     </div>
-                                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                                    <div className="flex items-center gap-2 text-xs text-on-surface-variant">
                                       {a.position?.name ? (
                                         <span className="truncate">
                                           {a.position.name}

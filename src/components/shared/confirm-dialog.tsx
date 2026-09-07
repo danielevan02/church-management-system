@@ -70,7 +70,7 @@ export function ConfirmDialog({
             disabled={pending}
             className={cn(
               destructive &&
-                "bg-destructive text-white hover:bg-destructive/90",
+                "bg-error text-white hover:bg-error/90",
             )}
           >
             {confirmLabel}

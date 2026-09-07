@@ -1,9 +1,10 @@
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Roboto, Roboto_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
+import { ThemeProvider } from "@/components/shared/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { church } from "@/config/church";
@@ -11,14 +12,22 @@ import { routing } from "@/lib/i18n/routing";
 
 import "../globals.css";
 
-const geistSans = Geist({
+// M3's baseline typeface. Static weights rather than Roboto Flex on purpose:
+// the type scale only needs 400/500 (700 covers stray font-bold call sites),
+// and this is a PWA served to members on Indonesian mobile networks — three
+// subsetted woff2 files beat one multi-axis variable font. Roboto Flex is the
+// upgrade path if/when you adopt M3 Expressive's weight-axis animation.
+const robotoSans = Roboto({
   variable: "--font-sans",
   subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
+const robotoMono = Roboto_Mono({
   variable: "--font-mono",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -48,13 +57,15 @@ export default async function LocaleLayout({
   return (
     <html
       lang={locale}
-      className={`${geistSans.variable} ${geistMono.variable}`}
+      className={`${robotoSans.variable} ${robotoMono.variable}`}
       suppressHydrationWarning
     >
       <body className="antialiased font-sans" suppressHydrationWarning>
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <TooltipProvider delayDuration={200}>{children}</TooltipProvider>
-          <Toaster richColors position="top-right" />
+          <ThemeProvider>
+            <TooltipProvider delayDuration={200}>{children}</TooltipProvider>
+            <Toaster richColors position="top-right" />
+          </ThemeProvider>
         </NextIntlClientProvider>
       </body>
     </html>

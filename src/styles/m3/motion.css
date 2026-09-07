@@ -1,0 +1,70 @@
+/*
+ * M3 motion: the legacy duration + easing tier.
+ *
+ * These are still spec'd and still useful for simple property fades, but M3's
+ * *current* motion system is spring physics — see spring.css, which is where
+ * anything that moves should look first.
+ *
+ * Two things this tier cannot do, which is why it is not the default:
+ *
+ * - "emphasized" is not a cubic-bezier. The spec defines it as two chained
+ *   curves (accelerate then decelerate) with a slight overshoot. The value
+ *   below is the standard web approximation; material-web ships the same
+ *   compromise.
+ * - No cubic-bezier can overshoot at all — its output is bounded by its
+ *   endpoints. Overshoot is most of what makes M3 motion read as M3, so it
+ *   needs `linear()`.
+ */
+
+:root {
+  --md-sys-motion-easing-linear: cubic-bezier(0, 0, 1, 1);
+  --md-sys-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --md-sys-motion-easing-standard-accelerate: cubic-bezier(0.3, 0, 1, 1);
+  --md-sys-motion-easing-standard-decelerate: cubic-bezier(0, 0, 0, 1);
+  --md-sys-motion-easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
+  --md-sys-motion-easing-emphasized-accelerate: cubic-bezier(0.3, 0, 0.8, 0.15);
+  --md-sys-motion-easing-emphasized-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);
+
+  --md-sys-motion-duration-short1: 50ms;
+  --md-sys-motion-duration-short2: 100ms;
+  --md-sys-motion-duration-short3: 150ms;
+  --md-sys-motion-duration-short4: 200ms;
+  --md-sys-motion-duration-medium1: 250ms;
+  --md-sys-motion-duration-medium2: 300ms;
+  --md-sys-motion-duration-medium3: 350ms;
+  --md-sys-motion-duration-medium4: 400ms;
+  --md-sys-motion-duration-long1: 450ms;
+  --md-sys-motion-duration-long2: 500ms;
+  --md-sys-motion-duration-long3: 550ms;
+  --md-sys-motion-duration-long4: 600ms;
+}
+
+@theme inline {
+  /* Spring easings — the default choice for anything that moves.
+   * Pair each with its matching `--md-sys-motion-spring-*-duration`; the
+   * easing describes the spring's shape, the duration is how long it takes to
+   * settle, and one without the other plays the curve at the wrong speed. */
+  --ease-spatial: var(--md-sys-motion-spring-default-spatial);
+  --ease-spatial-fast: var(--md-sys-motion-spring-fast-spatial);
+  --ease-spatial-slow: var(--md-sys-motion-spring-slow-spatial);
+  --ease-effects: var(--md-sys-motion-spring-default-effects);
+  --ease-effects-fast: var(--md-sys-motion-spring-fast-effects);
+  --ease-effects-slow: var(--md-sys-motion-spring-slow-effects);
+
+  --ease-standard: var(--md-sys-motion-easing-standard);
+  --ease-standard-accelerate: var(--md-sys-motion-easing-standard-accelerate);
+  --ease-standard-decelerate: var(--md-sys-motion-easing-standard-decelerate);
+  --ease-emphasized: var(--md-sys-motion-easing-emphasized);
+  --ease-emphasized-accelerate: var(--md-sys-motion-easing-emphasized-accelerate);
+  --ease-emphasized-decelerate: var(--md-sys-motion-easing-emphasized-decelerate);
+}
+
+/* Used by @/components/m3/ripple. */
+@keyframes m3-ripple-in {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}

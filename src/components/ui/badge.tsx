@@ -4,20 +4,49 @@ import { Slot } from "radix-ui"
 
 import { cn } from "@/lib/utils"
 
+/**
+ * Status pill, M3-flavoured.
+ *
+ * M3 has two things in this space and neither is quite this component: a
+ * *badge* (a 16dp `error` dot or count on an icon) and a *chip* (32dp,
+ * interactive, filters or represents an entity). What this codebase actually
+ * uses Badge for, across 38 files, is a non-interactive status pill inside
+ * table rows — so it is sized between the two: 24dp with `label-medium`,
+ * fully round, tonal container roles.
+ *
+ * `default` moved from solid `primary` to `secondary-container`. A small pill
+ * filled with `primary` is very loud in M3's colour system, and status pills
+ * are ambient information — the row is the content, not the badge. Use
+ * `variant="primary"` where a badge genuinely needs to shout.
+ *
+ * `success` and `warning` use the M3 custom colours from roles.css, which is
+ * what the hardcoded emerald/amber utilities scattered around the app should
+ * become — those ignored the theme and inverted badly in dark mode.
+ */
 const badgeVariants = cva(
-  "inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-3",
+  [
+    "m3-focus-ring inline-flex h-6 w-fit shrink-0 items-center justify-center gap-1",
+    "overflow-hidden rounded-full border border-transparent px-2",
+    "text-label-md whitespace-nowrap",
+    "transition-[background-color,border-color,color] duration-150 ease-standard",
+    "[&>svg]:pointer-events-none [&>svg]:size-3.5",
+    // Only anchors/buttons rendered through asChild are interactive.
+    "[a&]:state-layer [button&]:state-layer",
+  ],
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground [a&]:hover:bg-primary/90",
-        secondary:
-          "bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90",
-        destructive:
-          "bg-destructive text-white focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40 [a&]:hover:bg-destructive/90",
-        outline:
-          "border-border text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground",
-        ghost: "[a&]:hover:bg-accent [a&]:hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 [a&]:hover:underline",
+        default: "bg-secondary-container text-on-secondary-container",
+        primary: "bg-primary text-on-primary",
+        tertiary: "bg-tertiary-container text-on-tertiary-container",
+        success: "bg-success-container text-on-success-container",
+        warning: "bg-warning-container text-on-warning-container",
+        destructive: "bg-error text-on-error",
+        "destructive-tonal": "bg-error-container text-on-error-container",
+        secondary: "bg-surface-container-highest text-on-surface-variant",
+        outline: "border-outline bg-transparent text-on-surface-variant",
+        ghost: "bg-transparent text-on-surface-variant",
+        link: "bg-transparent text-primary underline-offset-4 [a&]:hover:underline",
       },
     },
     defaultVariants: {

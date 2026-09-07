@@ -54,13 +54,13 @@ export default async function AuditLogPage({
           </Link>
         </Button>
         <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="text-muted-foreground">
+        <p className="text-on-surface-variant">
           {t("subtitle", { total: result.total })}
         </p>
       </header>
 
       {result.items.length === 0 ? (
-        <div className="rounded-md border border-dashed p-10 text-center text-sm text-muted-foreground">
+        <div className="rounded-md border border-dashed p-10 text-center text-sm text-on-surface-variant">
           {t("empty")}
         </div>
       ) : (
@@ -78,12 +78,12 @@ export default async function AuditLogPage({
             <TableBody>
               {result.items.map((row) => (
                 <TableRow key={row.id}>
-                  <TableCell className="text-xs tabular-nums text-muted-foreground">
+                  <TableCell className="text-xs tabular-nums text-on-surface-variant">
                     {formatJakarta(row.createdAt, "dd MMM yyyy, HH:mm:ss")}
                   </TableCell>
                   <TableCell className="text-xs">
                     {row.user?.username ?? (
-                      <span className="text-muted-foreground italic">
+                      <span className="text-on-surface-variant italic">
                         {t("system")}
                       </span>
                     )}
@@ -98,22 +98,22 @@ export default async function AuditLogPage({
                       <>
                         <span className="font-medium">{row.entityType}</span>
                         {row.entityId ? (
-                          <span className="ml-1 text-muted-foreground">
+                          <span className="ml-1 text-on-surface-variant">
                             #{row.entityId.slice(0, 8)}
                           </span>
                         ) : null}
                       </>
                     ) : (
-                      <span className="text-muted-foreground">—</span>
+                      <span className="text-on-surface-variant">—</span>
                     )}
                   </TableCell>
                   <TableCell className="max-w-[280px]">
                     {row.metadata ? (
-                      <code className="line-clamp-1 text-xs text-muted-foreground">
+                      <code className="line-clamp-1 text-xs text-on-surface-variant">
                         {JSON.stringify(row.metadata)}
                       </code>
                     ) : (
-                      <span className="text-muted-foreground">—</span>
+                      <span className="text-on-surface-variant">—</span>
                     )}
                   </TableCell>
                 </TableRow>

@@ -27,12 +27,12 @@ export default async function MemberEventsPage() {
     <div className="flex flex-col gap-6">
       <header className="flex flex-col gap-1">
         <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="text-muted-foreground">{t("subtitle")}</p>
+        <p className="text-on-surface-variant">{t("subtitle")}</p>
       </header>
 
       {events.length === 0 ? (
         <Card>
-          <CardContent className="flex flex-col items-center gap-2 py-10 text-center text-sm text-muted-foreground">
+          <CardContent className="flex flex-col items-center gap-2 py-10 text-center text-sm text-on-surface-variant">
             <Calendar className="h-8 w-8" />
             {t("empty")}
           </CardContent>
@@ -43,7 +43,7 @@ export default async function MemberEventsPage() {
             <Link
               key={e.id}
               href={`/me/events/${e.id}`}
-              className="rounded-lg outline-none transition-colors hover:bg-accent/40 focus-visible:ring-2 focus-visible:ring-ring"
+              className="rounded-lg outline-none transition-colors hover:bg-surface-container-highest/40 focus-visible:ring-2 focus-visible:ring-primary"
             >
               <Card className="h-full">
                 <CardContent className="flex flex-col gap-3 pt-6">
@@ -55,12 +55,12 @@ export default async function MemberEventsPage() {
                       <Badge>{tStatus(statusKey(e.myRsvp.status))}</Badge>
                     ) : null}
                   </div>
-                  <div className="text-sm text-muted-foreground">
+                  <div className="text-sm text-on-surface-variant">
                     {formatJakarta(e.startsAt, "EEE, dd MMM yyyy · HH:mm")}
                     {e.location ? ` · ${e.location}` : ""}
                   </div>
                   {e.capacity ? (
-                    <div className="text-xs text-muted-foreground">
+                    <div className="text-xs text-on-surface-variant">
                       {e._count.rsvps}/{e.capacity} {t("rsvpsAbbr")}
                     </div>
                   ) : null}

@@ -35,17 +35,17 @@ export default function GlobalError({
       lang="id"
       className={`${geistSans.variable} ${geistMono.variable}`}
     >
-      <body className="antialiased font-sans bg-background text-foreground">
+      <body className="antialiased font-sans bg-surface text-on-surface">
         <main className="flex min-h-dvh items-center justify-center p-6">
-          <div className="flex w-full max-w-md flex-col items-center gap-5 rounded-xl border bg-card p-8 text-center shadow-sm">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10 text-destructive">
+          <div className="flex w-full max-w-md flex-col items-center gap-5 rounded-xl border bg-surface-container-low p-8 text-center shadow-sm">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-error/10 text-error">
               <AlertTriangle className="h-6 w-6" aria-hidden />
             </div>
             <div className="flex flex-col gap-2">
               <h1 className="text-xl font-semibold tracking-tight">
                 Terjadi kesalahan
               </h1>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-on-surface-variant">
                 Maaf, ada masalah teknis. Tim kami sudah mendapat notifikasi.
                 Coba muat ulang halaman.
               </p>
@@ -53,13 +53,13 @@ export default function GlobalError({
             <button
               type="button"
               onClick={reset}
-              className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-primary px-5 text-sm font-medium text-on-primary shadow-sm transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
               <RefreshCw className="h-4 w-4" aria-hidden />
               Muat Ulang
             </button>
             {error.digest ? (
-              <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
+              <p className="text-[10px] uppercase tracking-wider text-on-surface-variant">
                 Ref: {error.digest}
               </p>
             ) : null}

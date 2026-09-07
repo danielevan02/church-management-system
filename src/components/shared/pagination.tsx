@@ -39,7 +39,7 @@ export function Pagination({
   if (totalPages <= 1) {
     return (
       <div className="flex items-center justify-end">
-        <span className="text-sm text-muted-foreground">
+        <span className="text-sm text-on-surface-variant">
           {t("count", { total })}
         </span>
       </div>
@@ -48,7 +48,7 @@ export function Pagination({
 
   return (
     <div className="flex items-center justify-between gap-3">
-      <span className="text-sm text-muted-foreground">
+      <span className="text-sm text-on-surface-variant">
         {t("summary", { page, totalPages, total })}
       </span>
       <div className="flex gap-2">

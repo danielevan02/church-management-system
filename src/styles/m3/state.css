@@ -1,0 +1,202 @@
+/*
+ * M3 state layers and focus indicator.
+ *
+ * This is the single biggest behavioural gap between shadcn and M3. shadcn
+ * expresses interaction by *changing the container colour*
+ * (`hover:bg-primary/90`), which needs a bespoke rule per variant and breaks
+ * down entirely on transparent variants. M3 instead overlays a translucent
+ * layer of the *content* colour at a fixed opacity — 8% hover, 10% focus,
+ * 10% press, 16% drag — over whatever the container happens to be.
+ *
+ * Implemented as a ::before pseudo-element painted with `currentColor`, which
+ * turns out to be exactly right in every case without configuration:
+ *   filled button   currentColor = on-primary        -> white wash over primary
+ *   tonal button    currentColor = on-secondary-cont -> dark wash over tonal
+ *   text/outlined   currentColor = primary           -> primary wash over nothing
+ *   card / list row currentColor = on-surface        -> ink wash over surface
+ *
+ * `isolation: isolate` on the host plus `z-index: -1` on the pseudo-element is
+ * what keeps the wash above the host's own background but below its in-flow
+ * text and icons. Without the isolation the negative z-index would escape to
+ * the nearest ancestor stacking context and disappear behind the page.
+ *
+ * Override --md-state-layer-color when the content colour is not the right wash
+ * (e.g. a nav item whose label is on-surface-variant but whose state layer
+ * should read as on-surface).
+ */
+
+:root {
+  --md-sys-state-hover-opacity: 0.08;
+  --md-sys-state-focus-opacity: 0.1;
+  --md-sys-state-pressed-opacity: 0.1;
+  --md-sys-state-dragged-opacity: 0.16;
+  /* M3 disabled: content at 38%, container at 12%. */
+  --md-sys-state-disabled-content-opacity: 0.38;
+  --md-sys-state-disabled-container-opacity: 0.12;
+}
+
+@utility state-layer {
+  position: relative;
+  isolation: isolate;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background-color: var(--md-state-layer-color, currentColor);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--md-sys-motion-spring-fast-effects-duration)
+      var(--md-sys-motion-spring-fast-effects);
+  }
+
+  /* Guarded so touch devices do not get a hover wash stuck on after a tap. */
+  @media (hover: hover) and (pointer: fine) {
+    &:hover::before {
+      opacity: var(--md-sys-state-hover-opacity);
+    }
+  }
+
+  &:focus-visible::before {
+    opacity: var(--md-sys-state-focus-opacity);
+  }
+
+  /* Press wins over hover and focus, and must not animate in — M3 presses are
+   * instantaneous on the way down and only fade on release. */
+  &:active::before {
+    opacity: var(--md-sys-state-pressed-opacity);
+    transition-duration: 0ms;
+  }
+
+  /* Radix leaves data-state="open" on triggers while their popover is open;
+   * M3 keeps such a trigger visibly engaged. */
+  &[data-state="open"]::before {
+    opacity: var(--md-sys-state-hover-opacity);
+  }
+
+  /* Radix marks the active option in menus, selects and comboboxes with
+   * data-highlighted, driven by both keyboard and pointer. Plain :hover is not
+   * enough there — Radix moves the highlight programmatically during keyboard
+   * navigation, and :focus-visible does not reliably follow. */
+  &[data-highlighted]::before {
+    opacity: var(--md-sys-state-hover-opacity);
+  }
+
+  &:disabled::before,
+  &[data-disabled]::before,
+  &[aria-disabled="true"]::before {
+    opacity: 0;
+  }
+}
+
+/*
+ * M3 focus indicator: a 3px ring in `secondary`, offset 2px, drawn *outside*
+ * the container. Deliberately an `outline` rather than a box-shadow so it is
+ * never clipped by the `overflow: hidden` that ripple containment needs, and
+ * so it survives forced-colors mode.
+ */
+@utility m3-focus-ring {
+  outline: none;
+
+  &:focus-visible {
+    outline: 3px solid var(--md-sys-color-secondary);
+    outline-offset: 2px;
+  }
+}
+
+/*
+ * Selection controls (checkbox, radio, switch) are 18-20dp, well under the
+ * 40dp minimum touch target. M3 resolves that by giving them a 40dp circular
+ * state layer that overhangs the control, so the wash and the hit area are the
+ * same size even though the glyph is small. Separate utility rather than an
+ * override on `state-layer`, because relying on utility ordering to beat
+ * `inset: 0` is exactly the kind of thing that breaks on a Tailwind upgrade.
+ */
+@utility state-layer-control {
+  position: relative;
+  isolation: isolate;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: -1;
+    width: 40px;
+    height: 40px;
+    translate: -50% -50%;
+    border-radius: 9999px;
+    background-color: var(--md-state-layer-color, currentColor);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--md-sys-motion-spring-fast-effects-duration)
+      var(--md-sys-motion-spring-fast-effects);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover::before {
+      opacity: var(--md-sys-state-hover-opacity);
+    }
+  }
+
+  &:focus-visible::before {
+    opacity: var(--md-sys-state-focus-opacity);
+  }
+
+  &:active::before {
+    opacity: var(--md-sys-state-pressed-opacity);
+    transition-duration: 0ms;
+  }
+
+  &:disabled::before,
+  &[data-disabled]::before,
+  &[aria-disabled="true"]::before {
+    opacity: 0;
+  }
+}
+
+/* Ripple containment. Separate from state-layer so a component can take the
+ * state layer without paying for overflow clipping. */
+@utility ripple-host {
+  position: relative;
+  overflow: hidden;
+}
+
+/*
+ * Spring motion utilities.
+ *
+ * Each one binds an easing to its own settle duration, because the two are a
+ * single unit — a spring's "duration" is a property of its physics, not a
+ * separate design choice. Splitting them across two utilities is how you end
+ * up with a bouncy curve crammed into 150ms.
+ *
+ * Pick `spatial` for anything that travels or changes size (position, scale,
+ * corner radius, an indicator sliding). Pick `effects` for opacity and colour,
+ * where M3 forbids overshoot — a flickering opacity reads as a rendering bug.
+ */
+@utility motion-spatial {
+  transition-timing-function: var(--md-sys-motion-spring-default-spatial);
+  transition-duration: var(--md-sys-motion-spring-default-spatial-duration);
+}
+
+@utility motion-spatial-fast {
+  transition-timing-function: var(--md-sys-motion-spring-fast-spatial);
+  transition-duration: var(--md-sys-motion-spring-fast-spatial-duration);
+}
+
+@utility motion-spatial-slow {
+  transition-timing-function: var(--md-sys-motion-spring-slow-spatial);
+  transition-duration: var(--md-sys-motion-spring-slow-spatial-duration);
+}
+
+@utility motion-effects {
+  transition-timing-function: var(--md-sys-motion-spring-default-effects);
+  transition-duration: var(--md-sys-motion-spring-default-effects-duration);
+}
+
+@utility motion-effects-fast {
+  transition-timing-function: var(--md-sys-motion-spring-fast-effects);
+  transition-duration: var(--md-sys-motion-spring-fast-effects-duration);
+}

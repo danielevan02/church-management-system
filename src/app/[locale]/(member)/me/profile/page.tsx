@@ -38,7 +38,7 @@ export default async function MemberProfilePage() {
     <div className="flex flex-col gap-6">
       <header className="flex flex-col gap-1">
         <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="text-muted-foreground">{t("subtitle")}</p>
+        <p className="text-on-surface-variant">{t("subtitle")}</p>
       </header>
 
       <Card>
@@ -123,7 +123,7 @@ function Field({
 }) {
   return (
     <div className="grid grid-cols-3 gap-2">
-      <dt className="text-muted-foreground">{label}</dt>
+      <dt className="text-on-surface-variant">{label}</dt>
       <dd className="col-span-2">{value || "—"}</dd>
     </div>
   );

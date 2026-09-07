@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 
+import { PageTransition } from "@/components/m3/page-transition";
 import { InstallPrompt } from "@/components/member/install-prompt";
 import { MemberHeader } from "@/components/member/member-header";
 import { MemberSidebar } from "@/components/member/member-sidebar";
@@ -58,7 +59,9 @@ export default async function MemberLayout({
           <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-4 overflow-x-hidden p-4 pb-24 sm:p-6 md:pb-6 lg:p-8">
             <InstallPrompt />
             <PushBanner />
-            {children}
+            <PageTransition className="flex min-w-0 flex-1 flex-col gap-4">
+              {children}
+            </PageTransition>
           </div>
         </SidebarInset>
         <SidebarAutoCloseMobile />

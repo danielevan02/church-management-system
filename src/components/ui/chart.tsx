@@ -65,7 +65,20 @@ function ChartContainer({
         data-slot="chart"
         data-chart={chartId}
         className={cn(
-          "flex aspect-video justify-center text-xs [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-hidden [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&_.recharts-sector]:outline-hidden [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-surface]:outline-hidden",
+          // Recharts paints its chrome with hardcoded hex defaults; these
+          // selectors re-point axes, grids and cursors at M3 roles so a chart
+          // sits on a themed surface instead of a grey one.
+          "flex aspect-video justify-center text-body-sm",
+          "[&_.recharts-cartesian-axis-tick_text]:fill-on-surface-variant",
+          "[&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-outline-variant",
+          "[&_.recharts-curve.recharts-tooltip-cursor]:stroke-outline",
+          "[&_.recharts-polar-grid_[stroke='#ccc']]:stroke-outline-variant",
+          "[&_.recharts-reference-line_[stroke='#ccc']]:stroke-outline",
+          "[&_.recharts-radial-bar-background-sector]:fill-surface-container-highest",
+          "[&_.recharts-rectangle.recharts-tooltip-cursor]:fill-on-surface/8",
+          "[&_.recharts-dot[stroke='#fff']]:stroke-transparent",
+          "[&_.recharts-sector[stroke='#fff']]:stroke-transparent",
+          "[&_.recharts-layer]:outline-hidden [&_.recharts-sector]:outline-hidden [&_.recharts-surface]:outline-hidden",
           className
         )}
         {...props}
@@ -191,7 +204,10 @@ function ChartTooltipContent({
   return (
     <div
       className={cn(
-        "grid min-w-[8rem] items-start gap-1.5 rounded-lg border border-border/50 bg-background px-2.5 py-1.5 text-xs shadow-xl",
+        // Chart tooltips follow M3's plain-tooltip treatment: inverse surface,
+        // 4dp shape, no border. The inverse pair is what makes it read as
+        // floating above the plot rather than as another panel on it.
+        "grid min-w-[8rem] items-start gap-1.5 rounded-xs bg-inverse-surface px-3 py-2 text-body-sm text-inverse-on-surface shadow-level-2",
         className
       )}
     >
@@ -208,7 +224,7 @@ function ChartTooltipContent({
               <div
                 key={index}
                 className={cn(
-                  "flex w-full flex-wrap items-stretch gap-2 [&>svg]:h-2.5 [&>svg]:w-2.5 [&>svg]:text-muted-foreground",
+                  "flex w-full flex-wrap items-stretch gap-2 [&>svg]:h-2.5 [&>svg]:w-2.5 [&>svg]:text-inverse-on-surface/70",
                   indicator === "dot" && "items-center"
                 )}
               >
@@ -248,12 +264,12 @@ function ChartTooltipContent({
                     >
                       <div className="grid gap-1.5">
                         {nestLabel ? tooltipLabel : null}
-                        <span className="text-muted-foreground">
+                        <span className="text-inverse-on-surface/70">
                           {itemConfig?.label ?? item.name}
                         </span>
                       </div>
                       {item.value != null && (
-                        <span className="font-mono font-medium text-foreground tabular-nums">
+                        <span className="font-mono text-label-lg text-inverse-on-surface tabular-nums">
                           {typeof item.value === "number"
                             ? item.value.toLocaleString()
                             : String(item.value)}
@@ -306,7 +322,7 @@ function ChartLegendContent({
             <div
               key={index}
               className={cn(
-                "flex items-center gap-1.5 [&>svg]:h-3 [&>svg]:w-3 [&>svg]:text-muted-foreground"
+                "flex items-center gap-1.5 text-body-sm text-on-surface-variant [&>svg]:h-3 [&>svg]:w-3 [&>svg]:text-on-surface-variant"
               )}
             >
               {itemConfig?.icon && !hideIcon ? (

@@ -60,7 +60,7 @@ export default async function AttendanceReportsPage({
     <div className="flex flex-col gap-6">
       <header className="flex flex-col gap-1">
         <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="text-muted-foreground">{t("subtitle")}</p>
+        <p className="text-on-surface-variant">{t("subtitle")}</p>
       </header>
 
       <Card>
@@ -70,7 +70,7 @@ export default async function AttendanceReportsPage({
         </CardHeader>
         <CardContent>
           {trend.length === 0 ? (
-            <p className="text-sm text-muted-foreground">{t("trendEmpty")}</p>
+            <p className="text-sm text-on-surface-variant">{t("trendEmpty")}</p>
           ) : (
             <WeeklyTrendChart data={trend} />
           )}
@@ -85,7 +85,7 @@ export default async function AttendanceReportsPage({
           </CardHeader>
           <CardContent>
             {recentServices.items.length === 0 ? (
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-on-surface-variant">
                 {t("recentServicesEmpty")}
               </p>
             ) : (
@@ -102,7 +102,7 @@ export default async function AttendanceReportsPage({
                       >
                         {s.name}
                       </Link>
-                      <span className="text-xs text-muted-foreground">
+                      <span className="text-xs text-on-surface-variant">
                         {tType(typeKey(s.type))} ·{" "}
                         {formatJakarta(s.startsAt, "dd MMM yyyy, HH:mm")}
                       </span>
@@ -126,7 +126,7 @@ export default async function AttendanceReportsPage({
           </CardHeader>
           <CardContent>
             {inactive.length === 0 ? (
-              <p className="text-sm text-muted-foreground">{t("inactiveEmpty")}</p>
+              <p className="text-sm text-on-surface-variant">{t("inactiveEmpty")}</p>
             ) : (
               <div className="rounded-md border">
                 <Table>
@@ -156,13 +156,13 @@ export default async function AttendanceReportsPage({
                               >
                                 {m.fullName}
                               </Link>
-                              <span className="text-xs text-muted-foreground">
+                              <span className="text-xs text-on-surface-variant">
                                 {m.phone ?? "—"}
                               </span>
                             </div>
                           </div>
                         </TableCell>
-                        <TableCell className="text-sm text-muted-foreground">
+                        <TableCell className="text-sm text-on-surface-variant">
                           {m.lastSeenAt
                             ? formatDistanceToNow(m.lastSeenAt, {
                                 addSuffix: true,
@@ -174,7 +174,7 @@ export default async function AttendanceReportsPage({
                   </TableBody>
                 </Table>
                 {inactive.length > 50 ? (
-                  <div className="border-t p-2 text-center text-xs text-muted-foreground">
+                  <div className="border-t p-2 text-center text-xs text-on-surface-variant">
                     {t("moreCount", { count: inactive.length - 50 })}
                   </div>
                 ) : null}

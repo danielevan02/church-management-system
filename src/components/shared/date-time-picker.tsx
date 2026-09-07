@@ -92,7 +92,7 @@ export function DateTimePicker({
           aria-label={ariaLabel}
           className={cn(
             "w-full justify-start text-left font-normal",
-            !parsed && "text-muted-foreground",
+            !parsed && "text-on-surface-variant",
             className,
           )}
         >
@@ -105,7 +105,7 @@ export function DateTimePicker({
               role="button"
               tabIndex={0}
               aria-label={t("clear")}
-              className="ml-auto inline-flex h-5 w-5 items-center justify-center rounded-sm text-muted-foreground hover:bg-muted hover:text-foreground"
+              className="ml-auto inline-flex h-5 w-5 items-center justify-center rounded-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface"
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -139,7 +139,7 @@ export function DateTimePicker({
         />
         <div className="flex items-end gap-2 border-t p-3">
           <div className="flex flex-col gap-1">
-            <Label htmlFor="dtp-hh" className="text-xs text-muted-foreground">
+            <Label htmlFor="dtp-hh" className="text-xs text-on-surface-variant">
               {t("hour")}
             </Label>
             <Input
@@ -154,9 +154,9 @@ export function DateTimePicker({
               className="h-9 w-16 tabular-nums"
             />
           </div>
-          <span className="pb-2 text-muted-foreground">:</span>
+          <span className="pb-2 text-on-surface-variant">:</span>
           <div className="flex flex-col gap-1">
-            <Label htmlFor="dtp-mm" className="text-xs text-muted-foreground">
+            <Label htmlFor="dtp-mm" className="text-xs text-on-surface-variant">
               {t("minute")}
             </Label>
             <Input

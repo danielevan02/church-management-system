@@ -55,7 +55,7 @@ export default async function HouseholdDetailPage({
           <h1 className="text-3xl font-bold tracking-tight">
             {household.name}
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-on-surface-variant">
             {household.address ?? t("noAddress")}
           </p>
         </div>
@@ -82,7 +82,7 @@ export default async function HouseholdDetailPage({
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           {household.members.length === 0 ? (
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-on-surface-variant">
               {t("members.empty")}
             </p>
           ) : (
@@ -107,10 +107,10 @@ export default async function HouseholdDetailPage({
                           {m.fullName}
                         </Link>
                       </TableCell>
-                      <TableCell className="text-sm text-muted-foreground">
+                      <TableCell className="text-sm text-on-surface-variant">
                         {m.householdRole ?? "—"}
                       </TableCell>
-                      <TableCell className="text-sm text-muted-foreground">
+                      <TableCell className="text-sm text-on-surface-variant">
                         {m.phone ?? m.email ?? "—"}
                       </TableCell>
                       <TableCell>

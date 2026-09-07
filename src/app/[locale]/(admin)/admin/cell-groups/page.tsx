@@ -41,7 +41,7 @@ export default async function CellGroupsListPage({
       <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex flex-col gap-1">
           <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-          <p className="text-muted-foreground">
+          <p className="text-on-surface-variant">
             {t("subtitle", { total: result.total })}
           </p>
         </div>
@@ -56,7 +56,7 @@ export default async function CellGroupsListPage({
       </header>
 
       {result.total === 0 ? (
-        <div className="rounded-md border border-dashed p-10 text-center text-sm text-muted-foreground">
+        <div className="rounded-md border border-dashed p-10 text-center text-sm text-on-surface-variant">
           {t("empty")}
         </div>
       ) : (
@@ -76,7 +76,7 @@ export default async function CellGroupsListPage({
                   </Badge>
                 </div>
                 {g.description ? (
-                  <p className="text-sm text-muted-foreground line-clamp-2">
+                  <p className="text-sm text-on-surface-variant line-clamp-2">
                     {g.description}
                   </p>
                 ) : null}
@@ -87,13 +87,13 @@ export default async function CellGroupsListPage({
                     </AvatarFallback>
                   </Avatar>
                   <span>
-                    <span className="text-muted-foreground">
+                    <span className="text-on-surface-variant">
                       {t("leaderLabel")}:
                     </span>{" "}
                     <span className="font-medium">{g.leader.fullName}</span>
                   </span>
                 </div>
-                <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                <div className="flex flex-wrap items-center gap-2 text-xs text-on-surface-variant">
                   {g.nextMeetingAt ? (
                     <span>
                       {t("nextMeetingPrefix")}{" "}

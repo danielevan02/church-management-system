@@ -4,6 +4,23 @@ import * as React from "react"
 
 import { cn } from "@/lib/utils"
 
+/**
+ * Data table.
+ *
+ * M3 dropped the data table component that M2 had, so this follows M3's list
+ * and surface rules instead: `outline-variant` dividers, `title-small`
+ * `on-surface-variant` headers, `body-medium` cells, 56dp header and 52dp body
+ * rows.
+ *
+ * Row hover is the M3 state layer expressed as a background rather than a
+ * pseudo-element — `on-surface` at 8%, the exact value `state-layer` uses.
+ * `<tr>` is a poor host for an absolutely-positioned `::before` (its box model
+ * varies with `border-collapse`), and a background composites identically here
+ * because a row has no shape of its own to respect.
+ *
+ * Selection uses `secondary-container`, matching how every other M3 component
+ * in this system shows "this one is chosen".
+ */
 function Table({ className, ...props }: React.ComponentProps<"table">) {
   return (
     <div
@@ -12,7 +29,7 @@ function Table({ className, ...props }: React.ComponentProps<"table">) {
     >
       <table
         data-slot="table"
-        className={cn("w-full caption-bottom text-sm", className)}
+        className={cn("w-full caption-bottom text-body-md text-on-surface", className)}
         {...props}
       />
     </div>
@@ -23,7 +40,7 @@ function TableHeader({ className, ...props }: React.ComponentProps<"thead">) {
   return (
     <thead
       data-slot="table-header"
-      className={cn("[&_tr]:border-b", className)}
+      className={cn("[&_tr]:border-b [&_tr]:border-outline-variant", className)}
       {...props}
     />
   )
@@ -44,7 +61,7 @@ function TableFooter({ className, ...props }: React.ComponentProps<"tfoot">) {
     <tfoot
       data-slot="table-footer"
       className={cn(
-        "border-t bg-muted/50 font-medium [&>tr]:last:border-b-0",
+        "border-t border-outline-variant bg-surface-container text-title-sm [&>tr]:last:border-b-0",
         className
       )}
       {...props}
@@ -57,7 +74,9 @@ function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
     <tr
       data-slot="table-row"
       className={cn(
-        "border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted",
+        "border-b border-outline-variant transition-colors duration-150 ease-standard",
+        "hover:bg-on-surface/8 has-aria-expanded:bg-on-surface/8",
+        "data-[state=selected]:bg-secondary-container data-[state=selected]:text-on-secondary-container",
         className
       )}
       {...props}
@@ -70,7 +89,9 @@ function TableHead({ className, ...props }: React.ComponentProps<"th">) {
     <th
       data-slot="table-head"
       className={cn(
-        "h-10 px-2 text-left align-middle font-medium whitespace-nowrap text-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
+        "h-14 px-4 text-left align-middle whitespace-nowrap",
+        "text-title-sm text-on-surface-variant",
+        "[&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
         className
       )}
       {...props}
@@ -83,7 +104,8 @@ function TableCell({ className, ...props }: React.ComponentProps<"td">) {
     <td
       data-slot="table-cell"
       className={cn(
-        "p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
+        "h-13 px-4 align-middle whitespace-nowrap",
+        "[&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
         className
       )}
       {...props}
@@ -98,7 +120,7 @@ function TableCaption({
   return (
     <caption
       data-slot="table-caption"
-      className={cn("mt-4 text-sm text-muted-foreground", className)}
+      className={cn("mt-4 text-body-sm text-on-surface-variant", className)}
       {...props}
     />
   )

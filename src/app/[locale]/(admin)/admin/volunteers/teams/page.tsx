@@ -33,7 +33,7 @@ export default async function TeamsListPage({
             </Link>
           </Button>
           <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-          <p className="text-muted-foreground">
+          <p className="text-on-surface-variant">
             {t("subtitle", { total: result.total })}
           </p>
         </div>
@@ -46,7 +46,7 @@ export default async function TeamsListPage({
       </header>
 
       {result.total === 0 ? (
-        <div className="rounded-md border border-dashed p-10 text-center text-sm text-muted-foreground">
+        <div className="rounded-md border border-dashed p-10 text-center text-sm text-on-surface-variant">
           {t("empty")}
         </div>
       ) : (
@@ -66,13 +66,13 @@ export default async function TeamsListPage({
                   </Badge>
                 </div>
                 {tm.description ? (
-                  <p className="text-sm text-muted-foreground line-clamp-2">
+                  <p className="text-sm text-on-surface-variant line-clamp-2">
                     {tm.description}
                   </p>
                 ) : null}
                 <div className="flex flex-wrap gap-1">
                   {tm.positions.length === 0 ? (
-                    <span className="text-xs text-muted-foreground">
+                    <span className="text-xs text-on-surface-variant">
                       {t("noPositions")}
                     </span>
                   ) : (
@@ -83,7 +83,7 @@ export default async function TeamsListPage({
                     ))
                   )}
                 </div>
-                <div className="text-xs text-muted-foreground">
+                <div className="text-xs text-on-surface-variant">
                   {tm._count.assignments} {t("assignmentsAbbr")}
                 </div>
               </CardContent>

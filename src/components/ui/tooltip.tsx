@@ -30,9 +30,18 @@ function TooltipTrigger({
   return <TooltipPrimitive.Trigger data-slot="tooltip-trigger" {...props} />
 }
 
+/**
+ * M3 plain tooltip: `inverse-surface` container, `inverse-on-surface` label,
+ * `body-small`, 4dp shape, 24dp min height, and no elevation.
+ *
+ * The arrow is deliberately gone. M3 tooltips — plain and rich — have no
+ * caret; the inverse surface is what makes them read as a layer above the page.
+ * Keeping an arrow is the single clearest giveaway of a Material-flavoured
+ * tooltip that isn't actually following the spec.
+ */
 function TooltipContent({
   className,
-  sideOffset = 0,
+  sideOffset = 4,
   children,
   ...props
 }: React.ComponentProps<typeof TooltipPrimitive.Content>) {
@@ -42,13 +51,16 @@ function TooltipContent({
         data-slot="tooltip-content"
         sideOffset={sideOffset}
         className={cn(
-          "z-50 w-fit origin-(--radix-tooltip-content-transform-origin) animate-in rounded-md bg-foreground px-3 py-1.5 text-xs text-balance text-background fade-in-0 zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",
+          "z-50 flex min-h-6 w-fit items-center rounded-xs px-2 py-1",
+          "bg-inverse-surface text-body-sm text-balance text-inverse-on-surface",
+          "origin-(--radix-tooltip-content-transform-origin)",
+          "data-[state=delayed-open]:m3-dialog-enter data-[state=instant-open]:m3-dialog-enter",
+          "data-[state=closed]:m3-dialog-exit",
           className
         )}
         {...props}
       >
         {children}
-        <TooltipPrimitive.Arrow className="z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px] bg-foreground fill-foreground" />
       </TooltipPrimitive.Content>
     </TooltipPrimitive.Portal>
   )

@@ -181,7 +181,7 @@ export function CheckInForm({ classes }: { classes: ChildClass[] }) {
                   if (!cls) return null;
                   if (childAge < cls.ageMin || childAge > cls.ageMax) {
                     return (
-                      <p className="mt-1 text-xs text-amber-600 dark:text-amber-400">
+                      <p className="mt-1 text-xs text-warning">
                         {t("ageMismatchWarning", { age: childAge })}
                       </p>
                     );
@@ -190,7 +190,7 @@ export function CheckInForm({ classes }: { classes: ChildClass[] }) {
                 })()
               : null}
             {suggestedClassId() && classId === "" ? (
-              <p className="mt-1 text-xs text-muted-foreground">
+              <p className="mt-1 text-xs text-on-surface-variant">
                 {t("autoSuggestHint")}
               </p>
             ) : null}

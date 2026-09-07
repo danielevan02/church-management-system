@@ -25,7 +25,7 @@ export default async function NewUserPage() {
           </Link>
         </Button>
         <h1 className="text-3xl font-bold tracking-tight">{t("newTitle")}</h1>
-        <p className="text-muted-foreground">{t("newSubtitle")}</p>
+        <p className="text-on-surface-variant">{t("newSubtitle")}</p>
       </header>
       <UserCreateForm submitLabel={t("submitCreate")} />
     </div>

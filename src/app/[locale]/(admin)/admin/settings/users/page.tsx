@@ -43,7 +43,7 @@ export default async function UsersListPage({
       <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex flex-col gap-1">
           <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-          <p className="text-muted-foreground">
+          <p className="text-on-surface-variant">
             {t("subtitle", { total: result.total })}
           </p>
         </div>
@@ -56,7 +56,7 @@ export default async function UsersListPage({
       </header>
 
       {result.total === 0 ? (
-        <div className="rounded-md border border-dashed p-10 text-center text-sm text-muted-foreground">
+        <div className="rounded-md border border-dashed p-10 text-center text-sm text-on-surface-variant">
           {t("empty")}
         </div>
       ) : (
@@ -103,7 +103,7 @@ export default async function UsersListPage({
                             {u.username ?? u.member?.fullName ?? "—"}
                           </span>
                           {u.phone ? (
-                            <span className="text-xs text-muted-foreground">
+                            <span className="text-xs text-on-surface-variant">
                               {u.phone}
                             </span>
                           ) : null}
@@ -124,10 +124,10 @@ export default async function UsersListPage({
                           {u.member.fullName}
                         </Link>
                       ) : (
-                        <span className="text-muted-foreground">—</span>
+                        <span className="text-on-surface-variant">—</span>
                       )}
                     </TableCell>
-                    <TableCell className="text-xs tabular-nums text-muted-foreground">
+                    <TableCell className="text-xs tabular-nums text-on-surface-variant">
                       {u.lastLoginAt
                         ? formatJakarta(u.lastLoginAt, "dd MMM yyyy, HH:mm")
                         : "—"}

@@ -30,7 +30,7 @@ export default async function AttendanceHomePage() {
       <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex flex-col gap-1">
           <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-          <p className="text-muted-foreground">{t("subtitle")}</p>
+          <p className="text-on-surface-variant">{t("subtitle")}</p>
         </div>
         <div className="flex flex-wrap gap-2">
           <Button asChild variant="outline">
@@ -62,7 +62,7 @@ export default async function AttendanceHomePage() {
           </CardHeader>
           <CardContent>
             {openNow.length === 0 ? (
-              <p className="text-sm text-muted-foreground">{t("noOpenNow")}</p>
+              <p className="text-sm text-on-surface-variant">{t("noOpenNow")}</p>
             ) : (
               <ul className="flex flex-col gap-3">
                 {openNow.map((s) => (
@@ -72,7 +72,7 @@ export default async function AttendanceHomePage() {
                   >
                     <div className="flex flex-col">
                       <span className="font-medium">{s.name}</span>
-                      <span className="text-xs text-muted-foreground">
+                      <span className="text-xs text-on-surface-variant">
                         {tType(typeKey(s.type))} ·{" "}
                         {formatJakarta(s.startsAt, "EEE dd MMM, HH:mm")} ·{" "}
                         {s._count.attendances} {t("checkedInAbbr")}
@@ -98,7 +98,7 @@ export default async function AttendanceHomePage() {
           </CardHeader>
           <CardContent>
             {upcoming.length === 0 ? (
-              <p className="text-sm text-muted-foreground">{t("noUpcoming")}</p>
+              <p className="text-sm text-on-surface-variant">{t("noUpcoming")}</p>
             ) : (
               <ul className="flex flex-col gap-3">
                 {upcoming.map((s) => (
@@ -112,7 +112,7 @@ export default async function AttendanceHomePage() {
                     >
                       {s.name}
                     </Link>
-                    <span className="text-xs text-muted-foreground">
+                    <span className="text-xs text-on-surface-variant">
                       {tType(typeKey(s.type))} ·{" "}
                       {formatJakarta(s.startsAt, "EEE dd MMM yyyy, HH:mm")}
                       {s.location ? ` · ${s.location}` : null}

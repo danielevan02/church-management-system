@@ -1,6 +1,7 @@
 import { AdminHeader } from "@/components/admin/admin-header";
 import { AdminSidebar } from "@/components/admin/admin-sidebar";
 import { SidebarAutoCloseMobile } from "@/components/shared/sidebar-autoclose-mobile";
+import { PageTransition } from "@/components/m3/page-transition";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { prisma } from "@/lib/prisma";
 import { requireAdminSession } from "@/lib/session";
@@ -40,7 +41,9 @@ export default async function AdminLayout({
       <SidebarInset className="min-w-0">
         <AdminHeader />
         <div className="flex min-w-0 flex-1 flex-col gap-4 overflow-x-hidden p-4 sm:p-6 lg:p-8">
-          {children}
+          <PageTransition className="flex min-w-0 flex-1 flex-col gap-4">
+            {children}
+          </PageTransition>
         </div>
       </SidebarInset>
       <SidebarAutoCloseMobile />

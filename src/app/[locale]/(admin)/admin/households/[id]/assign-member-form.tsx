@@ -52,12 +52,12 @@ export function AssignMemberForm({
 
   if (candidates.length === 0) {
     return (
-      <p className="text-sm text-muted-foreground">{t("noCandidates")}</p>
+      <p className="text-sm text-on-surface-variant">{t("noCandidates")}</p>
     );
   }
 
   return (
-    <div className="flex flex-col gap-3 rounded-md border bg-muted/30 p-4">
+    <div className="flex flex-col gap-3 rounded-md border bg-surface-container-high/30 p-4">
       <p className="text-sm font-medium">{t("title")}</p>
       <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
         <div className="flex flex-col gap-2">

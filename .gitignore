@@ -44,3 +44,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Generated per-deployment M3 tonal palette (see scripts/build-theme.cjs)
+src/styles/m3/palette.generated.css

@@ -120,7 +120,7 @@ export function SetPinDialog({ memberId, hasExistingPin, hasPhone }: Props) {
               <button
                 type="button"
                 onClick={() => setShow((s) => !s)}
-                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground"
+                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1.5 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface"
               >
                 {show ? (
                   <EyeOff className="h-4 w-4" />
@@ -129,7 +129,7 @@ export function SetPinDialog({ memberId, hasExistingPin, hasPhone }: Props) {
                 )}
               </button>
             </div>
-            <p className="text-xs text-muted-foreground">{t("pinHint")}</p>
+            <p className="text-xs text-on-surface-variant">{t("pinHint")}</p>
           </div>
 
           <div className="flex flex-col gap-2">
@@ -150,7 +150,7 @@ export function SetPinDialog({ memberId, hasExistingPin, hasPhone }: Props) {
           </div>
 
           {error ? (
-            <p className="rounded-md border border-destructive/50 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+            <p className="rounded-md border border-error/50 bg-error/10 px-3 py-2 text-sm text-error">
               {error}
             </p>
           ) : null}

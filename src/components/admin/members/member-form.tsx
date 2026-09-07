@@ -500,7 +500,7 @@ function Section({
 }) {
   return (
     <div className="space-y-4">
-      <h3 className="text-sm font-medium text-muted-foreground">{title}</h3>
+      <h3 className="text-sm font-medium text-on-surface-variant">{title}</h3>
       {children}
     </div>
   );

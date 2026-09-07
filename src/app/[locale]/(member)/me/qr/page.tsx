@@ -34,7 +34,7 @@ export default async function MemberQrPage() {
     <div className="flex flex-col gap-6">
       <header className="flex flex-col gap-1">
         <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="text-muted-foreground">{t("subtitle")}</p>
+        <p className="text-on-surface-variant">{t("subtitle")}</p>
       </header>
 
       <Card>
@@ -62,7 +62,7 @@ export default async function MemberQrPage() {
               {t("download")}
             </a>
           </Button>
-          <p className="text-center text-xs text-muted-foreground">
+          <p className="text-center text-xs text-on-surface-variant">
             {t("warning")}
           </p>
         </CardContent>

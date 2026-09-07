@@ -38,15 +38,15 @@ export default async function MyChildrenPage() {
     <div className="flex flex-col gap-6">
       <header className="flex flex-col gap-1">
         <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="text-muted-foreground">{t("subtitle")}</p>
+        <p className="text-on-surface-variant">{t("subtitle")}</p>
       </header>
 
       {children.length === 0 ? (
         <Card>
           <CardContent className="flex flex-col items-center gap-3 py-10 text-center">
-            <Heart className="h-8 w-8 text-muted-foreground" />
-            <p className="text-sm text-muted-foreground">{t("empty")}</p>
-            <p className="text-xs text-muted-foreground">{t("emptyHint")}</p>
+            <Heart className="h-8 w-8 text-on-surface-variant" />
+            <p className="text-sm text-on-surface-variant">{t("empty")}</p>
+            <p className="text-xs text-on-surface-variant">{t("emptyHint")}</p>
           </CardContent>
         </Card>
       ) : (
@@ -78,7 +78,7 @@ export default async function MyChildrenPage() {
                 </CardHeader>
                 <CardContent>
                   {history.length === 0 ? (
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-on-surface-variant">
                       {t("noHistory")}
                     </p>
                   ) : (
@@ -92,7 +92,7 @@ export default async function MyChildrenPage() {
                             <span className="font-medium">
                               {h.childClass.name}
                             </span>
-                            <span className="text-xs text-muted-foreground tabular-nums">
+                            <span className="text-xs text-on-surface-variant tabular-nums">
                               {formatJakarta(h.checkedInAt, "EEE dd MMM yyyy, HH:mm")}
                             </span>
                           </div>
