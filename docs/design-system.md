@@ -312,7 +312,7 @@ navigation and delaying it ~90ms, which pays real latency on every tap to
 render a fade.
 
 **Container transform is implemented** at two complementary layers:
-1. **Component-level `<M3ContainerTransform>`** ([`src/components/m3/container-transform.tsx`](../src/components/m3/container-transform.tsx)):
+1. **Component-level `<ContainerTransform>`** ([`src/components/m3/container-transform.tsx`](../src/components/m3/container-transform.tsx)):
    Uses the FLIP (First, Last, Invert, Play) technique powered by M3's physics-based spatial spring (`--md-sys-motion-spring-default-spatial`) to morph compact containers (cards, FABs) into expanded dialogs/sheets and back with true overshoot and reversible motion.
 2. **CSS View Transitions API**:
    Standard M3 pseudo-elements (`::view-transition-group(m3-container)`, `::view-transition-old`, `::view-transition-new`) are defined in [`transitions.css`](../src/styles/m3/transitions.css) with spatial and effects spring timing functions for progressive enhancement across browser-native view transitions.

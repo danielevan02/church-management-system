@@ -3,13 +3,12 @@
 import * as React from "react";
 import { createPortal } from "react-dom";
 
-import {
-  calculateCenteredTargetRect,
-  type Rect,
-} from "@/lib/container-transform";
+import { calculateCenteredTargetRect } from "@/lib/container-transform";
 import { cn } from "@/lib/utils";
 
-export interface M3ContainerTransformProps {
+import type { Rect } from "@/lib/container-transform";
+
+export type ContainerTransformProps = {
   /**
    * The trigger element (e.g. Card, Button, FAB) in its compact state.
    * Receives `open` callback to trigger transformation.
@@ -40,7 +39,7 @@ export interface M3ContainerTransformProps {
 
   /** Optional accessible title / label for dialog */
   title?: string;
-}
+};
 
 type TransformPhase =
   | "idle"
@@ -61,16 +60,16 @@ type TransformPhase =
  *   using M3's physics-based spatial spring.
  * - Contents cross-fade smoothly: compact card view fades out, full detail view fades in.
  * - On close, it flies straight back into the card's slot in the grid,
- *   settles down, and the original card reappears!
+ *   settles down, and the original card reappears.
  */
-export function M3ContainerTransform({
+export function ContainerTransform({
   trigger,
   triggerContent,
   children,
   className,
   maxWidth = 640,
   title,
-}: M3ContainerTransformProps) {
+}: ContainerTransformProps) {
   const [phase, setPhase] = React.useState<TransformPhase>("idle");
 
   const triggerElRef = React.useRef<HTMLElement | null>(null);
@@ -340,3 +339,6 @@ export function M3ContainerTransform({
     </>
   );
 }
+
+/** Backwards-compatible alias */
+export const M3ContainerTransform = ContainerTransform;

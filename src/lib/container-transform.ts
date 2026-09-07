@@ -1,29 +1,29 @@
 /**
  * Pure helper functions for M3 Container Transform calculations.
  *
- * Used by `<M3ContainerTransform>` to compute spatial bounding boxes,
+ * Used by `<ContainerTransform>` to compute spatial bounding boxes,
  * centering calculations, and FLIP delta matrices when morphing
  * a container directly from its position on the page to the center.
  */
 
-export interface Rect {
+export type Rect = {
   left: number;
   top: number;
   width: number;
   height: number;
-}
+};
 
-export interface Dimensions {
+export type Dimensions = {
   width: number;
   height: number;
-}
+};
 
-export interface ContainerTransformDelta {
+export type ContainerTransformDelta = {
   dx: number;
   dy: number;
   sx: number;
   sy: number;
-}
+};
 
 /**
  * Calculates translation (dx, dy) and scale (sx, sy) needed to transform

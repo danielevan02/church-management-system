@@ -3,7 +3,7 @@
 import * as React from "react";
 import { Calendar, MapPin, Sparkles, UserCheck, X } from "lucide-react";
 
-import { M3ContainerTransform } from "@/components/m3/container-transform";
+import { ContainerTransform } from "@/components/m3/container-transform";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -17,7 +17,7 @@ export function ContainerTransformPreview() {
   return (
     <div className="grid gap-4 sm:grid-cols-2">
       {/* Card 1: Ibadah Raya */}
-      <M3ContainerTransform
+      <ContainerTransform
         title="Detail Ibadah Raya"
         triggerContent={
           <Card className="h-full border-none bg-surface-container shadow-none">
@@ -128,10 +128,10 @@ export function ContainerTransformPreview() {
             </div>
           </div>
         )}
-      </M3ContainerTransform>
+      </ContainerTransform>
 
       {/* Card 2: Ibadah Pemuda (Untuk perbandingan berdampingan) */}
-      <M3ContainerTransform
+      <ContainerTransform
         title="Detail Ibadah Pemuda"
         triggerContent={
           <Card className="h-full border-none bg-surface-container shadow-none">
@@ -238,7 +238,7 @@ export function ContainerTransformPreview() {
             </div>
           </div>
         )}
-      </M3ContainerTransform>
+      </ContainerTransform>
     </div>
   );
 }
