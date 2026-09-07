@@ -129,7 +129,7 @@ export default async function MemberDashboardPage() {
       ) : null}
 
       {/* Quick actions */}
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
         <QuickAction href="/me/qr" icon={QrCode} label={tQuick("myQr")} />
         {features.selfCheckIn ? (
           <QuickAction
@@ -462,16 +462,21 @@ function QuickAction({
   label,
 }: {
   href: string;
-  icon: typeof QrCode;
+  icon: React.ComponentType<{ className?: string }>;
   label: string;
 }) {
   return (
-    <Button asChild variant="outline" className="h-auto flex-col gap-2 py-4">
-      <Link href={href}>
-        <Icon className="h-5 w-5" />
-        <span className="text-xs">{label}</span>
-      </Link>
-    </Button>
+    <Link
+      href={href}
+      className="group flex h-full min-h-[108px] flex-col items-center justify-center gap-2.5 rounded-2xl border border-outline-variant/60 bg-surface-container-low p-3.5 text-center transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-surface-container hover:shadow-level-1 active:translate-y-0 active:rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+    >
+      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-all duration-200 group-hover:scale-110 group-hover:bg-primary group-hover:text-on-primary group-hover:shadow-sm">
+        <Icon className="h-5 w-5 transition-transform" />
+      </div>
+      <span className="line-clamp-2 text-balance text-xs font-medium leading-tight text-on-surface transition-colors group-hover:text-primary">
+        {label}
+      </span>
+    </Link>
   );
 }
 
