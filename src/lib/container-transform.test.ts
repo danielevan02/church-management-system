@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  calculateCenteredTargetRect,
   calculateContainerDelta,
   getInvertedTransformStyle,
   type Rect,
@@ -13,10 +14,6 @@ describe("calculateContainerDelta", () => {
 
     const delta = calculateContainerDelta(cardRect, dialogRect);
 
-    // dx: 100 - 50 = 50
-    // dy: 150 - 50 = 100
-    // sx: 300 / 600 = 0.5
-    // sy: 200 / 400 = 0.5
     expect(delta.dx).toBe(50);
     expect(delta.dy).toBe(100);
     expect(delta.sx).toBe(0.5);
@@ -48,5 +45,37 @@ describe("calculateContainerDelta", () => {
     const delta = { dx: 45.5, dy: 80.2, sx: 0.75, sy: 0.5 };
     const style = getInvertedTransformStyle(delta);
     expect(style).toBe("translate(45.5px, 80.2px) scale(0.75, 0.5)");
+  });
+});
+
+describe("calculateCenteredTargetRect", () => {
+  it("calculates perfectly centered bounds within viewport", () => {
+    const viewport = { width: 1200, height: 800 };
+    const contentHeight = 400;
+
+    const target = calculateCenteredTargetRect(viewport, contentHeight, 600, 16);
+
+    // width: min(1200 - 32, 600) = 600
+    // left: (1200 - 600) / 2 = 300
+    // height: min(800 - 32, 400) = 400
+    // top: (800 - 400) / 2 = 200
+    expect(target.width).toBe(600);
+    expect(target.left).toBe(300);
+    expect(target.height).toBe(400);
+    expect(target.top).toBe(200);
+  });
+
+  it("clamps to viewport minus padding on smaller screens", () => {
+    const mobileViewport = { width: 360, height: 600 };
+    const contentHeight = 500;
+
+    const target = calculateCenteredTargetRect(mobileViewport, contentHeight, 600, 16);
+
+    // width: 360 - 32 = 328
+    // left: (360 - 328) / 2 = 16
+    expect(target.width).toBe(328);
+    expect(target.left).toBe(16);
+    expect(target.height).toBe(500);
+    expect(target.top).toBe(50);
   });
 });
