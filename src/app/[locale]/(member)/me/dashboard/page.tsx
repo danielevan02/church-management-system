@@ -393,9 +393,9 @@ function QuickAction({
   return (
     <Link
       href={href}
-      className="group flex h-24 sm:h-28 flex-col items-center justify-center gap-2 rounded-[18px] border border-outline-variant/25 bg-surface-container-low p-2.5 sm:p-3 text-center transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-surface-container hover:shadow-level-1 active:translate-y-0 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary shadow-level-0"
+      className="group flex h-24 sm:h-28 flex-col items-center justify-center gap-2 rounded-2xl border border-outline-variant/40 bg-surface-container-low px-2 py-3 text-center transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-surface-container hover:shadow-level-1 active:translate-y-0 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary shadow-level-0"
     >
-      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[12px] bg-primary/10 text-primary transition-all duration-200 group-hover:scale-105 group-hover:bg-primary group-hover:text-on-primary group-hover:shadow-xs">
+      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary transition-all duration-200 group-hover:scale-105 group-hover:bg-primary group-hover:text-on-primary group-hover:shadow-xs">
         <Icon className="h-5 w-5 transition-transform" />
       </div>
       <span className="truncate w-full px-1 text-center text-[11px] sm:text-xs font-semibold text-on-surface transition-colors group-hover:text-primary tracking-tight">
