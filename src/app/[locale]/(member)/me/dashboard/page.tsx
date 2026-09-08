@@ -3,16 +3,20 @@ import {
   ArrowRight,
   Baby,
   Calendar,
+  HandCoins,
+  Heart,
   HeartHandshake,
   Megaphone,
+  QrCode,
+  ScanLine,
   Sprout,
+  UserCircle,
   UsersRound,
 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 
 import { ExpandableAnnouncementCard } from "@/components/member/announcements/expandable-announcement-card";
-import { ActionChips } from "@/components/member/dashboard/action-chips";
 import { DevotionalHeroCard } from "@/components/member/dashboard/devotional-hero-card";
 import { SmartWorshipPass } from "@/components/member/dashboard/smart-worship-pass";
 import { Button } from "@/components/ui/button";
@@ -34,6 +38,7 @@ export default async function MemberDashboardPage() {
   if (!session?.user) redirect("/auth/sign-in");
 
   const t = await getTranslations("dashboard.member");
+  const tQuick = await getTranslations("dashboard.member.quickActions");
   const tType = await getTranslations("discipleship.type");
 
   const memberId = session.user.memberId;
@@ -140,13 +145,39 @@ export default async function MemberDashboardPage() {
         hasSelfCheckIn={features.selfCheckIn}
       />
 
-      {/* 3. Minimalist M3 Action Chips (Ergonomic Pill Cluster) */}
-      <ActionChips
-        hasGiving={features.giving}
-        hasDevotionals={features.devotionals}
-        hasChildren={features.childrensCheckIn && children.length > 0}
-        hasCellGroup={true}
-      />
+      {/* 3. Quick Actions Matrix (3x2 Matrix on Mobile, 6x1 on Desktop) */}
+      <section aria-label="Aksi Cepat">
+        <div className="grid grid-cols-3 gap-2.5 sm:gap-3 lg:grid-cols-6">
+          <QuickAction href="/me/qr" icon={QrCode} label={tQuick("myQr")} />
+          {features.selfCheckIn ? (
+            <QuickAction
+              href="/me/check-in"
+              icon={ScanLine}
+              label={tQuick("checkIn")}
+            />
+          ) : null}
+          <QuickAction
+            href="/me/giving"
+            icon={HandCoins}
+            label={tQuick("giveNow")}
+          />
+          <QuickAction
+            href="/me/events"
+            icon={Calendar}
+            label={tQuick("events")}
+          />
+          <QuickAction
+            href="/me/prayer-requests"
+            icon={Heart}
+            label={tQuick("prayer")}
+          />
+          <QuickAction
+            href="/me/profile"
+            icon={UserCircle}
+            label={tQuick("myProfile")}
+          />
+        </div>
+      </section>
 
       {/* 4. Renungan Firman Hari Ini (M3 Journal Editorial Card) */}
       {features.devotionals && todayDevotional ? (
@@ -347,6 +378,30 @@ export default async function MemberDashboardPage() {
         </section>
       ) : null}
     </div>
+  );
+}
+
+function QuickAction({
+  href,
+  icon: Icon,
+  label,
+}: {
+  href: string;
+  icon: React.ComponentType<{ className?: string }>;
+  label: string;
+}) {
+  return (
+    <Link
+      href={href}
+      className="group flex h-full min-h-[96px] sm:min-h-[108px] flex-col items-center justify-center gap-2 rounded-2xl border border-outline-variant/60 bg-surface-container-low p-2.5 sm:p-3.5 text-center transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-surface-container hover:shadow-level-1 active:translate-y-0 active:rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+    >
+      <div className="flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-all duration-200 group-hover:scale-105 group-hover:bg-primary group-hover:text-on-primary group-hover:shadow-xs">
+        <Icon className="h-5 w-5 transition-transform" />
+      </div>
+      <span className="line-clamp-2 text-balance text-[11px] sm:text-xs font-medium leading-tight text-on-surface transition-colors group-hover:text-primary">
+        {label}
+      </span>
+    </Link>
   );
 }
 
