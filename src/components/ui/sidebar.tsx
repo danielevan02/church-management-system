@@ -4,6 +4,7 @@ import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { PanelLeftIcon } from "lucide-react"
 import { Slot } from "radix-ui"
+import { usePathname } from "next/navigation"
 
 import { useIsMobile } from "@/hooks/use-mobile"
 import { cn } from "@/lib/utils"
@@ -218,7 +219,7 @@ function Sidebar({
       <div
         data-slot="sidebar-gap"
         className={cn(
-          "relative w-(--sidebar-width) bg-transparent transition-[width] duration-200 ease-linear",
+          "relative w-(--sidebar-width) bg-transparent transition-[width] m3-sidebar-motion",
           "group-data-[collapsible=offcanvas]:w-0",
           "group-data-[side=right]:rotate-180",
           variant === "floating" || variant === "inset"
@@ -229,7 +230,7 @@ function Sidebar({
       <div
         data-slot="sidebar-container"
         className={cn(
-          "fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width) transition-[left,right,width] duration-200 ease-linear md:flex",
+          "fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width) transition-[left,right,width] m3-sidebar-motion md:flex",
           side === "left"
             ? "left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]"
             : "right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]",
@@ -291,7 +292,7 @@ function SidebarRail({ className, ...props }: React.ComponentProps<"button">) {
       onClick={toggleSidebar}
       title="Toggle Sidebar"
       className={cn(
-        "absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] hover:after:bg-outline-variant sm:flex",
+        "absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-colors motion-effects-fast group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] hover:after:bg-outline-variant sm:flex",
         "in-data-[side=left]:cursor-w-resize in-data-[side=right]:cursor-e-resize",
         "[[data-side=left][data-state=collapsed]_&]:cursor-e-resize [[data-side=right][data-state=collapsed]_&]:cursor-w-resize",
         "group-data-[collapsible=offcanvas]:translate-x-0 group-data-[collapsible=offcanvas]:after:left-full hover:group-data-[collapsible=offcanvas]:bg-sidebar",
@@ -310,7 +311,7 @@ function SidebarInset({ className, ...props }: React.ComponentProps<"main">) {
       data-slot="sidebar-inset"
       className={cn(
         "relative flex w-full flex-1 flex-col bg-surface",
-        "md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-lg md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-2",
+        "md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-lg md:peer-data-[variant=inset]:peer-data-[state=collapsed]:peer-data-[collapsible=offcanvas]:ml-2",
         className
       )}
       {...props}
@@ -369,17 +370,240 @@ function SidebarSeparator({
   )
 }
 
-function SidebarContent({ className, ...props }: React.ComponentProps<"div">) {
+type IndicatorRect = {
+  top: number
+  left: number
+  width: number
+  height: number
+}
+
+function SidebarContent({
+  className,
+  children,
+  onClick,
+  ...props
+}: React.ComponentProps<"div">) {
+  const contentRef = React.useRef<HTMLDivElement>(null)
+  const [rect, setRect] = React.useState<IndicatorRect | null>(null)
+  const [ready, setReady] = React.useState(false)
+  const [hasPending, setHasPending] = React.useState(false)
+  /**
+   * True while the indicator is following a *layout* change rather than a
+   * navigation, which is the difference between it gliding and it trailing.
+   *
+   * The rect is measured in JS and applied as an inline style, and the element
+   * also carries a 435ms spring on `transform,width,height`. That pairing is
+   * right for a click — the pill glides from the old row to the new one — and
+   * wrong for a resize: collapsing the drawer resizes every row, the
+   * `ResizeObserver` below re-measures on every frame of the 435ms width
+   * transition, and each new target restarts the spring from wherever the pill
+   * currently is. The pill ends up crawling behind the rows the whole way and
+   * settling late, which is the most visible thing wrong with the old collapse.
+   * While tracking, the transition is dropped so the pill sits exactly on its
+   * row every frame; navigation keeps the glide.
+   */
+  const [tracking, setTracking] = React.useState(false)
+  const pathname = usePathname()
+  const pendingTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
+  const trackingTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const measure = React.useCallback(() => {
+    const content = contentRef.current
+    if (!content) return
+
+    // Find the pending-active or active menu button inside this content container
+    const target =
+      content.querySelector<HTMLElement>(
+        '[data-sidebar="menu-button"][data-pending-active="true"]'
+      ) ??
+      content.querySelector<HTMLElement>(
+        '[data-sidebar="menu-button"][data-active="true"]'
+      )
+
+    if (!target) {
+      setRect(null)
+      return
+    }
+
+    const contentBox = content.getBoundingClientRect()
+    const targetBox = target.getBoundingClientRect()
+
+    // Position relative to content, accounting for scroll offset
+    setRect({
+      top: targetBox.top - contentBox.top + content.scrollTop,
+      left: targetBox.left - contentBox.left + content.scrollLeft,
+      width: targetBox.width,
+      height: targetBox.height,
+    })
+
+    // Avoid initial fly-in transition on page load
+    requestAnimationFrame(() => {
+      setReady(true)
+    })
+  }, [])
+
+  // Re-measure on pathname change, DOM mutations, or resize
+  React.useEffect(() => {
+    const content = contentRef.current
+    if (!content) return
+
+    // Route changed: clear all optimistic pending states
+    content
+      .querySelectorAll<HTMLElement>(
+        '[data-sidebar="menu-button"][data-pending-active="true"]'
+      )
+      .forEach((btn) => btn.removeAttribute("data-pending-active"))
+    setHasPending(false)
+
+    let frame = 0
+    const debouncedMeasure = () => {
+      cancelAnimationFrame(frame)
+      frame = requestAnimationFrame(measure)
+    }
+
+    debouncedMeasure()
+
+    const mutations = new MutationObserver(debouncedMeasure)
+    mutations.observe(content, {
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["data-active"],
+    })
+
+    const trackLayout = () => {
+      setTracking(true)
+      if (trackingTimerRef.current) clearTimeout(trackingTimerRef.current)
+      // Restore the glide once resizing has been quiet for a couple of frames.
+      trackingTimerRef.current = setTimeout(() => setTracking(false), 160)
+      debouncedMeasure()
+    }
+
+    const resizes = new ResizeObserver(trackLayout)
+    resizes.observe(content)
+    for (const child of Array.from(content.children)) {
+      resizes.observe(child)
+    }
+
+    return () => {
+      cancelAnimationFrame(frame)
+      mutations.disconnect()
+      resizes.disconnect()
+      if (pendingTimerRef.current) {
+        clearTimeout(pendingTimerRef.current)
+      }
+      if (trackingTimerRef.current) {
+        clearTimeout(trackingTimerRef.current)
+      }
+    }
+  }, [measure, pathname])
+
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    onClick?.(e)
+    const content = contentRef.current
+    if (!content) return
+
+    const target = (e.target as HTMLElement).closest<HTMLElement>(
+      '[data-sidebar="menu-button"]'
+    )
+    if (!target || !content.contains(target)) return
+
+    // Don't activate indicator on disabled items, action buttons, or items opting out
+    if (
+      target.getAttribute("aria-disabled") === "true" ||
+      target.hasAttribute("disabled") ||
+      target.getAttribute("data-no-indicator") === "true" ||
+      target.classList.contains("bg-primary") ||
+      target.closest('[data-sidebar="menu-action"]') ||
+      target.closest('[data-slot="sidebar-group-action"]')
+    ) {
+      return
+    }
+
+    // If item is already active and not pending, no need to glide
+    if (
+      target.getAttribute("data-active") === "true" &&
+      !content.querySelector('[data-sidebar="menu-button"][data-pending-active="true"]')
+    ) {
+      return
+    }
+
+    // Clear previous pending states everywhere in this content
+    content
+      .querySelectorAll<HTMLElement>(
+        '[data-sidebar="menu-button"][data-pending-active="true"]'
+      )
+      .forEach((btn) => btn.removeAttribute("data-pending-active"))
+
+    target.setAttribute("data-pending-active", "true")
+    setHasPending(true)
+
+    // Measure target immediately for instant optimistic sliding response
+    const contentBox = content.getBoundingClientRect()
+    const targetBox = target.getBoundingClientRect()
+
+    setRect({
+      top: targetBox.top - contentBox.top + content.scrollTop,
+      left: targetBox.left - contentBox.left + content.scrollLeft,
+      width: targetBox.width,
+      height: targetBox.height,
+    })
+    setReady(true)
+
+    // Safety timeout in case navigation is cancelled or delayed
+    if (pendingTimerRef.current) clearTimeout(pendingTimerRef.current)
+    pendingTimerRef.current = setTimeout(() => {
+      if (!contentRef.current) return
+      contentRef.current
+        .querySelectorAll<HTMLElement>(
+          '[data-sidebar="menu-button"][data-pending-active="true"]'
+        )
+        .forEach((btn) => btn.removeAttribute("data-pending-active"))
+      setHasPending(false)
+      measure()
+    }, 4000)
+  }
+
   return (
     <div
+      ref={contentRef}
       data-slot="sidebar-content"
       data-sidebar="content"
+      data-sliding-ready={ready && !!rect ? "true" : undefined}
+      data-has-pending={hasPending ? "true" : undefined}
+      onClick={handleClick}
       className={cn(
-        "flex min-h-0 flex-1 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden",
+        // Vertical scroll in both states. The collapsed rail used to be
+        // `overflow-hidden` (shadcn's way of keeping a scrollbar out of a
+        // narrow rail), but this app has 31 nav rows: at the old 32dp they
+        // already needed ~1250dp against roughly 600dp of rail, so the bottom
+        // third simply could not be reached. `overflow-x-hidden` keeps the
+        // horizontal clipping that the hidden was really there for.
+        "relative flex min-h-0 flex-1 flex-col gap-2 overflow-x-hidden overflow-y-auto",
         className
       )}
       {...props}
-    />
+    >
+      {rect && (
+        <div
+          aria-hidden="true"
+          data-slot="sidebar-menu-indicator"
+          className={cn(
+            "pointer-events-none absolute top-0 left-0 z-0 bg-secondary-container",
+            ready &&
+              !tracking &&
+              "motion-spatial transition-[transform,width,height,opacity]",
+            "rounded-xl group-data-[collapsible=icon]:rounded-full",
+          )}
+          style={{
+            transform: `translate3d(${rect.left}px, ${rect.top}px, 0)`,
+            width: rect.width,
+            height: rect.height,
+            willChange: "transform, width, height",
+          }}
+        />
+      )}
+      {children}
+    </div>
   )
 }
 
@@ -407,8 +631,8 @@ function SidebarGroupLabel({
       data-sidebar="group-label"
       className={cn(
         // M3 navigation drawer section header: 56dp, title-small.
-        "flex h-14 shrink-0 items-center px-4 text-title-sm text-on-surface-variant outline-hidden transition-[margin,opacity] duration-200 ease-standard [&>svg]:size-5 [&>svg]:shrink-0",
-        "group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0",
+        "flex h-14 shrink-0 items-center px-4 text-title-sm text-on-surface-variant outline-hidden transition-[margin,opacity] m3-sidebar-motion [&>svg]:size-5 [&>svg]:shrink-0",
+        "group-data-[collapsible=icon]:-mt-14 group-data-[collapsible=icon]:opacity-0 group-data-[collapsible=icon]:pointer-events-none",
         className
       )}
       {...props}
@@ -469,7 +693,10 @@ function SidebarMenuItem({ className, ...props }: React.ComponentProps<"li">) {
     <li
       data-slot="sidebar-menu-item"
       data-sidebar="menu-item"
-      className={cn("group/menu-item relative", className)}
+      className={cn(
+        "group/menu-item relative z-10 group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center",
+        className
+      )}
       {...props}
     />
   )
@@ -479,9 +706,10 @@ function SidebarMenuItem({ className, ...props }: React.ComponentProps<"li">) {
  * M3 navigation drawer item.
  *
  * The active state is the whole point: a full-width, fully-round (28dp)
- * `secondary-container` pill, which is how M3 says "you are here". shadcn's
- * `data-[active=true]:bg-sidebar-accent` is a faint grey tint that reads
- * identically to hover — the two states were indistinguishable.
+ * `secondary-container` pill, which is how M3 says "you are here".
+ *
+ * Sliding active indicator glides with Material 3 spatial spring physics between
+ * links on click and page changes.
  *
  * Hover/press come from `state-layer` rather than `hover:bg-*`, so the wash
  * composites correctly over both the transparent resting item and the tonal
@@ -493,11 +721,18 @@ const sidebarMenuButtonVariants = cva(
     "state-layer m3-focus-ring peer/menu-button",
     "flex w-full items-center gap-3 overflow-hidden rounded-xl px-4 text-left",
     "text-label-lg text-on-surface-variant",
-    "transition-[width,height,padding,background-color,color] duration-200 ease-standard",
+    "transition-[width,height,padding,background-color,color] m3-sidebar-motion",
     "group-has-data-[sidebar=menu-action]/menu-item:pr-8",
     // Collapsed rail: 56x32 pill, icon only.
-    "group-data-[collapsible=icon]:h-8! group-data-[collapsible=icon]:w-14! group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:rounded-full group-data-[collapsible=icon]:px-0!",
-    "data-[active=true]:bg-secondary-container data-[active=true]:text-on-secondary-container",
+    // Collapsed rail: a 40dp circle. It was a 56x32 stadium, which is M3's own
+    // rail indicator spec, but next to the round brand mark and avatar it read
+    // as an odd shape rather than a deliberate one. `gap-0` matters as much as
+    // the size: the label collapses to `max-width: 0` rather than
+    // `display: none`, so its 12dp gap survived and offset the icon 6dp left of
+    // centre in every row.
+    "group-data-[collapsible=icon]:size-10! group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:gap-0 group-data-[collapsible=icon]:rounded-full group-data-[collapsible=icon]:px-0!",
+    "data-[active=true]:bg-secondary-container data-[active=true]:text-on-secondary-container data-[active=true]:font-semibold",
+    "data-[pending-active=true]:text-on-secondary-container data-[pending-active=true]:font-semibold",
     "disabled:pointer-events-none disabled:text-on-surface/38",
     "aria-disabled:pointer-events-none aria-disabled:text-on-surface/38",
     "[&>span:last-child]:truncate [&>svg]:size-6 [&>svg]:shrink-0",
@@ -513,7 +748,7 @@ const sidebarMenuButtonVariants = cva(
         // M3 drawer item height.
         default: "h-14",
         sm: "h-10 text-label-md [&>svg]:size-5",
-        lg: "h-14 group-data-[collapsible=icon]:p-0!",
+        lg: "h-14 group-data-[collapsible=icon]:p-0!",  // collapsed size comes from the base circle
       },
     },
     defaultVariants: {

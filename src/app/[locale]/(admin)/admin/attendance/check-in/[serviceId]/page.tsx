@@ -1,11 +1,12 @@
-import { ArrowLeft } from "lucide-react";
+import { Lock } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
+import { Banner } from "@/components/m3/banner";
+import { PageHeader } from "@/components/m3/page-header";
 import { CheckInConsole } from "@/components/admin/attendance/check-in-console";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Link } from "@/lib/i18n/navigation";
+
 import { listAttendanceForService } from "@/server/queries/attendance";
 import { getService, isCheckInOpen } from "@/server/queries/services";
 import { formatJakarta } from "@/lib/datetime";
@@ -34,31 +35,23 @@ export default async function UsherCheckInPage({
   }));
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-4">
-        <Button asChild variant="ghost" size="sm" className="w-fit">
-          <Link href={`/admin/attendance/services/${serviceId}`}>
-            <ArrowLeft className="h-4 w-4" />
-            {service.name}
-          </Link>
-        </Button>
-
-        <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
-          <div className="flex flex-col gap-1">
-            <h1 className="text-3xl font-bold tracking-tight">
-              {t("pageTitle")}
-            </h1>
-            <div className="flex flex-wrap items-center gap-2 text-sm text-on-surface-variant">
-              <span>{service.name}</span>
-              <span>•</span>
-              <span>{tType(typeKey(service.type))}</span>
-              <span>•</span>
-              <span>
-                {formatJakarta(service.startsAt, "EEE dd MMM yyyy, HH:mm")}
-              </span>
-            </div>
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6">
+      <PageHeader
+        backHref={`/admin/attendance/services/${serviceId}`}
+        backLabel={service.name}
+        title={t("pageTitle")}
+        subtitle={
+          <div className="flex flex-wrap items-center gap-2">
+            <span>{service.name}</span>
+            <span>•</span>
+            <span>{tType(typeKey(service.type))}</span>
+            <span>•</span>
+            <span>
+              {formatJakarta(service.startsAt, "EEE dd MMM yyyy, HH:mm")}
+            </span>
           </div>
-
+        }
+        action={
           <div className="flex items-center gap-2 text-sm">
             <Badge variant={open ? "default" : "secondary"}>
               {open ? t("statusOpen") : t("statusClosed")}
@@ -67,13 +60,11 @@ export default async function UsherCheckInPage({
               {total} ({memberCount}M / {visitorCount}V)
             </span>
           </div>
-        </div>
-      </header>
+        }
+      />
 
       {!open ? (
-        <div className="rounded-md border border-dashed bg-surface-container-high/40 p-6 text-sm text-on-surface-variant">
-          {t("closedNotice")}
-        </div>
+        <Banner tone="warning" icon={Lock} title={t("closedNotice")} />
       ) : (
         <CheckInConsole serviceId={serviceId} initialRecent={initialRecent} />
       )}

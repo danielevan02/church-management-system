@@ -1,7 +1,9 @@
-import { ArrowLeft, CheckCircle2, Clock } from "lucide-react";
+import { Baby, CheckCircle2, Clock } from "lucide-react";
 import { getTranslations } from "next-intl/server";
+import { EmptyState } from "@/components/m3/empty-state";
 import { notFound, redirect } from "next/navigation";
 
+import { PageHeader } from "@/components/m3/page-header";
 import { Pagination } from "@/components/shared/pagination";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -51,19 +53,13 @@ export default async function CheckInHistoryPage({
   ]);
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1">
-        <Button asChild variant="ghost" size="sm" className="w-fit">
-          <Link href="/admin/children">
-            <ArrowLeft className="h-4 w-4" />
-            {t("back")}
-          </Link>
-        </Button>
-        <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="text-on-surface-variant">
-          {t("subtitle", { total: result.total })}
-        </p>
-      </header>
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6">
+      <PageHeader
+        backHref="/admin/children"
+        backLabel={t("back")}
+        title={t("title")}
+        subtitle={t("subtitle", { total: result.total })}
+      />
 
       <div className="-mx-1 flex flex-wrap items-center gap-2 overflow-x-auto px-1">
         <Button
@@ -88,11 +84,9 @@ export default async function CheckInHistoryPage({
       </div>
 
       {result.total === 0 ? (
-        <div className="rounded-md border border-dashed p-10 text-center text-sm text-on-surface-variant">
-          {t("empty")}
-        </div>
+        <EmptyState icon={Baby} title={t("empty")} />
       ) : (
-        <div className="rounded-md border">
+        <div className="rounded-lg bg-surface-container-low overflow-hidden">
           <Table>
             <TableHeader>
               <TableRow>

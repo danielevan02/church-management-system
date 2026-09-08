@@ -2,14 +2,10 @@ import { Activity, ArrowRight, ClipboardList, History } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { notFound, redirect } from "next/navigation";
 
+import { BlockSection } from "@/components/m3/block-section";
+import { PageHeader } from "@/components/m3/page-header";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+
 import { features } from "@/config/features";
 import { auth } from "@/lib/auth";
 import { Link } from "@/lib/i18n/navigation";
@@ -28,24 +24,27 @@ export default async function ChildrenHubPage() {
 
   const t = await getTranslations("children");
 
+  const tEyebrow = await getTranslations("eyebrow");
+
   const [active, classes] = await Promise.all([
     listActiveCheckIns(),
     listAllChildClasses({ activeOnly: true }),
   ]);
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1">
-        <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="text-on-surface-variant">{t("subtitle")}</p>
-      </header>
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6">
+      <PageHeader
+        eyebrow={tEyebrow("children")}
+        title={t("title")}
+        subtitle={t("subtitle")}
+      />
 
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
+      <div suppressHydrationWarning data-stagger="cards" className="grid grid-cols-2 gap-4 md:grid-cols-3">
         <Stat label={t("stats.activeNow")} value={active.length} accent />
         <Stat label={t("stats.activeClasses")} value={classes.length} />
       </div>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+      <div suppressHydrationWarning data-stagger="cards" className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <SectionLink
           href="/admin/children/check-in"
           icon={Activity}
@@ -84,9 +83,11 @@ function Stat({
 }) {
   return (
     <div
-      className={`flex flex-col gap-1 rounded-md border p-3 ${accent ? "border-primary bg-primary/5" : ""}`}
+      className={`flex flex-col gap-1.5 rounded-lg p-4 sm:p-5 ${
+        accent ? "bg-secondary-container text-on-secondary-container" : "bg-surface-container-high"
+      }`}
     >
-      <div className="text-xs text-on-surface-variant">{label}</div>
+      <div className="text-xs font-medium text-on-surface-variant">{label}</div>
       <div className="text-2xl font-bold tabular-nums">{value}</div>
     </div>
   );
@@ -108,22 +109,17 @@ function SectionLink({
   primary?: boolean;
 }) {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-base">
-          <Icon className="h-5 w-5" />
-          {title}
-        </CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Button asChild variant={primary ? "default" : "outline"} size="sm">
-          <Link href={href}>
-            {ctaLabel}
-            <ArrowRight className="h-4 w-4" />
-          </Link>
-        </Button>
-      </CardContent>
-    </Card>
+    <BlockSection
+      icon={Icon}
+      title={title}
+      description={description}
+    >
+      <Button asChild variant={primary ? "default" : "outline"} size="sm">
+        <Link href={href}>
+          {ctaLabel}
+          <ArrowRight className="size-4" />
+        </Link>
+      </Button>
+    </BlockSection>
   );
 }

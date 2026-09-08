@@ -1,12 +1,11 @@
-import { ArrowLeft, BookOpen } from "lucide-react";
+import { BookOpen } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
+import { CardWatermark, ExpressiveCard } from "@/components/m3/expressive-card";
+import { PageHeader } from "@/components/m3/page-header";
 import { MarkdownContent } from "@/components/shared/markdown-content";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { formatJakarta } from "@/lib/datetime";
-import { Link } from "@/lib/i18n/navigation";
 import { getDevotionalForMember } from "@/server/queries/devotionals";
 
 export default async function MemberDevotionalDetailPage({
@@ -22,67 +21,49 @@ export default async function MemberDevotionalDetailPage({
   const tDash = await getTranslations("dashboard.member.devotionalToday");
 
   return (
-    <div className="flex flex-col gap-4">
-      <Button asChild variant="ghost" size="sm" className="-ml-2 w-fit gap-1">
-        <Link href="/me/devotionals">
-          <ArrowLeft className="h-4 w-4" />
-          {t("back")}
-        </Link>
-      </Button>
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-5 pb-28 sm:pb-12">
+      <PageHeader
+        backHref="/me/devotionals"
+        backLabel={t("back")}
+        eyebrow={formatJakarta(devotional.publishedAt, "EEEE, dd MMMM yyyy")}
+        title={devotional.title}
+        subtitle={
+          devotional.authorName ? `— ${devotional.authorName}` : undefined
+        }
+      />
 
-      <Card className="relative overflow-hidden">
-        {/* Decorative watermark */}
-        <BookOpen
-          aria-hidden
-          className="pointer-events-none absolute -right-12 -top-12 h-56 w-56 text-primary/5"
-        />
+      <ExpressiveCard tone="gradient" padding="spacious" className="group gap-5">
+        <CardWatermark icon={BookOpen} className="-top-8 -right-8 bottom-auto h-52 w-52" />
 
-        {/* Hero header */}
-        <header className="relative border-b bg-linear-to-br from-primary/10 via-primary/5 to-transparent px-6 py-8 sm:px-8">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-primary px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-on-primary">
-              <BookOpen className="h-3 w-3" />
-              {tDash("label")}
-            </span>
-            <span className="text-xs uppercase tracking-wider text-on-surface-variant">
-              {formatJakarta(devotional.publishedAt, "EEEE, dd MMMM yyyy")}
-            </span>
+        <span className="inline-flex w-fit items-center gap-1.5 rounded-full bg-primary/15 px-3 py-1 text-xs font-semibold text-primary">
+          <BookOpen className="h-3.5 w-3.5" />
+          {tDash("label")}
+        </span>
+
+        {/* The verse is a pull-quote, not a field. It keeps the 4dp accent rule
+            — the one border in this language — because scripture is quoted
+            material and the rule is what marks it as someone else's words. */}
+        {devotional.verseRef || devotional.verseText ? (
+          <div className="rounded-2xl border-l-4 border-primary/40 bg-surface-container-high p-4">
+            {devotional.verseRef ? (
+              <p className="flex items-center gap-1.5 text-sm font-bold text-primary">
+                <BookOpen className="h-4 w-4" />
+                {devotional.verseRef}
+              </p>
+            ) : null}
+            {devotional.verseText ? (
+              <p className="mt-2 text-sm leading-relaxed italic whitespace-pre-wrap text-on-surface-variant">
+                {devotional.verseText}
+              </p>
+            ) : null}
           </div>
-          <h1 className="mt-3 text-3xl font-bold leading-tight tracking-tight">
-            {devotional.title}
-          </h1>
-          {devotional.authorName ? (
-            <p className="mt-2 text-sm italic text-on-surface-variant">
-              — {devotional.authorName}
-            </p>
-          ) : null}
-        </header>
+        ) : null}
 
-        {/* Body */}
-        <div className="relative space-y-6 px-6 py-8 sm:px-8">
-          {/* Verse panel */}
-          {devotional.verseRef || devotional.verseText ? (
-            <div className="rounded-md border-l-4 border-primary/40 bg-primary/5 p-4">
-              {devotional.verseRef ? (
-                <p className="flex items-center gap-1.5 text-sm font-semibold text-primary">
-                  <BookOpen className="h-4 w-4" />
-                  {devotional.verseRef}
-                </p>
-              ) : null}
-              {devotional.verseText ? (
-                <p className="mt-2 whitespace-pre-wrap text-sm italic leading-relaxed text-on-surface-variant">
-                  {devotional.verseText}
-                </p>
-              ) : null}
-            </div>
-          ) : null}
-
-          <MarkdownContent
-            source={devotional.body}
-            className="prose-base prose-p:leading-relaxed sm:prose-lg"
-          />
-        </div>
-      </Card>
+        <MarkdownContent
+          source={devotional.body}
+          className="prose-base prose-p:leading-relaxed sm:prose-lg"
+        />
+      </ExpressiveCard>
     </div>
   );
 }

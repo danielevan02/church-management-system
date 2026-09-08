@@ -14,6 +14,11 @@ import {
 import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 
+import { ExpressiveCard } from "@/components/m3/expressive-card";
+import { IconChip } from "@/components/m3/icon-chip";
+import { PageHeader } from "@/components/m3/page-header";
+import { QuickActionGrid, QuickActionTile } from "@/components/m3/quick-action";
+import { SectionHeader } from "@/components/m3/section-header";
 import { ExpandableAnnouncementCard } from "@/components/member/announcements/expandable-announcement-card";
 import { DevotionalHeroCard } from "@/components/member/dashboard/devotional-hero-card";
 import { QuickGivingAction } from "@/components/member/dashboard/quick-giving-action";
@@ -109,33 +114,27 @@ export default async function MemberDashboardPage() {
     milestones.length > 0 ? milestones[milestones.length - 1] : null;
 
   return (
-    <div className="flex flex-col gap-6 pb-28 sm:pb-12">
-      {/* 1. Contextual M3 Header Bar */}
-      <header className="flex items-center justify-between gap-4 pt-1">
-        <div className="space-y-0.5">
-          <p className="text-xs font-semibold text-primary uppercase tracking-wider">
-            {format(new Date(), "EEEE, dd MMMM yyyy")}
-          </p>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-on-surface">
-            {t("welcome", { name: member?.firstName ?? "Jemaat" })}
-          </h1>
-        </div>
-
-        {/* Member Profile Avatar Pill */}
-        <Link
-          href="/me/profile"
-          className="group relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-secondary-container text-on-secondary-container shadow-level-0 transition-all duration-200 hover:bg-secondary-container/80 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-          aria-label="Profil Saya"
-        >
-          <span className="text-sm font-bold">
-            {member?.firstName ? member.firstName[0] : "J"}
-            {member?.lastName ? member.lastName[0] : ""}
-          </span>
-          <span className="absolute -bottom-0.5 -right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-primary text-[8px] text-on-primary font-bold shadow-xs">
-            ✓
-          </span>
-        </Link>
-      </header>
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6 pb-28 sm:pb-12">
+      {/* 1. Contextual header: eyebrow date + greeting + profile pill */}
+      <PageHeader
+        eyebrow={format(new Date(), "EEEE, dd MMMM yyyy")}
+        title={t("welcome", { name: member?.firstName ?? "Jemaat" })}
+        action={
+          <Link
+            href="/me/profile"
+            className="group relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-secondary-container text-on-secondary-container shadow-level-0 motion-effects-fast transition-[background-color,transform] hover:bg-secondary-container/80 active:scale-95 m3-focus-ring"
+            aria-label={tQuick("myProfile")}
+          >
+            <span className="text-sm font-bold">
+              {member?.firstName ? member.firstName[0] : "J"}
+              {member?.lastName ? member.lastName[0] : ""}
+            </span>
+            <span className="absolute -right-0.5 -bottom-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-primary text-[8px] font-bold text-on-primary shadow-xs">
+              ✓
+            </span>
+          </Link>
+        }
+      />
 
       {/* 2. The Smart Worship Pass (Google Wallet Inspired Centerpiece) */}
       <SmartWorshipPass
@@ -146,12 +145,12 @@ export default async function MemberDashboardPage() {
         hasSelfCheckIn={features.selfCheckIn}
       />
 
-      {/* 3. Quick Actions Matrix (3x2 Matrix on Mobile, 6x1 on Desktop) */}
-      <section aria-label="Aksi Cepat">
-        <div className="grid grid-cols-3 gap-2.5 sm:gap-3 lg:grid-cols-6">
-          <QuickAction href="/me/qr" icon={QrCode} label={tQuick("myQr")} />
+      {/* 3. Quick actions: 3 across on a phone, 6 on a laptop */}
+      <section suppressHydrationWarning data-reveal="up" aria-label={tQuick("title")}>
+        <QuickActionGrid>
+          <QuickActionTile href="/me/qr" icon={QrCode} label={tQuick("myQr")} />
           {features.selfCheckIn ? (
-            <QuickAction
+            <QuickActionTile
               href="/me/check-in"
               icon={ScanLine}
               label={tQuick("checkIn")}
@@ -160,18 +159,18 @@ export default async function MemberDashboardPage() {
           {features.giving ? (
             <QuickGivingAction label={tQuick("giveNow")} bank={church.bank} />
           ) : null}
-          <QuickAction
+          <QuickActionTile
             href="/me/events"
             icon={Calendar}
             label={tQuick("events")}
           />
           <QuickPrayerAction label={tQuick("prayer")} />
-          <QuickAction
+          <QuickActionTile
             href="/me/profile"
             icon={UserCircle}
             label={tQuick("myProfile")}
           />
-        </div>
+        </QuickActionGrid>
       </section>
 
       {/* 4. Renungan Firman Hari Ini (M3 Journal Editorial Card) */}
@@ -180,14 +179,17 @@ export default async function MemberDashboardPage() {
       ) : null}
 
       {/* 5. Asymmetric Bento: Komunitas & Langkah Iman */}
-      <section aria-label="Komunitas dan Langkah Iman" className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <section
+        suppressHydrationWarning
+        data-stagger="cards"
+        aria-label="Komunitas dan Langkah Iman"
+        className="grid grid-cols-1 gap-4 sm:grid-cols-2"
+      >
         {/* Cell Group Live Tile */}
-        <div className="flex flex-col justify-between gap-4 rounded-3xl bg-surface-container-low p-5 sm:p-6 transition-all duration-200 hover:bg-surface-container shadow-level-0">
+        <ExpressiveCard className="justify-between gap-4 hover:bg-surface-container">
           <div className="space-y-3">
             <div className="flex items-center justify-between gap-2">
-              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-secondary-container text-on-secondary-container">
-                <UsersRound className="h-5 w-5" />
-              </div>
+              <IconChip icon={UsersRound} tone="secondary" />
               <span className="text-xs font-semibold text-on-surface-variant">
                 Komunitas Sel
               </span>
@@ -218,16 +220,14 @@ export default async function MemberDashboardPage() {
               <ArrowRight className="h-3 w-3" />
             </Link>
           </Button>
-        </div>
+        </ExpressiveCard>
 
         {/* Next Event or Discipleship Milestone */}
         {nextEvent ? (
-          <div className="flex flex-col justify-between gap-4 rounded-3xl bg-surface-container-low p-5 sm:p-6 transition-all duration-200 hover:bg-surface-container shadow-level-0">
+          <ExpressiveCard className="justify-between gap-4 hover:bg-surface-container">
             <div className="space-y-3">
               <div className="flex items-center justify-between gap-2">
-                <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                  <Calendar className="h-5 w-5" />
-                </div>
+                <IconChip icon={Calendar} />
                 <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-semibold text-primary">
                   {t("nextEvent")}
                 </span>
@@ -250,14 +250,12 @@ export default async function MemberDashboardPage() {
                 <ArrowRight className="h-3 w-3" />
               </Link>
             </Button>
-          </div>
+          </ExpressiveCard>
         ) : features.discipleship ? (
-          <div className="flex flex-col justify-between gap-4 rounded-3xl bg-surface-container-low p-5 sm:p-6 transition-all duration-200 hover:bg-surface-container shadow-level-0">
+          <ExpressiveCard className="justify-between gap-4 hover:bg-surface-container">
             <div className="space-y-3">
               <div className="flex items-center justify-between gap-2">
-                <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                  <Sprout className="h-5 w-5" />
-                </div>
+                <IconChip icon={Sprout} />
                 <span className="text-xs font-semibold text-on-surface-variant">
                   {t("discipleship.title")}
                 </span>
@@ -283,31 +281,23 @@ export default async function MemberDashboardPage() {
                 <ArrowRight className="h-3 w-3" />
               </Link>
             </Button>
-          </div>
+          </ExpressiveCard>
         ) : null}
       </section>
 
       {/* 6. Warta & Pengumuman Terbaru (Container Transform Feed) */}
       {latestAnnouncements.length > 0 ? (
-        <section className="flex flex-col gap-3" aria-label="Warta Jemaat">
-          <div className="flex items-center justify-between px-1">
-            <div className="flex items-center gap-2">
-              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                <Megaphone className="h-3.5 w-3.5" />
-              </div>
-              <h2 className="text-base font-bold text-on-surface">
-                {t("announcements.title")}
-              </h2>
-            </div>
-            <Button asChild variant="ghost" size="sm" className="text-xs text-primary rounded-full hover:bg-primary/5">
-              <Link href="/me/announcements" className="flex items-center gap-1">
-                <span>{t("announcements.viewAll")}</span>
-                <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
-            </Button>
-          </div>
+        <section suppressHydrationWarning data-reveal="up" className="flex flex-col gap-3" aria-label="Warta Jemaat">
+          <SectionHeader
+            icon={Megaphone}
+            title={t("announcements.title")}
+            action={{
+              href: "/me/announcements",
+              label: t("announcements.viewAll"),
+            }}
+          />
 
-          <div className="flex flex-col gap-2.5">
+          <div suppressHydrationWarning data-stagger="cards" className="flex flex-col gap-3">
             {latestAnnouncements.map((a) => {
               const isFresh =
                 Date.now() - a.publishedAt.getTime() < 24 * 60 * 60 * 1000;
@@ -326,33 +316,21 @@ export default async function MemberDashboardPage() {
       {/* 7. Children Section for Guardians */}
       {features.childrensCheckIn && children.length > 0 ? (
         <section className="flex flex-col gap-3" aria-label="Data Anak">
-          <div className="flex items-center justify-between px-1">
-            <div className="flex items-center gap-2">
-              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-surface-container-high text-primary">
-                <Baby className="h-3.5 w-3.5" />
-              </div>
-              <h2 className="text-base font-bold text-on-surface">
-                {t("children.title")}
-              </h2>
-            </div>
-            <Button asChild variant="ghost" size="sm" className="text-xs text-primary rounded-full hover:bg-primary/5">
-              <Link href="/me/children" className="flex items-center gap-1">
-                <span>{t("children.viewAll")}</span>
-                <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
-            </Button>
-          </div>
+          <SectionHeader
+            icon={Baby}
+            title={t("children.title")}
+            action={{ href: "/me/children", label: t("children.viewAll") }}
+          />
 
-          <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+          <div suppressHydrationWarning data-stagger="cards" className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
             {children.map((c) => (
-              <div
+              <ExpressiveCard
                 key={c.id}
-                className="flex items-center justify-between gap-3 rounded-3xl bg-surface-container-low p-4 shadow-level-0"
+                padding="compact"
+                className="flex-row items-center justify-between gap-3"
               >
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-surface-container-high text-primary">
-                    <HeartHandshake className="h-5 w-5" />
-                  </div>
+                  <IconChip icon={HeartHandshake} tone="neutral" />
                   <div>
                     <p className="font-semibold text-sm text-on-surface">
                       {c.fullName}
@@ -367,36 +345,12 @@ export default async function MemberDashboardPage() {
                 <Button asChild variant="tonal" size="sm" className="h-8 rounded-full text-xs shrink-0 px-3.5">
                   <Link href={`/me/children`}>Check-in</Link>
                 </Button>
-              </div>
+              </ExpressiveCard>
             ))}
           </div>
         </section>
       ) : null}
     </div>
-  );
-}
-
-function QuickAction({
-  href,
-  icon: Icon,
-  label,
-}: {
-  href: string;
-  icon: React.ComponentType<{ className?: string }>;
-  label: string;
-}) {
-  return (
-    <Link
-      href={href}
-      className="group flex h-24 sm:h-28 flex-col items-center justify-center gap-2 rounded-2xl border border-outline-variant/40 bg-surface-container-low px-2 py-3 text-center transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-surface-container hover:shadow-level-1 active:translate-y-0 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary shadow-level-0"
-    >
-      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary transition-all duration-200 group-hover:scale-105 group-hover:bg-primary group-hover:text-on-primary group-hover:shadow-xs">
-        <Icon className="h-5 w-5 transition-transform" />
-      </div>
-      <span className="truncate w-full px-1 text-center text-[11px] sm:text-xs font-semibold text-on-surface transition-colors group-hover:text-primary tracking-tight">
-        {label}
-      </span>
-    </Link>
   );
 }
 

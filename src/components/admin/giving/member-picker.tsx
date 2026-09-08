@@ -55,7 +55,7 @@ export function MemberPicker({ value, onChange, placeholder, initialName }: Prop
 
   if (value && selectedName) {
     return (
-      <div className="flex items-center justify-between rounded-md border px-3 py-2">
+      <div className="flex items-center justify-between rounded-2xl px-3 py-2 bg-surface-container-high">
         <span className="text-sm font-medium">{selectedName}</span>
         <Button type="button" variant="ghost" size="icon" onClick={clear}>
           <X className="h-4 w-4" />
@@ -80,7 +80,7 @@ export function MemberPicker({ value, onChange, placeholder, initialName }: Prop
         />
       </div>
       {open && q.trim().length >= 2 && results.length > 0 ? (
-        <ul className="flex flex-col gap-1 rounded-md border p-1">
+        <ul className="flex flex-col gap-1 rounded-2xl p-1 bg-surface-container-high">
           {results.map((m) => (
             <li key={m.id}>
               <button

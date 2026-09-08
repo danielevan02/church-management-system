@@ -1,10 +1,13 @@
-import { ArrowLeft } from "lucide-react";
+
 import { getTranslations } from "next-intl/server";
+import { Settings } from "lucide-react";
+import { EmptyState } from "@/components/m3/empty-state";
 import { notFound, redirect } from "next/navigation";
 
+import { PageHeader } from "@/components/m3/page-header";
 import { Pagination } from "@/components/shared/pagination";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+
 import {
   Table,
   TableBody,
@@ -14,7 +17,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { auth } from "@/lib/auth";
-import { Link } from "@/lib/i18n/navigation";
+
 import { hasAtLeastRole } from "@/lib/permissions";
 import { listAuditLogs } from "@/server/queries/audit";
 import { parsePageParam } from "@/server/queries/_pagination";
@@ -45,26 +48,18 @@ export default async function AuditLogPage({
   });
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1">
-        <Button asChild variant="ghost" size="sm" className="w-fit">
-          <Link href="/admin/settings">
-            <ArrowLeft className="h-4 w-4" />
-            {t("back")}
-          </Link>
-        </Button>
-        <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="text-on-surface-variant">
-          {t("subtitle", { total: result.total })}
-        </p>
-      </header>
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6">
+      <PageHeader
+        backHref="/admin/settings"
+        backLabel={t("back")}
+        title={t("title")}
+        subtitle={t("subtitle", { total: result.total })}
+      />
 
       {result.items.length === 0 ? (
-        <div className="rounded-md border border-dashed p-10 text-center text-sm text-on-surface-variant">
-          {t("empty")}
-        </div>
+        <EmptyState icon={Settings} title={t("empty")} />
       ) : (
-        <div className="rounded-md border">
+        <div className="rounded-lg bg-surface-container-low overflow-hidden">
           <Table>
             <TableHeader>
               <TableRow>

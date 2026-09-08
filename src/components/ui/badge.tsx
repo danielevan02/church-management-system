@@ -22,11 +22,21 @@ import { cn } from "@/lib/utils"
  * `success` and `warning` use the M3 custom colours from roles.css, which is
  * what the hardcoded emerald/amber utilities scattered around the app should
  * become — those ignored the theme and inverted badly in dark mode.
+ *
+ * **12dp of horizontal padding, and that number is the corner radius, not a
+ * taste call.** A `rounded-full` box is a semicircle at each end: its corner
+ * radius is half its height, so any horizontal padding below that radius
+ * puts the first glyph inside the curve, and the label reads as if it is
+ * touching the border. This pill was on `px-2` — 8dp against a 12dp radius, and
+ * narrower than its own 7dp of vertical padding, which is what made a status
+ * badge look cramped everywhere `variant="outline"` made the border visible.
+ * The same ratio is what M3 specifies for its 32dp chip: 16dp padding, 16dp
+ * radius. If you resize a pill, move the padding with it.
  */
 const badgeVariants = cva(
   [
     "m3-focus-ring inline-flex h-6 w-fit shrink-0 items-center justify-center gap-1",
-    "overflow-hidden rounded-full border border-transparent px-2",
+    "overflow-hidden rounded-full border border-transparent px-3",
     "text-label-md whitespace-nowrap",
     "transition-[background-color,border-color,color] duration-150 ease-standard",
     "[&>svg]:pointer-events-none [&>svg]:size-3.5",

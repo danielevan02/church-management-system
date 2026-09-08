@@ -4,6 +4,8 @@ import { Roboto, Roboto_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
+import { NavigationProgress } from "@/components/shared/navigation-progress";
+import { ScrollRevealProvider } from "@/components/m3/scroll-reveal";
 import { ThemeProvider } from "@/components/shared/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -63,7 +65,10 @@ export default async function LocaleLayout({
       <body className="antialiased font-sans" suppressHydrationWarning>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <ThemeProvider>
-            <TooltipProvider delayDuration={200}>{children}</TooltipProvider>
+            <TooltipProvider delayDuration={200}>
+              <NavigationProgress />
+              <ScrollRevealProvider>{children}</ScrollRevealProvider>
+            </TooltipProvider>
             <Toaster richColors position="top-right" />
           </ThemeProvider>
         </NextIntlClientProvider>

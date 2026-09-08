@@ -57,9 +57,10 @@ export function AdminNavUser({
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              tooltip={displayName}
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground group-data-[collapsible=icon]:p-0! group-data-[collapsible=icon]:justify-center"
             >
-              <Avatar className="h-8 w-8 rounded-lg grayscale">
+              <Avatar className="h-8 w-8 rounded-lg grayscale shrink-0">
                 {photoUrl ? (
                   <AvatarImage src={photoUrl} alt={displayName} />
                 ) : null}
@@ -67,19 +68,19 @@ export function AdminNavUser({
                   {initial}
                 </AvatarFallback>
               </Avatar>
-              <div className="grid flex-1 text-left text-sm leading-tight">
+              <div className="grid flex-1 text-left text-sm leading-tight m3-sidebar-label">
                 <span className="truncate font-medium">{displayName}</span>
                 <span className="truncate text-xs text-on-surface-variant">
                   {user.role}
                 </span>
               </div>
-              <MoreVertical className="ml-auto size-4" />
+              <MoreVertical className="ml-auto size-4 m3-sidebar-label" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
             className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
-            side={isMobile ? "bottom" : "right"}
-            align="end"
+            side={isMobile ? "top" : "right"}
+            align={isMobile ? "center" : "end"}
             sideOffset={4}
           >
             <DropdownMenuLabel className="p-0 font-normal">

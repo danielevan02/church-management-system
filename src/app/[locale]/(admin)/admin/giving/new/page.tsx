@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 
+import { PageHeader } from "@/components/m3/page-header";
 import { GivingCreateForm } from "./giving-create-form";
 import { toJakartaDateInput } from "@/lib/datetime";
 import { prisma } from "@/lib/prisma";
@@ -15,6 +16,8 @@ export default async function NewGivingPage({
     typeof sp.serviceId === "string" ? sp.serviceId : undefined;
 
   const t = await getTranslations("giving.new");
+
+  const tEyebrow = await getTranslations("eyebrow");
 
   const [funds, services] = await Promise.all([
     listAllFunds({ onlyActive: true }),
@@ -34,11 +37,12 @@ export default async function NewGivingPage({
     : toJakartaDateInput(new Date());
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1">
-        <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="text-on-surface-variant">{t("subtitle")}</p>
-      </header>
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6">
+      <PageHeader
+        eyebrow={tEyebrow("giving")}
+        title={t("title")}
+        subtitle={t("subtitle")}
+      />
       <GivingCreateForm
         funds={funds.map((f) => ({ id: f.id, name: f.name }))}
         services={services}

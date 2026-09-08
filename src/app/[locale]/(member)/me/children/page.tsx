@@ -1,16 +1,13 @@
-import { CheckCircle2, Clock, Heart } from "lucide-react";
+import { Baby, CheckCircle2, Clock, Heart } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { notFound, redirect } from "next/navigation";
 
+import { BlockRow } from "@/components/m3/block-section";
+import { EmptyState } from "@/components/m3/empty-state";
+import { ExpressiveCard } from "@/components/m3/expressive-card";
+import { PageHeader } from "@/components/m3/page-header";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { features } from "@/config/features";
 import { auth } from "@/lib/auth";
 import { formatJakarta } from "@/lib/datetime";
@@ -35,84 +32,83 @@ export default async function MyChildrenPage() {
   );
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1">
-        <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="text-on-surface-variant">{t("subtitle")}</p>
-      </header>
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6 pb-28 sm:pb-12">
+      <PageHeader
+        eyebrow={t("eyebrow")}
+        title={t("title")}
+        subtitle={t("subtitle")}
+      />
 
       {children.length === 0 ? (
-        <Card>
-          <CardContent className="flex flex-col items-center gap-3 py-10 text-center">
-            <Heart className="h-8 w-8 text-on-surface-variant" />
-            <p className="text-sm text-on-surface-variant">{t("empty")}</p>
-            <p className="text-xs text-on-surface-variant">{t("emptyHint")}</p>
-          </CardContent>
-        </Card>
+        <EmptyState
+          icon={Heart}
+          title={t("empty")}
+          description={t("emptyHint")}
+        />
       ) : (
-        <div className="flex flex-col gap-4">
+        <div suppressHydrationWarning data-stagger="cards" className="flex flex-col gap-4">
           {children.map((child, i) => {
             const history = histories[i] ?? [];
             const age = child.birthDate ? computeAge(child.birthDate) : null;
             return (
-              <Card key={child.id}>
-                <CardHeader>
-                  <div className="flex items-center gap-3">
-                    <Avatar className="h-10 w-10">
-                      {child.photoUrl ? (
-                        <AvatarImage src={child.photoUrl} alt={child.fullName} />
-                      ) : null}
-                      <AvatarFallback className="text-sm">
-                        {child.fullName.charAt(0).toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="flex flex-col">
-                      <CardTitle className="text-base">
-                        {child.fullName}
-                      </CardTitle>
-                      <CardDescription>
-                        {age != null ? t("age", { age }) : t("noAge")}
-                      </CardDescription>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  {history.length === 0 ? (
-                    <p className="text-sm text-on-surface-variant">
-                      {t("noHistory")}
+              <ExpressiveCard key={child.id} className="gap-4">
+                <div className="flex items-center gap-3">
+                  <Avatar className="h-10 w-10">
+                    {child.photoUrl ? (
+                      <AvatarImage src={child.photoUrl} alt={child.fullName} />
+                    ) : null}
+                    <AvatarFallback className="text-sm">
+                      {child.fullName.charAt(0).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="min-w-0">
+                    <h2 className="truncate text-base font-bold text-on-surface">
+                      {child.fullName}
+                    </h2>
+                    <p className="text-xs text-on-surface-variant">
+                      {age != null ? t("age", { age }) : t("noAge")}
                     </p>
-                  ) : (
-                    <ul className="flex flex-col gap-2 text-sm">
-                      {history.map((h) => (
-                        <li
-                          key={h.id}
-                          className="flex items-center justify-between rounded-md border p-3"
-                        >
-                          <div className="flex flex-col">
-                            <span className="font-medium">
-                              {h.childClass.name}
-                            </span>
-                            <span className="text-xs text-on-surface-variant tabular-nums">
-                              {formatJakarta(h.checkedInAt, "EEE dd MMM yyyy, HH:mm")}
-                            </span>
-                          </div>
-                          {h.checkedOutAt ? (
-                            <Badge variant="default">
-                              <CheckCircle2 className="h-3 w-3" />
-                              {formatJakarta(h.checkedOutAt, "HH:mm")}
-                            </Badge>
-                          ) : (
-                            <Badge variant="outline">
-                              <Clock className="h-3 w-3" />
-                              {t("active")}
-                            </Badge>
-                          )}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </CardContent>
-              </Card>
+                  </div>
+                </div>
+
+                {history.length === 0 ? (
+                  <EmptyState
+                    icon={Baby}
+                    tone="quiet"
+                    title={t("noHistory")}
+                    className="py-6"
+                  />
+                ) : (
+                  <div className="space-y-2">
+                    {history.map((h) => (
+                      <BlockRow key={h.id}>
+                        <div className="flex min-w-0 flex-col">
+                          <span className="truncate text-sm font-bold text-on-surface">
+                            {h.childClass.name}
+                          </span>
+                          <span className="text-xs tabular-nums text-on-surface-variant">
+                            {formatJakarta(
+                              h.checkedInAt,
+                              "EEE dd MMM yyyy, HH:mm",
+                            )}
+                          </span>
+                        </div>
+                        {h.checkedOutAt ? (
+                          <Badge variant="default" className="shrink-0">
+                            <CheckCircle2 className="h-3 w-3" />
+                            {formatJakarta(h.checkedOutAt, "HH:mm")}
+                          </Badge>
+                        ) : (
+                          <Badge variant="outline" className="shrink-0">
+                            <Clock className="h-3 w-3" />
+                            {t("active")}
+                          </Badge>
+                        )}
+                      </BlockRow>
+                    ))}
+                  </div>
+                )}
+              </ExpressiveCard>
             );
           })}
         </div>

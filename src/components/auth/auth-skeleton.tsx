@@ -46,12 +46,9 @@ export function AuthSkeleton() {
         </div>
       </section>
 
-      <aside
-        className="hidden lg:block"
-        style={{
-          background: `linear-gradient(135deg, ${church.primaryColor} 0%, ${church.primaryColor}dd 50%, ${church.primaryColor}99 100%)`,
-        }}
-      />
+      {/* Same paint as AuthShell's panel, or the branded half changes colour
+          the moment the page finishes streaming. */}
+      <aside className="hidden bg-linear-to-br from-primary via-primary to-primary-container lg:block" />
     </main>
   );
 }

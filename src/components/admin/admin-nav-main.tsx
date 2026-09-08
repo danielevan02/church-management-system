@@ -31,10 +31,11 @@ export function AdminNavMain({
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
+              data-no-indicator="true"
               tooltip={tQuick("create")}
               className="bg-primary text-on-primary duration-200 ease-linear hover:bg-primary/90 hover:text-on-primary active:bg-primary/90 active:text-on-primary min-w-8"
             >
-              <Link href="/admin/members/new">
+              <Link href="/admin/members/new" prefetch={true}>
                 <PlusCircle />
                 <span>{tQuick("create")}</span>
               </Link>
@@ -62,7 +63,7 @@ export function AdminNavMain({
                     </span>
                     <Badge
                       variant="outline"
-                      className="text-[10px] group-data-[collapsible=icon]:hidden"
+                      className="text-[10px] m3-sidebar-label"
                     >
                       {tCommon("soon")}
                     </Badge>
@@ -78,7 +79,7 @@ export function AdminNavMain({
                   tooltip={t(item.labelKey)}
                   isActive={active}
                 >
-                  <Link href={item.href}>
+                  <Link href={item.href} prefetch={true}>
                     <Icon />
                     <span>{t(item.labelKey)}</span>
                   </Link>

@@ -25,12 +25,19 @@ import { cn } from "@/lib/utils"
  *    blanket opacity cannot achieve, because it also fades the container's own
  *    contrast against the page.
  *
- * 3. Shape is a state, not a constant. `active:rounded-md` plus `shape-morph`
- *    gives M3 Expressive's press morph: the corners tighten one step on the
- *    shape scale, on a spatial spring that slightly overshoots. Note the
- *    transition list deliberately mixes the two spring families — radius rides
- *    the spatial spring via `shape-morph`, while colour and elevation ride the
- *    effects spring, because M3 forbids overshoot on effects.
+ * 3. **No press shape morph.** M3 Expressive treats shape as a state — press a
+ *    button and its corners tighten one step on the shape scale — and this
+ *    component did that via `active:rounded-md` plus `shape-morph-interactive`.
+ *    It has been removed on request: on a `rounded-full` control the morph is a
+ *    pill snapping to a rounded rectangle and back on every single click, which
+ *    across a form full of buttons reads as the UI glitching rather than as the
+ *    button acknowledging the press. The state layer and the elevation change
+ *    already carry the press, and they carry it without moving the geometry.
+ *    The `shape-morph` utilities still exist in shape.css for the components
+ *    that keep it (`ui/card.tsx`, `m3/quick-action.tsx`), so nothing else
+ *    changed; only the transition list here lost `border-radius`, which is why
+ *    it is now `motion-effects-fast` plus an explicit property list instead of
+ *    the combined `shape-morph-interactive`.
  *
  * 4. No ripple. Adding one would force `"use client"` onto a component imported
  *    by ~150 files, most of them Server Components, and drag the client boundary
@@ -40,14 +47,10 @@ import { cn } from "@/lib/utils"
  */
 const buttonVariants = cva(
   [
-    "state-layer m3-focus-ring shape-morph",
+    "state-layer m3-focus-ring motion-effects-fast",
+    "transition-[background-color,box-shadow,border-color,color,transform]",
     "inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap",
     "text-label-lg rounded-full",
-    // M3 Expressive shape morph: the corners tighten one step under the
-    // finger, on a spatial spring. See shape.css.
-    "active:rounded-md",
-    // Colour and elevation are effects, so no overshoot on them.
-    "motion-effects-fast transition-[background-color,box-shadow,border-color,color,border-radius]",
     "disabled:pointer-events-none",
     // M3 buttons use 18dp icons, not 16dp.
     "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-[18px]",
@@ -111,8 +114,8 @@ const buttonVariants = cva(
         "icon-sm": "size-9",
         "icon-lg": "size-14 [&_svg:not([class*='size-'])]:size-6",
 
-        /** M3 FAB: 56dp, large shape (not fully round), resting level 3. */
-        fab: "size-14 rounded-lg active:rounded-md [&_svg:not([class*='size-'])]:size-6",
+        /** M3 FAB: 56dp, extra-large shape 28dp (rounded-xl), resting level 3. */
+        fab: "size-14 rounded-xl [&_svg:not([class*='size-'])]:size-6",
       },
     },
     compoundVariants: [

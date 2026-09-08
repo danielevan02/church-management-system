@@ -1,6 +1,7 @@
 import { Plus } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
+import { PageHeader } from "@/components/m3/page-header";
 import { MemberFilters } from "@/components/admin/members/member-filters";
 import { MemberTable } from "@/components/admin/members/member-table";
 import { Pagination } from "@/components/shared/pagination";
@@ -58,6 +59,7 @@ export default async function MembersListPage({
 }) {
   const sp = await searchParams;
   const t = await getTranslations("members");
+  const tEyebrow = await getTranslations("eyebrow");
 
   const get = (key: string) => {
     const v = sp[key];
@@ -75,23 +77,20 @@ export default async function MembersListPage({
   const result = await listMembers({ filters, sort, page });
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <div className="flex flex-col gap-1">
-          <h1 className="text-3xl font-bold tracking-tight">
-            {t("list.title")}
-          </h1>
-          <p className="text-on-surface-variant">
-            {t("list.subtitle", { total: result.total })}
-          </p>
-        </div>
-        <Button asChild>
-          <Link href="/admin/members/new">
-            <Plus className="h-4 w-4" />
-            {t("list.newButton")}
-          </Link>
-        </Button>
-      </header>
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6">
+      <PageHeader
+        eyebrow={tEyebrow("members")}
+        title={t("list.title")}
+        subtitle={t("list.subtitle", { total: result.total })}
+        action={
+          <Button asChild>
+            <Link href="/admin/members/new">
+              <Plus className="h-4 w-4" />
+              {t("list.newButton")}
+            </Link>
+          </Button>
+        }
+      />
 
       <MemberFilters />
 

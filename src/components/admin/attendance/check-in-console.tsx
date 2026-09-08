@@ -5,15 +5,10 @@ import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
 
+import { BlockSection } from "@/components/m3/block-section";
 import { QrScanner } from "@/components/shared/qr-scanner";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useRouter } from "@/lib/i18n/navigation";
@@ -98,91 +93,85 @@ export function CheckInConsole({
 
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-[2fr_1fr]">
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("title")}</CardTitle>
-          <CardDescription>{t("description")}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Tabs value={tab} onValueChange={setTab} className="w-full">
-            <TabsList>
-              <TabsTrigger value="qr">
-                <ScanLine className="h-4 w-4" />
-                {t("tabQr")}
-              </TabsTrigger>
-              <TabsTrigger value="search">
-                <Search className="h-4 w-4" />
-                {t("tabSearch")}
-              </TabsTrigger>
-              <TabsTrigger value="visitor">
-                <UserPlus className="h-4 w-4" />
-                {t("tabVisitor")}
-              </TabsTrigger>
-            </TabsList>
+      <BlockSection
+        title={t("title")}
+        description={t("description")}
+      >
+        <Tabs value={tab} onValueChange={setTab} className="w-full">
+          <TabsList>
+            <TabsTrigger value="qr">
+              <ScanLine className="h-4 w-4" />
+              {t("tabQr")}
+            </TabsTrigger>
+            <TabsTrigger value="search">
+              <Search className="h-4 w-4" />
+              {t("tabSearch")}
+            </TabsTrigger>
+            <TabsTrigger value="visitor">
+              <UserPlus className="h-4 w-4" />
+              {t("tabVisitor")}
+            </TabsTrigger>
+          </TabsList>
 
-            <TabsContent value="qr" className="mt-4">
-              <QrScanner
-                onScan={onQrScan}
-                paused={tab !== "qr"}
-                mirrorOnFrontCamera
-              />
-              <p className="mt-2 text-xs text-on-surface-variant">
-                {t("qrHelp")}
-              </p>
-            </TabsContent>
+          <TabsContent value="qr" className="mt-4">
+            <QrScanner
+              onScan={onQrScan}
+              paused={tab !== "qr"}
+              mirrorOnFrontCamera
+            />
+            <p className="mt-2 text-xs text-on-surface-variant">
+              {t("qrHelp")}
+            </p>
+          </TabsContent>
 
-            <TabsContent value="search" className="mt-4">
-              <ManualSearch
-                serviceId={serviceId}
-                onSuccess={(r, n) => handleSuccess(r, "manual_usher", n)}
-              />
-            </TabsContent>
+          <TabsContent value="search" className="mt-4">
+            <ManualSearch
+              serviceId={serviceId}
+              onSuccess={(r, n) => handleSuccess(r, "manual_usher", n)}
+            />
+          </TabsContent>
 
-            <TabsContent value="visitor" className="mt-4">
-              <VisitorForm
-                serviceId={serviceId}
-                onSuccess={(r, n) => handleSuccess(r, "visitor_usher", n)}
-              />
-            </TabsContent>
-          </Tabs>
-        </CardContent>
-      </Card>
+          <TabsContent value="visitor" className="mt-4">
+            <VisitorForm
+              serviceId={serviceId}
+              onSuccess={(r, n) => handleSuccess(r, "visitor_usher", n)}
+            />
+          </TabsContent>
+        </Tabs>
+      </BlockSection>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("recentTitle")}</CardTitle>
-          <CardDescription>{t("recentDescription")}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {recent.length === 0 ? (
-            <p className="text-sm text-on-surface-variant">{t("recentEmpty")}</p>
-          ) : (
-            <ul className="flex flex-col gap-2 text-sm">
-              {recent.map((r) => (
-                <li
-                  key={r.recordId + r.at.toISOString()}
-                  className="flex items-center gap-2 rounded-md border p-2"
-                >
-                  <CheckCircle2
-                    className={
-                      r.alreadyCheckedIn
-                        ? "h-4 w-4 text-on-surface-variant"
-                        : "h-4 w-4 text-success"
-                    }
-                  />
-                  <div className="flex flex-1 flex-col">
-                    <span className="font-medium">{r.name}</span>
-                    <span className="text-xs text-on-surface-variant">
-                      {formatJakarta(r.at, "HH:mm:ss")} · {r.source}
-                      {r.alreadyCheckedIn ? ` · ${t("alreadyTag")}` : ""}
-                    </span>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </CardContent>
-      </Card>
+      <BlockSection
+        title={t("recentTitle")}
+        description={t("recentDescription")}
+      >
+        {recent.length === 0 ? (
+          <p className="text-sm text-on-surface-variant">{t("recentEmpty")}</p>
+        ) : (
+          <ul className="flex flex-col gap-2 text-sm">
+            {recent.map((r) => (
+              <li
+                key={r.recordId + r.at.toISOString()}
+                className="flex items-center gap-2 rounded-2xl p-2 bg-surface-container-high"
+              >
+                <CheckCircle2
+                  className={
+                    r.alreadyCheckedIn
+                      ? "h-4 w-4 text-on-surface-variant"
+                      : "h-4 w-4 text-success"
+                  }
+                />
+                <div className="flex flex-1 flex-col">
+                  <span className="font-medium">{r.name}</span>
+                  <span className="text-xs text-on-surface-variant">
+                    {formatJakarta(r.at, "HH:mm:ss")} · {r.source}
+                    {r.alreadyCheckedIn ? ` · ${t("alreadyTag")}` : ""}
+                  </span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </BlockSection>
     </div>
   );
 }
@@ -268,7 +257,7 @@ function ManualSearch({
                 type="button"
                 onClick={() => pick(m.id, m.fullName)}
                 disabled={pendingId === m.id}
-                className="flex w-full items-center justify-between rounded-md border px-3 py-2 text-left hover:bg-surface-container-high disabled:opacity-50"
+                className="flex w-full items-center justify-between rounded-2xl px-3 py-2 text-left hover:bg-surface-container-highest disabled:opacity-50 bg-surface-container-high"
               >
                 <span className="font-medium">{m.fullName}</span>
                 <span className="text-xs text-on-surface-variant">

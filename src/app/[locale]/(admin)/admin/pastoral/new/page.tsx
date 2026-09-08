@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { notFound, redirect } from "next/navigation";
 
+import { PageHeader } from "@/components/m3/page-header";
 import { VisitCreateForm } from "./visit-create-form";
 import { features } from "@/config/features";
 import { auth } from "@/lib/auth";
@@ -31,12 +32,15 @@ export default async function NewPastoralVisitPage({
   }
 
   const t = await getTranslations("pastoral.new");
+
+  const tEyebrow = await getTranslations("eyebrow");
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1">
-        <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="text-on-surface-variant">{t("subtitle")}</p>
-      </header>
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6">
+      <PageHeader
+        eyebrow={tEyebrow("pastoral")}
+        title={t("title")}
+        subtitle={t("subtitle")}
+      />
       <VisitCreateForm
         submitLabel={t("submit")}
         initialMemberId={memberParam ?? undefined}

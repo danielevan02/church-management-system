@@ -118,6 +118,7 @@ export function NavigationBar({
             <li key={destination.href} className="flex flex-1 justify-center">
               <Link
                 href={destination.href}
+                prefetch={true}
                 aria-current={active ? "page" : undefined}
                 className="m3-focus-ring group/dest flex w-full flex-col items-center gap-1 pt-3 pb-4"
               >
@@ -208,6 +209,7 @@ export function NavigationRail({
             <li key={destination.href} className={drawer ? "w-full" : undefined}>
               <Link
                 href={destination.href}
+                prefetch={true}
                 aria-current={active ? "page" : undefined}
                 className={cn(
                   "m3-focus-ring flex",

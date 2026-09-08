@@ -1,8 +1,10 @@
 import { format } from "date-fns";
-import { EyeOff, Globe } from "lucide-react";
+import { EmptyState } from "@/components/m3/empty-state";
+import { EyeOff, Globe, Heart } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { notFound, redirect } from "next/navigation";
 
+import { PageHeader } from "@/components/m3/page-header";
 import { DeletePrayerButton } from "@/components/admin/prayer-requests/delete-prayer-button";
 import { PrayerStatusSelect } from "@/components/admin/prayer-requests/status-select";
 import { Pagination } from "@/components/shared/pagination";
@@ -38,6 +40,8 @@ export default async function AdminPrayerRequestsPage({
   const page = parsePageParam(sp.page);
 
   const t = await getTranslations("prayerRequests.list");
+
+  const tEyebrow = await getTranslations("eyebrow");
   const tStatus = await getTranslations("prayerRequests.status");
 
   const result = await listPrayerRequests({
@@ -56,15 +60,12 @@ export default async function AdminPrayerRequestsPage({
   ];
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <div className="flex flex-col gap-1">
-          <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-          <p className="text-on-surface-variant">
-            {t("subtitle", { total: result.total })}
-          </p>
-        </div>
-      </header>
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6">
+      <PageHeader
+        eyebrow={tEyebrow("prayerRequests")}
+        title={t("title")}
+        subtitle={t("subtitle", { total: result.total })}
+      />
 
       <div className="flex flex-wrap items-center gap-2 -mx-1 overflow-x-auto px-1">
         {filterOptions.map((opt) => {
@@ -91,11 +92,9 @@ export default async function AdminPrayerRequestsPage({
       </div>
 
       {result.total === 0 ? (
-        <div className="rounded-md border border-dashed p-10 text-center text-sm text-on-surface-variant">
-          {t("empty")}
-        </div>
+        <EmptyState icon={Heart} title={t("empty")} />
       ) : (
-        <div className="rounded-md border">
+        <div className="rounded-lg bg-surface-container-low overflow-hidden">
           <Table>
             <TableHeader>
               <TableRow>

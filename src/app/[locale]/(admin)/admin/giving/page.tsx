@@ -1,16 +1,21 @@
-import { BarChart3, Layers, Pencil, Plus } from "lucide-react";
+import {
+  BarChart3,
+  CalendarRange,
+  HandCoins,
+  Layers,
+  Pencil,
+  Plus,
+} from "lucide-react";
+import { BlockSection } from "@/components/m3/block-section";
+import { EmptyState } from "@/components/m3/empty-state";
 import { getTranslations } from "next-intl/server";
 
+import { PageHeader } from "@/components/m3/page-header";
 import { GivingExportButton } from "@/components/admin/giving/giving-export-button";
 import { GivingFilters } from "@/components/admin/giving/giving-filters";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+
 import { formatJakarta } from "@/lib/datetime";
 import { formatRupiah } from "@/lib/format";
 import { Link } from "@/lib/i18n/navigation";
@@ -61,6 +66,8 @@ export default async function GivingListPage({
   };
 
   const t = await getTranslations("giving.list");
+
+  const tEyebrow = await getTranslations("eyebrow");
   const tServiceType = await getTranslations("services.type");
 
   const [funds, weeks] = await Promise.all([
@@ -72,39 +79,38 @@ export default async function GivingListPage({
   const grandCount = weeks.reduce((sum, w) => sum + w.entries.length, 0);
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <div className="flex flex-col gap-1">
-          <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-          <p className="text-on-surface-variant">
-            {t("subtitle", {
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6">
+      <PageHeader
+        eyebrow={tEyebrow("giving")}
+        title={t("title")}
+        subtitle={t("subtitle", {
               total: grandCount,
               sum: formatRupiah(grandTotal),
             })}
-          </p>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <GivingExportButton />
-          <Button asChild variant="outline">
-            <Link href="/admin/giving/funds">
-              <Layers className="h-4 w-4" />
-              {t("manageFunds")}
-            </Link>
-          </Button>
-          <Button asChild variant="outline">
-            <Link href="/admin/giving/reports">
-              <BarChart3 className="h-4 w-4" />
-              {t("reports")}
-            </Link>
-          </Button>
-          <Button asChild>
-            <Link href="/admin/giving/new">
-              <Plus className="h-4 w-4" />
-              {t("newButton")}
-            </Link>
-          </Button>
-        </div>
-      </header>
+        action={
+          <div className="flex flex-wrap gap-2">
+            <GivingExportButton />
+            <Button asChild variant="outline">
+              <Link href="/admin/giving/funds">
+                <Layers className="h-4 w-4" />
+                {t("manageFunds")}
+              </Link>
+            </Button>
+            <Button asChild variant="outline">
+              <Link href="/admin/giving/reports">
+                <BarChart3 className="h-4 w-4" />
+                {t("reports")}
+              </Link>
+            </Button>
+            <Button asChild>
+              <Link href="/admin/giving/new">
+                <Plus className="h-4 w-4" />
+                {t("newButton")}
+              </Link>
+            </Button>
+          </div>
+        }
+      />
 
       <GivingFilters
         funds={funds.map((f) => ({ id: f.id, name: f.name }))}
@@ -117,40 +123,39 @@ export default async function GivingListPage({
       />
 
       {grandCount === 0 ? (
-        <div className="rounded-md border border-dashed p-10 text-center text-sm text-on-surface-variant">
-          {t("empty")}
-        </div>
+        <EmptyState icon={HandCoins} title={t("empty")} />
       ) : (
-        <div className="flex flex-col gap-4">
+        <div suppressHydrationWarning data-stagger="cards" className="flex flex-col gap-4">
           {weeks.map((week) => {
             const grouped = groupByService(week.entries);
             const isCurrentWeek = week === weeks[0];
 
             return (
-              <Card key={week.weekStart.toISOString()}>
-                <CardHeader>
-                  <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-                    <div className="flex items-center gap-2">
-                      <CardTitle className="text-base">
-                        {formatWeekRange(week.weekStart, week.weekEnd)}
-                      </CardTitle>
-                      {isCurrentWeek ? (
-                        <Badge variant="outline" className="text-[10px]">
-                          {t("currentWeek")}
-                        </Badge>
-                      ) : null}
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-on-surface-variant">
-                        {t("weekTotal")}:{" "}
-                      </span>
-                      <span className="font-semibold tabular-nums">
-                        {formatRupiah(week.total)}
-                      </span>
-                    </div>
+              <BlockSection
+                key={week.weekStart.toISOString()}
+                icon={CalendarRange}
+                staggerChildren
+                title={
+                  <span className="flex items-center gap-2">
+                    {formatWeekRange(week.weekStart, week.weekEnd)}
+                    {isCurrentWeek ? (
+                      <Badge variant="outline" className="text-[10px]">
+                        {t("currentWeek")}
+                      </Badge>
+                    ) : null}
+                  </span>
+                }
+                action={
+                  <div className="text-sm">
+                    <span className="text-on-surface-variant">
+                      {t("weekTotal")}:{" "}
+                    </span>
+                    <span className="font-bold tabular-nums text-on-surface">
+                      {formatRupiah(week.total)}
+                    </span>
                   </div>
-                </CardHeader>
-                <CardContent>
+                }
+              >
                   {week.entries.length === 0 ? (
                     <p className="text-sm text-on-surface-variant">
                       {t("weekEmpty")}
@@ -160,9 +165,9 @@ export default async function GivingListPage({
                       {grouped.map((g) => (
                         <div
                           key={g.key}
-                          className="rounded-md border p-3"
+                          className="rounded-2xl bg-surface-container-high p-3"
                         >
-                          <div className="mb-2 flex flex-wrap items-center justify-between gap-2 border-b pb-2">
+                          <div className="mb-2 flex flex-wrap items-center justify-between gap-2 border-b border-outline-variant/40 pb-2">
                             <div className="flex flex-col">
                               <span className="font-medium">
                                 {g.kind === "service"
@@ -239,8 +244,7 @@ export default async function GivingListPage({
                       ))}
                     </div>
                   )}
-                </CardContent>
-              </Card>
+              </BlockSection>
             );
           })}
         </div>

@@ -1,9 +1,38 @@
+const FALLBACK_PRIMARY = "#1e3a8a";
+
+/**
+ * The one env var in this file whose *value* can be malformed rather than
+ * merely missing, and it fails silently.
+ *
+ * A hex colour starts with `#`, and an unquoted `.env` line is parsed as a
+ * comment from the `#` onwards — so `NEXT_PUBLIC_PRIMARY_COLOR=#0F766E` arrives
+ * as an empty string, not as `undefined`, and `??` never fires. That is not
+ * hypothetical: it is why the sign-in page's branded panel rendered
+ * `linear-gradient(135deg,  0%, dd 50%, 99 100%)` — an invalid gradient, which
+ * a browser drops whole, leaving white text on a white ground. It also emptied
+ * the manifest's `theme_color`, the PWA `themeColor` and the settings swatch.
+ *
+ * `scripts/build-theme.cjs` already reads the `.env` files itself rather than
+ * trusting `process.env` for exactly this reason, which is why the generated
+ * palette stayed correct while everything reading this config did not.
+ *
+ * So validate the shape, not the presence.
+ */
+function readPrimaryColor(): string {
+  const raw = process.env.NEXT_PUBLIC_PRIMARY_COLOR?.trim();
+  if (!raw) return FALLBACK_PRIMARY;
+  const hex = raw.startsWith("#") ? raw : `#${raw}`;
+  return /^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i.test(hex) ? hex : FALLBACK_PRIMARY;
+}
+
 export const church = {
   name: process.env.NEXT_PUBLIC_CHURCH_NAME ?? "Church Management System",
   shortName: process.env.NEXT_PUBLIC_CHURCH_SHORT_NAME ?? "ChMS",
   domain: process.env.NEXT_PUBLIC_CHURCH_DOMAIN ?? "localhost",
   defaultLocale: (process.env.NEXT_PUBLIC_DEFAULT_LOCALE ?? "id") as "id" | "en",
-  primaryColor: process.env.NEXT_PUBLIC_PRIMARY_COLOR ?? "#1e3a8a",
+  /** Raw hex, for the places that genuinely need one: the manifest and the
+   *  PWA theme colour. UI should use the `primary` design token instead. */
+  primaryColor: readPrimaryColor(),
   timezone: process.env.APP_TIMEZONE ?? "Asia/Jakarta",
   bank: {
     name: process.env.NEXT_PUBLIC_CHURCH_BANK_NAME ?? "BCA",

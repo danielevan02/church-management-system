@@ -3,6 +3,7 @@
 import * as React from "react";
 import {
   Calendar,
+  CalendarDays,
   ExternalLink,
   MapPin,
   Tag,
@@ -12,11 +13,12 @@ import {
 import { useTranslations } from "next-intl";
 
 import { ContainerTransform } from "@/components/m3/container-transform";
+import { ExpressiveCard } from "@/components/m3/expressive-card";
+import { IconChip } from "@/components/m3/icon-chip";
 import { MemberRsvpButtons } from "@/components/member/events/member-rsvp-button";
 import { MarkdownContent } from "@/components/shared/markdown-content";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { formatJakarta } from "@/lib/datetime";
 import { formatRupiah } from "@/lib/format";
 import { Link } from "@/lib/i18n/navigation";
@@ -59,27 +61,30 @@ export function ExpandableEventCard({ event }: ExpandableEventCardProps) {
   const tStatus = useTranslations("events.rsvpStatus");
 
   const cardPreview = (
-    <Card className="h-full transition-all hover:border-primary/40 hover:shadow-md">
-      <CardContent className="flex flex-col gap-3 pt-6">
-        <div className="flex items-start justify-between gap-2">
-          <span className="text-lg font-semibold tracking-tight text-on-surface">
+    <ExpressiveCard interactive className="h-full gap-3">
+      <div className="flex items-start justify-between gap-2">
+        <div className="flex min-w-0 items-start gap-3">
+          <IconChip icon={CalendarDays} />
+          <span className="min-w-0 text-base font-bold tracking-tight text-on-surface">
             {event.title}
           </span>
-          {event.myRsvp ? (
-            <Badge>{tStatus(statusKey(event.myRsvp.status))}</Badge>
-          ) : null}
         </div>
-        <div className="text-sm text-on-surface-variant">
-          {formatJakarta(event.startsAt, "EEE, dd MMM yyyy · HH:mm")}
-          {event.location ? ` · ${event.location}` : ""}
-        </div>
-        {event.capacity ? (
-          <div className="text-xs text-on-surface-variant">
-            {event._count.rsvps}/{event.capacity} {t("rsvpsAbbr")}
-          </div>
+        {event.myRsvp ? (
+          <Badge className="shrink-0">
+            {tStatus(statusKey(event.myRsvp.status))}
+          </Badge>
         ) : null}
-      </CardContent>
-    </Card>
+      </div>
+      <div className="text-sm text-on-surface-variant">
+        {formatJakarta(event.startsAt, "EEE, dd MMM yyyy · HH:mm")}
+        {event.location ? ` · ${event.location}` : ""}
+      </div>
+      {event.capacity ? (
+        <span className="w-fit rounded-full bg-surface-container-high px-2.5 py-0.5 text-[11px] font-semibold tabular-nums text-on-surface-variant">
+          {event._count.rsvps}/{event.capacity} {t("rsvpsAbbr")}
+        </span>
+      ) : null}
+    </ExpressiveCard>
   );
 
   return (
@@ -110,7 +115,7 @@ export function ExpandableEventCard({ event }: ExpandableEventCardProps) {
               open();
             }
           }}
-          className="group block h-full cursor-pointer rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          className="group block h-full cursor-pointer rounded-3xl outline-none focus-visible:ring-2 focus-visible:ring-primary"
         >
           {cardPreview}
         </div>
@@ -149,7 +154,7 @@ export function ExpandableEventCard({ event }: ExpandableEventCardProps) {
           {/* Details & RSVP */}
           <div className="overflow-y-auto pr-1 space-y-5">
             {/* Quick Metadata */}
-            <div className="grid gap-3 sm:grid-cols-2 text-sm text-on-surface-variant bg-surface-container/60 p-4 rounded-xl">
+            <div className="grid gap-3 rounded-2xl bg-surface-container-high p-4 text-sm text-on-surface-variant sm:grid-cols-2">
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4 text-primary shrink-0" />
                 <span>
@@ -181,7 +186,7 @@ export function ExpandableEventCard({ event }: ExpandableEventCardProps) {
 
             {/* RSVP Form / Action */}
             {event.requiresRsvp ? (
-              <div className="space-y-2 rounded-xl border border-outline-variant/50 p-4">
+              <div className="space-y-2 rounded-2xl bg-surface-container-high p-4">
                 <h3 className="font-semibold text-sm text-on-surface">
                   {tDetail("myRsvp")}
                 </h3>

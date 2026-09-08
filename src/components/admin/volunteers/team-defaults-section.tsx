@@ -98,7 +98,7 @@ export function TeamDefaultsSection({
         return (
           <li
             key={p.id}
-            className="flex flex-col gap-2 rounded-md border p-3 sm:flex-row sm:items-center sm:justify-between"
+            className="flex flex-col gap-2 rounded-2xl p-3 sm:flex-row sm:items-center sm:justify-between bg-surface-container-high"
           >
             <div className="flex min-w-0 flex-1 items-center gap-3">
               <span className="min-w-[120px] text-sm font-medium">

@@ -1,9 +1,10 @@
 "use client";
 
-import { Download, X } from "lucide-react";
+import { Download, Smartphone, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
+import { Banner } from "@/components/m3/banner";
 import { Button } from "@/components/ui/button";
 
 type BeforeInstallPromptEvent = Event & {
@@ -49,25 +50,27 @@ export function InstallPrompt() {
   };
 
   return (
-    <div className="flex items-center justify-between gap-3 rounded-md border border-primary/30 bg-primary/5 px-4 py-3 text-sm">
-      <div className="flex flex-col">
-        <span className="font-medium">{t("title")}</span>
-        <span className="text-xs text-on-surface-variant">{t("description")}</span>
-      </div>
-      <div className="flex shrink-0 items-center gap-1">
-        <Button size="sm" onClick={onInstall} className="gap-1.5">
-          <Download className="h-4 w-4" />
-          {t("install")}
-        </Button>
-        <Button
-          size="icon"
-          variant="ghost"
-          onClick={onDismiss}
-          aria-label={t("dismiss")}
-        >
-          <X className="h-4 w-4" />
-        </Button>
-      </div>
-    </div>
+    <Banner
+      icon={Smartphone}
+      title={t("title")}
+      description={t("description")}
+      actions={
+        <>
+          <Button size="sm" onClick={onInstall} className="rounded-full">
+            <Download className="h-4 w-4" />
+            {t("install")}
+          </Button>
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={onDismiss}
+            aria-label={t("dismiss")}
+            className="rounded-full"
+          >
+            <X className="h-4 w-4" />
+          </Button>
+        </>
+      }
+    />
   );
 }

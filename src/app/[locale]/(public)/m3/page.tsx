@@ -1,18 +1,36 @@
 import {
   AlertTriangle,
   Bell,
+  BookOpen,
+  CalendarCheck,
   CheckCircle2,
+  HandCoins,
+  HeartHandshake,
   Mail,
   MoreVertical,
   Search,
   Settings,
+  Users,
 } from "lucide-react";
 import { notFound } from "next/navigation";
 
+import { Banner } from "@/components/m3/banner";
+import { BlockRow, BlockSection } from "@/components/m3/block-section";
+import { DetailList, DetailRow } from "@/components/m3/detail-list";
+import { EmptyState } from "@/components/m3/empty-state";
+import { CardWatermark, ExpressiveCard } from "@/components/m3/expressive-card";
+import { IconChip } from "@/components/m3/icon-chip";
+import { PageHeader } from "@/components/m3/page-header";
+import { QuickActionGrid, QuickActionTile } from "@/components/m3/quick-action";
+import { SectionHeader } from "@/components/m3/section-header";
+import { StatGrid, StatTile } from "@/components/m3/stat-tile";
 import { TextField } from "@/components/m3/text-field";
 
 import { NavBarPreview, NavRailPreview } from "./nav-preview";
 import { ContainerTransformPreview } from "./container-transform-preview";
+import { ShapePreview } from "./shape-preview";
+import { ViewportRevealPreview } from "./viewport-reveal-preview";
+import { SkeletonPreview } from "./skeleton-preview";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -134,6 +152,19 @@ export default function M3GalleryPage() {
           <p className="text-body-md">Body medium — the quick brown fox.</p>
           <p className="text-label-lg">LABEL LARGE</p>
         </div>
+      </section>
+
+      <section className="space-y-4">
+        <div className="flex items-baseline justify-between">
+          <h2 className="text-headline-sm">Shape &amp; Shape Morph</h2>
+          <span className="text-label-md text-on-surface-variant">
+            M3 Corner Radius Scale + Spatial Spring Morph
+          </span>
+        </div>
+        <p className="text-body-md text-on-surface-variant">
+          Sistem bentuk Material 3: 7 tingkat kelengkungan sudut standar (0dp hingga 9999dp) dan transisi bentuk dinamis (shape morphing) berbasis fisika pegas spasial.
+        </p>
+        <ShapePreview />
       </section>
 
       <section className="space-y-4">
@@ -266,6 +297,19 @@ export default function M3GalleryPage() {
           Transformasi kontainer M3 dari elemen kompak (kartu) menjadi lembar detail secara mulus.
         </p>
         <ContainerTransformPreview />
+      </section>
+
+      <section className="space-y-4">
+        <div className="flex items-baseline justify-between">
+          <h2 className="text-headline-sm">Viewport Reveal &amp; Motion (&quot;Muncul Dari Bawah&quot;)</h2>
+          <span className="text-label-md text-on-surface-variant">
+            M3 Spatial Spring + Viewport Intersection
+          </span>
+        </div>
+        <p className="text-body-md text-on-surface-variant">
+          Animasi interaktif saat elemen masuk ke viewport layar atau saat membuka halaman: konten meluncur halus ke atas (bottom-to-top) dengan efek stagger berurutan.
+        </p>
+        <ViewportRevealPreview />
       </section>
 
       <section className="space-y-4">
@@ -440,6 +484,184 @@ export default function M3GalleryPage() {
           breakpoint — narrow the window to see it.
         </p>
       </section>
+
+      <section className="space-y-4">
+        <h2 className="text-headline-sm">Expressive layout</h2>
+        <p className="text-body-sm text-on-surface-variant">
+          The layer above the component library: the page-level composition the
+          member dashboard proved out, now shared by every screen. Blocks are
+          borderless, tonal and 24dp; hierarchy comes from tone and from an
+          icon chip, never from a rule.
+        </p>
+
+        <PageHeader
+          eyebrow="Data Jemaat"
+          title="Daftar Jemaat"
+          subtitle="248 jemaat terdaftar."
+          action={<Button variant="filled">Tambah</Button>}
+        />
+
+        <StatGrid>
+          <StatTile
+            icon={Users}
+            label="Jemaat aktif"
+            value="248"
+            hint="+6 bulan ini"
+            delta={{ value: "+2.4%", direction: "up" }}
+          />
+          <StatTile
+            icon={CalendarCheck}
+            tone="secondary"
+            label="Kehadiran"
+            value="214"
+            hint="rata-rata 4 minggu: 201"
+          />
+          <StatTile
+            icon={HandCoins}
+            tone="tertiary"
+            label="Persembahan"
+            value="Rp 12,4 jt"
+            delta={{ value: "-3.1%", direction: "down" }}
+          />
+          <StatTile
+            icon={HeartHandshake}
+            tone="neutral"
+            label="Pokok doa"
+            value="7"
+            hint="menunggu tindak lanjut"
+          />
+        </StatGrid>
+
+        <QuickActionGrid>
+          <QuickActionTile href="/m3" icon={Users} label="Jemaat" />
+          <QuickActionTile href="/m3" icon={CalendarCheck} label="Kehadiran" />
+          <QuickActionTile href="/m3" icon={HandCoins} label="Persembahan" />
+        </QuickActionGrid>
+
+        <SectionHeader
+          icon={Bell}
+          title="Warta Jemaat"
+          count={3}
+          action={{ href: "/m3", label: "Lihat semua" }}
+        />
+
+        <div className="grid gap-4 md:grid-cols-2">
+          <BlockSection
+            icon={Users}
+            title="Komsel Kaleb"
+            description="Pertemuan berikutnya Sabtu, 19:00."
+            bodyClassName="space-y-2"
+          >
+            <BlockRow>
+              <span className="text-sm font-bold text-on-surface">Budi Santoso</span>
+              <Badge>Pemimpin</Badge>
+            </BlockRow>
+            <BlockRow>
+              <span className="text-sm font-bold text-on-surface">Andi Wijaya</span>
+              <Badge variant="secondary">Anggota</Badge>
+            </BlockRow>
+          </BlockSection>
+
+          <ExpressiveCard tone="gradient" className="group gap-3">
+            <CardWatermark icon={BookOpen} />
+            <IconChip icon={BookOpen} tone="secondary" />
+            <h3 className="text-lg font-bold text-on-surface">
+              Renungan Hari Ini
+            </h3>
+            <p className="text-sm text-on-surface-variant">
+              `tone=&quot;gradient&quot;` plus a watermark — the hero treatment,
+              used once per screen.
+            </p>
+          </ExpressiveCard>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2">
+          <ExpressiveCard interactive className="gap-2">
+            <IconChip icon={Users} />
+            <p className="text-sm font-bold text-on-surface">Interactive block</p>
+            <p className="text-sm text-on-surface-variant">
+              Hover: one tonal step up, a 2px lift and level-1. Press: 0.99.
+            </p>
+          </ExpressiveCard>
+          <ExpressiveCard tone="nested" className="gap-2">
+            <p className="text-sm font-bold text-on-surface">Nested block</p>
+            <p className="text-sm text-on-surface-variant">
+              One step up, one radius step tighter, so the nesting reads.
+            </p>
+          </ExpressiveCard>
+        </div>
+
+        <DetailList>
+          <DetailRow icon={Users} label="Nama lengkap">
+            Budi Santoso
+          </DetailRow>
+          <DetailRow icon={CalendarCheck} label="Bergabung">
+            25 Apr 2026
+          </DetailRow>
+        </DetailList>
+
+        <div className="space-y-2">
+          <Banner
+            icon={Bell}
+            title="Aktifkan notifikasi"
+            description="Dapatkan warta jemaat langsung di ponsel Anda."
+            actions={<Button size="sm">Aktifkan</Button>}
+          />
+          <Banner tone="warning" icon={AlertTriangle} title="Check-in sudah ditutup" />
+          <Banner tone="success" icon={CheckCircle2} title="Kehadiran tercatat" />
+        </div>
+
+        <EmptyState
+          icon={Users}
+          title="Belum ada jemaat"
+          description="Tambahkan jemaat pertama untuk mulai mencatat kehadiran."
+          action={<Button variant="tonal">Tambah jemaat</Button>}
+        />
+
+        {/* The nested densities, which is where this language gets it wrong most
+            easily: a block whose sub-sections are all empty. `SectionHeader
+            size="sm"` and `EmptyState size="sm"` both step down so neither can
+            out-rank the block title above them — compare the full-size empty
+            state directly above. */}
+        <BlockSection
+          icon={CalendarCheck}
+          title="Hari ini & mendatang"
+          description="Sub-bagian dengan heading dan empty state rapat."
+          bodyClassName="flex flex-col gap-5"
+        >
+          <section className="flex flex-col gap-2">
+            <SectionHeader
+              title="Ibadah"
+              size="sm"
+              action={{ href: "/m3", label: "Kelola ibadah" }}
+              className="px-0"
+            />
+            <EmptyState
+              icon={CalendarCheck}
+              tone="quiet"
+              size="sm"
+              title="Belum ada ibadah terjadwal."
+            />
+          </section>
+
+          <section className="flex flex-col gap-2">
+            <SectionHeader
+              title="Acara"
+              size="sm"
+              action={{ href: "/m3", label: "Kelola acara" }}
+              className="px-0"
+            />
+            <EmptyState
+              icon={Bell}
+              tone="quiet"
+              size="sm"
+              title="Belum ada acara mendatang."
+            />
+          </section>
+        </BlockSection>
+      </section>
+
+      <SkeletonPreview />
 
       <NavBarPreview />
     </main>

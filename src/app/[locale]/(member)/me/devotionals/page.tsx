@@ -1,8 +1,10 @@
 import { ArrowRight, BookOpen } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
+import { EmptyState } from "@/components/m3/empty-state";
+import { ExpressiveCard } from "@/components/m3/expressive-card";
+import { PageHeader } from "@/components/m3/page-header";
 import { Pagination } from "@/components/shared/pagination";
-import { Card, CardContent } from "@/components/ui/card";
 import { formatJakarta } from "@/lib/datetime";
 import { Link } from "@/lib/i18n/navigation";
 import { excerpt } from "@/lib/markdown";
@@ -20,64 +22,68 @@ export default async function MemberDevotionalsPage({
   const result = await listDevotionalsForMember({ page });
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1">
-        <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="text-on-surface-variant">{t("subtitle")}</p>
-      </header>
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6 pb-28 sm:pb-12">
+      <PageHeader
+        eyebrow={t("eyebrow")}
+        title={t("title")}
+        subtitle={t("subtitle")}
+      />
 
       {result.total === 0 ? (
-        <div className="rounded-md border border-dashed p-10 text-center">
-          <BookOpen className="mx-auto mb-2 h-8 w-8 text-on-surface-variant" />
-          <p className="text-sm text-on-surface-variant">{t("empty")}</p>
-        </div>
+        <EmptyState icon={BookOpen} title={t("empty")} />
       ) : (
-        <div className="flex flex-col gap-3">
+        <div suppressHydrationWarning data-stagger="cards" className="flex flex-col gap-3">
           {result.items.map((d) => (
-            <Link
+            <ExpressiveCard
               key={d.id}
-              href={`/me/devotionals/${d.id}`}
-              className="group block focus-visible:outline-none"
+              asChild
+              interactive
+              padding="none"
+              className="group overflow-hidden"
             >
-              <Card className="overflow-hidden transition-all hover:border-primary/40 hover:shadow-md">
-                <CardContent className="flex items-stretch gap-0 p-0">
-                  <div className="flex w-20 shrink-0 flex-col items-center justify-center gap-0.5 border-r bg-gradient-to-b from-primary/10 to-primary/5 p-3">
+              <Link href={`/me/devotionals/${d.id}`}>
+                <div className="flex items-stretch">
+                  {/* Date rail. An archive is navigated by date before it is
+                      navigated by title, so the date is a landmark rather than
+                      a line of metadata. */}
+                  <div className="flex w-20 shrink-0 flex-col items-center justify-center gap-0.5 bg-primary/10 p-3">
                     <BookOpen className="mb-1 h-4 w-4 text-primary" />
                     <span className="text-2xl font-bold leading-none tabular-nums text-on-surface">
                       {formatJakarta(d.publishedAt, "dd")}
                     </span>
-                    <span className="text-[10px] font-medium uppercase tracking-wider text-on-surface-variant">
+                    <span className="text-[10px] font-semibold uppercase tracking-wider text-on-surface-variant">
                       {formatJakarta(d.publishedAt, "MMM")}
                     </span>
                   </div>
+
                   <div className="flex min-w-0 flex-1 items-center gap-3 p-4">
                     <div className="min-w-0 flex-1 space-y-1.5">
                       {d.verseRef || d.authorName ? (
                         <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                           {d.verseRef ? (
-                            <span className="inline-flex items-center gap-1 rounded border border-primary/30 bg-primary/5 px-1.5 py-0.5 text-[11px] font-medium text-primary">
+                            <span className="inline-flex items-center rounded-md bg-surface-container-high px-2 py-0.5 text-[11px] font-semibold text-primary">
                               {d.verseRef}
                             </span>
                           ) : null}
                           {d.authorName ? (
-                            <span className="text-xs italic text-on-surface-variant">
+                            <span className="text-xs text-on-surface-variant">
                               — {d.authorName}
                             </span>
                           ) : null}
                         </div>
                       ) : null}
-                      <h3 className="font-semibold leading-tight line-clamp-1">
+                      <h3 className="line-clamp-1 text-base font-bold leading-tight text-on-surface transition-colors group-hover:text-primary">
                         {d.title}
                       </h3>
-                      <p className="line-clamp-2 text-sm text-on-surface-variant">
+                      <p className="line-clamp-2 text-sm leading-relaxed text-on-surface-variant">
                         {excerpt(d.body)}
                       </p>
                     </div>
                     <ArrowRight className="h-5 w-5 shrink-0 text-on-surface-variant transition-transform group-hover:translate-x-0.5 group-hover:text-primary" />
                   </div>
-                </CardContent>
-              </Card>
-            </Link>
+                </div>
+              </Link>
+            </ExpressiveCard>
           ))}
         </div>
       )}

@@ -1,6 +1,8 @@
-import { Plus } from "lucide-react";
+import { Home, Plus } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
+import { EmptyState } from "@/components/m3/empty-state";
+import { PageHeader } from "@/components/m3/page-header";
 import { HouseholdFilters } from "@/components/admin/households/household-filters";
 import { Pagination } from "@/components/shared/pagination";
 import { Button } from "@/components/ui/button";
@@ -26,38 +28,35 @@ export default async function HouseholdsListPage({
   const qRaw = sp.q;
   const q = Array.isArray(qRaw) ? qRaw[0] : qRaw;
   const t = await getTranslations("households");
+  const tEyebrow = await getTranslations("eyebrow");
   const result = await listHouseholds({ page, q });
   const hasQuery = Boolean(q?.trim());
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <div className="flex flex-col gap-1">
-          <h1 className="text-3xl font-bold tracking-tight">
-            {t("list.title")}
-          </h1>
-          <p className="text-on-surface-variant">
-            {t("list.subtitle", { total: result.total })}
-          </p>
-        </div>
-        <Button asChild>
-          <Link href="/admin/households/new">
-            <Plus className="h-4 w-4" />
-            {t("list.newButton")}
-          </Link>
-        </Button>
-      </header>
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6">
+      <PageHeader
+        eyebrow={tEyebrow("households")}
+        title={t("list.title")}
+        subtitle={t("list.subtitle", { total: result.total })}
+        action={
+          <Button asChild>
+            <Link href="/admin/households/new">
+              <Plus className="h-4 w-4" />
+              {t("list.newButton")}
+            </Link>
+          </Button>
+        }
+      />
 
       <HouseholdFilters />
 
       {result.total === 0 ? (
-        <div className="rounded-md border border-dashed p-12 text-center">
-          <p className="text-sm text-on-surface-variant">
-            {hasQuery ? t("list.emptySearch") : t("list.empty")}
-          </p>
-        </div>
+        <EmptyState
+          icon={Home}
+          title={hasQuery ? t("list.emptySearch") : t("list.empty")}
+        />
       ) : (
-        <div className="rounded-md border bg-surface">
+        <div className="rounded-lg bg-surface-container-low overflow-hidden">
           <Table>
             <TableHeader>
               <TableRow>

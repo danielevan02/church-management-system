@@ -1,7 +1,9 @@
 import { Megaphone, Plus } from "lucide-react";
+import { EmptyState } from "@/components/m3/empty-state";
 import { getTranslations } from "next-intl/server";
 import { notFound, redirect } from "next/navigation";
 
+import { PageHeader } from "@/components/m3/page-header";
 import { Pagination } from "@/components/shared/pagination";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -33,33 +35,30 @@ export default async function AnnouncementsListPage({
   const sp = await searchParams;
   const page = parsePageParam(sp.page);
   const t = await getTranslations("announcements.list");
+  const tEyebrow = await getTranslations("eyebrow");
   const result = await listAnnouncements({ page });
   const now = new Date();
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <div className="flex flex-col gap-1">
-          <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-          <p className="text-on-surface-variant">
-            {t("subtitle", { total: result.total })}
-          </p>
-        </div>
-        <Button asChild>
-          <Link href="/admin/announcements/new">
-            <Plus className="h-4 w-4" />
-            {t("newButton")}
-          </Link>
-        </Button>
-      </header>
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6">
+      <PageHeader
+        eyebrow={tEyebrow("announcements")}
+        title={t("title")}
+        subtitle={t("subtitle", { total: result.total })}
+        action={
+          <Button asChild>
+            <Link href="/admin/announcements/new">
+              <Plus className="h-4 w-4" />
+              {t("newButton")}
+            </Link>
+          </Button>
+        }
+      />
 
       {result.total === 0 ? (
-        <div className="rounded-md border border-dashed p-10 text-center">
-          <Megaphone className="mx-auto mb-2 h-8 w-8 text-on-surface-variant" />
-          <p className="text-sm text-on-surface-variant">{t("empty")}</p>
-        </div>
+        <EmptyState icon={Megaphone} title={t("empty")} />
       ) : (
-        <div className="rounded-md border">
+        <div className="rounded-lg bg-surface-container-low overflow-hidden">
           <Table>
             <TableHeader>
               <TableRow>

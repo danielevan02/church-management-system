@@ -5,6 +5,7 @@ import {
   ArrowRight,
   BarChart3,
   Calendar,
+  CalendarClock,
   CalendarDays,
   HandCoins,
   HeartHandshake,
@@ -18,18 +19,20 @@ import {
 import { getTranslations } from "next-intl/server";
 import { notFound, redirect } from "next/navigation";
 
+import { BlockRow, BlockSection } from "@/components/m3/block-section";
+import { EmptyState } from "@/components/m3/empty-state";
+import { PageHeader } from "@/components/m3/page-header";
+import { QuickActionGrid, QuickActionTile } from "@/components/m3/quick-action";
+import { SectionHeader } from "@/components/m3/section-header";
+import { StatGrid, StatTile } from "@/components/m3/stat-tile";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { features } from "@/config/features";
 import { auth } from "@/lib/auth";
+import { getAuditDisplay } from "@/lib/audit-display";
+import { formatJakarta } from "@/lib/datetime";
 import { formatRupiah } from "@/lib/format";
+import { cn } from "@/lib/utils";
 import { Link } from "@/lib/i18n/navigation";
 import { hasAtLeastRole } from "@/lib/permissions";
 import { listRecentAuditLogs } from "@/server/queries/audit";
@@ -43,17 +46,19 @@ import {
   getMembershipSnapshot,
 } from "@/server/queries/reports";
 import { getUpcomingServices } from "@/server/queries/services";
-import { formatJakarta } from "@/lib/datetime";
 
 export default async function AdminDashboardPage() {
   const session = await auth();
   if (!session?.user) redirect("/auth/sign-in");
   if (!hasAtLeastRole(session.user.role, "STAFF")) notFound();
 
-  const canSeeGiving = hasAtLeastRole(session.user.role, "ADMIN") && features.giving;
+  const canSeeGiving =
+    hasAtLeastRole(session.user.role, "ADMIN") && features.giving;
   const canSeeAudit = hasAtLeastRole(session.user.role, "ADMIN");
 
   const t = await getTranslations("dashboard.admin");
+  const tEyebrow = await getTranslations("eyebrow");
+  const tEvents = await getTranslations("events.list");
 
   const [
     membership,
@@ -81,384 +86,361 @@ export default async function AdminDashboardPage() {
   const greetingName = session.user.username ?? "Admin";
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1">
-        <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="text-on-surface-variant">
-          {t("welcome", { name: greetingName })}{" "}
-          {t("subtitle", { date: format(new Date(), "EEEE, dd MMM yyyy") })}
-        </p>
-      </header>
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6">
+      <PageHeader
+        eyebrow={tEyebrow("dashboard")}
+        title={t("title")}
+        subtitle={`${t("welcome", { name: greetingName })} ${t("subtitle", {
+          date: format(new Date(), "EEEE, dd MMM yyyy"),
+        })}`}
+      />
 
       {/* KPI strip */}
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <KpiCard
+      <StatGrid>
+        <StatTile
           icon={Users}
           label={t("kpi.activeMembers")}
           value={membership.totalActive.toLocaleString("id-ID")}
-          hint={t("kpi.activeMembersHint", { count: membership.joinedThisMonth })}
+          hint={t("kpi.activeMembersHint", {
+            count: membership.joinedThisMonth,
+          })}
+          href="/admin/members"
         />
-        <KpiCard
+        <StatTile
           icon={UserCheck}
+          tone="secondary"
           label={t("kpi.lastService")}
+          /* When there is no service yet the tile shows an em dash, not the
+             sentence: a `text-3xl` fallback string sits at display size next to
+             four numerals and reads as the largest number on the page. */
           value={
             attendance.lastService?.total != null
               ? attendance.lastService.total.toLocaleString("id-ID")
-              : t("kpi.noService")
+              : "—"
           }
           hint={
             attendance.lastService
               ? t("kpi.lastServiceHint", { avg: attendance.avgLast4Weeks })
-              : undefined
+              : t("kpi.noService")
           }
+          href="/admin/attendance"
         />
         {canSeeGiving && giving ? (
-          <KpiCard
+          <StatTile
             icon={HandCoins}
+            tone="tertiary"
             label={t("kpi.thisMonthGiving")}
             value={formatRupiah(giving.thisMonthTotal)}
             hint={t("kpi.thisMonthGivingHint", { count: giving.thisMonthCount })}
+            href="/admin/giving"
           />
         ) : (
-          <KpiCard
+          <StatTile
             icon={UsersRound}
+            tone="tertiary"
             label={t("kpi.cellCoverage")}
             value={`${cellGroups.coveredPercent}%`}
             hint={t("kpi.cellCoverageHint", {
               covered: cellGroups.coveredCount,
               total: cellGroups.totalActiveMembers,
             })}
+            href="/admin/cell-groups"
           />
         )}
-        <KpiCard
+        <StatTile
           icon={HeartHandshake}
+          tone="neutral"
           label={t("kpi.openPrayer")}
           value={openPrayerCount.toLocaleString("id-ID")}
           hint={t("kpi.openPrayerHint")}
+          href="/admin/prayer-requests"
         />
-      </div>
+      </StatGrid>
 
       {/* Today + Attention */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-base">
-              <CalendarDays className="h-5 w-5" />
-              {t("today.title")}
-            </CardTitle>
-            <CardDescription>{t("today.description")}</CardDescription>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-5">
-            <section className="flex flex-col gap-2">
-              <SectionLabel
-                title={t("today.services")}
-                href="/admin/attendance/services"
-                cta={t("today.manageServices")}
+        <BlockSection
+          icon={CalendarDays}
+          title={t("today.title")}
+          description={t("today.description")}
+          bodyClassName="flex flex-col gap-5"
+          staggerChildren
+        >
+          <section className="flex flex-col gap-2">
+            <SectionHeader
+              title={t("today.services")}
+              action={{
+                href: "/admin/attendance/services",
+                label: t("today.manageServices"),
+              }}
+              size="sm"
+              className="px-0"
+            />
+            {upcomingServices.length === 0 ? (
+              <EmptyState
+                icon={CalendarDays}
+                tone="quiet"
+                size="sm"
+                title={t("today.noServices")}
               />
-              {upcomingServices.length === 0 ? (
-                <EmptyHint text={t("today.noServices")} />
-              ) : (
-                <ul className="flex flex-col gap-1.5">
-                  {upcomingServices.map((s) => (
-                    <li key={s.id}>
-                      <Link
-                        href={`/admin/attendance/services/${s.id}`}
-                        className="flex items-center justify-between rounded-md border px-3 py-2 text-sm transition hover:bg-surface-container-high/60"
-                      >
-                        <div className="flex flex-col">
-                          <span className="font-medium">{s.name}</span>
-                          <span className="text-xs text-on-surface-variant">
-                            {formatJakarta(s.startsAt, "EEE dd MMM · HH:mm")}
-                            {s.location ? ` · ${s.location}` : ""}
-                          </span>
-                        </div>
-                        <ArrowRight className="h-4 w-4 text-on-surface-variant" />
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </section>
-
-            <section className="flex flex-col gap-2">
-              <SectionLabel
-                title={t("today.events")}
-                href="/admin/events"
-                cta={t("today.manageEvents")}
-              />
-              {topEvents.length === 0 ? (
-                <EmptyHint text={t("today.noEvents")} />
-              ) : (
-                <ul className="flex flex-col gap-1.5">
-                  {topEvents.map((e) => (
-                    <li key={e.id}>
-                      <Link
-                        href={`/admin/events/${e.id}`}
-                        className="flex items-center justify-between rounded-md border px-3 py-2 text-sm transition hover:bg-surface-container-high/60"
-                      >
-                        <div className="flex flex-col">
-                          <span className="flex items-center gap-2 font-medium">
-                            {e.title}
-                            {!e.isPublished ? (
-                              <Badge variant="outline" className="text-[10px]">
-                                Draft
-                              </Badge>
-                            ) : null}
-                          </span>
-                          <span className="text-xs text-on-surface-variant">
-                            {formatJakarta(e.startsAt, "EEE dd MMM · HH:mm")}
-                            {e.location ? ` · ${e.location}` : ""}
-                          </span>
-                        </div>
-                        <span className="text-xs tabular-nums text-on-surface-variant">
-                          {e._count.rsvps} RSVP
+            ) : (
+              <div suppressHydrationWarning data-stagger="items" className="flex flex-col gap-2">
+                {upcomingServices.map((s) => (
+                  <BlockRow key={s.id} interactive asChild>
+                    <Link href={`/admin/attendance/services/${s.id}`}>
+                      <div className="flex min-w-0 flex-col">
+                        <span className="truncate text-sm font-bold text-on-surface">
+                          {s.name}
                         </span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </section>
-          </CardContent>
-        </Card>
+                        <span className="text-xs text-on-surface-variant">
+                          {formatJakarta(s.startsAt, "EEE dd MMM · HH:mm")}
+                          {s.location ? ` · ${s.location}` : ""}
+                        </span>
+                      </div>
+                      <ArrowRight className="h-4 w-4 shrink-0 text-on-surface-variant" />
+                    </Link>
+                  </BlockRow>
+                ))}
+              </div>
+            )}
+          </section>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-base">
-              <AlertCircle className="h-5 w-5" />
-              {t("attention.title")}
-            </CardTitle>
-            <CardDescription>{t("attention.description")}</CardDescription>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-5">
-            {features.pastoralCare ? (
-              <section className="flex flex-col gap-2">
-                <SectionLabel
-                  title={t("attention.followUps")}
-                  href="/admin/pastoral"
-                  cta={t("attention.viewFollowUps")}
-                />
-                {followUps.length === 0 ? (
-                  <EmptyHint text={t("attention.noFollowUps")} />
-                ) : (
-                  <ul className="flex flex-col gap-1.5">
-                    {followUps.map((f) => (
-                      <li
-                        key={f.id}
-                        className="flex items-center justify-between rounded-md border px-3 py-2 text-sm"
-                      >
-                        <div className="flex flex-col">
-                          <span className="font-medium">{f.member.fullName}</span>
-                          {f.followUp ? (
-                            <span className="line-clamp-1 text-xs text-on-surface-variant">
-                              {f.followUp}
-                            </span>
+          <section className="flex flex-col gap-2">
+            <SectionHeader
+              title={t("today.events")}
+              action={{ href: "/admin/events", label: t("today.manageEvents") }}
+              size="sm"
+              className="px-0"
+            />
+            {topEvents.length === 0 ? (
+              <EmptyState
+                icon={Calendar}
+                tone="quiet"
+                size="sm"
+                title={t("today.noEvents")}
+              />
+            ) : (
+              <div suppressHydrationWarning data-stagger="items" className="flex flex-col gap-2">
+                {topEvents.map((e) => (
+                  <BlockRow key={e.id} interactive asChild>
+                    <Link href={`/admin/events/${e.id}`}>
+                      <div className="flex min-w-0 flex-col">
+                        <span className="flex items-center gap-2 text-sm font-bold text-on-surface">
+                          <span className="truncate">{e.title}</span>
+                          {!e.isPublished ? (
+                            <Badge variant="outline" className="text-[10px]">
+                              {tEvents("statusDraft")}
+                            </Badge>
                           ) : null}
-                        </div>
-                        {f.followUpDate ? (
-                          <span className="text-xs tabular-nums text-on-surface-variant">
-                            {format(f.followUpDate, "dd MMM")}
+                        </span>
+                        <span className="text-xs text-on-surface-variant">
+                          {formatJakarta(e.startsAt, "EEE dd MMM · HH:mm")}
+                          {e.location ? ` · ${e.location}` : ""}
+                        </span>
+                      </div>
+                      <span className="shrink-0 text-xs tabular-nums text-on-surface-variant">
+                        {e._count.rsvps} RSVP
+                      </span>
+                    </Link>
+                  </BlockRow>
+                ))}
+              </div>
+            )}
+          </section>
+        </BlockSection>
+
+        <BlockSection
+          icon={AlertCircle}
+          iconTone="warning"
+          title={t("attention.title")}
+          description={t("attention.description")}
+          bodyClassName="flex flex-col gap-5"
+          staggerChildren
+        >
+          {features.pastoralCare ? (
+            <section className="flex flex-col gap-2">
+              <SectionHeader
+                title={t("attention.followUps")}
+                action={{
+                  href: "/admin/pastoral",
+                  label: t("attention.viewFollowUps"),
+                }}
+                size="sm"
+                className="px-0"
+              />
+              {followUps.length === 0 ? (
+                <EmptyState
+                  icon={CalendarClock}
+                  tone="quiet"
+                  size="sm"
+                  title={t("attention.noFollowUps")}
+                />
+              ) : (
+                <div suppressHydrationWarning data-stagger="items" className="flex flex-col gap-2">
+                  {followUps.map((f) => (
+                    <BlockRow key={f.id}>
+                      <div className="flex min-w-0 flex-col">
+                        <span className="truncate text-sm font-bold text-on-surface">
+                          {f.member.fullName}
+                        </span>
+                        {f.followUp ? (
+                          <span className="line-clamp-1 text-xs text-on-surface-variant">
+                            {f.followUp}
                           </span>
                         ) : null}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </section>
-            ) : null}
+                      </div>
+                      {f.followUpDate ? (
+                        <span className="shrink-0 text-xs tabular-nums text-on-surface-variant">
+                          {format(f.followUpDate, "dd MMM")}
+                        </span>
+                      ) : null}
+                    </BlockRow>
+                  ))}
+                </div>
+              )}
+            </section>
+          ) : null}
 
-            <section className="flex flex-col gap-2">
-              <SectionLabel
-                title={t("attention.openPrayer")}
-                href="/admin/prayer-requests"
-                cta={t("attention.viewPrayer")}
+          <section className="flex flex-col gap-2">
+            <SectionHeader
+              title={t("attention.openPrayer")}
+              action={{
+                href: "/admin/prayer-requests",
+                label: t("attention.viewPrayer"),
+              }}
+              size="sm"
+              className="px-0"
+            />
+            {openPrayerCount === 0 ? (
+              <EmptyState
+                icon={HeartHandshake}
+                tone="quiet"
+                size="sm"
+                title={t("attention.noOpenPrayer")}
               />
-              {openPrayerCount === 0 ? (
-                <EmptyHint text={t("attention.noOpenPrayer")} />
-              ) : (
-                <Link
-                  href="/admin/prayer-requests"
-                  className="flex items-center justify-between rounded-md border px-3 py-2 text-sm transition hover:bg-surface-container-high/60"
-                >
-                  <span className="flex items-center gap-2">
-                    <HeartHandshake className="h-4 w-4 text-on-surface-variant" />
+            ) : (
+              <BlockRow interactive asChild>
+                <Link href="/admin/prayer-requests">
+                  <span className="flex items-center gap-2 text-sm font-medium text-on-surface">
+                    <HeartHandshake className="h-4 w-4 text-primary" />
                     {t("kpi.openPrayer")}
                   </span>
-                  <span className="font-semibold tabular-nums">
+                  <span className="text-base font-bold tabular-nums text-on-surface">
                     {openPrayerCount}
                   </span>
                 </Link>
-              )}
-            </section>
-          </CardContent>
-        </Card>
+              </BlockRow>
+            )}
+          </section>
+        </BlockSection>
       </div>
 
       {/* Quick actions */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">{t("quickActions.title")}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-            <QuickAction
-              href="/admin/members/new"
-              icon={PlusCircle}
-              label={t("quickActions.newMember")}
+      <section className="flex flex-col gap-3">
+        <SectionHeader icon={PlusCircle} title={t("quickActions.title")} />
+        <QuickActionGrid>
+          <QuickActionTile
+            href="/admin/members/new"
+            icon={PlusCircle}
+            label={t("quickActions.newMember")}
+          />
+          <QuickActionTile
+            href="/admin/attendance"
+            icon={ScanLine}
+            label={t("quickActions.checkIn")}
+          />
+          {canSeeGiving ? (
+            <QuickActionTile
+              href="/admin/giving/new"
+              icon={HandCoins}
+              label={t("quickActions.newGiving")}
             />
-            <QuickAction
-              href="/admin/attendance"
-              icon={ScanLine}
-              label={t("quickActions.checkIn")}
-            />
-            {canSeeGiving ? (
-              <QuickAction
-                href="/admin/giving/new"
-                icon={HandCoins}
-                label={t("quickActions.newGiving")}
-              />
-            ) : null}
-            <QuickAction
-              href="/admin/announcements/new"
-              icon={Megaphone}
-              label={t("quickActions.newAnnouncement")}
-            />
-            <QuickAction
-              href="/admin/events/new"
-              icon={Calendar}
-              label={t("quickActions.newEvent")}
-            />
-            <QuickAction
-              href="/admin/reports"
-              icon={BarChart3}
-              label={t("quickActions.reports")}
-            />
-          </div>
-        </CardContent>
-      </Card>
+          ) : null}
+          <QuickActionTile
+            href="/admin/announcements/new"
+            icon={Megaphone}
+            label={t("quickActions.newAnnouncement")}
+          />
+          <QuickActionTile
+            href="/admin/events/new"
+            icon={Calendar}
+            label={t("quickActions.newEvent")}
+          />
+          <QuickActionTile
+            href="/admin/reports"
+            icon={BarChart3}
+            label={t("quickActions.reports")}
+          />
+        </QuickActionGrid>
+      </section>
 
       {/* Recent activity (ADMIN+) */}
       {canSeeAudit ? (
-        <Card>
-          <CardHeader className="flex flex-row items-start justify-between gap-2">
-            <div className="flex flex-col gap-1">
-              <CardTitle className="flex items-center gap-2 text-base">
-                <Activity className="h-5 w-5" />
-                {t("activity.title")}
-              </CardTitle>
-              <CardDescription>{t("activity.description")}</CardDescription>
-            </div>
-            <Button asChild variant="ghost" size="sm">
+        <BlockSection
+          icon={Activity}
+          iconTone="neutral"
+          title={t("activity.title")}
+          description={t("activity.description")}
+          staggerChildren
+          action={
+            <Button
+              asChild
+              variant="ghost"
+              size="sm"
+              className="rounded-full text-xs text-primary"
+            >
               <Link href="/admin/settings/audit">{t("activity.viewAll")}</Link>
             </Button>
-          </CardHeader>
-          <CardContent>
-            {auditLogs.length === 0 ? (
-              <EmptyHint text={t("activity.empty")} />
-            ) : (
-              <ul className="flex flex-col divide-y">
-                {auditLogs.map((log) => (
-                  <li
-                    key={log.id}
-                    className="flex items-center justify-between gap-3 py-2 text-sm"
-                  >
+          }
+          bodyClassName="flex flex-col gap-2"
+        >
+          {auditLogs.length === 0 ? (
+            <EmptyState
+              icon={Activity}
+              tone="quiet"
+              size="sm"
+              title={t("activity.empty")}
+            />
+          ) : (
+            auditLogs.map((log) => {
+              const display = getAuditDisplay(log.action);
+              const AuditIcon = display.icon;
+
+              return (
+                <BlockRow key={log.id}>
+                  <div className="flex min-w-0 items-center gap-3">
+                    <span
+                      className={cn(
+                        "inline-flex size-8 shrink-0 items-center justify-center rounded-lg",
+                        display.tone === "primary" && "bg-primary/10 text-primary",
+                        display.tone === "secondary" && "bg-secondary-container text-on-secondary-container",
+                        display.tone === "tertiary" && "bg-tertiary-container text-on-tertiary-container",
+                        display.tone === "error" && "bg-error-container text-on-error-container",
+                        display.tone === "neutral" && "bg-surface-container-highest text-on-surface-variant",
+                      )}
+                    >
+                      <AuditIcon className="size-4" />
+                    </span>
                     <div className="flex min-w-0 flex-col">
-                      <span className="flex items-center gap-2 font-medium">
-                        <Badge variant="outline" className="text-[10px]">
-                          {log.action}
-                        </Badge>
-                        <span className="truncate">{log.entityType}</span>
+                      <span className="truncate text-sm font-medium text-on-surface">
+                        {t(`activity.actions.${display.labelKey}`)}
                       </span>
                       <span className="truncate text-xs text-on-surface-variant">
-                        {log.user?.username ?? "system"}
+                        {t("activity.by", {
+                          actor: log.user?.username ?? "system",
+                        })}
                       </span>
                     </div>
-                    <span className="shrink-0 text-xs tabular-nums text-on-surface-variant">
-                      {formatJakarta(log.createdAt, "dd MMM HH:mm")}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </CardContent>
-        </Card>
+                  </div>
+                  <span className="shrink-0 text-xs tabular-nums text-on-surface-variant">
+                    {formatJakarta(log.createdAt, "dd MMM HH:mm")}
+                  </span>
+                </BlockRow>
+              );
+            })
+          )}
+        </BlockSection>
       ) : null}
     </div>
-  );
-}
-
-function KpiCard({
-  icon: Icon,
-  label,
-  value,
-  hint,
-}: {
-  icon: typeof Users;
-  label: string;
-  value: React.ReactNode;
-  hint?: string;
-}) {
-  return (
-    <Card>
-      <CardContent className="flex flex-col gap-1 p-4">
-        <div className="flex items-center justify-between text-on-surface-variant">
-          <span className="text-xs">{label}</span>
-          <Icon className="h-4 w-4" />
-        </div>
-        <div className="text-2xl font-bold tabular-nums">{value}</div>
-        {hint ? <div className="text-xs text-on-surface-variant">{hint}</div> : null}
-      </CardContent>
-    </Card>
-  );
-}
-
-function SectionLabel({
-  title,
-  href,
-  cta,
-}: {
-  title: string;
-  href: string;
-  cta: string;
-}) {
-  return (
-    <div className="flex items-center justify-between">
-      <span className="text-sm font-medium">{title}</span>
-      <Button asChild variant="link" size="sm" className="h-auto px-0">
-        <Link href={href}>{cta}</Link>
-      </Button>
-    </div>
-  );
-}
-
-function EmptyHint({ text }: { text: string }) {
-  return (
-    <p className="rounded-md border border-dashed px-3 py-4 text-center text-xs text-on-surface-variant">
-      {text}
-    </p>
-  );
-}
-
-function QuickAction({
-  href,
-  icon: Icon,
-  label,
-}: {
-  href: string;
-  icon: React.ComponentType<{ className?: string }>;
-  label: string;
-}) {
-  return (
-    <Link
-      href={href}
-      className="group flex h-full min-h-[108px] flex-col items-center justify-center gap-2.5 rounded-2xl border border-outline-variant/60 bg-surface-container-low p-3.5 text-center transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-surface-container hover:shadow-level-1 active:translate-y-0 active:rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-    >
-      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-all duration-200 group-hover:scale-110 group-hover:bg-primary group-hover:text-on-primary group-hover:shadow-sm">
-        <Icon className="h-5 w-5 transition-transform" />
-      </div>
-      <span className="line-clamp-2 text-balance text-xs font-medium leading-tight text-on-surface transition-colors group-hover:text-primary">
-        {label}
-      </span>
-    </Link>
   );
 }

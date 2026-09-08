@@ -49,6 +49,19 @@
     "help": "Bantuan",
     "search": "Cari",
     "modulesGroup": "Modul",
+    "groups": {
+      "overview": "Ringkasan",
+      "people": "Jemaat & Komunitas",
+      "ministry": "Pelayanan & Ibadah",
+      "communication": "Media & Rohani",
+      "finance": "Keuangan & Laporan",
+      "system": "Sistem"
+    },
+    "memberGroups": {
+      "main": "Utama",
+      "worship": "Ibadah & Pelayanan",
+      "community": "Komunitas & Rohani"
+    },
     "quick": {
       "create": "Tambah Cepat"
     },
@@ -196,9 +209,27 @@
       },
       "activity": {
         "title": "Aktivitas Terbaru",
-        "description": "10 entri audit log terakhir.",
+        "description": "Apa saja yang terjadi belakangan ini.",
         "empty": "Belum ada aktivitas tercatat.",
-        "viewAll": "Lihat semua"
+        "viewAll": "Lihat semua",
+        "by": "oleh {actor}",
+        "actions": {
+          "childCheckIn": "Anak check-in",
+          "childCheckOut": "Anak check-out",
+          "childCheckInDelete": "Check-in anak dihapus",
+          "childClassActivate": "Kelas anak diaktifkan",
+          "childClassDeactivate": "Kelas anak dinonaktifkan",
+          "userCreate": "Akun pengguna baru dibuat",
+          "userUpdate": "Data pengguna diubah",
+          "userResetPassword": "Password direset",
+          "userActivate": "Akun pengguna diaktifkan",
+          "userDeactivate": "Akun pengguna dinonaktifkan",
+          "memberDelete": "Jemaat dihapus",
+          "memberRestore": "Jemaat dipulihkan",
+          "givingDelete": "Data persembahan dihapus",
+          "settingsUpdate": "Pengaturan sistem diubah",
+          "unknown": "Aktivitas sistem"
+        }
       }
     },
     "member": {
@@ -266,18 +297,22 @@
   "memberPortal": {
     "offline": {
       "title": "Anda sedang offline",
+      "eyebrow": "Koneksi",
       "description": "Tidak ada koneksi internet. Halaman ini di-cache untuk Anda. Coba lagi setelah koneksi pulih.",
       "retry": "Coba lagi"
     },
     "announcements": {
       "title": "Pengumuman",
+      "eyebrow": "Warta Jemaat",
       "subtitle": "Berita & info terbaru dari gereja.",
       "empty": "Belum ada pengumuman.",
       "back": "Kembali",
-      "new": "Baru"
+      "new": "Baru",
+      "badge": "Warta"
     },
     "devotionals": {
       "title": "Renungan",
+      "eyebrow": "Renungan Harian",
       "subtitle": "Saat teduh harian dari gereja.",
       "empty": "Belum ada renungan.",
       "back": "Kembali"
@@ -298,6 +333,7 @@
     },
     "profile": {
       "title": "Profil Saya",
+      "eyebrow": "Akun Saya",
       "subtitle": "Beberapa data hanya bisa diubah oleh pengurus.",
       "submit": "Simpan Perubahan",
       "savedToast": "Profil tersimpan.",
@@ -340,6 +376,7 @@
     },
     "qr": {
       "title": "QR Saya",
+      "eyebrow": "Identitas",
       "subtitle": "Tunjukkan QR ini ke usher untuk check-in cepat.",
       "description": "QR ini berisi token tertanda. Berlaku 1 tahun.",
       "alt": "QR untuk {name}",
@@ -348,6 +385,7 @@
     },
     "giving": {
       "title": "Beri Persembahan",
+      "eyebrow": "Persembahan",
       "subtitle": "Transfer ke {church} via QRIS atau rekening bank.",
       "noteTitle": "Tentang persembahan Anda",
       "noteDescription": "Tuhan memberkati hati yang memberi dengan sukacita.",
@@ -355,6 +393,7 @@
     },
     "discipleship": {
       "title": "Perjalanan Saya",
+      "eyebrow": "Pertumbuhan",
       "subtitle": "Milestone rohani yang dicatat oleh gereja.",
       "journeyTitle": "Milestone",
       "journeyDescription": "Dicatat oleh gembala atau admin.",
@@ -362,6 +401,7 @@
     },
     "volunteer": {
       "title": "Pelayanan Saya",
+      "eyebrow": "Pelayanan",
       "subtitle": "Jadwal pelayanan Anda yang akan datang.",
       "upcomingTitle": "Akan Datang",
       "upcomingDescription": "Konfirmasi atau tolak supaya tim tahu kepastian Anda.",
@@ -375,6 +415,7 @@
     },
     "events": {
       "title": "Acara Saya",
+      "eyebrow": "Acara",
       "subtitle": "Acara akan datang yang bisa Anda RSVP.",
       "empty": "Belum ada acara terbaru.",
       "rsvpsAbbr": "hadir",
@@ -395,11 +436,14 @@
         "feeLabel": "Biaya",
         "rsvpTitle": "RSVP Anda",
         "rsvpDescription": "Beritahu gereja apakah Anda akan hadir.",
-        "yourCurrentStatus": "Saat ini: {status}"
+        "yourCurrentStatus": "Saat ini: {status}",
+        "dateLabel": "Waktu",
+        "locationLabel": "Lokasi"
       }
     },
     "cellGroup": {
       "title": "Komsel Saya",
+      "eyebrow": "Komunitas",
       "subtitle": "Jadwal dan anggota komsel Anda.",
       "empty": "Anda belum tergabung di komsel manapun. Hubungi pengurus jika ingin gabung.",
       "nextMeetingLabel": "Pertemuan berikutnya",
@@ -410,6 +454,7 @@
     },
     "checkIn": {
       "title": "Check-in",
+      "eyebrow": "Kehadiran",
       "subtitle": "Tandai kehadiran Anda untuk ibadah hari ini.",
       "openNow": "Sedang Buka",
       "openNowDescription": "Ibadah yang sedang menerima check-in.",
@@ -444,6 +489,7 @@
     },
     "prayerRequests": {
       "title": "Permintaan Doa",
+      "eyebrow": "Doa",
       "subtitle": "Kirim pokok doa kepada tim pastoral.",
       "newButton": "Permintaan baru",
       "empty": "Anda belum mengirim permintaan doa.",
@@ -479,6 +525,7 @@
     },
     "children": {
       "title": "Anak saya",
+      "eyebrow": "Keluarga",
       "subtitle": "Riwayat check-in anak-anak di rumah tangga Anda.",
       "empty": "Belum ada anak yang ditautkan ke rumah tangga Anda.",
       "emptyHint": "Mintakan admin gereja untuk menautkan anak Anda ke rumah tangga.",
@@ -575,6 +622,7 @@
       }
     },
     "detail": {
+      "backToList": "Daftar jemaat",
       "edit": "Ubah",
       "tabs": {
         "profile": "Profil",
@@ -625,7 +673,7 @@
       },
       "login": {
         "title": "Akun Login",
-        "description": "PIN yang dipakai jemaat untuk masuk ke portal.",
+        "description": "Pilih PIN 4–6 digit. Beritahukan PIN baru ke jemaat secara pribadi.",
         "statusLabel": "Status",
         "statusActive": "PIN sudah diatur",
         "statusNoPin": "PIN belum diatur",
@@ -635,7 +683,6 @@
         "resetButton": "Reset PIN",
         "setTitle": "Atur PIN Login",
         "resetTitle": "Reset PIN Login",
-        "description": "Pilih PIN 4–6 digit. Beritahukan PIN baru ke jemaat secara pribadi.",
         "pinLabel": "PIN Baru",
         "pinHint": "4–6 digit angka.",
         "confirmLabel": "Konfirmasi PIN",
@@ -2190,5 +2237,26 @@
         "description": "Check-in Anak → Check-in. Pilih anak, pengantar, & kelas. Sistem mengeluarkan kode keamanan 4 karakter."
       }
     }
+  },
+  "eyebrow": {
+    "dashboard": "Ringkasan",
+    "members": "Data Jemaat",
+    "households": "Data Jemaat",
+    "attendance": "Kehadiran",
+    "services": "Kehadiran",
+    "giving": "Keuangan",
+    "cellGroups": "Komunitas",
+    "discipleship": "Pemuridan",
+    "volunteers": "Pelayanan",
+    "events": "Acara",
+    "announcements": "Komunikasi",
+    "devotionals": "Komunikasi",
+    "pastoral": "Penggembalaan",
+    "prayerRequests": "Penggembalaan",
+    "reports": "Analitik",
+    "settings": "Administrasi",
+    "children": "Pelayanan Anak",
+    "search": "Pencarian",
+    "help": "Bantuan"
   }
 }

@@ -1,5 +1,5 @@
-import { DetailSkeleton } from "@/components/shared/skeletons";
+import { AdminHouseholdDetailSkeleton } from "@/components/shared/skeletons";
 
 export default function Loading() {
-  return <DetailSkeleton tabs={2} />;
+  return <AdminHouseholdDetailSkeleton />;
 }

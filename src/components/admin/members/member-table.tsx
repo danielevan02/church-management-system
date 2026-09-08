@@ -1,7 +1,8 @@
 import { format } from "date-fns";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Users } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
+import { EmptyState } from "@/components/m3/empty-state";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -31,14 +32,12 @@ export async function MemberTable({ items }: { items: MemberListItem[] }) {
 
   if (items.length === 0) {
     return (
-      <div className="rounded-md border border-dashed p-12 text-center">
-        <p className="text-sm text-on-surface-variant">{t("empty")}</p>
-      </div>
+      <EmptyState icon={Users} title={t("empty")} />
     );
   }
 
   return (
-    <div className="rounded-md border bg-surface">
+    <div className="rounded-lg bg-surface-container-low overflow-hidden">
       <Table>
         <TableHeader>
           <TableRow>

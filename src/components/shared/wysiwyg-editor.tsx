@@ -104,7 +104,7 @@ export function WysiwygEditor({ value, onChange, placeholder }: Props) {
   if (!editor) return null;
 
   return (
-    <div className="overflow-hidden rounded-md border border-outline">
+    <div className="overflow-hidden rounded-lg border border-outline">
       <TooltipProvider delayDuration={200}>
         <div className="flex flex-wrap items-center gap-0.5 border-b border-outline bg-surface-container-high/30 p-1">
           <ToolbarButton
@@ -112,14 +112,14 @@ export function WysiwygEditor({ value, onChange, placeholder }: Props) {
             active={editor.isActive("bold")}
             onClick={() => editor.chain().focus().toggleBold().run()}
           >
-            <Bold className="h-4 w-4" />
+            <Bold className="size-4" />
           </ToolbarButton>
           <ToolbarButton
             tooltip={t("tools.italic")}
             active={editor.isActive("italic")}
             onClick={() => editor.chain().focus().toggleItalic().run()}
           >
-            <Italic className="h-4 w-4" />
+            <Italic className="size-4" />
           </ToolbarButton>
           <ToolbarButton
             tooltip={t("tools.heading")}
@@ -128,7 +128,7 @@ export function WysiwygEditor({ value, onChange, placeholder }: Props) {
               editor.chain().focus().toggleHeading({ level: 2 }).run()
             }
           >
-            <Heading2 className="h-4 w-4" />
+            <Heading2 className="size-4" />
           </ToolbarButton>
           <Separator />
           <ToolbarButton
@@ -136,21 +136,21 @@ export function WysiwygEditor({ value, onChange, placeholder }: Props) {
             active={editor.isActive("bulletList")}
             onClick={() => editor.chain().focus().toggleBulletList().run()}
           >
-            <List className="h-4 w-4" />
+            <List className="size-4" />
           </ToolbarButton>
           <ToolbarButton
             tooltip={t("tools.numbered")}
             active={editor.isActive("orderedList")}
             onClick={() => editor.chain().focus().toggleOrderedList().run()}
           >
-            <ListOrdered className="h-4 w-4" />
+            <ListOrdered className="size-4" />
           </ToolbarButton>
           <ToolbarButton
             tooltip={t("tools.quote")}
             active={editor.isActive("blockquote")}
             onClick={() => editor.chain().focus().toggleBlockquote().run()}
           >
-            <Quote className="h-4 w-4" />
+            <Quote className="size-4" />
           </ToolbarButton>
           <Separator />
           <ToolbarButton
@@ -158,7 +158,7 @@ export function WysiwygEditor({ value, onChange, placeholder }: Props) {
             active={editor.isActive("link")}
             onClick={() => promptLink(editor, t("placeholders.linkUrl"))}
           >
-            <LinkIcon className="h-4 w-4" />
+            <LinkIcon className="size-4" />
           </ToolbarButton>
           <div className="ml-auto">
             <HelpDialog />
@@ -207,8 +207,8 @@ function ToolbarButton({
         <Button
           type="button"
           variant={active ? "secondary" : "ghost"}
-          size="sm"
-          className="h-8 w-8 p-0"
+          size="icon-xs"
+          className="size-8 p-0! pl-0! pr-0! inline-flex items-center justify-center shrink-0"
           onClick={onClick}
         >
           {children}
@@ -224,8 +224,8 @@ function HelpDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button type="button" variant="ghost" size="sm" className="h-8 gap-1.5">
-          <HelpCircle className="h-4 w-4" />
+        <Button type="button" variant="ghost" size="xs" className="h-8 gap-1.5">
+          <HelpCircle className="size-4" />
           <span className="hidden sm:inline">{t("button")}</span>
         </Button>
       </DialogTrigger>

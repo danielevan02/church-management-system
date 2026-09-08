@@ -58,7 +58,7 @@ export function ServiceFilters() {
   }
 
   return (
-    <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
+    <div className="flex flex-col gap-3 rounded-lg bg-surface-container-high p-3 lg:flex-row lg:items-center">
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -101,7 +101,7 @@ export function ServiceFilters() {
         value={sp.get("status") ?? ANY}
         onValueChange={(v) => pushParams({ status: v })}
       >
-        <SelectTrigger className="w-[140px]">
+        <SelectTrigger className="w-[180px]">
           <SelectValue placeholder={t("status")} />
         </SelectTrigger>
         <SelectContent>

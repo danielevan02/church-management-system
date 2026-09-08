@@ -1,12 +1,13 @@
-import { ArrowLeft } from "lucide-react";
+
 import { getTranslations } from "next-intl/server";
 import { notFound, redirect } from "next/navigation";
 
+import { PageHeader } from "@/components/m3/page-header";
 import { CellGroupEditForm } from "./cell-group-edit-form";
-import { Button } from "@/components/ui/button";
+
 import { auth } from "@/lib/auth";
 import { toJakartaInput } from "@/lib/datetime";
-import { Link } from "@/lib/i18n/navigation";
+
 import { canAccessCellGroup, hasAtLeastRole } from "@/lib/permissions";
 import {
   getCellGroup,
@@ -44,16 +45,12 @@ export default async function EditCellGroupPage({
   const isStaff = hasAtLeastRole(session.user.role, "STAFF");
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1">
-        <Button asChild variant="ghost" size="sm" className="w-fit">
-          <Link href={`/admin/cell-groups/${id}`}>
-            <ArrowLeft className="h-4 w-4" />
-            {group.name}
-          </Link>
-        </Button>
-        <h1 className="text-3xl font-bold tracking-tight">{t("edit.title")}</h1>
-      </header>
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6">
+      <PageHeader
+        backHref={`/admin/cell-groups/${id}`}
+        backLabel={group.name}
+        title={t("edit.title")}
+      />
       <CellGroupEditForm
         id={id}
         canChangeLeader={isStaff}

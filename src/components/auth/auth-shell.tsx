@@ -21,7 +21,7 @@ export async function AuthShell({ title, subtitle, children }: AuthShellProps) {
         <header className="text-sm font-medium">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 rounded-md transition-opacity hover:opacity-80"
+            className="inline-flex items-center gap-2 rounded-full transition-opacity hover:opacity-80"
             aria-label={t("backToHome")}
           >
             <Image
@@ -40,7 +40,7 @@ export async function AuthShell({ title, subtitle, children }: AuthShellProps) {
         <div className="flex flex-1 items-center">
           <div className="mx-auto w-full max-w-sm">
             <div className="mb-8 space-y-2">
-              <h1 className="text-2xl font-semibold tracking-tight text-on-surface">
+              <h1 className="text-2xl font-bold tracking-tight text-on-surface sm:text-3xl">
                 {title}
               </h1>
               <p className="text-sm text-on-surface-variant">{subtitle}</p>
@@ -54,12 +54,18 @@ export async function AuthShell({ title, subtitle, children }: AuthShellProps) {
         </footer>
       </section>
 
-      <aside
-        className="relative hidden overflow-hidden lg:block"
-        style={{
-          background: `linear-gradient(135deg, ${church.primaryColor} 0%, ${church.primaryColor}dd 50%, ${church.primaryColor}99 100%)`,
-        }}
-      >
+      {/*
+        The panel is painted from the `primary` role, not from
+        `church.primaryColor`. The old inline gradient concatenated hex alpha
+        onto the env value (`${color}dd`), which only works for a 6-digit hex
+        and produced an invalid gradient the moment the value was anything else
+        — and browsers drop an invalid `background` whole, which is how this
+        ended up as white text on a white ground. The token is generated from
+        the same seed by `scripts/build-theme.cjs`, so the branding is
+        unchanged, and it carries a dark-mode mapping the inline style never
+        had.
+      */}
+      <aside className="relative hidden overflow-hidden bg-linear-to-br from-primary via-primary to-primary-container lg:block">
         <div
           aria-hidden
           className="absolute inset-0 opacity-20"
@@ -69,9 +75,9 @@ export async function AuthShell({ title, subtitle, children }: AuthShellProps) {
           }}
         />
 
-        <div className="relative flex h-full flex-col justify-between p-12 text-white">
+        <div className="relative flex h-full flex-col justify-between p-12 text-on-primary">
           <div className="flex items-center gap-3">
-            <span className="flex h-10 w-10 items-center justify-center rounded-md bg-surface-container-lowest p-1">
+            <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-surface-container-lowest p-1">
               <Image
                 src="/icon-ui-192.png"
                 alt=""

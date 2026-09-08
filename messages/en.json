@@ -49,6 +49,19 @@
     "help": "Help",
     "search": "Search",
     "modulesGroup": "Modules",
+    "groups": {
+      "overview": "Overview",
+      "people": "People & Community",
+      "ministry": "Ministry & Worship",
+      "communication": "Media & Spiritual",
+      "finance": "Finance & Reports",
+      "system": "System"
+    },
+    "memberGroups": {
+      "main": "Main",
+      "worship": "Worship & Serving",
+      "community": "Community & Spiritual"
+    },
     "quick": {
       "create": "Quick Create"
     },
@@ -196,9 +209,27 @@
       },
       "activity": {
         "title": "Recent Activity",
-        "description": "Last 10 audit log entries.",
+        "description": "What's been happening lately.",
         "empty": "No activity recorded yet.",
-        "viewAll": "View all"
+        "viewAll": "View all",
+        "by": "by {actor}",
+        "actions": {
+          "childCheckIn": "Child checked in",
+          "childCheckOut": "Child checked out",
+          "childCheckInDelete": "Child check-in removed",
+          "childClassActivate": "Children's class activated",
+          "childClassDeactivate": "Children's class deactivated",
+          "userCreate": "New user account created",
+          "userUpdate": "User account updated",
+          "userResetPassword": "Password was reset",
+          "userActivate": "User account activated",
+          "userDeactivate": "User account deactivated",
+          "memberDelete": "Member removed",
+          "memberRestore": "Member restored",
+          "givingDelete": "Giving record deleted",
+          "settingsUpdate": "System settings updated",
+          "unknown": "System activity"
+        }
       }
     },
     "member": {
@@ -266,18 +297,22 @@
   "memberPortal": {
     "offline": {
       "title": "You are offline",
+      "eyebrow": "Connection",
       "description": "No internet connection. This page was cached for you. Try again once you're back online.",
       "retry": "Try again"
     },
     "announcements": {
       "title": "Announcements",
+      "eyebrow": "Bulletin",
       "subtitle": "Latest news and updates from the church.",
       "empty": "No announcements yet.",
       "back": "Back",
-      "new": "New"
+      "new": "New",
+      "badge": "Bulletin"
     },
     "devotionals": {
       "title": "Devotionals",
+      "eyebrow": "Daily Devotional",
       "subtitle": "Daily quiet time from the church.",
       "empty": "No devotionals yet.",
       "back": "Back"
@@ -298,6 +333,7 @@
     },
     "profile": {
       "title": "My profile",
+      "eyebrow": "My Account",
       "subtitle": "Some fields can only be changed by an administrator.",
       "submit": "Save changes",
       "savedToast": "Profile saved.",
@@ -340,6 +376,7 @@
     },
     "qr": {
       "title": "My QR",
+      "eyebrow": "Identity",
       "subtitle": "Show this code to an usher for quick check-in.",
       "description": "This QR contains a signed token. Valid for 1 year.",
       "alt": "QR for {name}",
@@ -348,6 +385,7 @@
     },
     "giving": {
       "title": "Give",
+      "eyebrow": "Giving",
       "subtitle": "Transfer to {church} via QRIS or bank.",
       "noteTitle": "About your giving",
       "noteDescription": "May the Lord bless a cheerful giver.",
@@ -355,6 +393,7 @@
     },
     "discipleship": {
       "title": "My journey",
+      "eyebrow": "Growth",
       "subtitle": "Spiritual milestones recorded by the church.",
       "journeyTitle": "Milestones",
       "journeyDescription": "Recorded by your pastor or admin.",
@@ -362,6 +401,7 @@
     },
     "volunteer": {
       "title": "My serving",
+      "eyebrow": "Serving",
       "subtitle": "Your upcoming volunteer assignments.",
       "upcomingTitle": "Upcoming",
       "upcomingDescription": "Confirm or decline so the team knows you're set.",
@@ -375,6 +415,7 @@
     },
     "events": {
       "title": "My events",
+      "eyebrow": "Events",
       "subtitle": "Upcoming events you can RSVP to.",
       "empty": "No upcoming events right now.",
       "rsvpsAbbr": "going",
@@ -395,11 +436,14 @@
         "feeLabel": "Fee",
         "rsvpTitle": "Your RSVP",
         "rsvpDescription": "Let the church know if you're coming.",
-        "yourCurrentStatus": "Current: {status}"
+        "yourCurrentStatus": "Current: {status}",
+        "dateLabel": "When",
+        "locationLabel": "Location"
       }
     },
     "cellGroup": {
       "title": "My cell group",
+      "eyebrow": "Community",
       "subtitle": "Schedule and members of your cell group.",
       "empty": "You're not in any cell group yet. Talk to your leader if you'd like to join one.",
       "nextMeetingLabel": "Next meeting",
@@ -410,6 +454,7 @@
     },
     "checkIn": {
       "title": "Check-in",
+      "eyebrow": "Attendance",
       "subtitle": "Mark your attendance for today's service.",
       "openNow": "Open now",
       "openNowDescription": "Services accepting check-ins right now.",
@@ -444,6 +489,7 @@
     },
     "prayerRequests": {
       "title": "Prayer requests",
+      "eyebrow": "Prayer",
       "subtitle": "Submit prayer needs to the pastoral team.",
       "newButton": "New request",
       "empty": "You haven't submitted any prayer requests yet.",
@@ -479,6 +525,7 @@
     },
     "children": {
       "title": "My children",
+      "eyebrow": "Family",
       "subtitle": "Recent kids-ministry check-ins for children in your household.",
       "empty": "No children linked to your household yet.",
       "emptyHint": "Ask the church admin to link your kids to your household.",
@@ -575,6 +622,7 @@
       }
     },
     "detail": {
+      "backToList": "Members",
       "edit": "Edit",
       "tabs": {
         "profile": "Profile",
@@ -625,7 +673,7 @@
       },
       "login": {
         "title": "Login account",
-        "description": "PIN that the member uses to sign in to the portal.",
+        "description": "Choose a 4–6 digit PIN. Tell the jemaat their new PIN privately.",
         "statusLabel": "Status",
         "statusActive": "PIN set",
         "statusNoPin": "PIN not set",
@@ -635,7 +683,6 @@
         "resetButton": "Reset PIN",
         "setTitle": "Set login PIN",
         "resetTitle": "Reset login PIN",
-        "description": "Choose a 4–6 digit PIN. Tell the jemaat their new PIN privately.",
         "pinLabel": "New PIN",
         "pinHint": "4–6 digits, numbers only.",
         "confirmLabel": "Confirm PIN",
@@ -2190,5 +2237,26 @@
         "description": "Children → Check-in. Pick the child, drop-off guardian, and class. The system issues a 4-character safety code."
       }
     }
+  },
+  "eyebrow": {
+    "dashboard": "Overview",
+    "members": "People",
+    "households": "People",
+    "attendance": "Attendance",
+    "services": "Attendance",
+    "giving": "Finance",
+    "cellGroups": "Community",
+    "discipleship": "Discipleship",
+    "volunteers": "Serving",
+    "events": "Events",
+    "announcements": "Communication",
+    "devotionals": "Communication",
+    "pastoral": "Pastoral care",
+    "prayerRequests": "Pastoral care",
+    "reports": "Analytics",
+    "settings": "Administration",
+    "children": "Children",
+    "search": "Search",
+    "help": "Help"
   }
 }

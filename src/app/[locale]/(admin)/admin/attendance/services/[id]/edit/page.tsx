@@ -1,10 +1,10 @@
-import { ArrowLeft } from "lucide-react";
+
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
+import { PageHeader } from "@/components/m3/page-header";
 import { ServiceEditForm } from "./service-edit-form";
-import { Button } from "@/components/ui/button";
-import { Link } from "@/lib/i18n/navigation";
+
 import { getService } from "@/server/queries/services";
 import { formatJakarta } from "@/lib/datetime";
 
@@ -24,16 +24,12 @@ export default async function EditServicePage({
   const t = await getTranslations("services");
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1">
-        <Button asChild variant="ghost" size="sm" className="w-fit">
-          <Link href={`/admin/attendance/services/${id}`}>
-            <ArrowLeft className="h-4 w-4" />
-            {service.name}
-          </Link>
-        </Button>
-        <h1 className="text-3xl font-bold tracking-tight">{t("edit.title")}</h1>
-      </header>
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6">
+      <PageHeader
+        backHref={`/admin/attendance/services/${id}`}
+        backLabel={service.name}
+        title={t("edit.title")}
+      />
 
       <ServiceEditForm
         id={id}

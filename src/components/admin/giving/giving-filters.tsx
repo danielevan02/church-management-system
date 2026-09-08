@@ -54,7 +54,7 @@ export function GivingFilters({ funds, current }: Props) {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-3 rounded-md border p-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="grid grid-cols-1 gap-3 rounded-lg p-4 sm:grid-cols-2 lg:grid-cols-4 bg-surface-container-high">
       <div className="flex flex-col gap-1">
         <Label className="text-xs">{t("fund")}</Label>
         <Select

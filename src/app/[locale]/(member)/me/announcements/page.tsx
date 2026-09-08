@@ -1,6 +1,8 @@
 import { Megaphone } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
+import { EmptyState } from "@/components/m3/empty-state";
+import { PageHeader } from "@/components/m3/page-header";
 import { ExpandableAnnouncementCard } from "@/components/member/announcements/expandable-announcement-card";
 import { Pagination } from "@/components/shared/pagination";
 import { parsePageParam } from "@/server/queries/_pagination";
@@ -17,19 +19,17 @@ export default async function MemberAnnouncementsPage({
   const result = await listAnnouncementsForMember({ page });
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1">
-        <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="text-on-surface-variant">{t("subtitle")}</p>
-      </header>
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6 pb-28 sm:pb-12">
+      <PageHeader
+        eyebrow={t("eyebrow")}
+        title={t("title")}
+        subtitle={t("subtitle")}
+      />
 
       {result.total === 0 ? (
-        <div className="rounded-md border border-dashed p-10 text-center">
-          <Megaphone className="mx-auto mb-2 h-8 w-8 text-on-surface-variant" />
-          <p className="text-sm text-on-surface-variant">{t("empty")}</p>
-        </div>
+        <EmptyState icon={Megaphone} title={t("empty")} />
       ) : (
-        <div className="flex flex-col gap-3">
+        <div suppressHydrationWarning data-stagger="cards" className="flex flex-col gap-3">
           {result.items.map((a) => {
             const isFresh =
               Date.now() - a.publishedAt.getTime() < 24 * 60 * 60 * 1000;

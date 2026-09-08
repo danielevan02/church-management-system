@@ -1,10 +1,10 @@
-import { ArrowLeft } from "lucide-react";
+
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
+import { PageHeader } from "@/components/m3/page-header";
 import { HouseholdEditForm } from "./household-edit-form";
-import { Button } from "@/components/ui/button";
-import { Link } from "@/lib/i18n/navigation";
+
 import { getHousehold } from "@/server/queries/households";
 
 export default async function EditHouseholdPage({
@@ -19,16 +19,12 @@ export default async function EditHouseholdPage({
   const t = await getTranslations("households");
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1">
-        <Button asChild variant="ghost" size="sm" className="w-fit">
-          <Link href={`/admin/households/${id}`}>
-            <ArrowLeft className="h-4 w-4" />
-            {household.name}
-          </Link>
-        </Button>
-        <h1 className="text-3xl font-bold tracking-tight">{t("edit.title")}</h1>
-      </header>
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6">
+      <PageHeader
+        backHref={`/admin/households/${id}`}
+        backLabel={household.name}
+        title={t("edit.title")}
+      />
 
       <HouseholdEditForm
         id={id}

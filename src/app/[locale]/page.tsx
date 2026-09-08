@@ -61,7 +61,7 @@ export default async function Home() {
         </div>
       </header>
 
-      <section className="flex items-center justify-center px-6 py-16 sm:py-20">
+      <section suppressHydrationWarning data-reveal="up" className="flex items-center justify-center px-6 py-16 sm:py-20">
         <div className="flex w-full max-w-2xl flex-col items-center gap-8 text-center">
           <span
             className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium uppercase tracking-widest text-on-surface-variant"
@@ -74,7 +74,7 @@ export default async function Home() {
             {t("hero.badge")}
           </span>
 
-          <h1 className="text-balance text-4xl font-semibold tracking-tight text-on-surface sm:text-5xl lg:text-6xl">
+          <h1 className="text-balance text-4xl font-bold tracking-tight text-on-surface sm:text-5xl lg:text-6xl">
             {church.name}
           </h1>
 
@@ -102,6 +102,8 @@ export default async function Home() {
 
       {/* Visi */}
       <section
+        suppressHydrationWarning
+        data-reveal="up"
         className="border-t px-6 py-16 sm:py-20"
         style={{ borderColor: `${primary}1a` }}
       >
@@ -129,6 +131,8 @@ export default async function Home() {
 
       {/* Misi */}
       <section
+        suppressHydrationWarning
+        data-reveal="up"
         className="border-t px-6 py-16 sm:py-20"
         style={{ borderColor: `${primary}1a` }}
       >
@@ -155,17 +159,23 @@ export default async function Home() {
             </p>
           </div>
 
-          <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <ol suppressHydrationWarning data-stagger="cards" className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {misiItems.map((item, i) => (
               <li
                 key={i}
-                className="group relative flex flex-col gap-3 rounded-xl border bg-surface-container-low/40 p-6 transition-colors hover:border-on-surface/20"
-                style={{ borderColor: `${primary}1f` }}
+                suppressHydrationWarning
+                data-reveal="up"
+                data-delay={(i % 3) + 1}
+                /* The one place the landing page borrows the app's block
+                   language: a tonal 24dp card, no border, hover lift. The
+                   surrounding sections keep their hairline rules — a marketing
+                   page reads top-to-bottom and needs the section breaks. */
+                className="group relative flex flex-col gap-3 rounded-3xl bg-surface-container-low p-6 shadow-level-0 motion-effects-fast transition-[background-color,box-shadow,transform] hover:-translate-y-0.5 hover:bg-surface-container hover:shadow-level-1"
               >
                 <span
-                  className="flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold"
+                  className="flex h-10 w-10 items-center justify-center rounded-2xl text-sm font-bold"
                   style={{
-                    backgroundColor: `${primary}14`,
+                    backgroundColor: `${primary}1f`,
                     color: primary,
                   }}
                 >

@@ -56,7 +56,7 @@ const cardVariants = cva(
       },
       /** Whole-card click target: M3 state layer, plus a hover lift when elevated. */
       interactive: {
-        true: "state-layer m3-focus-ring shape-morph cursor-pointer active:rounded-md",
+        true: "state-layer m3-focus-ring shape-morph-interactive cursor-pointer active:rounded-md",
         false: "",
       },
     },

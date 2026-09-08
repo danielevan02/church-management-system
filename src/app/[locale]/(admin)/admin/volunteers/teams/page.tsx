@@ -1,13 +1,13 @@
-import { ArrowLeft, Plus } from "lucide-react";
+import { HeartHandshake, Plus } from "lucide-react";
+import { ExpressiveCard } from "@/components/m3/expressive-card";
+import { EmptyState } from "@/components/m3/empty-state";
 import { getTranslations } from "next-intl/server";
 
+import { PageHeader } from "@/components/m3/page-header";
 import { Pagination } from "@/components/shared/pagination";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-} from "@/components/ui/card";
+
 import { Link } from "@/lib/i18n/navigation";
 import { parsePageParam } from "@/server/queries/_pagination";
 import { listTeams } from "@/server/queries/volunteers";
@@ -23,71 +23,61 @@ export default async function TeamsListPage({
   const result = await listTeams({ page });
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <div className="flex flex-col gap-1">
-          <Button asChild variant="ghost" size="sm" className="w-fit">
-            <Link href="/admin/volunteers">
-              <ArrowLeft className="h-4 w-4" />
-              {t("backToList")}
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6">
+      <PageHeader
+        backHref="/admin/volunteers"
+        backLabel={t("backToList")}
+        title={t("title")}
+        subtitle={t("subtitle", { total: result.total })}
+        action={
+          <Button asChild>
+            <Link href="/admin/volunteers/teams/new">
+              <Plus className="h-4 w-4" />
+              {t("newButton")}
             </Link>
           </Button>
-          <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-          <p className="text-on-surface-variant">
-            {t("subtitle", { total: result.total })}
-          </p>
-        </div>
-        <Button asChild>
-          <Link href="/admin/volunteers/teams/new">
-            <Plus className="h-4 w-4" />
-            {t("newButton")}
-          </Link>
-        </Button>
-      </header>
+        }
+      />
 
       {result.total === 0 ? (
-        <div className="rounded-md border border-dashed p-10 text-center text-sm text-on-surface-variant">
-          {t("empty")}
-        </div>
+        <EmptyState icon={HeartHandshake} title={t("empty")} />
       ) : (
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <div suppressHydrationWarning data-stagger="cards" className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
           {result.items.map((tm) => (
-            <Card key={tm.id}>
-              <CardContent className="flex flex-col gap-3 pt-6">
-                <div className="flex items-start justify-between gap-2">
-                  <Link
-                    href={`/admin/volunteers/teams/${tm.id}`}
-                    className="text-lg font-semibold tracking-tight hover:underline"
-                  >
-                    {tm.name}
-                  </Link>
-                  <Badge variant={tm.isActive ? "default" : "secondary"}>
-                    {tm.isActive ? t("statusActive") : t("statusInactive")}
-                  </Badge>
-                </div>
-                {tm.description ? (
-                  <p className="text-sm text-on-surface-variant line-clamp-2">
-                    {tm.description}
-                  </p>
-                ) : null}
-                <div className="flex flex-wrap gap-1">
-                  {tm.positions.length === 0 ? (
-                    <span className="text-xs text-on-surface-variant">
-                      {t("noPositions")}
-                    </span>
-                  ) : (
-                    tm.positions.map((p) => (
-                      <Badge key={p.id} variant="outline" className="text-xs">
-                        {p.name}
-                      </Badge>
-                    ))
-                  )}
-                </div>
-                <div className="text-xs text-on-surface-variant">
-                  {tm._count.assignments} {t("assignmentsAbbr")}
-                </div>
-              </CardContent>
-            </Card>
+            <ExpressiveCard key={tm.id} className="flex flex-col gap-3 pt-6">
+              <div className="flex items-start justify-between gap-2">
+                <Link
+                  href={`/admin/volunteers/teams/${tm.id}`}
+                  className="text-lg font-semibold tracking-tight hover:underline"
+                >
+                  {tm.name}
+                </Link>
+                <Badge variant={tm.isActive ? "default" : "secondary"}>
+                  {tm.isActive ? t("statusActive") : t("statusInactive")}
+                </Badge>
+              </div>
+              {tm.description ? (
+                <p className="text-sm text-on-surface-variant line-clamp-2">
+                  {tm.description}
+                </p>
+              ) : null}
+              <div className="flex flex-wrap gap-1">
+                {tm.positions.length === 0 ? (
+                  <span className="text-xs text-on-surface-variant">
+                    {t("noPositions")}
+                  </span>
+                ) : (
+                  tm.positions.map((p) => (
+                    <Badge key={p.id} variant="outline" className="text-xs">
+                      {p.name}
+                    </Badge>
+                  ))
+                )}
+              </div>
+              <div className="text-xs text-on-surface-variant">
+                {tm._count.assignments} {t("assignmentsAbbr")}
+              </div>
+            </ExpressiveCard>
           ))}
         </div>
       )}

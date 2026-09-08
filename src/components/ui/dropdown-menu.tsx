@@ -294,10 +294,11 @@ function DropdownMenuSubContent({
     <DropdownMenuPrimitive.Portal>
       <DropdownMenuPrimitive.SubContent
         data-slot="dropdown-menu-sub-content"
+        collisionPadding={8}
         className={cn(
           MENU_SURFACE,
           // A submenu floats above its parent menu, so one level higher.
-          "shadow-level-3 origin-(--radix-dropdown-menu-content-transform-origin)",
+          "z-50 shadow-level-3 origin-(--radix-dropdown-menu-content-transform-origin)",
           "max-h-(--radix-dropdown-menu-content-available-height) overflow-x-hidden overflow-y-auto",
           className
         )}

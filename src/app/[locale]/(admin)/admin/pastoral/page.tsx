@@ -1,8 +1,10 @@
 import { format } from "date-fns";
-import { Plus } from "lucide-react";
+import { EmptyState } from "@/components/m3/empty-state";
+import { HeartPulse, Plus } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 
+import { PageHeader } from "@/components/m3/page-header";
 import { DeleteVisitButton } from "@/components/admin/pastoral/delete-visit-button";
 import { Pagination } from "@/components/shared/pagination";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -40,6 +42,8 @@ export default async function PastoralListPage({
   if (role === "MEMBER") notFound();
 
   const t = await getTranslations("pastoral.list");
+
+  const tEyebrow = await getTranslations("eyebrow");
   const tType = await getTranslations("pastoral.visitType");
 
   let cellGroupIds: string[] | undefined;
@@ -62,30 +66,27 @@ export default async function PastoralListPage({
   const canCreate = hasAtLeastRole(role, "LEADER");
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <div className="flex flex-col gap-1">
-          <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-          <p className="text-on-surface-variant">
-            {t("subtitle", { total: result.total })}
-          </p>
-        </div>
-        {canCreate ? (
-          <Button asChild>
-            <Link href="/admin/pastoral/new">
-              <Plus className="h-4 w-4" />
-              {t("newButton")}
-            </Link>
-          </Button>
-        ) : null}
-      </header>
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6">
+      <PageHeader
+        eyebrow={tEyebrow("pastoral")}
+        title={t("title")}
+        subtitle={t("subtitle", { total: result.total })}
+        action={
+          canCreate ? (
+            <Button asChild>
+              <Link href="/admin/pastoral/new">
+                <Plus className="h-4 w-4" />
+                {t("newButton")}
+              </Link>
+            </Button>
+          ) : null
+        }
+      />
 
       {result.total === 0 ? (
-        <div className="rounded-md border border-dashed p-10 text-center text-sm text-on-surface-variant">
-          {t("empty")}
-        </div>
+        <EmptyState icon={HeartPulse} title={t("empty")} />
       ) : (
-        <div className="rounded-md border">
+        <div className="rounded-lg bg-surface-container-low overflow-hidden">
           <Table>
             <TableHeader>
               <TableRow>

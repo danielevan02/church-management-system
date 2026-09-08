@@ -1,11 +1,9 @@
-import { ArrowLeft } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 
 import { PrayerCreateForm } from "./prayer-create-form";
-import { Button } from "@/components/ui/button";
+import { PageHeader } from "@/components/m3/page-header";
 import { auth } from "@/lib/auth";
-import { Link } from "@/lib/i18n/navigation";
 
 export default async function NewMyPrayerRequestPage() {
   const session = await auth();
@@ -15,17 +13,14 @@ export default async function NewMyPrayerRequestPage() {
   const t = await getTranslations("memberPortal.prayerRequests");
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1">
-        <Button asChild variant="ghost" size="sm" className="w-fit">
-          <Link href="/me/prayer-requests">
-            <ArrowLeft className="h-4 w-4" />
-            {t("back")}
-          </Link>
-        </Button>
-        <h1 className="text-3xl font-bold tracking-tight">{t("newTitle")}</h1>
-        <p className="text-on-surface-variant">{t("newSubtitle")}</p>
-      </header>
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6 pb-28 sm:pb-12">
+      <PageHeader
+        backHref="/me/prayer-requests"
+        backLabel={t("back")}
+        eyebrow={t("eyebrow")}
+        title={t("newTitle")}
+        subtitle={t("newSubtitle")}
+      />
       <PrayerCreateForm submitLabel={t("submit")} />
     </div>
   );

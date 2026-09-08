@@ -21,11 +21,10 @@ import { cn } from "@/lib/utils"
  */
 const toggleVariants = cva(
   [
-    "state-layer m3-focus-ring shape-morph",
+    "state-layer m3-focus-ring motion-effects-fast",
+    "transition-[background-color,box-shadow,border-color,color,transform]",
     "inline-flex items-center justify-center gap-2 rounded-full whitespace-nowrap",
     "text-label-lg",
-    "active:rounded-md",
-    "motion-effects-fast transition-[background-color,border-color,color,border-radius]",
     "disabled:pointer-events-none disabled:text-on-surface/38",
     "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-6",
   ],

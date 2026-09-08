@@ -1,6 +1,8 @@
-import { CalendarRange, Plus } from "lucide-react";
+import { CalendarCheck, CalendarRange, Plus } from "lucide-react";
+import { EmptyState } from "@/components/m3/empty-state";
 import { getTranslations } from "next-intl/server";
 
+import { PageHeader } from "@/components/m3/page-header";
 import { ServiceFilters } from "@/components/admin/attendance/service-filters";
 import { Pagination } from "@/components/shared/pagination";
 import { Badge } from "@/components/ui/badge";
@@ -70,43 +72,42 @@ export default async function ServicesListPage({
   );
 
   const t = await getTranslations("services.list");
+
+  const tEyebrow = await getTranslations("eyebrow");
   const tType = await getTranslations("services.type");
   const result = await listServices({ filters, page });
   const now = new Date();
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <div className="flex flex-col gap-1">
-          <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-          <p className="text-on-surface-variant">
-            {t("subtitle", { total: result.total })}
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <Button asChild variant="outline">
-            <Link href="/admin/attendance/services/recurring">
-              <CalendarRange className="h-4 w-4" />
-              {t("recurringButton")}
-            </Link>
-          </Button>
-          <Button asChild>
-            <Link href="/admin/attendance/services/new">
-              <Plus className="h-4 w-4" />
-              {t("newButton")}
-            </Link>
-          </Button>
-        </div>
-      </header>
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6">
+      <PageHeader
+        eyebrow={tEyebrow("services")}
+        title={t("title")}
+        subtitle={t("subtitle", { total: result.total })}
+        action={
+          <div className="flex gap-2">
+            <Button asChild variant="outline">
+              <Link href="/admin/attendance/services/recurring">
+                <CalendarRange className="h-4 w-4" />
+                {t("recurringButton")}
+              </Link>
+            </Button>
+            <Button asChild>
+              <Link href="/admin/attendance/services/new">
+                <Plus className="h-4 w-4" />
+                {t("newButton")}
+              </Link>
+            </Button>
+          </div>
+        }
+      />
 
       <ServiceFilters />
 
       {result.items.length === 0 ? (
-        <div className="rounded-md border border-dashed p-10 text-center text-sm text-on-surface-variant">
-          {isFiltered ? t("emptyFiltered") : t("empty")}
-        </div>
+        <EmptyState icon={CalendarCheck} title={isFiltered ? t("emptyFiltered") : t("empty")} />
       ) : (
-        <div className="rounded-md border">
+        <div className="rounded-lg bg-surface-container-low overflow-hidden">
           <Table>
             <TableHeader>
               <TableRow>

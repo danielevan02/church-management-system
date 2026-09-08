@@ -1,7 +1,9 @@
-import { Plus } from "lucide-react";
+import { Plus, Settings } from "lucide-react";
+import { EmptyState } from "@/components/m3/empty-state";
 import { getTranslations } from "next-intl/server";
 import { notFound, redirect } from "next/navigation";
 
+import { PageHeader } from "@/components/m3/page-header";
 import { ToggleActiveButton } from "@/components/admin/settings/toggle-active-button";
 import { Pagination } from "@/components/shared/pagination";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -34,33 +36,31 @@ export default async function UsersListPage({
   const sp = await searchParams;
   const page = parsePageParam(sp.page);
   const t = await getTranslations("settings.users");
+  const tEyebrow = await getTranslations("eyebrow");
   const tRole = await getTranslations("settings.users.roles");
 
   const result = await listUsers({ page });
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <div className="flex flex-col gap-1">
-          <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-          <p className="text-on-surface-variant">
-            {t("subtitle", { total: result.total })}
-          </p>
-        </div>
-        <Button asChild>
-          <Link href="/admin/settings/users/new">
-            <Plus className="h-4 w-4" />
-            {t("newButton")}
-          </Link>
-        </Button>
-      </header>
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6">
+      <PageHeader
+        eyebrow={tEyebrow("settings")}
+        title={t("title")}
+        subtitle={t("subtitle", { total: result.total })}
+        action={
+          <Button asChild>
+            <Link href="/admin/settings/users/new">
+              <Plus className="h-4 w-4" />
+              {t("newButton")}
+            </Link>
+          </Button>
+        }
+      />
 
       {result.total === 0 ? (
-        <div className="rounded-md border border-dashed p-10 text-center text-sm text-on-surface-variant">
-          {t("empty")}
-        </div>
+        <EmptyState icon={Settings} title={t("empty")} />
       ) : (
-        <div className="rounded-md border">
+        <div className="rounded-lg bg-surface-container-low overflow-hidden">
           <Table>
             <TableHeader>
               <TableRow>

@@ -16,14 +16,11 @@ import {
 import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 
+import { BlockSection } from "@/components/m3/block-section";
+import { IconChip } from "@/components/m3/icon-chip";
+import { PageHeader } from "@/components/m3/page-header";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+
 import { auth } from "@/lib/auth";
 import { Link } from "@/lib/i18n/navigation";
 
@@ -48,6 +45,8 @@ export default async function HelpPage() {
   if (!session?.user) redirect("/auth/sign-in");
 
   const t = await getTranslations("help");
+
+  const tEyebrow = await getTranslations("eyebrow");
   const tModule = await getTranslations("help.modules");
   const tQuick = await getTranslations("help.quickStart");
 
@@ -60,102 +59,94 @@ export default async function HelpPage() {
   ];
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1">
-        <h1 className="flex items-center gap-2 text-3xl font-bold tracking-tight">
-          <HelpCircle className="h-7 w-7" />
-          {t("title")}
-        </h1>
-        <p className="text-on-surface-variant">{t("subtitle")}</p>
-      </header>
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6">
+      <PageHeader
+        leading={<IconChip icon={HelpCircle} size="lg" tone="secondary" />}
+        eyebrow={tEyebrow("help")}
+        title={t("title")}
+        subtitle={t("subtitle")}
+      />
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">{tQuick("title")}</CardTitle>
-          <CardDescription>{tQuick("description")}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ol className="ml-4 flex list-decimal flex-col gap-2 text-sm">
-            {QUICK_STEPS.map((s) => (
-              <li key={s.key}>{tQuick(s.key as never)}</li>
-            ))}
-          </ol>
-        </CardContent>
-      </Card>
+      <BlockSection
+        title={tQuick("title")}
+        description={tQuick("description")}
+        staggerChildren
+      >
+        <ol className="ml-4 flex list-decimal flex-col gap-2 text-sm">
+          {QUICK_STEPS.map((s) => (
+            <li key={s.key}>{tQuick(s.key as never)}</li>
+          ))}
+        </ol>
+      </BlockSection>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">{t("modulesTitle")}</CardTitle>
-          <CardDescription>{t("modulesDescription")}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ul className="grid grid-cols-1 gap-3 md:grid-cols-2">
-            {MODULES.map((m) => (
-              <li
-                key={m.key}
-                className="flex items-start gap-3 rounded-md border p-3"
-              >
-                <m.icon className="mt-0.5 h-5 w-5 shrink-0 text-on-surface-variant" />
-                <div className="flex flex-1 flex-col gap-1">
-                  <span className="font-medium">
-                    {tModule(`${m.key}.title` as never)}
-                  </span>
-                  <span className="text-xs text-on-surface-variant">
-                    {tModule(`${m.key}.description` as never)}
-                  </span>
-                  <Button
-                    asChild
-                    variant="ghost"
-                    size="sm"
-                    className="mt-1 w-fit"
-                  >
-                    <Link href={m.href}>{t("openModule")}</Link>
-                  </Button>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </CardContent>
-      </Card>
+      <BlockSection
+        title={t("modulesTitle")}
+        description={t("modulesDescription")}
+        staggerChildren
+      >
+        <ul suppressHydrationWarning data-stagger="cards" className="grid grid-cols-1 gap-3 md:grid-cols-2">
+          {MODULES.map((m) => (
+            <li
+              key={m.key}
+              className="flex items-start gap-3 rounded-2xl p-3 bg-surface-container-high"
+            >
+              <m.icon className="mt-0.5 h-5 w-5 shrink-0 text-on-surface-variant" />
+              <div className="flex flex-1 flex-col gap-1">
+                <span className="font-medium">
+                  {tModule(`${m.key}.title` as never)}
+                </span>
+                <span className="text-xs text-on-surface-variant">
+                  {tModule(`${m.key}.description` as never)}
+                </span>
+                <Button
+                  asChild
+                  variant="ghost"
+                  size="sm"
+                  className="mt-1 w-fit"
+                >
+                  <Link href={m.href}>{t("openModule")}</Link>
+                </Button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </BlockSection>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">{t("commonTasksTitle")}</CardTitle>
-          <CardDescription>{t("commonTasksDescription")}</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4 text-sm">
-          <Section
-            title={t("tasks.addMember.title")}
-            description={t("tasks.addMember.description")}
-          />
-          <Section
-            title={t("tasks.recordAttendance.title")}
-            description={t("tasks.recordAttendance.description")}
-          />
-          <Section
-            title={t("tasks.recordGiving.title")}
-            description={t("tasks.recordGiving.description")}
-          />
-          <Section
-            title={t("tasks.broadcastMessage.title")}
-            description={t("tasks.broadcastMessage.description")}
-          />
-          <Section
-            title={t("tasks.checkInChild.title")}
-            description={t("tasks.checkInChild.description")}
-          />
-        </CardContent>
-      </Card>
+      <BlockSection
+        title={t("commonTasksTitle")}
+        description={t("commonTasksDescription")}
+        bodyClassName="space-y-4 text-sm"
+        staggerChildren
+      >
+        <Section
+          title={t("tasks.addMember.title")}
+          description={t("tasks.addMember.description")}
+        />
+        <Section
+          title={t("tasks.recordAttendance.title")}
+          description={t("tasks.recordAttendance.description")}
+        />
+        <Section
+          title={t("tasks.recordGiving.title")}
+          description={t("tasks.recordGiving.description")}
+        />
+        <Section
+          title={t("tasks.broadcastMessage.title")}
+          description={t("tasks.broadcastMessage.description")}
+        />
+        <Section
+          title={t("tasks.checkInChild.title")}
+          description={t("tasks.checkInChild.description")}
+        />
+      </BlockSection>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">{t("supportTitle")}</CardTitle>
-          <CardDescription>{t("supportDescription")}</CardDescription>
-        </CardHeader>
-        <CardContent className="text-sm text-on-surface-variant">
-          {t("supportBody")}
-        </CardContent>
-      </Card>
+      <BlockSection
+        title={t("supportTitle")}
+        description={t("supportDescription")}
+        bodyClassName="text-sm text-on-surface-variant"
+      >
+        {t("supportBody")}
+      </BlockSection>
     </div>
   );
 }

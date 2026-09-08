@@ -5,13 +5,7 @@ import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Banner } from "@/components/m3/banner";
 import { useRouter } from "@/lib/i18n/navigation";
 import { checkInMemberAction } from "@/server/actions/attendance/check-in";
 
@@ -63,46 +57,40 @@ export function AutoCheckIn({
   }, [serviceId, memberId, serviceName, router, t]);
 
   return (
-    <Card
-      className={
+    <Banner
+      tone={
         status === "ok" || status === "alreadyCheckedIn"
-          ? "border-success/40 bg-success/5"
+          ? "success"
           : status === "error"
-            ? "border-error/40 bg-error/5"
-            : ""
+            ? "error"
+            : "neutral"
       }
-    >
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-base">
-          {status === "pending" ? (
-            <Loader2 className="h-5 w-5 animate-spin" />
-          ) : null}
-          {status === "ok" ? (
-            <CheckCircle2 className="h-5 w-5 text-success" />
-          ) : null}
-          {status === "alreadyCheckedIn" ? (
-            <CheckCircle2 className="h-5 w-5 text-success" />
-          ) : null}
-          {status === "error" ? (
-            <XCircle className="h-5 w-5 text-error" />
-          ) : null}
-          {status === "pending"
-            ? t("autoPendingTitle")
-            : status === "ok"
-              ? t("autoSuccessTitle")
-              : status === "alreadyCheckedIn"
-                ? t("autoAlreadyTitle")
-                : t("autoErrorTitle")}
-        </CardTitle>
-        <CardDescription>
-          {status === "pending"
-            ? t("autoPendingDescription", { name: serviceName })
-            : status === "error"
-              ? (errorMessage ?? t("errors.generic"))
-              : t("autoSuccessDescription", { name: serviceName })}
-        </CardDescription>
-      </CardHeader>
-      <CardContent />
-    </Card>
+      icon={
+        status === "pending"
+          ? Loader2
+          : status === "error"
+            ? XCircle
+            : CheckCircle2
+      }
+      /* The spinner has to keep spinning, and IconChip renders its glyph
+         bare — so the animation class goes on the chip, not the icon. */
+      className={status === "pending" ? "[&_svg]:animate-spin" : undefined}
+      title={
+        status === "pending"
+          ? t("autoPendingTitle")
+          : status === "ok"
+            ? t("autoSuccessTitle")
+            : status === "alreadyCheckedIn"
+              ? t("autoAlreadyTitle")
+              : t("autoErrorTitle")
+      }
+      description={
+        status === "pending"
+          ? t("autoPendingDescription", { name: serviceName })
+          : status === "error"
+            ? (errorMessage ?? t("errors.generic"))
+            : t("autoSuccessDescription", { name: serviceName })
+      }
+    />
   );
 }

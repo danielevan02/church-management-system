@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 
+import { PageHeader } from "@/components/m3/page-header";
 import { AssignmentForm } from "@/components/admin/volunteers/assignment-form";
 import { listAllTeams } from "@/server/queries/volunteers";
 
@@ -12,14 +13,17 @@ export default async function NewAssignmentPage({
   const teamParam = Array.isArray(sp.team) ? sp.team[0] : sp.team;
 
   const t = await getTranslations("volunteers.assignment.new");
+
+  const tEyebrow = await getTranslations("eyebrow");
   const teams = await listAllTeams();
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1">
-        <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="text-on-surface-variant">{t("subtitle")}</p>
-      </header>
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6">
+      <PageHeader
+        eyebrow={tEyebrow("volunteers")}
+        title={t("title")}
+        subtitle={t("subtitle")}
+      />
       <AssignmentForm
         teams={teams.map((t) => ({
           id: t.id,

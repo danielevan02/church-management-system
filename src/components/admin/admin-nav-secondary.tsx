@@ -51,7 +51,7 @@ export function AdminNavSecondary({
                   </SidebarMenuButton>
                 ) : (
                   <SidebarMenuButton asChild isActive={active}>
-                    <Link href={item.href}>{Inner}</Link>
+                    <Link href={item.href} prefetch={true}>{Inner}</Link>
                   </SidebarMenuButton>
                 )}
               </SidebarMenuItem>

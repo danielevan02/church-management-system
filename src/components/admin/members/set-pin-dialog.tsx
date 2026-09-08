@@ -150,7 +150,7 @@ export function SetPinDialog({ memberId, hasExistingPin, hasPhone }: Props) {
           </div>
 
           {error ? (
-            <p className="rounded-md border border-error/50 bg-error/10 px-3 py-2 text-sm text-error">
+            <p className="rounded-2xl border border-error/50 bg-error/10 px-3 py-2 text-sm text-error">
               {error}
             </p>
           ) : null}

@@ -203,9 +203,7 @@
 @utility m3-fade-through {
   animation:
     m3-fade-through-in var(--md-sys-motion-spring-default-effects-duration)
-      var(--md-sys-motion-spring-default-effects) both,
-    m3-fade-through-scale var(--md-sys-motion-spring-default-spatial-duration)
-      var(--md-sys-motion-spring-default-spatial) both;
+      var(--md-sys-motion-spring-default-effects) both;
 }
 
 /* Shared axis moves 30dp along x. Forward comes from the trailing edge,
@@ -226,6 +224,378 @@
     m3-axis-x-backward var(--md-sys-motion-spring-default-spatial-duration)
       var(--md-sys-motion-spring-default-spatial) both;
 }
+
+/* ------------------------------------------------------------------------
+ * M3 Viewport Entrance & Scroll-Driven Reveal
+ *
+ * Smooth upward decelerated slide & fade entrance for content coming into the
+ * viewport ("muncul dari bawah ke atas"). Follows M3 standard spatial physics
+ * (spring overshoot ~1.015) and critically damped opacity effects.
+ */
+
+@keyframes m3-fade-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 20px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@utility m3-fade-up {
+  animation:
+    m3-fade-in var(--md-sys-motion-spring-default-effects-duration)
+      var(--md-sys-motion-spring-default-effects) both,
+    m3-fade-up var(--md-sys-motion-spring-default-spatial-duration)
+      var(--md-sys-motion-spring-default-spatial) both;
+}
+
+/* Stagger cascade for direct children in page transition containers */
+@utility m3-stagger-container {
+  & > *:nth-child(1) {
+    animation:
+      m3-fade-in var(--md-sys-motion-spring-default-effects-duration)
+        var(--md-sys-motion-spring-default-effects) 0ms both,
+      m3-fade-up var(--md-sys-motion-spring-default-spatial-duration)
+        var(--md-sys-motion-spring-default-spatial) 0ms both;
+  }
+  & > *:nth-child(2) {
+    animation:
+      m3-fade-in var(--md-sys-motion-spring-default-effects-duration)
+        var(--md-sys-motion-spring-default-effects) 60ms both,
+      m3-fade-up var(--md-sys-motion-spring-default-spatial-duration)
+        var(--md-sys-motion-spring-default-spatial) 60ms both;
+  }
+  & > *:nth-child(3) {
+    animation:
+      m3-fade-in var(--md-sys-motion-spring-default-effects-duration)
+        var(--md-sys-motion-spring-default-effects) 120ms both,
+      m3-fade-up var(--md-sys-motion-spring-default-spatial-duration)
+        var(--md-sys-motion-spring-default-spatial) 120ms both;
+  }
+  & > *:nth-child(4) {
+    animation:
+      m3-fade-in var(--md-sys-motion-spring-default-effects-duration)
+        var(--md-sys-motion-spring-default-effects) 180ms both,
+      m3-fade-up var(--md-sys-motion-spring-default-spatial-duration)
+        var(--md-sys-motion-spring-default-spatial) 180ms both;
+  }
+  & > *:nth-child(5) {
+    animation:
+      m3-fade-in var(--md-sys-motion-spring-default-effects-duration)
+        var(--md-sys-motion-spring-default-effects) 240ms both,
+      m3-fade-up var(--md-sys-motion-spring-default-spatial-duration)
+        var(--md-sys-motion-spring-default-spatial) 240ms both;
+  }
+  & > *:nth-child(6) {
+    animation:
+      m3-fade-in var(--md-sys-motion-spring-default-effects-duration)
+        var(--md-sys-motion-spring-default-effects) 300ms both,
+      m3-fade-up var(--md-sys-motion-spring-default-spatial-duration)
+        var(--md-sys-motion-spring-default-spatial) 300ms both;
+  }
+  & > *:nth-child(n + 7) {
+    animation:
+      m3-fade-in var(--md-sys-motion-spring-default-effects-duration)
+        var(--md-sys-motion-spring-default-effects) 360ms both,
+      m3-fade-up var(--md-sys-motion-spring-default-spatial-duration)
+        var(--md-sys-motion-spring-default-spatial) 360ms both;
+  }
+}
+
+/* Delay utility classes */
+@utility stagger-1 { animation-delay: 60ms !important; }
+@utility stagger-2 { animation-delay: 120ms !important; }
+@utility stagger-3 { animation-delay: 180ms !important; }
+@utility stagger-4 { animation-delay: 240ms !important; }
+@utility stagger-5 { animation-delay: 300ms !important; }
+@utility stagger-6 { animation-delay: 360ms !important; }
+
+/*
+ * Viewport / IntersectionObserver-driven reveal state
+ * Elements start slightly lower and transparent, then glide up smoothly when in view.
+ */
+[data-reveal="up"] {
+  opacity: 0;
+  transform: translate3d(0, 20px, 0);
+  transition:
+    transform var(--md-sys-motion-spring-default-spatial-duration)
+      var(--md-sys-motion-spring-default-spatial),
+    opacity var(--md-sys-motion-spring-default-effects-duration)
+      var(--md-sys-motion-spring-default-effects);
+  will-change: transform, opacity;
+}
+
+[data-reveal="up"][data-revealed="true"] {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+[data-reveal="up"][data-revealed="true"][data-delay="1"] { transition-delay: 60ms; }
+[data-reveal="up"][data-revealed="true"][data-delay="2"] { transition-delay: 120ms; }
+[data-reveal="up"][data-revealed="true"][data-delay="3"] { transition-delay: 180ms; }
+[data-reveal="up"][data-revealed="true"][data-delay="4"] { transition-delay: 240ms; }
+[data-reveal="up"][data-revealed="true"][data-delay="5"] { transition-delay: 300ms; }
+
+/*
+ * Container Staggering on View
+ * Children are initially offset and transparent. When the container enters
+ * the viewport (via IntersectionObserver or view timeline), children reveal
+ * one by one with a staggered wave, avoiding monolithic block animations.
+ */
+
+/* 1. Stagger for Cards, Bento Tiles, and KPI metrics */
+[data-stagger="cards"] > * {
+  opacity: 0;
+  transform: translate3d(0, 18px, 0);
+  transition:
+    transform var(--md-sys-motion-spring-default-spatial-duration)
+      var(--md-sys-motion-spring-default-spatial),
+    opacity var(--md-sys-motion-spring-default-effects-duration)
+      var(--md-sys-motion-spring-default-effects);
+  will-change: transform, opacity;
+}
+
+[data-stagger="cards"][data-revealed="true"] > *:nth-child(1) {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 0ms;
+}
+[data-stagger="cards"][data-revealed="true"] > *:nth-child(2) {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 60ms;
+}
+[data-stagger="cards"][data-revealed="true"] > *:nth-child(3) {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 120ms;
+}
+[data-stagger="cards"][data-revealed="true"] > *:nth-child(4) {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 180ms;
+}
+[data-stagger="cards"][data-revealed="true"] > *:nth-child(5) {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 240ms;
+}
+[data-stagger="cards"][data-revealed="true"] > *:nth-child(6) {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 300ms;
+}
+[data-stagger="cards"][data-revealed="true"] > *:nth-child(7) {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 360ms;
+}
+[data-stagger="cards"][data-revealed="true"] > *:nth-child(n + 8) {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 420ms;
+}
+
+/* 2. Stagger for compact list items, rows, chips, and sub-blocks */
+[data-stagger="items"] > * {
+  opacity: 0;
+  transform: translate3d(0, 12px, 0);
+  transition:
+    transform var(--md-sys-motion-spring-default-spatial-duration)
+      var(--md-sys-motion-spring-default-spatial),
+    opacity var(--md-sys-motion-spring-default-effects-duration)
+      var(--md-sys-motion-spring-default-effects);
+  will-change: transform, opacity;
+}
+
+[data-stagger="items"][data-revealed="true"] > *:nth-child(1) {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 0ms;
+}
+[data-stagger="items"][data-revealed="true"] > *:nth-child(2) {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 40ms;
+}
+[data-stagger="items"][data-revealed="true"] > *:nth-child(3) {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 80ms;
+}
+[data-stagger="items"][data-revealed="true"] > *:nth-child(4) {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 120ms;
+}
+[data-stagger="items"][data-revealed="true"] > *:nth-child(5) {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 160ms;
+}
+[data-stagger="items"][data-revealed="true"] > *:nth-child(6) {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 200ms;
+}
+[data-stagger="items"][data-revealed="true"] > *:nth-child(n + 7) {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 240ms;
+}
+
+/* 3. Stagger for data table rows */
+[data-stagger="rows"] > tr {
+  opacity: 0;
+  transform: translate3d(0, 10px, 0);
+  transition:
+    transform var(--md-sys-motion-spring-default-spatial-duration)
+      var(--md-sys-motion-spring-default-spatial),
+    opacity var(--md-sys-motion-spring-default-effects-duration)
+      var(--md-sys-motion-spring-default-effects);
+  will-change: transform, opacity;
+}
+
+[data-stagger="rows"][data-revealed="true"] > tr:nth-child(1) {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 0ms;
+}
+[data-stagger="rows"][data-revealed="true"] > tr:nth-child(2) {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 35ms;
+}
+[data-stagger="rows"][data-revealed="true"] > tr:nth-child(3) {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 70ms;
+}
+[data-stagger="rows"][data-revealed="true"] > tr:nth-child(4) {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 105ms;
+}
+[data-stagger="rows"][data-revealed="true"] > tr:nth-child(5) {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 140ms;
+}
+[data-stagger="rows"][data-revealed="true"] > tr:nth-child(6) {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 175ms;
+}
+[data-stagger="rows"][data-revealed="true"] > tr:nth-child(7) {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 210ms;
+}
+[data-stagger="rows"][data-revealed="true"] > tr:nth-child(8) {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 245ms;
+}
+[data-stagger="rows"][data-revealed="true"] > tr:nth-child(9) {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 280ms;
+}
+[data-stagger="rows"][data-revealed="true"] > tr:nth-child(10) {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 315ms;
+}
+[data-stagger="rows"][data-revealed="true"] > tr:nth-child(n + 11) {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 350ms;
+}
+
+/* 4. Stagger for top-level page sections (Header, KPI, Main content, Details) */
+[data-stagger="sections"] > * {
+  opacity: 0;
+  transform: translate3d(0, 16px, 0);
+  transition:
+    transform var(--md-sys-motion-spring-default-spatial-duration)
+      var(--md-sys-motion-spring-default-spatial),
+    opacity var(--md-sys-motion-spring-default-effects-duration)
+      var(--md-sys-motion-spring-default-effects);
+  will-change: transform, opacity;
+}
+
+[data-stagger="sections"][data-revealed="true"] > *:nth-child(1) {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 0ms;
+}
+[data-stagger="sections"][data-revealed="true"] > *:nth-child(2) {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 60ms;
+}
+[data-stagger="sections"][data-revealed="true"] > *:nth-child(3) {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 120ms;
+}
+[data-stagger="sections"][data-revealed="true"] > *:nth-child(4) {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 180ms;
+}
+[data-stagger="sections"][data-revealed="true"] > *:nth-child(5) {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 240ms;
+}
+[data-stagger="sections"][data-revealed="true"] > *:nth-child(n + 6) {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 300ms;
+}
+
+/*
+ * Modern CSS Scroll-Driven Animations (Progressive Enhancement)
+ * For browsers that support View Timeline, trigger entry reveal seamlessly on scroll.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    .m3-scroll-reveal {
+      animation: m3-fade-up var(--md-sys-motion-spring-default-spatial-duration)
+        var(--md-sys-motion-spring-default-spatial) backwards;
+      animation-timeline: view();
+      animation-range: entry 0% entry 30%;
+    }
+  }
+}
+
+/* Fallback for no-JS / search crawlers */
+@media (scripting: none) {
+  [data-reveal="up"],
+  [data-stagger] > *,
+  [data-stagger="rows"] > tr {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .m3-fade-up,
+  .m3-stagger-container > *,
+  [data-reveal="up"],
+  [data-stagger] > *,
+  [data-stagger="rows"] > tr {
+    animation: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+    transition: none !important;
+  }
+}
+
 
 /* ------------------------------------------------------------------------
  * M3 Container Transform
@@ -289,3 +659,96 @@
   opacity: 1 !important;
 }
 
+
+/* ------------------------------------------------------------------------
+ * M3 navigation drawer <-> rail collapse
+ *
+ * Two things made this feel wrong, and neither was the idea.
+ *
+ * **Everything moved on a different curve.** A collapse here travels 280px —
+ * the drawer is 360dp and the rail is 80dp, 35% further than shadcn's stock
+ * 256->48 — and the parts crossing that distance were on three unrelated
+ * timings: the gap and container width on `200ms linear`, the menu items on
+ * `200ms ease-standard`, and the sliding active indicator on the 435ms spatial
+ * spring. So the panel edge snapped to its final width while the active pill
+ * was still travelling for another quarter of a second, visibly detached from
+ * the row it belongs to. `m3-sidebar-motion` is the one curve they now share,
+ * and it is the spring the indicator already used, so the edge, the rows and
+ * the pill arrive together. It reads the motion-scheme token rather than a
+ * literal duration, so `[data-motion="standard"]` gets 317ms and reduced-motion
+ * gets 1ms for free.
+ *
+ * **Labels were hidden rather than collapsed.** `display: none` is not
+ * animatable, so the drawer emptied in one frame and only then narrowed, and
+ * for the frames before that every label still on screen was re-truncating as
+ * its box shrank. The fix is the one the reference implementation uses: don't
+ * hide the label, **collapse its width**. `max-width` goes to 0 with
+ * `overflow: hidden`, so the text slides out behind its own edge — nothing
+ * pops, nothing re-truncates, and because the label stops contributing width
+ * the row centres on its icon by itself. That last part is why there is no
+ * sequencing delay here: the label squeezing shut and the rail closing are the
+ * same motion, so they overlap instead of queueing.
+ *
+ * Opacity leads the squeeze deliberately — the fast effects spring (150ms)
+ * against the spatial spring (435ms) — so the text is gone well before its box
+ * finishes closing, and on the way back it fades up just as the box finishes
+ * revealing it. That ordering is the reference's 0.18s/0.25s split, expressed
+ * in tokens.
+ *
+ * `max-width` needs a concrete value to interpolate from, hence the 18rem cap.
+ * That is above the widest a label can be inside a 360dp drawer (the row spends
+ * 16dp of group padding, 32dp of its own, a 24dp icon and a 12dp gap), so it
+ * never clips an expanded label — it only exists to give the transition a
+ * number.
+ *
+ * Structural things stay on `display: none`, in `sidebar.tsx`: a
+ * `sidebar-menu-sub` list at zero width would still occupy its full height and
+ * push the rail's rows apart. Only inline labels collapse.
+ */
+@utility m3-sidebar-motion {
+  transition-timing-function: var(--md-sys-motion-spring-default-spatial);
+  transition-duration: var(--md-sys-motion-spring-default-spatial-duration);
+}
+
+/*
+ * `m3-sidebar-label` is for the inline labels outside a menu button — the
+ * church name, the user block, the trailing chevron, the count badges.
+ * Menu-button labels are matched structurally so the ~30 nav items need no
+ * class of their own.
+ *
+ * `white-space` is deliberately not set: menu-button labels already carry
+ * `truncate`, and the church name is a `line-clamp-2` that is meant to wrap
+ * onto two lines while the drawer is open.
+ */
+@utility m3-sidebar-label {
+  max-width: 18rem;
+  overflow: hidden;
+  transition-property: opacity, max-width;
+  transition-duration:
+    var(--md-sys-motion-spring-fast-effects-duration),
+    var(--md-sys-motion-spring-default-spatial-duration);
+  transition-timing-function:
+    var(--md-sys-motion-spring-fast-effects),
+    var(--md-sys-motion-spring-default-spatial);
+}
+
+[data-slot="sidebar-menu-button"] > span {
+  max-width: 18rem;
+  overflow: hidden;
+  transition-property: opacity, max-width;
+  transition-duration:
+    var(--md-sys-motion-spring-fast-effects-duration),
+    var(--md-sys-motion-spring-default-spatial-duration);
+  transition-timing-function:
+    var(--md-sys-motion-spring-fast-effects),
+    var(--md-sys-motion-spring-default-spatial);
+}
+
+[data-slot="sidebar"][data-collapsible="icon"] .m3-sidebar-label,
+[data-slot="sidebar"][data-collapsible="icon"]
+  [data-slot="sidebar-menu-button"]
+  > span {
+  max-width: 0;
+  opacity: 0;
+  pointer-events: none;
+}

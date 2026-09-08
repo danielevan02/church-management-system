@@ -1,10 +1,10 @@
-import { ArrowLeft } from "lucide-react";
+
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
+import { PageHeader } from "@/components/m3/page-header";
 import { EventEditForm } from "./event-edit-form";
-import { Button } from "@/components/ui/button";
-import { Link } from "@/lib/i18n/navigation";
+
 import { getEvent } from "@/server/queries/events";
 import { formatJakarta } from "@/lib/datetime";
 
@@ -24,16 +24,12 @@ export default async function EditEventPage({
   const t = await getTranslations("events");
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1">
-        <Button asChild variant="ghost" size="sm" className="w-fit">
-          <Link href={`/admin/events/${id}`}>
-            <ArrowLeft className="h-4 w-4" />
-            {event.title}
-          </Link>
-        </Button>
-        <h1 className="text-3xl font-bold tracking-tight">{t("edit.title")}</h1>
-      </header>
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6">
+      <PageHeader
+        backHref={`/admin/events/${id}`}
+        backLabel={event.title}
+        title={t("edit.title")}
+      />
       <EventEditForm
         id={id}
         submitLabel={t("edit.submit")}

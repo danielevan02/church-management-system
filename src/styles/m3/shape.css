@@ -53,8 +53,34 @@
   transition-duration: var(--md-sys-motion-spring-fast-spatial-duration);
 }
 
+/*
+ * Combined motion utility for interactive components (buttons, FABs, tiles)
+ * that morph their shape AND shift effects (color, shadow, border) simultaneously.
+ * Border-radius rides the spatial spring with overshoot, while surface effects
+ * ride the critically damped effects spring.
+ */
+@utility shape-morph-interactive {
+  transition-property: border-radius, background-color, box-shadow, border-color, color, transform;
+  transition-duration:
+    var(--md-sys-motion-spring-fast-spatial-duration),
+    var(--md-sys-motion-spring-fast-effects-duration),
+    var(--md-sys-motion-spring-fast-effects-duration),
+    var(--md-sys-motion-spring-fast-effects-duration),
+    var(--md-sys-motion-spring-fast-effects-duration),
+    var(--md-sys-motion-spring-fast-effects-duration);
+  transition-timing-function:
+    var(--md-sys-motion-spring-fast-spatial),
+    var(--md-sys-motion-spring-fast-effects),
+    var(--md-sys-motion-spring-fast-effects),
+    var(--md-sys-motion-spring-fast-effects),
+    var(--md-sys-motion-spring-fast-effects),
+    var(--md-sys-motion-spring-fast-effects);
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .shape-morph {
-    transition-duration: 1ms;
+  .shape-morph,
+  .shape-morph-interactive {
+    transition-duration: 1ms !important;
   }
 }
+

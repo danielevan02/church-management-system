@@ -1,19 +1,14 @@
-import { ArrowLeft, Check, X } from "lucide-react";
+import { Check, X } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { notFound, redirect } from "next/navigation";
 
+import { BlockSection } from "@/components/m3/block-section";
+import { PageHeader } from "@/components/m3/page-header";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+
 import { features, type FeatureFlag } from "@/config/features";
 import { auth } from "@/lib/auth";
-import { Link } from "@/lib/i18n/navigation";
+
 import { hasAtLeastRole } from "@/lib/permissions";
 
 const FLAG_KEYS: FeatureFlag[] = [
@@ -34,70 +29,62 @@ export default async function FeaturesPage() {
   const tFlag = await getTranslations("settings.features.flags");
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1">
-        <Button asChild variant="ghost" size="sm" className="w-fit">
-          <Link href="/admin/settings">
-            <ArrowLeft className="h-4 w-4" />
-            {t("back")}
-          </Link>
-        </Button>
-        <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="text-on-surface-variant">{t("subtitle")}</p>
-      </header>
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6">
+      <PageHeader
+        backHref="/admin/settings"
+        backLabel={t("back")}
+        title={t("title")}
+        subtitle={t("subtitle")}
+      />
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">{t("statusTitle")}</CardTitle>
-          <CardDescription>{t("statusDescription")}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ul className="flex flex-col gap-2 text-sm">
-            {FLAG_KEYS.map((flag) => {
-              const enabled = features[flag];
-              return (
-                <li
-                  key={flag}
-                  className="flex items-center justify-between rounded-md border px-3 py-2"
-                >
-                  <div className="flex flex-col">
-                    <span className="font-medium">{tFlag(`${flag}.label` as never)}</span>
-                    <span className="text-xs text-on-surface-variant">
-                      {tFlag(`${flag}.description` as never)}
-                    </span>
-                  </div>
-                  <Badge variant={enabled ? "default" : "outline"}>
-                    {enabled ? (
-                      <Check className="h-3 w-3" />
-                    ) : (
-                      <X className="h-3 w-3" />
-                    )}
-                    {enabled ? t("enabled") : t("disabled")}
-                  </Badge>
-                </li>
-              );
-            })}
-          </ul>
-        </CardContent>
-      </Card>
+      <BlockSection
+        title={t("statusTitle")}
+        description={t("statusDescription")}
+        staggerChildren
+      >
+        <ul className="flex flex-col gap-2 text-sm">
+          {FLAG_KEYS.map((flag) => {
+            const enabled = features[flag];
+            return (
+              <li
+                key={flag}
+                className="flex items-center justify-between rounded-2xl px-3 py-2 bg-surface-container-high"
+              >
+                <div className="flex flex-col">
+                  <span className="font-medium">{tFlag(`${flag}.label` as never)}</span>
+                  <span className="text-xs text-on-surface-variant">
+                    {tFlag(`${flag}.description` as never)}
+                  </span>
+                </div>
+                <Badge variant={enabled ? "default" : "outline"}>
+                  {enabled ? (
+                    <Check className="h-3 w-3" />
+                  ) : (
+                    <X className="h-3 w-3" />
+                  )}
+                  {enabled ? t("enabled") : t("disabled")}
+                </Badge>
+              </li>
+            );
+          })}
+        </ul>
+      </BlockSection>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">{t("howToTitle")}</CardTitle>
-          <CardDescription>{t("howToDescription")}</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-3 text-sm">
-          <p className="text-on-surface-variant">{t("howToBody")}</p>
-          <pre className="overflow-x-auto rounded-md bg-surface-container-high p-3 text-xs">
-{`// src/config/features.ts
-export const features = {
-  childrensCheckIn: true,
-  pastoralCare: true,
-  // ...
-} as const;`}
-          </pre>
-        </CardContent>
-      </Card>
+      <BlockSection
+        title={t("howToTitle")}
+        description={t("howToDescription")}
+        bodyClassName="space-y-3 text-sm"
+      >
+                  <p className="text-on-surface-variant">{t("howToBody")}</p>
+                  <pre className="overflow-x-auto rounded-md bg-surface-container-high p-3 text-xs">
+        {`// src/config/features.ts
+        export const features = {
+          childrensCheckIn: true,
+          pastoralCare: true,
+          // ...
+        } as const;`}
+                  </pre>
+      </BlockSection>
     </div>
   );
 }

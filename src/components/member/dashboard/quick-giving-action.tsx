@@ -6,6 +6,11 @@ import { ExternalLink, HandCoins, X } from "lucide-react";
 import { CopyButton } from "@/components/giving/copy-button";
 import { QrisImage } from "@/components/giving/qris-image";
 import { ContainerTransform } from "@/components/m3/container-transform";
+import {
+  QuickActionIcon,
+  QuickActionLabel,
+  quickActionTileClass,
+} from "@/components/m3/quick-action";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/lib/i18n/navigation";
 
@@ -23,13 +28,9 @@ export function QuickGivingAction({ label, bank }: QuickGivingActionProps) {
   const hasBank = bank.accountNumber && bank.accountHolder;
 
   const tileContent = (
-    <div className="group flex h-24 sm:h-28 w-full flex-col items-center justify-center gap-2 rounded-2xl border border-outline-variant/40 bg-surface-container-low px-2 py-3 text-center transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-surface-container hover:shadow-level-1 active:translate-y-0 active:scale-[0.98] shadow-level-0 cursor-pointer">
-      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary transition-all duration-200 group-hover:scale-105 group-hover:bg-primary group-hover:text-on-primary group-hover:shadow-xs">
-        <HandCoins className="h-5 w-5 transition-transform" />
-      </div>
-      <span className="truncate w-full px-1 text-center text-[11px] sm:text-xs font-semibold text-on-surface transition-colors group-hover:text-primary tracking-tight">
-        {label}
-      </span>
+    <div className={quickActionTileClass}>
+      <QuickActionIcon icon={HandCoins} />
+      <QuickActionLabel>{label}</QuickActionLabel>
     </div>
   );
 

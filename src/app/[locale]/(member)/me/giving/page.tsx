@@ -1,13 +1,9 @@
+import { HandCoins, HeartHandshake } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
+import { BlockSection } from "@/components/m3/block-section";
+import { PageHeader } from "@/components/m3/page-header";
 import { GiveInfoCard } from "@/components/giving/give-info-card";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { church } from "@/config/church";
 
 export default async function MemberGivingPage() {
@@ -15,15 +11,15 @@ export default async function MemberGivingPage() {
   const tPublic = await getTranslations("publicGive");
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1">
-        <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="text-on-surface-variant">
-          {t("subtitle", { church: church.name })}
-        </p>
-      </header>
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6 pb-28 sm:pb-12">
+      <PageHeader
+        eyebrow={t("eyebrow")}
+        title={t("title")}
+        subtitle={t("subtitle", { church: church.name })}
+      />
 
       <GiveInfoCard
+        icon={HandCoins}
         title={tPublic("optionsTitle")}
         description={tPublic("optionsDescription")}
         bank={church.bank}
@@ -37,15 +33,16 @@ export default async function MemberGivingPage() {
         }}
       />
 
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("noteTitle")}</CardTitle>
-          <CardDescription>{t("noteDescription")}</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-2 text-sm text-on-surface-variant">
-          <p>{t("noteBody")}</p>
-        </CardContent>
-      </Card>
+      <BlockSection
+        icon={HeartHandshake}
+        iconTone="secondary"
+        title={t("noteTitle")}
+        description={t("noteDescription")}
+      >
+        <p className="text-sm leading-relaxed text-on-surface-variant">
+          {t("noteBody")}
+        </p>
+      </BlockSection>
     </div>
   );
 }

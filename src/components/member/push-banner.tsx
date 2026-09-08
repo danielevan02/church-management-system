@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
 
+import { Banner } from "@/components/m3/banner";
 import { Button } from "@/components/ui/button";
 import { subscribePushAction } from "@/server/actions/push/subscribe";
 import { unsubscribePushAction } from "@/server/actions/push/unsubscribe";
@@ -119,53 +120,54 @@ export function PushBanner() {
 
   if (state === "denied") {
     return (
-      <div className="flex items-center justify-between gap-3 rounded-md border border-surface-container-high bg-surface-container-high/30 px-4 py-3 text-sm">
-        <div className="flex flex-col">
-          <span className="font-medium">{t("deniedTitle")}</span>
-          <span className="text-xs text-on-surface-variant">
-            {t("deniedDescription")}
-          </span>
-        </div>
-        <Button
-          size="icon"
-          variant="ghost"
-          onClick={onDismiss}
-          aria-label={t("dismiss")}
-        >
-          <X className="h-4 w-4" />
-        </Button>
-      </div>
+      <Banner
+        tone="neutral"
+        icon={BellOff}
+        title={t("deniedTitle")}
+        description={t("deniedDescription")}
+        actions={
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={onDismiss}
+            aria-label={t("dismiss")}
+            className="rounded-full"
+          >
+            <X className="h-4 w-4" />
+          </Button>
+        }
+      />
     );
   }
 
   return (
-    <div className="flex items-center justify-between gap-3 rounded-md border border-primary/30 bg-primary/5 px-4 py-3 text-sm">
-      <div className="flex flex-col">
-        <span className="font-medium">{t("enableTitle")}</span>
-        <span className="text-xs text-on-surface-variant">
-          {t("enableDescription")}
-        </span>
-      </div>
-      <div className="flex shrink-0 items-center gap-1">
-        <Button
-          size="sm"
-          onClick={onSubscribe}
-          disabled={pending}
-          className="gap-1.5"
-        >
-          <Bell className="h-4 w-4" />
-          {t("enable")}
-        </Button>
-        <Button
-          size="icon"
-          variant="ghost"
-          onClick={onDismiss}
-          aria-label={t("dismiss")}
-        >
-          <X className="h-4 w-4" />
-        </Button>
-      </div>
-    </div>
+    <Banner
+      icon={Bell}
+      title={t("enableTitle")}
+      description={t("enableDescription")}
+      actions={
+        <>
+          <Button
+            size="sm"
+            onClick={onSubscribe}
+            disabled={pending}
+            className="rounded-full"
+          >
+            <Bell className="h-4 w-4" />
+            {t("enable")}
+          </Button>
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={onDismiss}
+            aria-label={t("dismiss")}
+            className="rounded-full"
+          >
+            <X className="h-4 w-4" />
+          </Button>
+        </>
+      }
+    />
   );
 }
 
@@ -215,23 +217,23 @@ export function PushUnsubscribeRow() {
   if (state !== "subscribed") return null;
 
   return (
-    <div className="flex items-center justify-between gap-3 rounded-md border px-4 py-3 text-sm">
-      <div className="flex flex-col">
-        <span className="font-medium">{t("subscribedTitle")}</span>
-        <span className="text-xs text-on-surface-variant">
-          {t("subscribedDescription")}
-        </span>
-      </div>
-      <Button
-        size="sm"
-        variant="outline"
-        onClick={onUnsubscribe}
-        disabled={pending}
-        className="gap-1.5"
-      >
-        <BellOff className="h-4 w-4" />
-        {t("disable")}
-      </Button>
-    </div>
+    <Banner
+      tone="neutral"
+      icon={Bell}
+      title={t("subscribedTitle")}
+      description={t("subscribedDescription")}
+      actions={
+        <Button
+          size="sm"
+          variant="tonal"
+          onClick={onUnsubscribe}
+          disabled={pending}
+          className="rounded-full"
+        >
+          <BellOff className="h-4 w-4" />
+          {t("disable")}
+        </Button>
+      }
+    />
   );
 }

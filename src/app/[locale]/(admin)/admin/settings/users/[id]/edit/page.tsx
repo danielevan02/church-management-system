@@ -1,19 +1,14 @@
-import { ArrowLeft } from "lucide-react";
+
 import { getTranslations } from "next-intl/server";
 import { notFound, redirect } from "next/navigation";
 
+import { BlockSection } from "@/components/m3/block-section";
+import { PageHeader } from "@/components/m3/page-header";
 import { PasswordResetForm } from "@/components/admin/settings/password-reset-form";
 import { UserEditForm } from "@/components/admin/settings/user-edit-form";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+
 import { auth } from "@/lib/auth";
-import { Link } from "@/lib/i18n/navigation";
+
 import { hasAtLeastRole } from "@/lib/permissions";
 import { getUser } from "@/server/queries/users";
 
@@ -35,57 +30,41 @@ export default async function EditUserPage({
   const isSelf = user.id === session.user.id;
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1">
-        <Button asChild variant="ghost" size="sm" className="w-fit">
-          <Link href="/admin/settings/users">
-            <ArrowLeft className="h-4 w-4" />
-            {t("back")}
-          </Link>
-        </Button>
-        <h1
-          className={
-            user.username
-              ? "text-3xl font-bold uppercase tracking-tight"
-              : "text-3xl font-bold tracking-tight"
-          }
-        >
-          {user.username ?? user.member?.fullName ?? t("editTitle")}
-        </h1>
-        <p className="text-on-surface-variant">{t("editSubtitle")}</p>
-      </header>
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6">
+      <PageHeader
+        backHref="/admin/settings/users"
+        backLabel={t("back")}
+        title={
+          <span className={user.username ? "uppercase" : undefined}>
+            {user.username ?? user.member?.fullName ?? t("editTitle")}
+          </span>
+        }
+        subtitle={t("editSubtitle")}
+      />
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">{t("editFormTitle")}</CardTitle>
-          <CardDescription>{t("editFormDescription")}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <UserEditForm
-            id={user.id}
-            submitLabel={t("submitUpdate")}
-            initialValues={{
-              role: user.role,
-              isActive: user.isActive,
-              memberId: user.memberId ?? "",
-            }}
-            initialMemberName={user.member?.fullName ?? null}
-            isSelf={isSelf}
-          />
-        </CardContent>
-      </Card>
+      <BlockSection
+        title={t("editFormTitle")}
+        description={t("editFormDescription")}
+      >
+        <UserEditForm
+          id={user.id}
+          submitLabel={t("submitUpdate")}
+          initialValues={{
+            role: user.role,
+            isActive: user.isActive,
+            memberId: user.memberId ?? "",
+          }}
+          initialMemberName={user.member?.fullName ?? null}
+          isSelf={isSelf}
+        />
+      </BlockSection>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">
-            {t("passwordReset.title")}
-          </CardTitle>
-          <CardDescription>{t("passwordReset.description")}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <PasswordResetForm id={user.id} />
-        </CardContent>
-      </Card>
+      <BlockSection
+        title={t("passwordReset.title")}
+        description={t("passwordReset.description")}
+      >
+        <PasswordResetForm id={user.id} />
+      </BlockSection>
     </div>
   );
 }

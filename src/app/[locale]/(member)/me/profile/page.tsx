@@ -1,24 +1,20 @@
 import { format } from "date-fns";
+import { KeyRound, ShieldCheck, UserRoundPen } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { notFound, redirect } from "next/navigation";
 
 import { ChangePinForm } from "./change-pin-form";
 import { ProfileEditForm } from "./profile-edit-form";
+import { BlockSection } from "@/components/m3/block-section";
+import { DetailList, DetailRow } from "@/components/m3/detail-list";
+import { PageHeader } from "@/components/m3/page-header";
 import { PushUnsubscribeRow } from "@/components/member/push-banner";
 import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
 function fmtDate(d: Date | null | undefined): string {
-  return d ? format(d, "yyyy-MM-dd") : "—";
+  return d ? format(d, "dd MMM yyyy") : "—";
 }
 
 export default async function MemberProfilePage() {
@@ -33,98 +29,72 @@ export default async function MemberProfilePage() {
 
   const t = await getTranslations("memberPortal.profile");
   const tStatus = await getTranslations("members.form.status");
+  const tGender = await getTranslations("members.form.gender");
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1">
-        <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="text-on-surface-variant">{t("subtitle")}</p>
-      </header>
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6 pb-28 sm:pb-12">
+      <PageHeader
+        eyebrow={t("eyebrow")}
+        title={t("title")}
+        subtitle={t("subtitle")}
+      />
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">{t("readonly.title")}</CardTitle>
-          <CardDescription>{t("readonly.description")}</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-2 text-sm">
-          <Field label={t("fields.fullName")} value={member.fullName} />
-          <Field
-            label={t("fields.gender")}
-            value={member.gender === "MALE" ? "Pria" : "Wanita"}
-          />
-          <Field
-            label={t("fields.birthDate")}
-            value={fmtDate(member.birthDate)}
-          />
-          <Separator />
-          <Field
-            label={t("fields.status")}
-            value={
-              <Badge>
-                {tStatus(member.status.toLowerCase() as never)}
-              </Badge>
-            }
-          />
-          <Field
-            label={t("fields.joinedAt")}
-            value={fmtDate(member.joinedAt)}
-          />
-          <Field
-            label={t("fields.baptismDate")}
-            value={fmtDate(member.baptismDate)}
-          />
-          <Field
-            label={t("fields.baptismChurch")}
-            value={member.baptismChurch}
-          />
-        </CardContent>
-      </Card>
+      <BlockSection
+        icon={ShieldCheck}
+        iconTone="neutral"
+        title={t("readonly.title")}
+        description={t("readonly.description")}
+      >
+        <DetailList>
+          <DetailRow label={t("fields.fullName")}>{member.fullName}</DetailRow>
+          <DetailRow label={t("fields.gender")}>
+            {member.gender === "MALE" ? tGender("male") : tGender("female")}
+          </DetailRow>
+          <DetailRow label={t("fields.birthDate")}>
+            {fmtDate(member.birthDate)}
+          </DetailRow>
+          <DetailRow label={t("fields.status")}>
+            <Badge>{tStatus(member.status.toLowerCase() as never)}</Badge>
+          </DetailRow>
+          <DetailRow label={t("fields.joinedAt")}>
+            {fmtDate(member.joinedAt)}
+          </DetailRow>
+          <DetailRow label={t("fields.baptismDate")}>
+            {fmtDate(member.baptismDate)}
+          </DetailRow>
+          <DetailRow label={t("fields.baptismChurch")} span>
+            {member.baptismChurch || "—"}
+          </DetailRow>
+        </DetailList>
+      </BlockSection>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">{t("editable.title")}</CardTitle>
-          <CardDescription>{t("editable.description")}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ProfileEditForm
-            initialValues={{
-              phone: member.phone ?? "",
-              address: member.address ?? "",
-              city: member.city ?? "",
-              province: member.province ?? "",
-              postalCode: member.postalCode ?? "",
-              maritalStatus: member.maritalStatus ?? "",
-            }}
-          />
-        </CardContent>
-      </Card>
+      <BlockSection
+        icon={UserRoundPen}
+        title={t("editable.title")}
+        description={t("editable.description")}
+      >
+        <ProfileEditForm
+          initialValues={{
+            phone: member.phone ?? "",
+            address: member.address ?? "",
+            city: member.city ?? "",
+            province: member.province ?? "",
+            postalCode: member.postalCode ?? "",
+            maritalStatus: member.maritalStatus ?? "",
+          }}
+        />
+      </BlockSection>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">{t("pin.title")}</CardTitle>
-          <CardDescription>{t("pin.description")}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ChangePinForm />
-        </CardContent>
-      </Card>
+      <BlockSection
+        icon={KeyRound}
+        iconTone="secondary"
+        title={t("pin.title")}
+        description={t("pin.description")}
+      >
+        <ChangePinForm />
+      </BlockSection>
 
       <PushUnsubscribeRow />
-    </div>
-  );
-}
-
-function Field({
-  label,
-  value,
-}: {
-  label: string;
-  value: React.ReactNode;
-}) {
-  return (
-    <div className="grid grid-cols-3 gap-2">
-      <dt className="text-on-surface-variant">{label}</dt>
-      <dd className="col-span-2">{value || "—"}</dd>
     </div>
   );
 }

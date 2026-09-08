@@ -1,24 +1,19 @@
 import { format } from "date-fns";
-import { ArrowLeft, Calendar, MapPin, Users } from "lucide-react";
+import { Calendar, CircleDollarSign, MapPin, Users } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { notFound, redirect } from "next/navigation";
 
+import { BlockSection } from "@/components/m3/block-section";
+import { DetailList, DetailRow } from "@/components/m3/detail-list";
+import { ExpressiveCard } from "@/components/m3/expressive-card";
+import { PageHeader } from "@/components/m3/page-header";
 import { MemberRsvpButtons } from "@/components/member/events/member-rsvp-button";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { auth } from "@/lib/auth";
+import { formatJakarta } from "@/lib/datetime";
 import { formatRupiah } from "@/lib/format";
-import { Link } from "@/lib/i18n/navigation";
 import { prisma } from "@/lib/prisma";
 import { countGoingFor, getEvent } from "@/server/queries/events";
-import { formatJakarta } from "@/lib/datetime";
 
 export default async function MemberEventDetailPage({
   params,
@@ -43,6 +38,7 @@ export default async function MemberEventDetailPage({
   ]);
 
   const t = await getTranslations("memberPortal.events.detail");
+  const tEvents = await getTranslations("memberPortal.events");
   const tStatus = await getTranslations("events.rsvpStatus");
 
   const past = event.endsAt < new Date();
@@ -50,81 +46,70 @@ export default async function MemberEventDetailPage({
     event.registrationOpen && event.requiresRsvp && !past;
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-4">
-        <Button asChild variant="ghost" size="sm" className="w-fit">
-          <Link href="/me/events">
-            <ArrowLeft className="h-4 w-4" />
-            {t("backToList")}
-          </Link>
-        </Button>
-        <div className="flex flex-col gap-1">
-          <h1 className="text-3xl font-bold tracking-tight">{event.title}</h1>
-          {past ? (
-            <Badge variant="outline" className="w-fit">
-              {t("statusPast")}
-            </Badge>
-          ) : null}
-        </div>
-      </header>
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6 pb-28 sm:pb-12">
+      <PageHeader
+        backHref="/me/events"
+        backLabel={t("backToList")}
+        eyebrow={tEvents("eyebrow")}
+        title={event.title}
+        action={
+          past ? <Badge variant="outline">{t("statusPast")}</Badge> : undefined
+        }
+      />
 
-      <Card>
-        <CardContent className="flex flex-col gap-3 pt-6 text-sm">
-          <div className="flex items-start gap-3">
-            <Calendar className="mt-0.5 h-4 w-4 text-on-surface-variant" />
-            <div>
-              {format(event.startsAt, "EEEE, dd MMM yyyy")} ·{" "}
-              {formatJakarta(event.startsAt, "HH:mm")}
-              {" — "}
-              {formatJakarta(event.endsAt, "HH:mm")}
-            </div>
-          </div>
+      <ExpressiveCard className="gap-4">
+        <DetailList>
+          <DetailRow icon={Calendar} label={t("dateLabel")}>
+            {format(event.startsAt, "EEEE, dd MMM yyyy")} ·{" "}
+            {formatJakarta(event.startsAt, "HH:mm")}
+            {" — "}
+            {formatJakarta(event.endsAt, "HH:mm")}
+          </DetailRow>
           {event.location ? (
-            <div className="flex items-start gap-3">
-              <MapPin className="mt-0.5 h-4 w-4 text-on-surface-variant" />
-              <div>{event.location}</div>
-            </div>
+            <DetailRow icon={MapPin} label={t("locationLabel")}>
+              {event.location}
+            </DetailRow>
           ) : null}
-          <div className="flex items-start gap-3">
-            <Users className="mt-0.5 h-4 w-4 text-on-surface-variant" />
-            <div>
+          <DetailRow icon={Users} label={t("goingLabel")}>
+            <span className="tabular-nums">
               {goingCount}
-              {event.capacity ? `/${event.capacity}` : ""} {t("goingLabel")}
-            </div>
-          </div>
+              {event.capacity ? `/${event.capacity}` : ""}
+            </span>
+          </DetailRow>
           {event.fee ? (
-            <div className="text-sm">
-              <span className="text-on-surface-variant">{t("feeLabel")}: </span>
-              <span className="font-semibold">{formatRupiah(event.fee)}</span>
-            </div>
+            <DetailRow icon={CircleDollarSign} label={t("feeLabel")}>
+              {formatRupiah(event.fee)}
+            </DetailRow>
           ) : null}
-          {event.description ? (
-            <p className="whitespace-pre-wrap text-sm">{event.description}</p>
-          ) : null}
-        </CardContent>
-      </Card>
+        </DetailList>
+
+        {event.description ? (
+          <p className="text-sm leading-relaxed whitespace-pre-wrap text-on-surface-variant">
+            {event.description}
+          </p>
+        ) : null}
+      </ExpressiveCard>
 
       {event.requiresRsvp ? (
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("rsvpTitle")}</CardTitle>
-            <CardDescription>
-              {myRsvp
-                ? t("yourCurrentStatus", {
-                    status: tStatus(statusKey(myRsvp.status)),
-                  })
-                : t("rsvpDescription")}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <MemberRsvpButtons
-              eventId={id}
-              current={myRsvp?.status ?? null}
-              rsvpId={myRsvp?.id ?? null}
-              registrationOpen={registrationOpen}
-            />
-          </CardContent>
-        </Card>
+        <BlockSection
+          icon={Users}
+          iconTone="secondary"
+          title={t("rsvpTitle")}
+          description={
+            myRsvp
+              ? t("yourCurrentStatus", {
+                  status: tStatus(statusKey(myRsvp.status)),
+                })
+              : t("rsvpDescription")
+          }
+        >
+          <MemberRsvpButtons
+            eventId={id}
+            current={myRsvp?.status ?? null}
+            rsvpId={myRsvp?.id ?? null}
+            registrationOpen={registrationOpen}
+          />
+        </BlockSection>
       ) : null}
     </div>
   );

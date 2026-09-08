@@ -1,5 +1,5 @@
-import { DetailSkeleton } from "@/components/shared/skeletons";
+import { MemberEventDetailSkeleton } from "@/components/shared/skeletons";
 
 export default function Loading() {
-  return <DetailSkeleton tabs={1} />;
+  return <MemberEventDetailSkeleton />;
 }

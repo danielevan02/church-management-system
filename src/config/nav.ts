@@ -24,7 +24,13 @@ import {
 
 import type { FeatureFlag } from "@/config/features";
 
-export type AdminNavGroup = "main" | "documents" | "secondary";
+export type AdminNavGroup =
+  | "overview"
+  | "people"
+  | "ministry"
+  | "communication"
+  | "finance"
+  | "system";
 
 export type AdminNavItem = {
   href: string;
@@ -38,79 +44,66 @@ export type AdminNavItem = {
 };
 
 export const adminNav: readonly AdminNavItem[] = [
-  // === MAIN ===
+  // === OVERVIEW ===
   {
     href: "/admin/dashboard",
     labelKey: "nav.dashboard",
     icon: LayoutDashboard,
-    group: "main",
+    group: "overview",
     roles: ["ADMIN", "STAFF", "LEADER"],
   },
+
+  // === PEOPLE & COMMUNITY ===
   {
     href: "/admin/members",
     labelKey: "nav.members",
     icon: Users,
-    group: "main",
+    group: "people",
     roles: ["ADMIN", "STAFF", "LEADER"],
   },
   {
     href: "/admin/households",
     labelKey: "nav.households",
     icon: Home,
-    group: "main",
+    group: "people",
     roles: ["ADMIN", "STAFF"],
   },
   {
     href: "/admin/cell-groups",
     labelKey: "nav.cellGroups",
     icon: UsersRound,
-    group: "main",
+    group: "people",
     roles: ["ADMIN", "STAFF", "LEADER"],
   },
+  {
+    href: "/admin/pastoral",
+    labelKey: "nav.pastoral",
+    icon: HeartHandshake,
+    group: "people",
+    roles: ["ADMIN", "STAFF", "LEADER"],
+    feature: "pastoralCare",
+  },
+
+  // === MINISTRY & WORSHIP ===
   {
     href: "/admin/attendance",
     labelKey: "nav.attendance",
     icon: UserCheck,
-    group: "main",
+    group: "ministry",
     roles: ["ADMIN", "STAFF"],
-  },
-  {
-    href: "/admin/giving",
-    labelKey: "nav.giving",
-    icon: HandCoins,
-    group: "main",
-    roles: ["ADMIN", "STAFF"],
-    feature: "giving",
   },
   {
     href: "/admin/events",
     labelKey: "nav.events",
     icon: Calendar,
-    group: "main",
+    group: "ministry",
     roles: ["ADMIN", "STAFF"],
-  },
-
-  // === DOCUMENTS / MODUL ===
-  {
-    href: "/admin/announcements",
-    labelKey: "nav.announcements",
-    icon: Megaphone,
-    group: "documents",
-    roles: ["ADMIN", "STAFF"],
-  },
-  {
-    href: "/admin/devotionals",
-    labelKey: "nav.devotionals",
-    icon: BookOpen,
-    group: "documents",
-    roles: ["ADMIN", "STAFF"],
-    feature: "devotionals",
   },
   {
     href: "/admin/volunteers",
     labelKey: "nav.volunteers",
     icon: HeartHandshake,
-    group: "documents",
+    group: "ministry",
     roles: ["ADMIN", "STAFF", "LEADER"],
     feature: "volunteers",
   },
@@ -118,61 +111,80 @@ export const adminNav: readonly AdminNavItem[] = [
     href: "/admin/children",
     labelKey: "nav.children",
     icon: Baby,
-    group: "documents",
+    group: "ministry",
     roles: ["ADMIN", "STAFF"],
     feature: "childrensCheckIn",
-  },
-  {
-    href: "/admin/pastoral",
-    labelKey: "nav.pastoral",
-    icon: HeartHandshake,
-    group: "documents",
-    roles: ["ADMIN", "STAFF", "LEADER"],
-    feature: "pastoralCare",
-  },
-  {
-    href: "/admin/prayer-requests",
-    labelKey: "nav.prayerRequestsAdmin",
-    icon: HandHeart,
-    group: "documents",
-    roles: ["ADMIN", "STAFF"],
   },
   {
     href: "/admin/discipleship",
     labelKey: "nav.discipleship",
     icon: Sprout,
-    group: "documents",
+    group: "ministry",
     roles: ["ADMIN", "STAFF"],
     feature: "discipleship",
+  },
+
+  // === COMMUNICATION & CONTENT ===
+  {
+    href: "/admin/announcements",
+    labelKey: "nav.announcements",
+    icon: Megaphone,
+    group: "communication",
+    roles: ["ADMIN", "STAFF"],
+  },
+  {
+    href: "/admin/devotionals",
+    labelKey: "nav.devotionals",
+    icon: BookOpen,
+    group: "communication",
+    roles: ["ADMIN", "STAFF"],
+    feature: "devotionals",
+  },
+  {
+    href: "/admin/prayer-requests",
+    labelKey: "nav.prayerRequestsAdmin",
+    icon: HandHeart,
+    group: "communication",
+    roles: ["ADMIN", "STAFF"],
+  },
+
+  // === FINANCE & REPORTS ===
+  {
+    href: "/admin/giving",
+    labelKey: "nav.giving",
+    icon: HandCoins,
+    group: "finance",
+    roles: ["ADMIN", "STAFF"],
+    feature: "giving",
   },
   {
     href: "/admin/reports",
     labelKey: "nav.reports",
     icon: BarChart3,
-    group: "documents",
+    group: "finance",
     roles: ["ADMIN", "STAFF"],
   },
 
-  // === SECONDARY ===
+  // === SYSTEM (SECONDARY) ===
   {
     href: "/admin/settings",
     labelKey: "nav.settings",
     icon: Settings,
-    group: "secondary",
+    group: "system",
     roles: ["ADMIN"],
   },
   {
     href: "/admin/help",
     labelKey: "nav.help",
     icon: HelpCircle,
-    group: "secondary",
+    group: "system",
     roles: ["ADMIN", "STAFF", "LEADER"],
   },
   {
     href: "/admin/search",
     labelKey: "nav.search",
     icon: Search,
-    group: "secondary",
+    group: "system",
     roles: ["ADMIN", "STAFF", "LEADER"],
   },
 ] as const;
@@ -181,84 +193,105 @@ export function visibleAdminNav(role: Role): readonly AdminNavItem[] {
   return adminNav.filter((item) => item.roles.includes(role));
 }
 
+export type MemberNavGroup = "main" | "worship" | "community";
+
 export type MemberNavItem = {
   href: string;
   labelKey: string;
   icon: LucideIcon;
+  group: MemberNavGroup;
   feature?: FeatureFlag;
   comingSoon?: boolean;
 };
 
 export const memberNav: readonly MemberNavItem[] = [
+  // === MAIN ===
   {
     href: "/me/dashboard",
     labelKey: "nav.myDashboard",
     icon: LayoutDashboard,
-  },
-  {
-    href: "/me/announcements",
-    labelKey: "nav.myAnnouncements",
-    icon: Megaphone,
-  },
-  {
-    href: "/me/devotionals",
-    labelKey: "nav.myDevotionals",
-    icon: BookOpen,
-    feature: "devotionals",
+    group: "main",
   },
   {
     href: "/me/profile",
     labelKey: "nav.myProfile",
     icon: UserCircle,
+    group: "main",
   },
   {
     href: "/me/qr",
     labelKey: "nav.myQr",
     icon: QrCode,
+    group: "main",
   },
+
+  // === WORSHIP & SERVING ===
   {
     href: "/me/check-in",
     labelKey: "nav.myCheckIn",
     icon: UserCheck,
+    group: "worship",
     feature: "selfCheckIn",
-  },
-  {
-    href: "/me/cell-group",
-    labelKey: "nav.myCellGroup",
-    icon: UsersRound,
-  },
-  {
-    href: "/me/giving",
-    labelKey: "nav.myGiving",
-    icon: HandCoins,
-    feature: "giving",
   },
   {
     href: "/me/events",
     labelKey: "nav.myEvents",
     icon: Calendar,
+    group: "worship",
   },
   {
     href: "/me/volunteer",
     labelKey: "nav.myVolunteer",
     icon: HeartHandshake,
+    group: "worship",
     feature: "volunteers",
-  },
-  {
-    href: "/me/discipleship",
-    labelKey: "nav.myDiscipleship",
-    icon: Sprout,
-    feature: "discipleship",
-  },
-  {
-    href: "/me/prayer-requests",
-    labelKey: "nav.prayerRequests",
-    icon: HandHeart,
   },
   {
     href: "/me/children",
     labelKey: "nav.myChildren",
     icon: Baby,
+    group: "worship",
     feature: "childrensCheckIn",
+  },
+  {
+    href: "/me/giving",
+    labelKey: "nav.myGiving",
+    icon: HandCoins,
+    group: "worship",
+    feature: "giving",
+  },
+
+  // === COMMUNITY & SPIRITUAL ===
+  {
+    href: "/me/cell-group",
+    labelKey: "nav.myCellGroup",
+    icon: UsersRound,
+    group: "community",
+  },
+  {
+    href: "/me/devotionals",
+    labelKey: "nav.myDevotionals",
+    icon: BookOpen,
+    group: "community",
+    feature: "devotionals",
+  },
+  {
+    href: "/me/prayer-requests",
+    labelKey: "nav.prayerRequests",
+    icon: HandHeart,
+    group: "community",
+  },
+  {
+    href: "/me/discipleship",
+    labelKey: "nav.myDiscipleship",
+    icon: Sprout,
+    group: "community",
+    feature: "discipleship",
+  },
+  {
+    href: "/me/announcements",
+    labelKey: "nav.myAnnouncements",
+    icon: Megaphone,
+    group: "community",
   },
 ] as const;

@@ -1,5 +1,5 @@
-import { FormPageSkeleton } from "@/components/shared/skeletons";
+import { MemberProfileSkeleton } from "@/components/shared/skeletons";
 
 export default function Loading() {
-  return <FormPageSkeleton fields={8} />;
+  return <MemberProfileSkeleton />;
 }

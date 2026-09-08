@@ -21,7 +21,7 @@ export function QrisImage({
     return (
       <div
         className={cn(
-          "flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed bg-surface-container-high text-center text-xs text-on-surface-variant p-4",
+          "flex flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-outline-variant bg-surface-container-high p-4 text-center text-xs text-on-surface-variant",
           className || "h-64 w-64"
         )}
       >

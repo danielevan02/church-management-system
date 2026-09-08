@@ -200,3 +200,24 @@
   transition-timing-function: var(--md-sys-motion-spring-fast-effects);
   transition-duration: var(--md-sys-motion-spring-fast-effects-duration);
 }
+
+/*
+ * M3 navigation sliding active indicator.
+ * When the sliding indicator is mounted and measured, suppress static button
+ * backgrounds so the shared indicator pill glides cleanly underneath.
+ */
+[data-sliding-ready="true"] [data-sidebar="menu-button"][data-active="true"],
+[data-sliding-ready="true"] [data-sidebar="menu-button"][data-pending-active="true"] {
+  background-color: transparent !important;
+}
+
+/*
+ * When an item is optimistically pending, suppress active text styling on other items
+ * so only the newly clicked target is highlighted.
+ */
+[data-has-pending="true"] [data-sidebar="menu-button"][data-active="true"]:not([data-pending-active="true"]) {
+  font-weight: 400 !important;
+  color: var(--md-sys-color-on-surface-variant) !important;
+}
+
+

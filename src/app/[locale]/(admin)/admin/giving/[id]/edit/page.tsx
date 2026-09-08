@@ -1,12 +1,13 @@
-import { ArrowLeft } from "lucide-react";
+
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
+import { PageHeader } from "@/components/m3/page-header";
 import { GivingEditForm } from "./giving-edit-form";
-import { Button } from "@/components/ui/button";
+
 import { toJakartaDateInput } from "@/lib/datetime";
 import { formatRupiah } from "@/lib/format";
-import { Link } from "@/lib/i18n/navigation";
+
 import { prisma } from "@/lib/prisma";
 import { listAllFunds } from "@/server/queries/funds";
 import { getGivingEntry } from "@/server/queries/giving";
@@ -46,16 +47,12 @@ export default async function EditGivingPage({
       : services;
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1">
-        <Button asChild variant="ghost" size="sm" className="w-fit">
-          <Link href={`/admin/giving/${id}`}>
-            <ArrowLeft className="h-4 w-4" />
-            {formatRupiah(entry.amount)}
-          </Link>
-        </Button>
-        <h1 className="text-3xl font-bold tracking-tight">{t("edit.title")}</h1>
-      </header>
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6">
+      <PageHeader
+        backHref={`/admin/giving/${id}`}
+        backLabel={formatRupiah(entry.amount)}
+        title={t("edit.title")}
+      />
       <GivingEditForm
         id={id}
         funds={funds.map((f) => ({ id: f.id, name: f.name }))}

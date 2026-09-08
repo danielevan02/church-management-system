@@ -5,16 +5,11 @@ import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 
+import { BlockSection } from "@/components/m3/block-section";
 import { ChildPicker } from "@/components/admin/children/child-picker";
 import { MemberPicker } from "@/components/admin/giving/member-picker";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -107,30 +102,26 @@ export function CheckInForm({ classes }: { classes: ChildClass[] }) {
   return (
     <div className="flex flex-col gap-4">
       {issuedCode ? (
-        <Card className="border-primary bg-primary/5">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-base">
-              <Sparkles className="h-5 w-5" />
-              {t("issued.title", { name: issuedFor ?? "" })}
-            </CardTitle>
-            <CardDescription>{t("issued.description")}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center justify-between">
-              <code className="font-mono text-4xl font-bold tracking-widest tabular-nums">
-                {issuedCode}
-              </code>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => setIssuedCode(null)}
-              >
-                {t("issued.dismiss")}
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+        <BlockSection
+          icon={Sparkles}
+          title={t("issued.title", { name: issuedFor ?? "" })}
+          description={t("issued.description")}
+          className="border-primary bg-primary/5"
+        >
+          <div className="flex items-center justify-between">
+            <code className="font-mono text-4xl font-bold tracking-widest tabular-nums">
+              {issuedCode}
+            </code>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setIssuedCode(null)}
+            >
+              {t("issued.dismiss")}
+            </Button>
+          </div>
+        </BlockSection>
       ) : null}
 
       <form onSubmit={handleSubmit} className="space-y-4">

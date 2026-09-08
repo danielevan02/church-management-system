@@ -1,11 +1,11 @@
 import { format } from "date-fns";
-import { ArrowLeft } from "lucide-react";
+
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
+import { PageHeader } from "@/components/m3/page-header";
 import { MemberEditForm } from "./member-edit-form";
-import { Button } from "@/components/ui/button";
-import { Link } from "@/lib/i18n/navigation";
+
 import { getMember } from "@/server/queries/members";
 
 function toDateInput(date: Date | null | undefined): string {
@@ -24,16 +24,12 @@ export default async function EditMemberPage({
   const t = await getTranslations("members");
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1">
-        <Button asChild variant="ghost" size="sm" className="w-fit">
-          <Link href={`/admin/members/${id}`}>
-            <ArrowLeft className="h-4 w-4" />
-            {member.fullName}
-          </Link>
-        </Button>
-        <h1 className="text-3xl font-bold tracking-tight">{t("edit.title")}</h1>
-      </header>
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6">
+      <PageHeader
+        backHref={`/admin/members/${id}`}
+        backLabel={member.fullName}
+        title={t("edit.title")}
+      />
 
       <MemberEditForm
         id={id}

@@ -1,5 +1,5 @@
-import { DashboardSkeleton } from "@/components/shared/skeletons";
+import { AdminCheckInConsoleSkeleton } from "@/components/shared/skeletons";
 
 export default function Loading() {
-  return <DashboardSkeleton />;
+  return <AdminCheckInConsoleSkeleton />;
 }

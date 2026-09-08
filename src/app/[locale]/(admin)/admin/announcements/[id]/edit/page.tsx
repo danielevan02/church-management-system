@@ -1,13 +1,14 @@
-import { ArrowLeft } from "lucide-react";
+
 import { getTranslations } from "next-intl/server";
 import { notFound, redirect } from "next/navigation";
 
+import { PageHeader } from "@/components/m3/page-header";
 import { AnnouncementForm } from "@/components/admin/announcements/announcement-form";
 import { DeleteAnnouncementButton } from "./delete-announcement-button";
-import { Button } from "@/components/ui/button";
+
 import { auth } from "@/lib/auth";
 import { toJakartaInput } from "@/lib/datetime";
-import { Link } from "@/lib/i18n/navigation";
+
 import { hasAtLeastRole } from "@/lib/permissions";
 import { updateAnnouncementAction } from "@/server/actions/announcements/update";
 import { getAnnouncement } from "@/server/queries/announcements";
@@ -35,21 +36,15 @@ export default async function EditAnnouncementPage({
   }
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-        <div className="flex flex-col gap-1">
-          <Button asChild variant="ghost" size="sm" className="w-fit">
-            <Link href="/admin/announcements">
-              <ArrowLeft className="h-4 w-4" />
-              {t("backToList")}
-            </Link>
-          </Button>
-          <h1 className="text-3xl font-bold tracking-tight">
-            {announcement.title}
-          </h1>
-        </div>
-        <DeleteAnnouncementButton id={id} />
-      </header>
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6">
+      <PageHeader
+        backHref="/admin/announcements"
+        backLabel={t("backToList")}
+        title={announcement.title}
+        action={
+          <DeleteAnnouncementButton id={id} />
+        }
+      />
 
       <AnnouncementForm
         submitLabel={t("submit")}

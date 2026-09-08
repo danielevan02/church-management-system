@@ -115,7 +115,7 @@ export function QrScanner({
 
   if (paused) {
     return (
-      <div className="flex h-72 items-center justify-center rounded-md border border-dashed bg-surface-container-high text-sm text-on-surface-variant">
+      <div className="flex h-72 items-center justify-center rounded-3xl bg-surface-container-high text-sm text-on-surface-variant">
         {t("paused")}
       </div>
     );
@@ -123,15 +123,15 @@ export function QrScanner({
 
   if (error) {
     return (
-      <div className="flex h-72 flex-col items-center justify-center gap-2 rounded-md border border-dashed bg-error/5 px-6 text-center text-sm text-error">
-        <p className="font-medium">{t("cameraUnavailable")}</p>
+      <div className="flex h-72 flex-col items-center justify-center gap-2 rounded-3xl bg-error-container px-6 text-center text-sm text-on-error-container">
+        <p className="font-bold">{t("cameraUnavailable")}</p>
         <p className="text-xs opacity-80">{error}</p>
       </div>
     );
   }
 
   return (
-    <div className="overflow-hidden rounded-md border bg-black">
+    <div className="overflow-hidden rounded-3xl bg-black">
       {/* By default we ask for the rear camera and render unmirrored.
           When `mirrorOnFrontCamera` is set AND the active camera turns
           out to be user-facing (e.g. a laptop running the usher console),

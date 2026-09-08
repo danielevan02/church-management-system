@@ -57,7 +57,7 @@ function SelectTrigger({
         "focus-visible:border-primary focus-visible:inset-ring-2 focus-visible:inset-ring-primary",
         "disabled:cursor-not-allowed disabled:border-on-surface/12 disabled:text-on-surface/38",
         "aria-invalid:border-error aria-invalid:focus-visible:inset-ring-error",
-        "*:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2",
+        "*:data-[slot=select-value]:min-w-0 *:data-[slot=select-value]:truncate",
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-6 [&_svg:not([class*='text-'])]:text-on-surface-variant",
         className
       )}

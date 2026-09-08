@@ -1,15 +1,12 @@
-import { ArrowLeft, Pencil } from "lucide-react";
+import { Pencil } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
+import { BlockSection } from "@/components/m3/block-section";
+import { PageHeader } from "@/components/m3/page-header";
 import { DeleteGivingButton } from "./delete-giving-button";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+
 import { Separator } from "@/components/ui/separator";
 import { formatJakarta } from "@/lib/datetime";
 import { formatRupiah } from "@/lib/format";
@@ -28,26 +25,20 @@ export default async function GivingDetailPage({
   const t = await getTranslations("giving.detail");
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-4">
-        <Button asChild variant="ghost" size="sm" className="w-fit">
-          <Link href="/admin/giving">
-            <ArrowLeft className="h-4 w-4" />
-            {t("backToList")}
-          </Link>
-        </Button>
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-          <div className="flex flex-col gap-1">
-            <h1 className="text-3xl font-bold tracking-tight">
-              {formatRupiah(entry.amount)}
-            </h1>
-            <p className="text-sm text-on-surface-variant">
-              {entry.service
-                ? `${entry.service.name} · ${formatJakarta(entry.service.startsAt, "EEEE, dd MMM yyyy HH:mm")}`
-                : `${t("standalone")} · ${formatJakarta(entry.receivedAt, "EEEE, dd MMM yyyy")}`}
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-2">
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6">
+      <PageHeader
+        backHref="/admin/giving"
+        backLabel={t("backToList")}
+        title={formatRupiah(entry.amount)}
+        subtitle={
+          <p>
+            {entry.service
+              ? `${entry.service.name} · ${formatJakarta(entry.service.startsAt, "EEEE, dd MMM yyyy HH:mm")}`
+              : `${t("standalone")} · ${formatJakarta(entry.receivedAt, "EEEE, dd MMM yyyy")}`}
+          </p>
+        }
+        action={
+          <>
             <Button asChild variant="outline">
               <Link href={`/admin/giving/${id}/edit`}>
                 <Pencil className="h-4 w-4" />
@@ -55,62 +46,60 @@ export default async function GivingDetailPage({
               </Link>
             </Button>
             <DeleteGivingButton id={id} />
-          </div>
-        </div>
-      </header>
+          </>
+        }
+      />
 
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("details")}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-2 text-sm">
-          <Field
-            label={t("fields.service")}
-            value={
-              entry.service ? (
-                <Link
-                  href={`/admin/attendance/services/${entry.service.id}`}
-                  className="text-primary hover:underline"
-                >
-                  {entry.service.name}
-                </Link>
-              ) : (
-                <span className="text-on-surface-variant">
-                  {t("standalone")}
-                </span>
-              )
-            }
-          />
-          <Field
-            label={t("fields.receivedAt")}
-            value={formatJakarta(entry.receivedAt, "EEEE, dd MMM yyyy")}
-          />
-          <Field label={t("fields.fund")} value={entry.fund.name} />
-          <Separator />
-          <Field
-            label={t("fields.amount")}
-            value={
-              <span className="font-semibold tabular-nums">
-                {formatRupiah(entry.amount)}
+      <BlockSection
+        title={t("details")}
+        bodyClassName="space-y-2 text-sm"
+      >
+        <Field
+          label={t("fields.service")}
+          value={
+            entry.service ? (
+              <Link
+                href={`/admin/attendance/services/${entry.service.id}`}
+                className="text-primary hover:underline"
+              >
+                {entry.service.name}
+              </Link>
+            ) : (
+              <span className="text-on-surface-variant">
+                {t("standalone")}
               </span>
-            }
-          />
-          <Field label={t("fields.recordedBy")} value={entry.recordedBy} />
-          <Field
-            label={t("fields.recordedAt")}
-            value={formatJakarta(entry.createdAt, "dd MMM yyyy HH:mm")}
-          />
-          {entry.notes ? (
-            <>
-              <Separator />
-              <div>
-                <div className="text-on-surface-variant">{t("fields.notes")}</div>
-                <p className="whitespace-pre-wrap">{entry.notes}</p>
-              </div>
-            </>
-          ) : null}
-        </CardContent>
-      </Card>
+            )
+          }
+        />
+        <Field
+          label={t("fields.receivedAt")}
+          value={formatJakarta(entry.receivedAt, "EEEE, dd MMM yyyy")}
+        />
+        <Field label={t("fields.fund")} value={entry.fund.name} />
+        <Separator />
+        <Field
+          label={t("fields.amount")}
+          value={
+            <span className="font-semibold tabular-nums">
+              {formatRupiah(entry.amount)}
+            </span>
+          }
+        />
+        <Field label={t("fields.recordedBy")} value={entry.recordedBy} />
+        <Field
+          label={t("fields.recordedAt")}
+          value={formatJakarta(entry.createdAt, "dd MMM yyyy HH:mm")}
+        />
+        {entry.notes ? (
+          <>
+            <Separator />
+            <div>
+              <div className="text-on-surface-variant">{t("fields.notes")}</div>
+              <p className="whitespace-pre-wrap">{entry.notes}</p>
+            </div>
+          </>
+        ) : null}
+      </BlockSection>
     </div>
   );
 }

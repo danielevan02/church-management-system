@@ -1,12 +1,17 @@
 import { addMonths, format, startOfWeek } from "date-fns";
+import { BlockSection } from "@/components/m3/block-section";
+import { EmptyState } from "@/components/m3/empty-state";
 import {
   AlertTriangle,
+  CalendarRange,
   ChevronLeft,
   ChevronRight,
+  HeartHandshake,
   Layers,
 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
+import { PageHeader } from "@/components/m3/page-header";
 import { AddAssignmentDialog } from "@/components/admin/volunteers/add-assignment-dialog";
 import { AddTeamForWeekDialog } from "@/components/admin/volunteers/add-team-for-week-dialog";
 import { AssignmentRowActions } from "@/components/admin/volunteers/assignment-row-actions";
@@ -14,7 +19,7 @@ import { GenerateWeekButton } from "@/components/admin/volunteers/generate-week-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 import { Link } from "@/lib/i18n/navigation";
 import {
   listTeamsWithDefaults,
@@ -29,6 +34,7 @@ export default async function VolunteersHomePage({
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const t = await getTranslations("volunteers.schedule");
+  const tEyebrow = await getTranslations("eyebrow");
   const tStatus = await getTranslations("volunteers.assignmentStatus");
 
   const sp = await searchParams;
@@ -52,28 +58,27 @@ export default async function VolunteersHomePage({
     format(startOfWeek(new Date(), { weekStartsOn: 1 }), "yyyy-MM-dd");
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <div className="flex flex-col gap-1">
-          <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-          <p className="text-on-surface-variant">
-            {t("rangeSubtitle", {
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6">
+      <PageHeader
+        eyebrow={tEyebrow("volunteers")}
+        title={t("title")}
+        subtitle={t("rangeSubtitle", {
               start: format(result.rangeStart, "dd MMM yyyy"),
               end: format(result.rangeEnd, "dd MMM yyyy"),
               total: result.total,
             })}
-          </p>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <Button asChild variant="outline">
-            <Link href="/admin/volunteers/teams">
-              <Layers className="h-4 w-4" />
-              {t("manageTeams")}
-            </Link>
-          </Button>
-          <GenerateWeekButton teams={teamsWithDefaults} />
-        </div>
-      </header>
+        action={
+          <div className="flex flex-wrap gap-2">
+            <Button asChild variant="outline">
+              <Link href="/admin/volunteers/teams">
+                <Layers className="h-4 w-4" />
+                {t("manageTeams")}
+              </Link>
+            </Button>
+            <GenerateWeekButton teams={teamsWithDefaults} />
+          </div>
+        }
+      />
 
       <div className="flex flex-wrap items-center gap-2">
         <Button asChild variant="outline" size="sm">
@@ -96,28 +101,27 @@ export default async function VolunteersHomePage({
       </div>
 
       {result.activeTeams.length === 0 ? (
-        <div className="rounded-md border border-dashed p-10 text-center text-sm text-on-surface-variant">
-          {t("noTeamsYet")}
-        </div>
+        <EmptyState icon={HeartHandshake} title={t("noTeamsYet")} />
       ) : (
-        <div className="flex flex-col gap-6">
+        <div suppressHydrationWarning data-stagger="cards" className="flex flex-col gap-6">
           {result.weeks.map((week) => {
             const conflictSet = new Set(week.conflictMemberIds);
             return (
-              <Card key={week.weekStart.toISOString()}>
-                <CardHeader className="flex flex-row items-start justify-between gap-3 border-b pb-3">
-                  <div className="flex flex-col gap-0.5">
-                    <h2 className="text-lg font-semibold">
-                      {t("weekHeader", {
-                        date: format(week.serviceDate, "dd MMM yyyy"),
-                      })}
-                    </h2>
-                    <p className="text-xs text-on-surface-variant">
-                      {format(week.weekStart, "dd MMM")} —{" "}
-                      {format(week.weekEnd, "dd MMM yyyy")} ·{" "}
-                      {t("totalAssignments", { count: week.total })}
-                    </p>
-                  </div>
+              <BlockSection
+                key={week.weekStart.toISOString()}
+                icon={CalendarRange}
+                staggerChildren
+                title={t("weekHeader", {
+                  date: format(week.serviceDate, "dd MMM yyyy"),
+                })}
+                description={
+                  <>
+                    {format(week.weekStart, "dd MMM")} —{" "}
+                    {format(week.weekEnd, "dd MMM yyyy")} ·{" "}
+                    {t("totalAssignments", { count: week.total })}
+                  </>
+                }
+                action={
                   <div className="flex items-center gap-2">
                     {conflictSet.size > 0 ? (
                       <Badge variant="warning" className="gap-1">
@@ -130,8 +134,9 @@ export default async function VolunteersHomePage({
                       serviceDate={week.serviceDate}
                     />
                   </div>
-                </CardHeader>
-                <CardContent className="flex flex-col gap-5 pt-5">
+                }
+                bodyClassName="flex flex-col gap-5"
+              >
                   {week.teams.map((team) => (
                     <div
                       key={team.teamId}
@@ -159,7 +164,7 @@ export default async function VolunteersHomePage({
                             return (
                               <li
                                 key={a.id}
-                                className="flex flex-col gap-2 rounded-md border bg-surface-container-low p-3 sm:flex-row sm:items-center sm:justify-between"
+                                className="flex flex-col gap-2 rounded-2xl bg-surface-container-low p-3 sm:flex-row sm:items-center sm:justify-between"
                               >
                                 <div className="flex min-w-0 items-center gap-3">
                                   <Avatar className="h-8 w-8">
@@ -184,7 +189,7 @@ export default async function VolunteersHomePage({
                                       {hasConflict ? (
                                         <Badge
                                           variant="warning"
-                                          className="h-5 gap-1 px-1.5 text-label-sm"
+                                          className="h-5 gap-1 px-2.5 text-label-sm"
                                         >
                                           <AlertTriangle className="h-3 w-3" />
                                           {t("conflictBadge")}
@@ -218,8 +223,7 @@ export default async function VolunteersHomePage({
                       </ul>
                     </div>
                   ))}
-                </CardContent>
-              </Card>
+              </BlockSection>
             );
           })}
         </div>
@@ -238,7 +242,7 @@ function StatusBadge({ status, label }: { status: string; label: string }) {
           ? "destructive"
           : "secondary";
   return (
-    <Badge variant={variant} className="px-1.5 py-0 text-[10px]">
+    <Badge variant={variant} className="text-[10px]">
       {label}
     </Badge>
   );

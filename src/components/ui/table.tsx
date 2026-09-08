@@ -20,6 +20,16 @@ import { cn } from "@/lib/utils"
  *
  * Selection uses `secondary-container`, matching how every other M3 component
  * in this system shows "this one is chosen".
+ *
+ * **A table's surface wrapper must not out-radius its cells.** Cells are `px-4`
+ * — 16dp — and the M3 shape scale in `shape.css` makes `rounded-3xl` 48dp, not
+ * Tailwind's 24dp. Every call site had wrapped this in
+ * `rounded-3xl bg-surface-container-low`, which left the header label 2.7dp
+ * from the corner arc and clipped the full-bleed row dividers over 48dp at each
+ * end — the line under the header visibly died into nothing. So a wrapper sits
+ * at `rounded-lg`, which equals the cell inset exactly. If you change `px-4`
+ * here, the 17 wrappers have to move with it; they are still duplicated inline
+ * at each call site rather than living on `table-container`.
  */
 function Table({ className, ...props }: React.ComponentProps<"table">) {
   return (
@@ -46,10 +56,16 @@ function TableHeader({ className, ...props }: React.ComponentProps<"thead">) {
   )
 }
 
-function TableBody({ className, ...props }: React.ComponentProps<"tbody">) {
+function TableBody({
+  className,
+  stagger = true,
+  ...props
+}: React.ComponentProps<"tbody"> & { stagger?: boolean }) {
   return (
     <tbody
       data-slot="table-body"
+      suppressHydrationWarning
+      data-stagger={stagger ? "rows" : undefined}
       className={cn("[&_tr:last-child]:border-0", className)}
       {...props}
     />

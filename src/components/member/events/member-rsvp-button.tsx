@@ -1,10 +1,11 @@
 "use client";
 
-import { Check, Loader2, X } from "lucide-react";
+import { CalendarX, Check, Loader2, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 
+import { Banner } from "@/components/m3/banner";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "@/lib/i18n/navigation";
 import {
@@ -68,9 +69,7 @@ export function MemberRsvpButtons({
 
   if (!registrationOpen) {
     return (
-      <div className="rounded-md border border-dashed p-3 text-sm text-on-surface-variant">
-        {t("registrationClosed")}
-      </div>
+      <Banner tone="neutral" icon={CalendarX} title={t("registrationClosed")} />
     );
   }
 

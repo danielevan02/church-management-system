@@ -291,7 +291,7 @@ export function AssignmentForm({
             )}
           />
           {weekBusy.length > 0 ? (
-            <div className="md:col-span-2 flex flex-col gap-2 rounded-md border bg-surface-container-high/40 p-3">
+            <div className="md:col-span-2 flex flex-col gap-2 rounded-2xl bg-surface-container-high p-3">
               <p className="text-xs font-medium text-on-surface-variant">
                 {t("alreadyScheduled", { count: weekBusy.length })}
               </p>

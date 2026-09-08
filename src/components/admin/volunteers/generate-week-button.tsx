@@ -131,7 +131,7 @@ export function GenerateWeekButton({ teams }: { teams: TeamOption[] }) {
               </button>
             </div>
             <p className="text-xs text-on-surface-variant">{t("teamsHint")}</p>
-            <ul className="flex max-h-60 flex-col gap-1 overflow-y-auto rounded-md border p-2">
+            <ul className="flex max-h-60 flex-col gap-1 overflow-y-auto rounded-2xl p-2 bg-surface-container-high">
               {teams.map((team) => {
                 const checked = selectedTeamIds.has(team.id);
                 return (
@@ -154,7 +154,7 @@ export function GenerateWeekButton({ teams }: { teams: TeamOption[] }) {
             </ul>
           </div>
         ) : (
-          <p className="rounded-md border bg-surface-container-high/50 p-3 text-sm text-on-surface-variant">
+          <p className="rounded-2xl bg-surface-container-high p-3 text-sm text-on-surface-variant">
             {t("noTeamsAvailable")}
           </p>
         )}

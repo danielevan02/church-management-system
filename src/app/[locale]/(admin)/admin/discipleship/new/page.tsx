@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 
+import { PageHeader } from "@/components/m3/page-header";
 import { MilestoneCreateForm } from "./milestone-create-form";
 
 export default async function NewMilestonePage({
@@ -11,12 +12,15 @@ export default async function NewMilestonePage({
   const memberParam = Array.isArray(sp.member) ? sp.member[0] : sp.member;
 
   const t = await getTranslations("discipleship.new");
+
+  const tEyebrow = await getTranslations("eyebrow");
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1">
-        <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="text-on-surface-variant">{t("subtitle")}</p>
-      </header>
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6">
+      <PageHeader
+        eyebrow={tEyebrow("discipleship")}
+        title={t("title")}
+        subtitle={t("subtitle")}
+      />
       <MilestoneCreateForm
         submitLabel={t("submit")}
         initialMemberId={memberParam ?? undefined}

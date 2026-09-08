@@ -1,6 +1,8 @@
-import { ArrowLeft, Plus } from "lucide-react";
+import { HandCoins, Plus } from "lucide-react";
+import { EmptyState } from "@/components/m3/empty-state";
 import { getTranslations } from "next-intl/server";
 
+import { PageHeader } from "@/components/m3/page-header";
 import { Pagination } from "@/components/shared/pagination";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -28,34 +30,26 @@ export default async function FundsListPage({
   const result = await listFunds({ page });
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <div className="flex flex-col gap-1">
-          <Button asChild variant="ghost" size="sm" className="w-fit">
-            <Link href="/admin/giving">
-              <ArrowLeft className="h-4 w-4" />
-              {t("backToList")}
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6">
+      <PageHeader
+        backHref="/admin/giving"
+        backLabel={t("backToList")}
+        title={t("title")}
+        subtitle={t("subtitle", { total: result.total })}
+        action={
+          <Button asChild>
+            <Link href="/admin/giving/funds/new">
+              <Plus className="h-4 w-4" />
+              {t("newButton")}
             </Link>
           </Button>
-          <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-          <p className="text-on-surface-variant">
-            {t("subtitle", { total: result.total })}
-          </p>
-        </div>
-        <Button asChild>
-          <Link href="/admin/giving/funds/new">
-            <Plus className="h-4 w-4" />
-            {t("newButton")}
-          </Link>
-        </Button>
-      </header>
+        }
+      />
 
       {result.total === 0 ? (
-        <div className="rounded-md border border-dashed p-10 text-center text-sm text-on-surface-variant">
-          {t("empty")}
-        </div>
+        <EmptyState icon={HandCoins} title={t("empty")} />
       ) : (
-        <div className="rounded-md border">
+        <div className="rounded-lg bg-surface-container-low overflow-hidden">
           <Table>
             <TableHeader>
               <TableRow>

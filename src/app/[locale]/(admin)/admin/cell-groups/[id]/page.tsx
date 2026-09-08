@@ -1,21 +1,17 @@
 import { format } from "date-fns";
-import { ArrowLeft, Pencil, Plus } from "lucide-react";
+import { Pencil, Plus } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { notFound, redirect } from "next/navigation";
 
+import { BlockSection } from "@/components/m3/block-section";
+import { PageHeader } from "@/components/m3/page-header";
 import { AssignCellGroupMemberForm } from "@/components/admin/cell-groups/assign-member-form";
 import { NextMeetingForm } from "@/components/admin/cell-groups/next-meeting-form";
 import { RemoveCellGroupMemberButton } from "@/components/admin/cell-groups/remove-member-button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+
 import { auth } from "@/lib/auth";
 import { formatJakarta, toJakartaInput } from "@/lib/datetime";
 import { Link } from "@/lib/i18n/navigation";
@@ -52,18 +48,14 @@ export default async function CellGroupDetailPage({
   const t = await getTranslations("cellGroups.detail");
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-4">
-        <Button asChild variant="ghost" size="sm" className="w-fit">
-          <Link href="/admin/cell-groups">
-            <ArrowLeft className="h-4 w-4" />
-            {t("backToList")}
-          </Link>
-        </Button>
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6">
+      <PageHeader
+        backHref="/admin/cell-groups"
+        backLabel={t("backToList")}
+        title={group.name}
+        subtitle={
           <div className="flex flex-col gap-1">
-            <h1 className="text-3xl font-bold tracking-tight">{group.name}</h1>
-            <div className="flex flex-wrap items-center gap-2 text-sm text-on-surface-variant">
+            <div className="flex flex-wrap items-center gap-2">
               <Badge variant={group.isActive ? "default" : "secondary"}>
                 {group.isActive ? t("statusActive") : t("statusInactive")}
               </Badge>
@@ -82,11 +74,11 @@ export default async function CellGroupDetailPage({
                 </>
               ) : null}
             </div>
-            {group.description ? (
-              <p className="text-sm text-on-surface-variant">{group.description}</p>
-            ) : null}
+            {group.description ? <p>{group.description}</p> : null}
           </div>
-          <div className="flex flex-wrap gap-2">
+        }
+        action={
+          <>
             <Button asChild variant="outline">
               <Link href={`/admin/cell-groups/${id}/edit`}>
                 <Pencil className="h-4 w-4" />
@@ -99,211 +91,197 @@ export default async function CellGroupDetailPage({
                 {t("submitReport")}
               </Link>
             </Button>
-          </div>
-        </div>
-      </header>
+          </>
+        }
+      />
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle>{t("nextMeetingTitle")}</CardTitle>
-            <CardDescription>{t("nextMeetingDescription")}</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3 text-sm">
-            {group.nextMeetingAt ? (
-              <div className="rounded-md border bg-surface-container-high/30 p-3 text-sm">
-                <div className="font-medium">
-                  {formatJakarta(group.nextMeetingAt, "EEEE, d MMM yyyy · HH:mm")}
+      <div suppressHydrationWarning data-stagger="cards" className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        <BlockSection
+          title={t("nextMeetingTitle")}
+          description={t("nextMeetingDescription")}
+          className="lg:col-span-2"
+          bodyClassName="space-y-3 text-sm"
+        >
+          {group.nextMeetingAt ? (
+            <div className="rounded-2xl bg-surface-container-high p-3 text-sm">
+              <div className="font-medium">
+                {formatJakarta(group.nextMeetingAt, "EEEE, d MMM yyyy · HH:mm")}
+              </div>
+              {group.nextMeetingLocation ? (
+                <div className="text-on-surface-variant">
+                  {group.nextMeetingLocation}
                 </div>
-                {group.nextMeetingLocation ? (
-                  <div className="text-on-surface-variant">
-                    {group.nextMeetingLocation}
-                  </div>
-                ) : null}
-                {group.nextMeetingNotes ? (
-                  <div className="mt-1 text-xs whitespace-pre-wrap">
-                    {group.nextMeetingNotes}
-                  </div>
-                ) : null}
-              </div>
-            ) : (
-              <p className="text-sm text-on-surface-variant italic">
-                {t("nextMeetingEmpty")}
-              </p>
-            )}
-            <NextMeetingForm
-              cellGroupId={id}
-              hasExisting={Boolean(group.nextMeetingAt)}
-              initialValues={{
-                nextMeetingAt: group.nextMeetingAt
-                  ? toJakartaInput(group.nextMeetingAt)
-                  : "",
-                nextMeetingLocation: group.nextMeetingLocation ?? "",
-                nextMeetingNotes: group.nextMeetingNotes ?? "",
-              }}
-            />
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("leaderTitle")}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center gap-3">
-              <Avatar className="h-10 w-10">
-                {group.leader.photoUrl ? (
-                  <AvatarImage
-                    src={group.leader.photoUrl}
-                    alt={group.leader.fullName}
-                  />
-                ) : null}
-                <AvatarFallback>
-                  {group.leader.fullName.charAt(0).toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
-              <div className="flex flex-col">
-                <Link
-                  href={`/admin/members/${group.leader.id}`}
-                  className="font-medium hover:underline"
-                >
-                  {group.leader.fullName}
-                </Link>
-                <span className="text-xs text-on-surface-variant">
-                  {group.leader.phone ?? "—"}
-                </span>
-              </div>
+              ) : null}
+              {group.nextMeetingNotes ? (
+                <div className="mt-1 text-xs whitespace-pre-wrap">
+                  {group.nextMeetingNotes}
+                </div>
+              ) : null}
             </div>
-          </CardContent>
-        </Card>
+          ) : (
+            <p className="text-sm text-on-surface-variant italic">
+              {t("nextMeetingEmpty")}
+            </p>
+          )}
+          <NextMeetingForm
+            cellGroupId={id}
+            hasExisting={Boolean(group.nextMeetingAt)}
+            initialValues={{
+              nextMeetingAt: group.nextMeetingAt
+                ? toJakartaInput(group.nextMeetingAt)
+                : "",
+              nextMeetingLocation: group.nextMeetingLocation ?? "",
+              nextMeetingNotes: group.nextMeetingNotes ?? "",
+            }}
+          />
+        </BlockSection>
+
+        <BlockSection
+          title={t("leaderTitle")}
+        >
+          <div className="flex items-center gap-3">
+            <Avatar className="h-10 w-10">
+              {group.leader.photoUrl ? (
+                <AvatarImage
+                  src={group.leader.photoUrl}
+                  alt={group.leader.fullName}
+                />
+              ) : null}
+              <AvatarFallback>
+                {group.leader.fullName.charAt(0).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex flex-col">
+              <Link
+                href={`/admin/members/${group.leader.id}`}
+                className="font-medium hover:underline"
+              >
+                {group.leader.fullName}
+              </Link>
+              <span className="text-xs text-on-surface-variant">
+                {group.leader.phone ?? "—"}
+              </span>
+            </div>
+          </div>
+        </BlockSection>
 
         {group.childGroups.length > 0 ? (
-          <Card>
-            <CardHeader>
-              <CardTitle>{t("childGroupsTitle")}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="flex flex-col gap-2 text-sm">
-                {group.childGroups.map((c) => (
-                  <li key={c.id}>
-                    <Link
-                      href={`/admin/cell-groups/${c.id}`}
-                      className="font-medium hover:underline"
-                    >
-                      {c.name}
-                    </Link>
-                    {!c.isActive ? (
-                      <span className="ml-2 text-xs text-on-surface-variant">
-                        ({t("statusInactive")})
-                      </span>
-                    ) : null}
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
+          <BlockSection
+            title={t("childGroupsTitle")}
+          >
+            <ul suppressHydrationWarning data-stagger="items" className="flex flex-col gap-2 text-sm">
+              {group.childGroups.map((c) => (
+                <li key={c.id}>
+                  <Link
+                    href={`/admin/cell-groups/${c.id}`}
+                    className="font-medium hover:underline"
+                  >
+                    {c.name}
+                  </Link>
+                  {!c.isActive ? (
+                    <span className="ml-2 text-xs text-on-surface-variant">
+                      ({t("statusInactive")})
+                    </span>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+          </BlockSection>
         ) : null}
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("membersTitle")}</CardTitle>
-          <CardDescription>
-            {t("membersDescription", { count: group.members.length })}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-4">
-          <AssignCellGroupMemberForm cellGroupId={id} />
-          {group.members.length === 0 ? (
-            <p className="text-sm text-on-surface-variant">{t("membersEmpty")}</p>
-          ) : (
-            <ul className="flex flex-col gap-2 text-sm">
-              {group.members.map((m) => (
-                <li
-                  key={m.id}
-                  className="flex items-center justify-between gap-2 rounded-md border p-3"
-                >
-                  <div className="flex items-center gap-3">
-                    <Avatar className="h-8 w-8">
-                      {m.member.photoUrl ? (
-                        <AvatarImage
-                          src={m.member.photoUrl}
-                          alt={m.member.fullName}
-                        />
-                      ) : null}
-                      <AvatarFallback className="text-xs">
-                        {m.member.fullName.charAt(0).toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="flex flex-col">
-                      <Link
-                        href={`/admin/members/${m.member.id}`}
-                        className="font-medium hover:underline"
-                      >
-                        {m.member.fullName}
-                      </Link>
-                      <span className="text-xs text-on-surface-variant">
-                        {t("joinedOn")}: {format(m.joinedAt, "dd MMM yyyy")}
-                      </span>
-                    </div>
-                  </div>
-                  <RemoveCellGroupMemberButton
-                    cellGroupId={id}
-                    memberId={m.member.id}
-                  />
-                </li>
-              ))}
-            </ul>
-          )}
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("reportsTitle")}</CardTitle>
-          <CardDescription>{t("reportsDescription")}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {reports.length === 0 ? (
-            <p className="text-sm text-on-surface-variant">{t("reportsEmpty")}</p>
-          ) : (
-            <ul className="flex flex-col gap-2 text-sm">
-              {reports.map((r) => (
-                <li
-                  key={r.id}
-                  className="flex items-start justify-between gap-3 rounded-md border p-3"
-                >
+      <BlockSection
+        title={t("membersTitle")}
+        description={t("membersDescription", { count: group.members.length })}
+        bodyClassName="flex flex-col gap-4"
+      >
+        <AssignCellGroupMemberForm cellGroupId={id} />
+        {group.members.length === 0 ? (
+          <p className="text-sm text-on-surface-variant">{t("membersEmpty")}</p>
+        ) : (
+          <ul suppressHydrationWarning data-stagger="items" className="flex flex-col gap-2 text-sm">
+            {group.members.map((m) => (
+              <li
+                key={m.id}
+                className="flex items-center justify-between gap-2 rounded-2xl p-3 bg-surface-container-high"
+              >
+                <div className="flex items-center gap-3">
+                  <Avatar className="h-8 w-8">
+                    {m.member.photoUrl ? (
+                      <AvatarImage
+                        src={m.member.photoUrl}
+                        alt={m.member.fullName}
+                      />
+                    ) : null}
+                    <AvatarFallback className="text-xs">
+                      {m.member.fullName.charAt(0).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
                   <div className="flex flex-col">
-                    <span className="font-medium">
-                      {format(r.meetingDate, "EEEE, dd MMM yyyy")}
+                    <Link
+                      href={`/admin/members/${m.member.id}`}
+                      className="font-medium hover:underline"
+                    >
+                      {m.member.fullName}
+                    </Link>
+                    <span className="text-xs text-on-surface-variant">
+                      {t("joinedOn")}: {format(m.joinedAt, "dd MMM yyyy")}
                     </span>
-                    {r.topic ? (
-                      <span className="text-xs text-on-surface-variant">
-                        {r.topic}
-                      </span>
-                    ) : null}
-                    {r.notes ? (
-                      <span className="mt-1 text-xs whitespace-pre-wrap">
-                        {r.notes}
-                      </span>
-                    ) : null}
                   </div>
-                  <div className="text-right text-xs">
-                    <div className="font-semibold tabular-nums">
-                      {r.attendeeCount} {t("attendeesAbbr")}
+                </div>
+                <RemoveCellGroupMemberButton
+                  cellGroupId={id}
+                  memberId={m.member.id}
+                />
+              </li>
+            ))}
+          </ul>
+        )}
+      </BlockSection>
+
+      <BlockSection
+        title={t("reportsTitle")}
+        description={t("reportsDescription")}
+      >
+        {reports.length === 0 ? (
+          <p className="text-sm text-on-surface-variant">{t("reportsEmpty")}</p>
+        ) : (
+          <ul suppressHydrationWarning data-stagger="items" className="flex flex-col gap-2 text-sm">
+            {reports.map((r) => (
+              <li
+                key={r.id}
+                className="flex items-start justify-between gap-3 rounded-2xl p-3 bg-surface-container-high"
+              >
+                <div className="flex flex-col">
+                  <span className="font-medium">
+                    {format(r.meetingDate, "EEEE, dd MMM yyyy")}
+                  </span>
+                  {r.topic ? (
+                    <span className="text-xs text-on-surface-variant">
+                      {r.topic}
+                    </span>
+                  ) : null}
+                  {r.notes ? (
+                    <span className="mt-1 text-xs whitespace-pre-wrap">
+                      {r.notes}
+                    </span>
+                  ) : null}
+                </div>
+                <div className="text-right text-xs">
+                  <div className="font-semibold tabular-nums">
+                    {r.attendeeCount} {t("attendeesAbbr")}
+                  </div>
+                  {r.visitorCount > 0 ? (
+                    <div className="text-on-surface-variant tabular-nums">
+                      +{r.visitorCount} {t("visitorsAbbr")}
                     </div>
-                    {r.visitorCount > 0 ? (
-                      <div className="text-on-surface-variant tabular-nums">
-                        +{r.visitorCount} {t("visitorsAbbr")}
-                      </div>
-                    ) : null}
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </CardContent>
-      </Card>
+                  ) : null}
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </BlockSection>
 
     </div>
   );

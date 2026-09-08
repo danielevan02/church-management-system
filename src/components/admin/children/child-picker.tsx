@@ -74,7 +74,7 @@ export function ChildPicker({
 
   if (value && selectedName) {
     return (
-      <div className="flex items-center justify-between rounded-md border px-3 py-2">
+      <div className="flex items-center justify-between rounded-2xl px-3 py-2 bg-surface-container-high">
         <div className="flex flex-col">
           <span className="text-sm font-medium">{selectedName}</span>
           {selectedAge != null ? (
@@ -106,7 +106,7 @@ export function ChildPicker({
         />
       </div>
       {open && q.trim().length >= 2 && results.length > 0 ? (
-        <ul className="flex flex-col gap-1 rounded-md border p-1">
+        <ul className="flex flex-col gap-1 rounded-2xl p-1 bg-surface-container-high">
           {results.map((c) => (
             <li key={c.id}>
               <button

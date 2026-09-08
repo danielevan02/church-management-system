@@ -23,10 +23,12 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarRail,
   useSidebar,
 } from "@/components/ui/sidebar";
 import { church } from "@/config/church";
@@ -47,6 +49,12 @@ type Props = React.ComponentProps<typeof Sidebar> & {
   role: Role;
 };
 
+const MEMBER_SECTIONS = [
+  { group: "main", labelKey: "nav.memberGroups.main", showLabel: false },
+  { group: "worship", labelKey: "nav.memberGroups.worship", showLabel: true },
+  { group: "community", labelKey: "nav.memberGroups.community", showLabel: true },
+] as const;
+
 export function MemberSidebar({ member, role, ...props }: Props) {
   const t = useTranslations();
   const tCommon = useTranslations("common");
@@ -58,25 +66,29 @@ export function MemberSidebar({ member, role, ...props }: Props) {
   );
 
   return (
-    <Sidebar collapsible="offcanvas" {...props}>
+    <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
-              className="h-auto items-center py-2 data-[slot=sidebar-menu-button]:p-1.5!"
+              size="lg"
+              tooltip={church.name}
+              className="h-auto items-center py-2 data-[slot=sidebar-menu-button]:p-1.5! group-data-[collapsible=icon]:p-0! group-data-[collapsible=icon]:justify-center"
             >
-              <Link href="/me/dashboard">
-                <Image
-                  src="/icon-ui-192.png"
-                  alt=""
-                  aria-hidden
-                  width={20}
-                  height={20}
-                  priority
-                  className="size-5! object-contain"
-                />
-                <span className="line-clamp-2 text-sm font-semibold leading-tight whitespace-normal!">
+              <Link href="/me/dashboard" prefetch={true} className="flex items-center gap-2.5">
+                <div className="flex aspect-square size-8 shrink-0 items-center justify-center rounded-lg bg-surface-container-high">
+                  <Image
+                    src="/icon-ui-192.png"
+                    alt=""
+                    aria-hidden
+                    width={20}
+                    height={20}
+                    priority
+                    className="size-5! object-contain"
+                  />
+                </div>
+                <span className="line-clamp-2 text-sm font-semibold leading-tight whitespace-normal! m3-sidebar-label">
                   {church.name}
                 </span>
               </Link>
@@ -86,61 +98,73 @@ export function MemberSidebar({ member, role, ...props }: Props) {
       </SidebarHeader>
 
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => {
-                const Icon = item.icon;
-                const active =
-                  pathname === item.href ||
-                  pathname.startsWith(`${item.href}/`);
+        {MEMBER_SECTIONS.map((section) => {
+          const sectionItems = items.filter((item) => item.group === section.group);
+          if (sectionItems.length === 0) return null;
 
-                if (item.comingSoon) {
-                  return (
-                    <SidebarMenuItem key={item.href}>
-                      <SidebarMenuButton
-                        tooltip={t(item.labelKey)}
-                        aria-disabled
-                        className="cursor-not-allowed opacity-50"
-                      >
-                        <Icon />
-                        <span className="flex-1 truncate">
-                          {t(item.labelKey)}
-                        </span>
-                        <Badge
-                          variant="outline"
-                          className="text-[10px] group-data-[collapsible=icon]:hidden"
+          return (
+            <SidebarGroup key={section.group}>
+              {section.showLabel ? (
+                <SidebarGroupLabel>{t(section.labelKey)}</SidebarGroupLabel>
+              ) : null}
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {sectionItems.map((item) => {
+                    const Icon = item.icon;
+                    const active =
+                      pathname === item.href ||
+                      pathname.startsWith(`${item.href}/`);
+
+                    if (item.comingSoon) {
+                      return (
+                        <SidebarMenuItem key={item.href}>
+                          <SidebarMenuButton
+                            tooltip={t(item.labelKey)}
+                            aria-disabled
+                            className="cursor-not-allowed opacity-50"
+                          >
+                            <Icon />
+                            <span className="flex-1 truncate">
+                              {t(item.labelKey)}
+                            </span>
+                            <Badge
+                              variant="outline"
+                              className="text-[10px] m3-sidebar-label"
+                            >
+                              {tCommon("soon")}
+                            </Badge>
+                          </SidebarMenuButton>
+                        </SidebarMenuItem>
+                      );
+                    }
+
+                    return (
+                      <SidebarMenuItem key={item.href}>
+                        <SidebarMenuButton
+                          asChild
+                          tooltip={t(item.labelKey)}
+                          isActive={active}
                         >
-                          {tCommon("soon")}
-                        </Badge>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  );
-                }
-
-                return (
-                  <SidebarMenuItem key={item.href}>
-                    <SidebarMenuButton
-                      asChild
-                      tooltip={t(item.labelKey)}
-                      isActive={active}
-                    >
-                      <Link href={item.href}>
-                        <Icon />
-                        <span>{t(item.labelKey)}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                );
-              })}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+                          <Link href={item.href} prefetch={true}>
+                            <Icon />
+                            <span>{t(item.labelKey)}</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    );
+                  })}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          );
+        })}
       </SidebarContent>
 
       <SidebarFooter>
         <MemberNavUser member={member} role={role} />
       </SidebarFooter>
+
+      <SidebarRail />
     </Sidebar>
   );
 }
@@ -165,9 +189,10 @@ function MemberNavUser({
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              tooltip={displayName}
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground group-data-[collapsible=icon]:p-0! group-data-[collapsible=icon]:justify-center"
             >
-              <Avatar className="h-8 w-8 rounded-lg">
+              <Avatar className="h-8 w-8 rounded-lg shrink-0">
                 {member?.photoUrl ? (
                   <AvatarImage
                     src={member.photoUrl}
@@ -177,16 +202,16 @@ function MemberNavUser({
                 ) : null}
                 <AvatarFallback className="rounded-lg">{initial}</AvatarFallback>
               </Avatar>
-              <div className="grid flex-1 text-left text-sm leading-tight">
+              <div className="grid flex-1 text-left text-sm leading-tight m3-sidebar-label">
                 <span className="truncate font-medium">{displayName}</span>
               </div>
-              <MoreVertical className="ml-auto size-4" />
+              <MoreVertical className="ml-auto size-4 m3-sidebar-label" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
             className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
-            side={isMobile ? "bottom" : "right"}
-            align="end"
+            side={isMobile ? "top" : "right"}
+            align={isMobile ? "center" : "end"}
             sideOffset={4}
           >
             <DropdownMenuLabel className="p-0 font-normal">
@@ -233,3 +258,4 @@ function MemberNavUser({
     </SidebarMenu>
   );
 }
+

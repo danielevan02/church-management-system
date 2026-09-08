@@ -1,20 +1,16 @@
-import { CheckCircle2 } from "lucide-react";
+import { CalendarClock, CheckCircle2, ScanLine } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 
 import { AutoCheckIn } from "./auto-check-in";
 import { ScanBannerButton } from "./scan-banner-button";
 import { SelfCheckInButton } from "./self-check-in-button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { BlockRow, BlockSection } from "@/components/m3/block-section";
+import { EmptyState } from "@/components/m3/empty-state";
+import { PageHeader } from "@/components/m3/page-header";
 import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
 import { formatJakarta } from "@/lib/datetime";
+import { prisma } from "@/lib/prisma";
 import {
   getCheckInOpenServices,
   getService,
@@ -61,14 +57,13 @@ export default async function MemberCheckInPage({
       : null;
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div className="flex flex-col gap-1">
-          <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-          <p className="text-on-surface-variant">{t("subtitle")}</p>
-        </div>
-        <ScanBannerButton memberId={memberId} />
-      </header>
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6 pb-28 sm:pb-12">
+      <PageHeader
+        eyebrow={t("eyebrow")}
+        title={t("title")}
+        subtitle={t("subtitle")}
+        action={<ScanBannerButton memberId={memberId} />}
+      />
 
       {autoCheckInTarget ? (
         <AutoCheckIn
@@ -78,73 +73,78 @@ export default async function MemberCheckInPage({
         />
       ) : null}
 
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("openNow")}</CardTitle>
-          <CardDescription>{t("openNowDescription")}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {open.length === 0 ? (
-            <p className="text-sm text-on-surface-variant">{t("noOpen")}</p>
-          ) : (
-            <ul className="flex flex-col gap-3">
-              {open.map((s) => {
-                const already = checkedInIds.has(s.id);
-                return (
-                  <li
-                    key={s.id}
-                    className="flex flex-col gap-2 rounded-md border p-3 sm:flex-row sm:items-center sm:justify-between"
-                  >
-                    <div className="flex flex-col">
-                      <span className="font-medium">{s.name}</span>
-                      <span className="text-xs text-on-surface-variant">
-                        {tType(typeKey(s.type))} ·{" "}
-                        {formatJakarta(s.startsAt, "EEE dd MMM, HH:mm")}
-                        {s.location ? ` · ${s.location}` : ""}
-                      </span>
-                    </div>
-                    {already ? (
-                      <span className="flex items-center gap-1 text-sm text-success">
-                        <CheckCircle2 className="h-4 w-4" />
-                        {t("alreadyCheckedIn")}
-                      </span>
-                    ) : (
-                      <SelfCheckInButton
-                        serviceId={s.id}
-                        memberId={memberId}
-                      />
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
-          )}
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("upcoming")}</CardTitle>
-          <CardDescription>{t("upcomingDescription")}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {upcoming.length === 0 ? (
-            <p className="text-sm text-on-surface-variant">{t("noUpcoming")}</p>
-          ) : (
-            <ul className="flex flex-col gap-2 text-sm">
-              {upcoming.map((s) => (
-                <li key={s.id} className="flex flex-col gap-1 rounded-md border p-3">
-                  <span className="font-medium">{s.name}</span>
+      <BlockSection
+        icon={ScanLine}
+        iconTone="secondary"
+        title={t("openNow")}
+        description={t("openNowDescription")}
+        bodyClassName="space-y-2"
+      >
+        {open.length === 0 ? (
+          <EmptyState
+            icon={ScanLine}
+            tone="quiet"
+            title={t("noOpen")}
+            className="py-6"
+          />
+        ) : (
+          open.map((s) => {
+            const already = checkedInIds.has(s.id);
+            return (
+              <BlockRow key={s.id} className="flex-col items-stretch sm:flex-row sm:items-center">
+                <div className="flex min-w-0 flex-col">
+                  <span className="truncate text-sm font-bold text-on-surface">
+                    {s.name}
+                  </span>
                   <span className="text-xs text-on-surface-variant">
                     {tType(typeKey(s.type))} ·{" "}
-                    {formatJakarta(s.startsAt, "EEE dd MMM yyyy, HH:mm")}
+                    {formatJakarta(s.startsAt, "EEE dd MMM, HH:mm")}
+                    {s.location ? ` · ${s.location}` : ""}
                   </span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </CardContent>
-      </Card>
+                </div>
+                {already ? (
+                  <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-success-container px-3 py-1 text-xs font-semibold text-on-success-container">
+                    <CheckCircle2 className="h-3.5 w-3.5" />
+                    {t("alreadyCheckedIn")}
+                  </span>
+                ) : (
+                  <SelfCheckInButton serviceId={s.id} memberId={memberId} />
+                )}
+              </BlockRow>
+            );
+          })
+        )}
+      </BlockSection>
+
+      <BlockSection
+        icon={CalendarClock}
+        title={t("upcoming")}
+        description={t("upcomingDescription")}
+        bodyClassName="space-y-2"
+      >
+        {upcoming.length === 0 ? (
+          <EmptyState
+            icon={CalendarClock}
+            tone="quiet"
+            title={t("noUpcoming")}
+            className="py-6"
+          />
+        ) : (
+          upcoming.map((s) => (
+            <BlockRow key={s.id}>
+              <div className="flex min-w-0 flex-col">
+                <span className="truncate text-sm font-bold text-on-surface">
+                  {s.name}
+                </span>
+                <span className="text-xs text-on-surface-variant">
+                  {tType(typeKey(s.type))} ·{" "}
+                  {formatJakarta(s.startsAt, "EEE dd MMM yyyy, HH:mm")}
+                </span>
+              </div>
+            </BlockRow>
+          ))
+        )}
+      </BlockSection>
     </div>
   );
 }

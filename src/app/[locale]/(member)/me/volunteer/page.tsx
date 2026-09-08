@@ -1,17 +1,13 @@
 import { format } from "date-fns";
-import { HeartHandshake } from "lucide-react";
+import { HeartHandshake, History } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 
+import { BlockRow, BlockSection } from "@/components/m3/block-section";
+import { EmptyState } from "@/components/m3/empty-state";
+import { PageHeader } from "@/components/m3/page-header";
 import { MemberAssignmentActions } from "@/components/member/volunteer/member-assignment-actions";
 import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { auth } from "@/lib/auth";
 import {
   getAssignmentHistoryForMember,
@@ -33,80 +29,82 @@ export default async function MemberVolunteerPage() {
   ]);
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1">
-        <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="text-on-surface-variant">{t("subtitle")}</p>
-      </header>
+    <div suppressHydrationWarning data-stagger="sections" className="flex flex-col gap-6 pb-28 sm:pb-12">
+      <PageHeader
+        eyebrow={t("eyebrow")}
+        title={t("title")}
+        subtitle={t("subtitle")}
+      />
 
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("upcomingTitle")}</CardTitle>
-          <CardDescription>{t("upcomingDescription")}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {upcoming.length === 0 ? (
-            <div className="flex flex-col items-center gap-2 py-6 text-center text-sm text-on-surface-variant">
-              <HeartHandshake className="h-8 w-8" />
-              {t("upcomingEmpty")}
-            </div>
-          ) : (
-            <ul className="flex flex-col gap-3">
-              {upcoming.map((a) => (
-                <li
-                  key={a.id}
-                  className="flex flex-col gap-2 rounded-md border p-3 sm:flex-row sm:items-center sm:justify-between"
-                >
-                  <div className="flex flex-col">
-                    <span className="font-medium">{a.team.name}</span>
-                    <span className="text-xs text-on-surface-variant">
-                      {format(a.serviceDate, "EEE dd MMM yyyy")}
-                      {a.position ? ` · ${a.position.name}` : ""}
-                    </span>
-                    {a.notes ? (
-                      <span className="mt-1 text-xs">{a.notes}</span>
-                    ) : null}
-                  </div>
-                  <div className="flex flex-col items-end gap-2 sm:items-center sm:gap-3">
-                    <Badge>
-                      {tStatus(a.status.toLowerCase() as never)}
-                    </Badge>
-                    <MemberAssignmentActions id={a.id} status={a.status as never} />
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </CardContent>
-      </Card>
+      <BlockSection
+        icon={HeartHandshake}
+        iconTone="secondary"
+        title={t("upcomingTitle")}
+        description={t("upcomingDescription")}
+        bodyClassName="space-y-2"
+        staggerChildren
+      >
+        {upcoming.length === 0 ? (
+          <EmptyState
+            icon={HeartHandshake}
+            tone="quiet"
+            title={t("upcomingEmpty")}
+            className="py-6"
+          />
+        ) : (
+          upcoming.map((a) => (
+            <BlockRow
+              key={a.id}
+              className="flex-col items-stretch gap-2 sm:flex-row sm:items-center"
+            >
+              <div className="flex min-w-0 flex-col">
+                <span className="truncate text-sm font-bold text-on-surface">
+                  {a.team.name}
+                </span>
+                <span className="text-xs text-on-surface-variant">
+                  {format(a.serviceDate, "EEE dd MMM yyyy")}
+                  {a.position ? ` · ${a.position.name}` : ""}
+                </span>
+                {a.notes ? (
+                  <span className="mt-1 text-xs text-on-surface-variant">
+                    {a.notes}
+                  </span>
+                ) : null}
+              </div>
+              <div className="flex shrink-0 items-center gap-2">
+                <Badge>{tStatus(a.status.toLowerCase() as never)}</Badge>
+                <MemberAssignmentActions id={a.id} status={a.status as never} />
+              </div>
+            </BlockRow>
+          ))
+        )}
+      </BlockSection>
 
       {history.length > 0 ? (
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("historyTitle")}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="flex flex-col gap-2 text-sm">
-              {history.map((a) => (
-                <li
-                  key={a.id}
-                  className="flex items-center justify-between gap-2 rounded-md border p-3"
-                >
-                  <div className="flex flex-col">
-                    <span className="font-medium">{a.team.name}</span>
-                    <span className="text-xs text-on-surface-variant">
-                      {format(a.serviceDate, "EEE dd MMM yyyy")}
-                      {a.position ? ` · ${a.position.name}` : ""}
-                    </span>
-                  </div>
-                  <Badge variant="outline">
-                    {tStatus(a.status.toLowerCase() as never)}
-                  </Badge>
-                </li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
+        <BlockSection
+          icon={History}
+          iconTone="neutral"
+          title={t("historyTitle")}
+          bodyClassName="space-y-2"
+          staggerChildren
+        >
+          {history.map((a) => (
+            <BlockRow key={a.id}>
+              <div className="flex min-w-0 flex-col">
+                <span className="truncate text-sm font-bold text-on-surface">
+                  {a.team.name}
+                </span>
+                <span className="text-xs text-on-surface-variant">
+                  {format(a.serviceDate, "EEE dd MMM yyyy")}
+                  {a.position ? ` · ${a.position.name}` : ""}
+                </span>
+              </div>
+              <Badge variant="outline" className="shrink-0">
+                {tStatus(a.status.toLowerCase() as never)}
+              </Badge>
+            </BlockRow>
+          ))}
+        </BlockSection>
       ) : null}
     </div>
   );

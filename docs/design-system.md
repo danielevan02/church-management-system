@@ -359,17 +359,27 @@ Three parts to M3 shape, and only the first is a token problem.
 
 **Shape scale** — the radius tokens above. Done.
 
-**Shape morph** — M3 Expressive treats shape as a *state*: press a button and
-its corners move. `border-radius` is spatial, so it takes a spatial spring and
-is allowed to overshoot; that slight overshoot is what makes a corner feel like
-it has mass rather than like a value being reassigned. Applied via the
-`shape-morph` utility to buttons, FABs, toggles and interactive cards.
+**Shape morph** — M3 Expressive treats shape as a *state*: press a component
+and its corners move. `border-radius` is spatial, so it takes a spatial spring
+and is allowed to overshoot; that slight overshoot is what makes a corner feel
+like it has mass rather than like a value being reassigned. The rule, where it
+is used: **on press, step the radius down one level of the shape scale.** M3
+publishes the morph behaviour but not per-component web tokens for the target
+shapes, so the target is an interpretation, and the direction (tighter under
+the finger) matches M3 Expressive's own button demos.
 
-The rule used across the system: **on press, step the radius down one level of
-the shape scale.** M3 publishes the morph behaviour but not per-component web
-tokens for the target shapes, so this is an interpretation — a consistent one,
-and the direction (tighter under the finger) matches M3 Expressive's own button
-demos.
+**Now applied to interactive cards and quick-action tiles only.** It was
+removed from `Button` and `Toggle` on request. On a `rounded-full` control the
+morph is a pill snapping to a rounded rectangle and back on every click, and
+across a form full of buttons that reads as the UI glitching rather than as the
+button acknowledging the press — the state layer and the elevation step already
+carry the press without moving the geometry. The `shape-morph` and
+`shape-morph-interactive` utilities are unchanged and still in use; the two
+components just dropped `active:rounded-md`, and their transition lists moved
+from the combined `shape-morph-interactive` to `motion-effects-fast` plus an
+explicit property list, since they no longer transition `border-radius`.
+Reduced motion is still covered either way — `spring.css` zeroes every spring
+duration token at the root, not per utility.
 
 **Shape library** — M3 Expressive ships ~35 named polygon shapes (clover,
 burst, sunny, gem, pentagon, puffy…). **Not implemented**, deliberately. They
@@ -488,7 +498,14 @@ A few of these are judgement calls rather than spec lookups:
   `default` also moved from solid `primary` to `secondary-container`: a small
   pill filled with `primary` is very loud in M3's colour system, and status
   pills are ambient information. `variant="primary"` is there when a badge
-  genuinely needs to shout.
+  genuinely needs to shout. It carries **12dp** of horizontal padding, which is
+  its corner radius: on a `rounded-full` box the radius is half the height, so
+  padding below that puts the first glyph inside the curve and the label looks
+  like it is touching the border. This was on 8dp and looked cramped wherever
+  `variant="outline"` made the border visible. Same ratio M3 gives its 32dp
+  chip (16dp padding, 16dp radius). Resize a pill, move its padding — and note
+  the exemption: `Button`'s text/ghost variants sit at 12dp on a 40dp pill
+  because they have no resting container for the curve to show on.
 - **`tooltip`** — the arrow is gone. M3 tooltips have no caret; the inverse
   surface is what makes them read as a layer above the page. An arrow is the
   clearest giveaway of a Material-flavoured tooltip that isn't following the
@@ -655,6 +672,158 @@ crossover point is an artifact of the scale choice rather than a fact about the
 data. The fix is two charts or one indexed to a common base; both change the
 reports page layout and its translation keys, so it is left as a decision
 rather than folded into a restyle.
+
+## The expressive layout layer
+
+Everything above is a *component* library. This section is the layer above it:
+the page-level composition language, which was designed on the member dashboard
+and then rolled out to every screen in the app.
+
+It exists because a migrated component library does not by itself produce a
+coherent product. After phase 4 every button, card and table was M3, and the
+pages were still shadcn pages: an `h1.text-3xl`, a stack of
+`Card > CardHeader > CardTitle > CardContent`, and `rounded-md border
+border-dashed p-10 text-center` wherever a list came back empty. Same tokens,
+different language.
+
+### The seven rules
+
+1. **A block is borderless, tonal and 24dp.** `surface-container-low` on a
+   `surface` page, `shadow-level-0`. Tone carries the boundary; nothing gets a
+   border unless tone cannot work (a block on an already-tonal region, a text
+   field, a quoted verse).
+2. **One tonal step, not two.** These blocks are large and repeat down a phone
+   screen. Two steps is a wall of grey. One step still separates, and it leaves
+   `surface-container` free as the *hover* state — which is how an interactive
+   block signals itself without spending a shadow.
+3. **Nesting steps up in tone and down in radius.** A row inside a block is
+   `surface-container-high` at 16dp. This is the pair that replaced
+   `rounded-md border p-3`, and it is the one that survives dark mode — a
+   hairline border there turns into a grey scratch.
+4. **Every block group is anchored by an icon chip.** A page is a stack of
+   large tonal blocks with no rules between them, so the eye needs a hard mark
+   to find where one group ends. 28dp for a section heading, 40dp for a block,
+   48dp for a hero.
+5. **Eyebrow, then title.** M3's "eyebrow + headline" from `ui/card.tsx`,
+   lifted to the page: a tracked uppercase `label` in `primary` above the
+   screen's name. On a detail page the eyebrow is the *parent record*, which is
+   why `PageHeader`'s `backLabel` doubles as the default eyebrow.
+6. **Empty is a state, not a failure.** A dashed border says "content failed to
+   arrive". A member with no prayer requests yet is not a failure, so an empty
+   state is a real tonal block with a promoted icon and a title that says
+   something.
+7. **Actions are pills.** `Button` is already `rounded-full`; inline actions are
+   `size="sm"` at 36dp, page actions 40dp.
+8. **The inset has to clear the corner arc.** The app got this wrong in three
+   separate places, and the reason it keeps happening is that **the radius scale
+   here is not Tailwind's** — `shape.css` re-points it to M3, so `rounded-lg` is
+   16dp, `rounded-xl` 28dp, `rounded-2xl` **36dp** and `rounded-3xl` **48dp**.
+   The class names read far tamer than the shapes they produce, so an inset
+   copied from a stock-Tailwind instinct lands nowhere near the corner it has to
+   clear.
+
+   The geometry: content inset by *p* from both edges sits at the corner point
+   (*p*,*p*), and the arc's centre is at (*r*,*r*). It clears the curve only
+   while *p* > *r*(1 − 1/√2) ≈ **0.29*r***, and the clearance it actually has on
+   the diagonal is *r* − √2(*r* − *p*), which is always less than *p*. Keep that
+   diagonal at roughly half the edge inset or better; at a fifth it reads as
+   wedged into the curve, which is the tell.
+
+   | Shape | Radius | Inset | Diagonal | |
+   |---|---|---|---|---|
+   | filter bar, before | 36dp | 12dp | 2.1dp | wedged |
+   | `StatTile` at `compact`, before | 48dp | 16dp | 2.7dp | wedged |
+   | `ExpressiveCard` `nested` + `compact` | 36dp | 16dp | 7.7dp | ok |
+   | `ExpressiveCard` 48dp + `compact` | 48dp | 20dp | 8.4dp | ok |
+   | `StatTile` at `default` (`sm:`) | 48dp | 24dp | 14.1dp | good |
+   | filter bar, after | 16dp | 12dp | 10.3dp | good |
+
+   So: `ExpressiveCard` pairs `padding="compact"` to the tone's radius in
+   `compoundVariants` so the two scales cannot drift apart by hand; `StatTile`
+   takes the full `default` inset because it is the one shape that parks content
+   in all four corners; a filter bar steps *down* to 16dp rather than padding out
+   to meet 36dp, because it holds 4dp controls and 36dp was never the right jump
+   from them; and a fully-round pill takes horizontal padding equal to half its
+   height, since that is its radius. The exemption is a control with no resting
+   container — `Button`'s text and ghost variants sit at 12dp on a 40dp pill
+   because there is no curve on screen to clear.
+
+### The one documented deviation
+
+**Titles are bold.** `docs/design-system.md` says above that M3 almost never
+sets display or headline text bold, and that is still true of the component
+library. The page and block *titles* in this layer break it on purpose: these
+screens are read on a phone at arm's length with a thumb on a bottom nav bar,
+and a `headline-sm` at regular weight loses the top of the hierarchy to the
+first tonal block below it — which here is large, 24dp and coloured. Bold at
+24/30px is what keeps the title winning. It is not licence to bold headlines
+elsewhere.
+
+### The components
+
+All in `src/components/m3/`, all server-safe (no `"use client"`), all visible
+together in `/m3` under "Expressive layout".
+
+| Component | Replaces | Note |
+|---|---|---|
+| `PageHeader` | `<header><h1 className="text-3xl …">` | eyebrow / title / subtitle / `action`; `backHref` + `leading` for detail pages |
+| `SectionHeader` | an ad-hoc flex row with a bold span | icon chip, title, count, "view all" with a forward arrow; `size="sm"` drops to the 12px eyebrow for a heading *inside* a block |
+| `ExpressiveCard` | `ui/card.tsx` where a card is a *region* not a document | `tone` low/high/tonal/gradient/nested/outline/error, `interactive`, `asChild` |
+| `BlockSection` | `Card + CardHeader + CardTitle + CardDescription + CardContent` | the highest-leverage one: that composition was the most repeated shape in the app |
+| `BlockRow` | `rounded-md border p-3` | the nested list row |
+| `IconChip` | a bare `text-primary` icon beside a heading | 3 sizes, 8 tones |
+| `StatTile` / `StatGrid` | the admin dashboard's local `KpiCard` | label-above-value, `tabular-nums`, direction-coloured delta with `invertDelta` |
+| `EmptyState` | `rounded-md border border-dashed p-10 text-center` | ~20 call sites; `size="sm"` collapses to one muted row for an empty *sub*-section |
+| `Banner` | `rounded-md border border-primary/30 bg-primary/5` notices | install prompt, push opt-in, "check-in closed" |
+| `HeroBanner` | the dashboard's worship pass, generalised | accent gradient + masked ambient artwork |
+| `QuickActionTile` / `QuickActionGrid` | three near-identical copies of the same tile | the only bordered box in the language, and the only accent-role hover |
+| `DetailList` / `DetailRow` | a 3-column `grid` of `dt`/`dd` | a real `<dl>`, no rules |
+| `CardWatermark` | the devotional card's bled icon | 4% `primary`, grows on hover |
+
+### How the rollout was done
+
+Mostly by codemod, because 94 page files is where a migration like this dies by
+hand. Three passes, each one structural rather than textual, and each bailing
+out of anything it did not fully understand so the irregular pages got read
+instead of half-converted:
+
+1. **Headers.** Two uniform `<header>` shapes, then the back-button variants,
+   then 9 rich detail headers by hand. `<PageHeader>` for all 94 screens.
+2. **Blocks.** `Card` → `BlockSection` (54) or `ExpressiveCard` (15), matching a
+   `</Card>` to the `<Card>` at its own indentation. An icon inside a
+   `CardTitle` is lifted into `BlockSection`'s `icon` slot.
+3. **Shapes.** `rounded-md border` retired token by token inside className
+   literals: padded boxes became 16dp rows, unpadded ones 24dp shells, and a box
+   naming a border *colour* was left outlined because it is a control.
+
+Two lessons worth keeping. The codemod must forward **every** attribute it does
+not understand — the first version dropped `key` on five list items, which
+typecheck could not see and only `react/jsx-key` caught. And re-indenting JSX
+with a regex compounds: each pass re-measured indentation the previous pass had
+already changed, so the fix was to `git checkout` the tree and re-run one
+correct pass, not to patch the patches.
+
+### If you add a screen
+
+- `PageHeader` at the top. Eyebrow from the `eyebrow.*` namespace on a module
+  screen; `backHref` + `backLabel` on a detail screen, and let the label become
+  the eyebrow.
+- Blocks are `BlockSection` (titled) or `ExpressiveCard` (untitled). Rows inside
+  them are `BlockRow`.
+- Empty is `EmptyState`, never a dashed border. Notices are `Banner`.
+- **Step the densities down when you nest.** A `SectionHeader` inside a
+  `BlockSection` needs `size="sm"` — at the default both render `text-base`
+  bold and the sub-heading reads as important as the block containing it. An
+  `EmptyState` inside such a sub-section needs `size="sm"` too: at full size a
+  48dp chip over a bold 16px line makes *absence* the tallest thing on the
+  screen. The admin dashboard had four of them and was mostly whitespace.
+  `className="py-6"` is not the fix — it trims the padding and leaves the chip
+  and the display weight.
+- `pb-28 sm:pb-12` on member-portal pages — the mobile bottom nav is fixed and
+  will otherwise sit on top of the last block.
+- Add a `loading.tsx` whose skeleton uses the *same* shapes
+  (`rounded-3xl bg-surface-container-low`), including the eyebrow line.
+  `src/components/shared/skeletons/` has them.
 
 ## Rollout
 

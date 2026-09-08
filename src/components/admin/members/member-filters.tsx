@@ -40,7 +40,7 @@ export function MemberFilters() {
   }
 
   return (
-    <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
+    <div className="flex flex-col gap-3 rounded-lg bg-surface-container-high p-3 lg:flex-row lg:items-center">
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -67,7 +67,7 @@ export function MemberFilters() {
           value={sp.get("status") ?? ANY}
           onValueChange={(v) => pushParams({ status: v })}
         >
-          <SelectTrigger className="w-[140px]">
+          <SelectTrigger className="w-[180px]">
             <SelectValue placeholder={t("status")} />
           </SelectTrigger>
           <SelectContent>
@@ -84,7 +84,7 @@ export function MemberFilters() {
           value={sp.get("gender") ?? ANY}
           onValueChange={(v) => pushParams({ gender: v })}
         >
-          <SelectTrigger className="w-[120px]">
+          <SelectTrigger className="w-[180px]">
             <SelectValue placeholder={t("gender")} />
           </SelectTrigger>
           <SelectContent>
@@ -98,7 +98,7 @@ export function MemberFilters() {
           value={sp.get("sort") ?? "name_asc"}
           onValueChange={(v) => pushParams({ sort: v === "name_asc" ? null : v })}
         >
-          <SelectTrigger className="w-[160px]">
+          <SelectTrigger className="w-[210px]">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
