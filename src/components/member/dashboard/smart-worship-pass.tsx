@@ -10,19 +10,12 @@ import {
   QrCode,
   ScanLine,
   SunMedium,
+  X,
 } from "lucide-react";
 import Image from "next/image";
 
+import { ContainerTransform } from "@/components/m3/container-transform";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { formatJakarta } from "@/lib/datetime";
 import { Link } from "@/lib/i18n/navigation";
 
@@ -55,8 +48,6 @@ export function SmartWorshipPass({
   qrDataUrl,
   hasSelfCheckIn,
 }: SmartWorshipPassProps) {
-  const [qrOpen, setQrOpen] = React.useState(false);
-
   return (
     <div className="relative overflow-hidden rounded-3xl bg-linear-to-br from-primary/10 via-surface-container-high to-surface-container p-5 sm:p-7 shadow-level-0 transition-all duration-300">
       {/* Subtle Background Watermark / Ambient Accent */}
@@ -120,7 +111,7 @@ export function SmartWorshipPass({
           </div>
         ) : null}
 
-        {/* Action Group: Instant Check-in & Interactive QR Modal */}
+        {/* Action Group: Instant Check-in & ContainerTransform QR Modal */}
         <div className="flex flex-wrap items-center gap-2.5 pt-1">
           {hasSelfCheckIn ? (
             <Button
@@ -136,66 +127,111 @@ export function SmartWorshipPass({
           ) : null}
 
           {qrDataUrl ? (
-            <Dialog open={qrOpen} onOpenChange={setQrOpen}>
-              <DialogTrigger asChild>
-                <Button
-                  variant="tonal"
-                  className="rounded-full px-4 h-10 text-xs sm:text-sm font-semibold flex items-center gap-2 active:scale-95 transition-all"
-                >
-                  <QrCode className="h-4 w-4" />
+            <ContainerTransform
+              title="QR Identitas Jemaat"
+              maxWidth={420}
+              triggerContent={
+                <div className="inline-flex h-10 items-center gap-2 rounded-full bg-surface-container-highest px-4 text-xs sm:text-sm font-semibold text-on-surface shadow-level-0 hover:bg-surface-container-highest/80 transition-all active:scale-95">
+                  <QrCode className="h-4 w-4 text-primary" />
                   <span>Tampilkan QR</span>
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-sm">
-                <DialogHeader className="text-center sm:text-center">
-                  <DialogTitle className="text-xl font-bold">
-                    QR Identitas Jemaat
-                  </DialogTitle>
-                  <DialogDescription className="text-xs">
-                    {member?.fullName ?? "Jemaat"}
-                  </DialogDescription>
-                </DialogHeader>
-
-                <div className="flex flex-col items-center gap-4 py-2">
-                  <div className="rounded-2xl bg-white p-4 shadow-level-1">
-                    <Image
-                      src={qrDataUrl}
-                      alt={`QR Jemaat ${member?.fullName ?? ""}`}
-                      width={240}
-                      height={240}
-                      className="h-56 w-56 object-contain"
-                      unoptimized
-                    />
-                  </div>
-
-                  <div className="inline-flex items-center gap-1.5 rounded-full bg-surface-container px-3 py-1 text-[11px] font-medium text-on-surface-variant">
-                    <SunMedium className="h-3.5 w-3.5 text-warning" />
-                    <span>Tingkatkan kecerahan layar untuk scan optimal</span>
+                </div>
+              }
+              trigger={({ open, isOpen, ref }) => (
+                <div
+                  ref={ref}
+                  onClick={open}
+                  tabIndex={0}
+                  role="button"
+                  aria-haspopup="dialog"
+                  data-m3-origin-hidden={isOpen ? "true" : undefined}
+                  style={
+                    isOpen
+                      ? {
+                          visibility: "hidden",
+                          opacity: 0,
+                          transition: "none",
+                          pointerEvents: "none",
+                        }
+                      : undefined
+                  }
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      open();
+                    }
+                  }}
+                  className="rounded-full outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                >
+                  <div className="inline-flex h-10 items-center gap-2 rounded-full bg-surface-container-highest px-4 text-xs sm:text-sm font-semibold text-on-surface shadow-level-0 hover:bg-surface-container-highest/80 transition-all active:scale-95 cursor-pointer">
+                    <QrCode className="h-4 w-4 text-primary" />
+                    <span>Tampilkan QR</span>
                   </div>
                 </div>
-
-                <DialogFooter className="flex flex-row items-center justify-between gap-2 sm:justify-between">
-                  <Button asChild variant="ghost" size="sm" className="text-xs">
-                    <a
-                      href={qrDataUrl}
-                      download={`qr-${member?.id ?? "jemaat"}.png`}
-                      className="flex items-center gap-1.5"
+              )}
+            >
+              {({ close }) => (
+                <div className="flex flex-col p-6 sm:p-7">
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="space-y-1">
+                      <h2 className="text-xl font-bold text-on-surface">
+                        QR Identitas Jemaat
+                      </h2>
+                      <p className="text-xs text-on-surface-variant font-medium">
+                        {member?.fullName ?? "Jemaat"}
+                      </p>
+                    </div>
+                    <Button
+                      variant="text"
+                      size="icon"
+                      onClick={close}
+                      aria-label="Tutup QR"
+                      className="rounded-full"
                     >
-                      <Download className="h-3.5 w-3.5" />
-                      <span>Simpan QR</span>
-                    </a>
-                  </Button>
-                  <Button
-                    variant="tonal"
-                    size="sm"
-                    onClick={() => setQrOpen(false)}
-                    className="rounded-full px-4"
-                  >
-                    Tutup
-                  </Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
+                      <X className="h-5 w-5" />
+                    </Button>
+                  </div>
+
+                  <div className="flex flex-col items-center gap-4 py-6">
+                    <div className="rounded-3xl bg-white p-4 shadow-level-2">
+                      <Image
+                        src={qrDataUrl}
+                        alt={`QR Jemaat ${member?.fullName ?? ""}`}
+                        width={240}
+                        height={240}
+                        className="h-56 w-56 object-contain"
+                        unoptimized
+                      />
+                    </div>
+
+                    <div className="inline-flex items-center gap-1.5 rounded-full bg-surface-container px-3.5 py-1 text-xs font-medium text-on-surface-variant">
+                      <SunMedium className="h-3.5 w-3.5 text-warning" />
+                      <span>Tingkatkan kecerahan layar untuk scan optimal</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between gap-2 pt-2 border-t border-outline-variant/30">
+                    <Button asChild variant="ghost" size="sm" className="text-xs rounded-full">
+                      <a
+                        href={qrDataUrl}
+                        download={`qr-${member?.id ?? "jemaat"}.png`}
+                        className="flex items-center gap-1.5"
+                      >
+                        <Download className="h-3.5 w-3.5" />
+                        <span>Simpan QR</span>
+                      </a>
+                    </Button>
+                    <Button
+                      variant="tonal"
+                      size="sm"
+                      onClick={close}
+                      className="rounded-full px-5 text-xs"
+                    >
+                      Tutup
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </ContainerTransform>
           ) : (
             <Button
               asChild

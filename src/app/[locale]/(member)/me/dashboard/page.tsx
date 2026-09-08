@@ -3,8 +3,6 @@ import {
   ArrowRight,
   Baby,
   Calendar,
-  HandCoins,
-  Heart,
   HeartHandshake,
   Megaphone,
   QrCode,
@@ -18,8 +16,11 @@ import { redirect } from "next/navigation";
 
 import { ExpandableAnnouncementCard } from "@/components/member/announcements/expandable-announcement-card";
 import { DevotionalHeroCard } from "@/components/member/dashboard/devotional-hero-card";
+import { QuickGivingAction } from "@/components/member/dashboard/quick-giving-action";
+import { QuickPrayerAction } from "@/components/member/dashboard/quick-prayer-action";
 import { SmartWorshipPass } from "@/components/member/dashboard/smart-worship-pass";
 import { Button } from "@/components/ui/button";
+import { church } from "@/config/church";
 import { features } from "@/config/features";
 import { auth } from "@/lib/auth";
 import { formatJakarta } from "@/lib/datetime";
@@ -156,21 +157,15 @@ export default async function MemberDashboardPage() {
               label={tQuick("checkIn")}
             />
           ) : null}
-          <QuickAction
-            href="/me/giving"
-            icon={HandCoins}
-            label={tQuick("giveNow")}
-          />
+          {features.giving ? (
+            <QuickGivingAction label={tQuick("giveNow")} bank={church.bank} />
+          ) : null}
           <QuickAction
             href="/me/events"
             icon={Calendar}
             label={tQuick("events")}
           />
-          <QuickAction
-            href="/me/prayer-requests"
-            icon={Heart}
-            label={tQuick("prayer")}
-          />
+          <QuickPrayerAction label={tQuick("prayer")} />
           <QuickAction
             href="/me/profile"
             icon={UserCircle}
