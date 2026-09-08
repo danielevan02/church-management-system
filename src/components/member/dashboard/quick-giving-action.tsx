@@ -69,11 +69,11 @@ export function QuickGivingAction({ label, bank }: QuickGivingActionProps) {
       )}
     >
       {({ close }) => (
-        <div className="flex flex-col p-6 sm:p-7">
+        <div className="flex flex-col p-5 sm:p-6">
           {/* Header */}
           <div className="flex items-start justify-between gap-4">
             <div className="space-y-1">
-              <h2 className="text-xl font-bold text-on-surface">
+              <h2 className="text-lg sm:text-xl font-bold text-on-surface">
                 Persembahan Digital
               </h2>
               <p className="text-xs text-on-surface-variant">
@@ -85,34 +85,38 @@ export function QuickGivingAction({ label, bank }: QuickGivingActionProps) {
               size="icon"
               onClick={close}
               aria-label="Tutup persembahan"
-              className="rounded-full"
+              className="rounded-full shrink-0 -mr-1 -mt-1"
             >
               <X className="h-5 w-5" />
             </Button>
           </div>
 
-          <div className="my-4 h-px bg-outline-variant/30" />
+          <div className="my-3.5 h-px bg-outline-variant/30" />
 
           {/* Giving Methods */}
-          <div className="flex flex-col items-center gap-5">
+          <div className="flex flex-col items-center gap-4">
             {/* QRIS Display */}
             <div className="flex flex-col items-center gap-2">
-              <span className="text-xs font-semibold text-primary uppercase tracking-wider">
+              <span className="text-[11px] font-semibold text-primary uppercase tracking-wider">
                 Scan QRIS Semua Bank / E-Wallet
               </span>
               <div className="overflow-hidden rounded-2xl bg-white p-3 shadow-level-1">
-                <QrisImage src={bank.qrisImagePath} alt="QRIS Persembahan" />
+                <QrisImage
+                  src={bank.qrisImagePath}
+                  alt="QRIS Persembahan"
+                  className="h-48 w-48 sm:h-52 sm:w-52 object-contain"
+                />
               </div>
             </div>
 
             {/* Bank Transfer Info */}
             {hasBank ? (
-              <div className="w-full rounded-2xl bg-surface-container p-4 space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-on-surface-variant">
+              <div className="w-full rounded-2xl bg-surface-container p-3.5 sm:p-4 space-y-2">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-semibold text-on-surface-variant">
                     Transfer Bank: {bank.name}
                   </span>
-                  <span className="text-xs text-on-surface-variant">
+                  <span className="text-on-surface-variant">
                     a.n. {bank.accountHolder}
                   </span>
                 </div>
@@ -127,7 +131,7 @@ export function QuickGivingAction({ label, bank }: QuickGivingActionProps) {
           </div>
 
           {/* Footer */}
-          <div className="mt-6 flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-outline-variant/30">
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-outline-variant/30">
             <Button asChild variant="ghost" size="sm" className="rounded-full text-xs">
               <Link href="/me/giving">
                 <ExternalLink className="h-4 w-4" />

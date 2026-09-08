@@ -289,31 +289,62 @@ export function ContainerTransform({
     }
   }, [phase]);
 
-  // Keep dialog centered on window resize while open
+  // Keep dialog centered on window resize and sync height with content while open
   React.useEffect(() => {
     if (phase !== "open") return;
-    const onResize = () => {
-      const measureEl = measureElRef.current;
-      if (!measureEl) return;
-      const measuredHeight = measureEl.scrollHeight || 420;
+
+    const surfaceEl = surfaceElRef.current;
+    const contentEl =
+      (surfaceEl?.querySelector("[data-m3-expanded-content]")?.firstElementChild as HTMLElement | null) ||
+      (surfaceEl?.querySelector("[data-m3-expanded-content]") as HTMLElement | null) ||
+      surfaceEl;
+
+    const syncBounds = () => {
+      if (!contentEl) return;
+      const measuredHeight = Math.ceil(
+        contentEl.getBoundingClientRect().height || contentEl.scrollHeight || 420
+      );
+      if (!measuredHeight || measuredHeight <= 0) return;
+
       const viewport = { width: window.innerWidth, height: window.innerHeight };
       const target = calculateCenteredTargetRect(viewport, measuredHeight, maxWidth, 16);
       targetRectRef.current = target;
-      setSurfaceBounds((prev) =>
-        prev
-          ? {
-              ...prev,
-              top: target.top,
-              left: target.left,
-              width: target.width,
-              height: target.height,
-              transition: "none",
-            }
-          : null
-      );
+
+      setSurfaceBounds((prev) => {
+        if (!prev) return null;
+        if (
+          prev.height === target.height &&
+          prev.top === target.top &&
+          prev.width === target.width &&
+          prev.left === target.left
+        ) {
+          return prev;
+        }
+        return {
+          ...prev,
+          top: target.top,
+          left: target.left,
+          width: target.width,
+          height: target.height,
+          transition:
+            "top 200ms var(--md-sys-motion-easing-standard), height 200ms var(--md-sys-motion-easing-standard), left 200ms var(--md-sys-motion-easing-standard), width 200ms var(--md-sys-motion-easing-standard)",
+        };
+      });
     };
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
+
+    syncBounds();
+
+    const ro =
+      typeof ResizeObserver !== "undefined" && contentEl ? new ResizeObserver(syncBounds) : null;
+    if (ro && contentEl) {
+      ro.observe(contentEl);
+    }
+
+    window.addEventListener("resize", syncBounds);
+    return () => {
+      ro?.disconnect();
+      window.removeEventListener("resize", syncBounds);
+    };
   }, [phase, maxWidth]);
 
   // Start forward flight once measured
@@ -324,8 +355,12 @@ export function ContainerTransform({
     const origin = originRectRef.current;
     if (!measureEl || !origin) return;
 
-    // 1. Calculate destination bounds
-    const measuredHeight = measureEl.scrollHeight || 420;
+    // 1. Calculate destination bounds from actual child element height (without phantom wrapper padding)
+    const child = measureEl.firstElementChild as HTMLElement | null;
+    const measuredHeight = child
+      ? Math.ceil(child.getBoundingClientRect().height || child.scrollHeight)
+      : Math.ceil(measureEl.scrollHeight || 420);
+
     const viewport = { width: window.innerWidth, height: window.innerHeight };
     const target = calculateCenteredTargetRect(viewport, measuredHeight, maxWidth, 16);
     targetRectRef.current = target;
@@ -434,7 +469,7 @@ export function ContainerTransform({
               {/* Offscreen element for exact height measurement */}
               <div
                 ref={measureElRef}
-                className="fixed -left-[9999px] top-0 invisible pointer-events-none p-6"
+                className="fixed -left-[9999px] top-0 invisible pointer-events-none"
                 style={{ width: `${Math.min(typeof window !== "undefined" ? window.innerWidth - 32 : 600, maxWidth)}px` }}
                 aria-hidden="true"
               >
@@ -496,8 +531,9 @@ export function ContainerTransform({
 
                 {/* Expanded Detail Layer (cross-fades in during expansion, fades out on return) */}
                 <div
+                  data-m3-expanded-content="true"
                   className={cn(
-                    "h-full w-full transition-opacity",
+                    "w-full transition-opacity",
                     phase === "measuring" && "opacity-0 invisible",
                     phase === "animating-open" && "opacity-100 visible duration-300 delay-75",
                     phase === "open" && "opacity-100 visible",
