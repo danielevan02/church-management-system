@@ -137,16 +137,65 @@
     }
   },
   "landing": {
+    "nav": {
+      "schedule": "Jadwal Ibadah",
+      "about": "Tentang Kami",
+      "devotional": "Renungan",
+      "events": "Agenda",
+      "give": "Persembahan",
+      "visit": "Kunjungi Kami",
+      "menu": "Buka menu"
+    },
     "hero": {
-      "badge": "Portal Jemaat",
-      "verse": "Aku bersukacita ketika dikatakan kepadaku: 'Mari kita pergi ke rumah TUHAN'.",
+      "headline": "Satu keluarga yang bertumbuh dalam <em>kasih</em>, kuasa, dan kebenaran Allah.",
+      "lead": "Siapa pun Anda, dari mana pun Anda datang, ada tempat bagi Anda di sini. Kami berkumpul tiga kali setiap hari Minggu, dan semuanya terbuka untuk siapa saja.",
+      "verse": "Aku bersukacita, ketika dikatakan orang kepadaku: 'Mari kita pergi ke rumah TUHAN.'",
       "verseRef": "Mazmur 122:1",
       "primaryCta": "Masuk",
-      "staffSignIn": "Pengurus"
+      "staffSignIn": "Pengurus",
+      "scheduleCta": "Lihat jadwal ibadah",
+      "directionsCta": "Rute ke gereja",
+      "photoAlt": "Jemaat {church} berkumpul setelah ibadah"
+    },
+    "schedule": {
+      "title": "Yang perlu Anda tahu sebelum datang",
+      "description": "Ibadah berlangsung sekitar 90 menit dan tidak ada yang perlu Anda siapkan. Tiga hal berikut biasanya cukup untuk membuat kunjungan pertama terasa ringan.",
+      "day": "Setiap Minggu",
+      "tzLabel": "WIB",
+      "service1": {
+        "name": "Ibadah I",
+        "time": "07.00",
+        "note": "Ibadah pagi"
+      },
+      "service2": {
+        "name": "Ibadah II",
+        "time": "10.00",
+        "note": "Ibadah umum"
+      },
+      "service3": {
+        "name": "TYOG",
+        "time": "10.00",
+        "note": "Ibadah pemuda"
+      },
+      "upcomingTitle": "Ibadah mendatang",
+      "upcomingDescription": "Di luar tiga ibadah mingguan, ini yang sudah terjadwal.",
+      "firstTimeTitle": "Pertama kali berkunjung?",
+      "note1": {
+        "title": "Datang apa adanya",
+        "body": "Tidak ada aturan berpakaian. Yang kami tunggu adalah Anda, bukan pakaian Anda."
+      },
+      "note2": {
+        "title": "Sekitar 90 menit",
+        "body": "Pujian, firman, dan doa bersama. Anda sudah bisa pulang sebelum tengah hari."
+      },
+      "note3": {
+        "title": "Ada yang menyambut",
+        "body": "Datang sepuluh menit lebih awal, dan penyambut kami akan mengantar Anda ke tempat duduk."
+      }
     },
     "visi": {
-      "label": "Visi",
-      "text": "Memberitakan Anugerah Keselamatan dan Mendewasakan Jemaat Dalam Kasih, Kuasa dan Kebenaran Allah."
+      "text": "Memberitakan Anugerah Keselamatan dan Mendewasakan Jemaat Dalam Kasih, Kuasa dan Kebenaran Allah.",
+      "description": "Itulah visi yang kami hidupi bersama. Enam misi berikut — kami menyebutnya PIKP3 — adalah cara kami menjalaninya dari minggu ke minggu."
     },
     "misi": {
       "label": "Misi",
@@ -157,7 +206,69 @@
       "item3": "Menggembalakan jemaat melalui Kelompok Kecil.",
       "item4": "Melatih dan memperlengkapi jemaat melalui pembinaan yang berkesinambungan.",
       "item5": "Mengobarkan semangat jemaat dalam memberitakan Anugerah keselamatan.",
-      "item6": "Melakukan Pelayanan Sosial dengan kasih."
+      "item6": "Melakukan Pelayanan Sosial dengan kasih.",
+      "photoAlt": "Tim pelayanan {church} pada Ibadah Jumat Agung",
+      "photoCaption": "Tim pelayanan pada Ibadah Jumat Agung"
+    },
+    "devotional": {
+      "title": "Renungan yang sedang kami baca",
+      "description": "Bacaan singkat untuk menemani hari Anda. Teks lengkapnya terbuka begitu Anda masuk ke portal jemaat.",
+      "byline": "Oleh {author}",
+      "readMore": "Baca renungan",
+      "archiveTitle": "Semua renungan",
+      "archiveDescription": "Kumpulan renungan harian yang kami tulis dan bagikan di {church}. Terbuka untuk siapa saja — tidak perlu masuk.",
+      "archiveCta": "Semua renungan",
+      "backToArchive": "Semua renungan",
+      "paginationLabel": "Navigasi halaman renungan",
+      "pageOf": "Halaman {page} dari {total}",
+      "newer": "Lebih baru",
+      "older": "Lebih lama",
+      "moreLabel": "Renungan lainnya"
+    },
+    "events": {
+      "title": "Yang sedang kami siapkan",
+      "description": "Kegiatan di luar ibadah Minggu, terbuka untuk jemaat maupun tamu. Pendaftaran dibuka di portal jemaat.",
+      "at": "Pukul {time} WIB",
+      "detailCta": "Lihat detail"
+    },
+    "give": {
+      "title": "Memberi, sebagai bagian dari ibadah",
+      "description": "Persembahan jemaat menopang ibadah mingguan, pembinaan, dan pelayanan sosial. Dua cara di bawah ini sama-sama masuk ke rekening gereja.",
+      "pageCta": "Halaman persembahan",
+      "bankLabel": "Bank",
+      "accountNumberLabel": "Nomor rekening",
+      "copied": "Tersalin",
+      "qrisHint": "Pindai dengan aplikasi mobile banking atau dompet digital mana pun.",
+      "qrisMissing": "QRIS belum tersedia",
+      "confirmCta": "Konfirmasi via WhatsApp",
+      "reconciliationNote": "Persembahan dicatat setelah admin merekonsiliasi mutasi bank. Riwayat pemberian Anda dapat dilihat di portal jemaat.",
+      "qrisMissingHint": "Untuk sementara, silakan gunakan transfer bank di samping."
+    },
+    "visit": {
+      "title": "Cara menemukan kami",
+      "description": "Kami menantikan kehadiran Anda. Kalau Anda bingung di jalan, hubungi nomor di bawah — akan ada yang memandu.",
+      "contactTitle": "Kontak",
+      "addressLabel": "Alamat",
+      "phoneLabel": "Telepon",
+      "whatsappLabel": "WhatsApp",
+      "emailLabel": "Email",
+      "instagramLabel": "Instagram",
+      "youtubeLabel": "YouTube",
+      "directionsCta": "Buka di Google Maps",
+      "mapTitle": "Peta lokasi {church}"
+    },
+    "closing": {
+      "title": "Pintu rumah Tuhan selalu terbuka",
+      "body": "Siapa pun Anda, mari bersekutu bersama kami hari Minggu ini. Cukup datang; kami akan menyambut Anda di pintu."
+    },
+    "footer": {
+      "tagline": "Satu portal untuk pelayanan dan persekutuan jemaat.",
+      "memberCta": "Masuk sebagai jemaat",
+      "staffCta": "Masuk sebagai pengurus",
+      "navTitle": "Navigasi",
+      "portalTitle": "Portal",
+      "reachTitle": "Hubungi",
+      "rights": "Hak cipta dilindungi."
     }
   },
   "dashboard": {
@@ -2258,5 +2369,11 @@
     "children": "Pelayanan Anak",
     "search": "Pencarian",
     "help": "Bantuan"
+  },
+  "notFound": {
+    "title": "Halaman ini tidak ditemukan",
+    "body": "Mungkin alamatnya salah ketik, atau halamannya sudah dipindahkan. Silakan kembali ke beranda.",
+    "homeCta": "Kembali ke beranda",
+    "devotionalCta": "Lihat renungan"
   }
 }

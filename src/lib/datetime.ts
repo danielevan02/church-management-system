@@ -1,9 +1,23 @@
+import { enUS, id as idLocale } from "date-fns/locale";
 import { formatInTimeZone, fromZonedTime } from "date-fns-tz";
 
 import type { Locale } from "date-fns";
 
 /** App-wide timezone. Indonesia uses WIB (UTC+7), no DST. */
 export const TZ = "Asia/Jakarta";
+
+/**
+ * Map a next-intl locale string onto a date-fns locale, so month and weekday
+ * names follow the page language rather than defaulting to English.
+ *
+ * Server Components get the locale from `getLocale()`; pass the result
+ * straight into `formatJakarta`. Anything unrecognised falls back to English
+ * rather than throwing, because a wrong month name is a smaller failure than
+ * a 500 on the public landing page.
+ */
+export function dateFnsLocale(locale: string): Locale {
+  return locale === "id" ? idLocale : enUS;
+}
 
 /**
  * Format a Date in Jakarta time using a date-fns format pattern.

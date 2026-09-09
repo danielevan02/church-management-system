@@ -3,6 +3,7 @@
 import { QrCode } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -10,14 +11,24 @@ export function QrisImage({
   src,
   alt,
   className,
+  fallback,
 }: {
   src: string;
   alt: string;
   className?: string;
+  /**
+   * What to show when the file is missing. The default is styled in M3 roles,
+   * which is right on `/give` and wrong on the landing page — that page is
+   * theme-independent and would get a dark tonal box on a paper ground for any
+   * visitor whose OS is in dark mode. Callers outside the themed app pass
+   * their own.
+   */
+  fallback?: React.ReactNode;
 }) {
   const [errored, setErrored] = useState(false);
 
   if (errored) {
+    if (fallback !== undefined) return <>{fallback}</>;
     return (
       <div
         className={cn(

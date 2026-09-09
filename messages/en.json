@@ -137,27 +137,138 @@
     }
   },
   "landing": {
+    "nav": {
+      "schedule": "Services",
+      "about": "About",
+      "devotional": "Devotionals",
+      "events": "Events",
+      "give": "Giving",
+      "visit": "Visit",
+      "menu": "Open menu"
+    },
     "hero": {
-      "badge": "Member portal",
-      "verse": "I rejoiced with those who said to me, \"Let us go to the house of the Lord.\"",
+      "headline": "One family growing in the <em>love</em>, power, and truth of God.",
+      "lead": "Whoever you are and wherever you come from, there is a place for you here. We gather three times every Sunday, and every service is open to anyone.",
+      "verse": "I rejoiced with those who said to me, 'Let us go to the house of the LORD.'",
       "verseRef": "Psalm 122:1",
       "primaryCta": "Sign in",
-      "staffSignIn": "Staff"
+      "staffSignIn": "Staff",
+      "scheduleCta": "See service times",
+      "directionsCta": "Get directions",
+      "photoAlt": "The congregation of {church} gathered after a service"
+    },
+    "schedule": {
+      "title": "What to know before you come",
+      "description": "A service runs about 90 minutes and there is nothing you need to prepare. These three things are usually enough to make a first visit feel easy.",
+      "day": "Every Sunday",
+      "tzLabel": "WIB",
+      "service1": {
+        "name": "Service I",
+        "time": "07.00",
+        "note": "Early service"
+      },
+      "service2": {
+        "name": "Service II",
+        "time": "10.00",
+        "note": "Main service"
+      },
+      "service3": {
+        "name": "TYOG",
+        "time": "10.00",
+        "note": "Youth service"
+      },
+      "upcomingTitle": "Upcoming services",
+      "upcomingDescription": "Beyond the three weekly services, here is what is already scheduled.",
+      "firstTimeTitle": "Visiting for the first time?",
+      "note1": {
+        "title": "Come as you are",
+        "body": "There is no dress code. It is you we are expecting, not your clothes."
+      },
+      "note2": {
+        "title": "About 90 minutes",
+        "body": "Songs, the sermon, and prayer together. You will be home before midday."
+      },
+      "note3": {
+        "title": "Someone will meet you",
+        "body": "Arrive ten minutes early and one of our welcomers will walk you to a seat."
+      }
     },
     "visi": {
-      "label": "Vision",
-      "text": "To proclaim the grace of salvation and to mature the congregation in God's love, power, and truth."
+      "text": "To proclaim the grace of salvation and to bring the congregation to maturity in the love, power, and truth of God.",
+      "description": "That is the vision we live by together. The six commitments below — we call them PIKP3 — are how we carry it out from week to week."
     },
     "misi": {
       "label": "Mission",
       "acronym": "PIKP3",
-      "expansion": "Unity · Worship and Prayer · Small Groups · Discipleship · Evangelism · Social Service",
-      "item1": "Strengthen the unity of GKJ.",
+      "expansion": "Unity · Worship and Prayer · Small Groups · Discipleship · Evangelism · Social Ministry",
+      "item1": "Strengthen the unity and fellowship of GKJ.",
       "item2": "Guide every member into intimacy with God through worship and prayer.",
       "item3": "Shepherd the congregation through small groups.",
-      "item4": "Train and equip the congregation through continuous discipleship.",
-      "item5": "Ignite the congregation's passion to proclaim the grace of salvation.",
-      "item6": "Carry out social service in love."
+      "item4": "Train and equip members through continuous discipleship.",
+      "item5": "Stir the congregation to proclaim the grace of salvation.",
+      "item6": "Carry out social ministry with love.",
+      "photoAlt": "The ministry team of {church} at the Good Friday service",
+      "photoCaption": "The ministry team at the Good Friday service"
+    },
+    "devotional": {
+      "title": "What we are reading now",
+      "description": "Short readings to keep you company through the day. The full text opens as soon as you sign in to the member portal.",
+      "byline": "By {author}",
+      "readMore": "Read devotional",
+      "archiveTitle": "All devotionals",
+      "archiveDescription": "Every daily reading we write and share at {church}. Open to anyone — no sign-in needed.",
+      "archiveCta": "All devotionals",
+      "backToArchive": "All devotionals",
+      "paginationLabel": "Devotional pagination",
+      "pageOf": "Page {page} of {total}",
+      "newer": "Newer",
+      "older": "Older",
+      "moreLabel": "More devotionals"
+    },
+    "events": {
+      "title": "What we are preparing",
+      "description": "Gatherings beyond Sunday worship, open to members and visitors alike. Registration opens in the member portal.",
+      "at": "At {time} WIB",
+      "detailCta": "See details"
+    },
+    "give": {
+      "title": "Giving, as part of worship",
+      "description": "What the congregation gives sustains weekly worship, discipleship, and social ministry. Both routes below reach the same church account.",
+      "pageCta": "Giving page",
+      "bankLabel": "Bank",
+      "accountNumberLabel": "Account number",
+      "copied": "Copied",
+      "qrisHint": "Scan with any mobile banking or e-wallet app.",
+      "qrisMissing": "QRIS not available yet",
+      "confirmCta": "Confirm via WhatsApp",
+      "reconciliationNote": "Gifts are recorded once an administrator reconciles the bank statement. Your giving history appears in the member portal.",
+      "qrisMissingHint": "For now, please use the bank transfer details alongside."
+    },
+    "visit": {
+      "title": "How to find us",
+      "description": "We look forward to meeting you. If you get lost on the way, call the number below and someone will guide you in.",
+      "contactTitle": "Contact",
+      "addressLabel": "Address",
+      "phoneLabel": "Phone",
+      "whatsappLabel": "WhatsApp",
+      "emailLabel": "Email",
+      "instagramLabel": "Instagram",
+      "youtubeLabel": "YouTube",
+      "directionsCta": "Open in Google Maps",
+      "mapTitle": "Map showing {church}"
+    },
+    "closing": {
+      "title": "The door is always open",
+      "body": "Whoever you are, come and worship with us this Sunday. Just come; we will meet you at the door."
+    },
+    "footer": {
+      "tagline": "One portal for the ministry and fellowship of the congregation.",
+      "memberCta": "Sign in as a member",
+      "staffCta": "Sign in as staff",
+      "navTitle": "Navigate",
+      "portalTitle": "Portal",
+      "reachTitle": "Reach us",
+      "rights": "All rights reserved."
     }
   },
   "dashboard": {
@@ -2258,5 +2369,11 @@
     "children": "Children",
     "search": "Search",
     "help": "Help"
+  },
+  "notFound": {
+    "title": "We could not find that page",
+    "body": "The address may be mistyped, or the page has moved. Head back to the home page.",
+    "homeCta": "Back to home",
+    "devotionalCta": "Read devotionals"
   }
 }

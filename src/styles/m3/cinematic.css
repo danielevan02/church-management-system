@@ -1,0 +1,129 @@
+/*
+ * Scroll-driven parallax for the public landing page.
+ *
+ * The one effect here is **scroll-driven CSS**, not a scroll listener, and that
+ * is a technical choice rather than a stylistic one:
+ *
+ * - It runs off the main thread in Chromium, so a parallax that would jank
+ *   under a `scroll` handler stays smooth while the page is doing real work.
+ * - It cannot desynchronise from the scroll position the way a rAF-throttled
+ *   handler does at the ends of a fling.
+ * - It writes nothing to the DOM, so it cannot reintroduce the hydration
+ *   mismatch class `ScrollRevealProvider` had — an effect that stamped
+ *   attributes React never rendered.
+ *
+ * The cost is support: `animation-timeline` is Chromium 115+ and Safari 26+,
+ * still flagged in Firefox. The rule is wrapped in `@supports`, and what a
+ * non-supporting browser gets is the page as designed with a still photo —
+ * not a broken version of it.
+ *
+ * Reduced motion switches it off. A parallax is exactly the involuntary
+ * movement that triggers vestibular symptoms, so this is not politeness.
+ *
+ * ---------------------------------------------------------------------------
+ * Blooms, and why they are scoped to the dark hero
+ *
+ * These were first tried across every light band and were wrong there, for one
+ * reason worth keeping: **a blurred accent pool only reads as light against a
+ * dark ground.** On a near-white `surface` a 38%-primary radial at blur(28px)
+ * adds no luminance — it tints the field in uneven patches, which the eye
+ * reads as dirt rather than as a light source. Grain at 3.5% over `overlay`
+ * behaves the same way: depth on dark, murk on near-white, so it is gone.
+ *
+ * They also multiplied: the hero briefly carried four grounds at once — a
+ * vertical gradient, two radials on different hues and the grain — and the
+ * radials cut visibly across the gradient's axis beside the photo.
+ *
+ * So the rule is: **one ground per band, and blooms only on `brand-dark`.**
+ * On tone 10 the same radials finally do what they were for.
+ */
+
+@utility m3-bloom {
+  background-image: radial-gradient(
+    closest-side,
+    color-mix(in oklab, var(--md-sys-color-primary) 55%, transparent),
+    transparent
+  );
+  filter: blur(36px);
+}
+
+@utility m3-bloom-tertiary {
+  background-image: radial-gradient(
+    closest-side,
+    color-mix(in oklab, var(--md-sys-color-tertiary) 45%, transparent),
+    transparent
+  );
+  filter: blur(40px);
+}
+
+/* A slow drift, so the light does not read as painted on. */
+@keyframes m3-drift {
+  from {
+    transform: translate3d(0, -5%, 0) scale(1);
+  }
+  to {
+    transform: translate3d(0, 8%, 0) scale(1.1);
+  }
+}
+
+/*
+ * The image travels against the scroll across its whole `cover` range — from
+ * entering the viewport to leaving it — which is the range parallax wants.
+ * `entry` finishes the travel while the element is still part-way on screen
+ * and then holds, which reads as a glitch rather than as depth.
+ *
+ * The image has to be oversized: translating a flush-fitting one exposes the
+ * container edge. `scale(1.18)` covers ±7% of travel with margin, and the
+ * frame clips.
+ */
+@keyframes m3-parallax-y {
+  from {
+    transform: scale(1.18) translate3d(0, -7%, 0);
+  }
+  to {
+    transform: scale(1.18) translate3d(0, 7%, 0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .m3-parallax {
+      animation: m3-parallax-y linear both;
+      animation-duration: auto;
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
+      will-change: transform;
+    }
+
+    .m3-drift {
+      animation: m3-drift linear both;
+      animation-duration: auto;
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
+      will-change: transform;
+    }
+  }
+}
+
+/*
+ * `view()` binds to the nearest ancestor **scroll container**, and
+ * `overflow: hidden` creates one — which is why the first version of this
+ * parallax did not move at all: the timeline attached to the photo's own
+ * clipping frame, a box that never scrolls, and sat frozen at one progress
+ * value. Frames that clip a parallax image must use `overflow: clip`, which
+ * clips without becoming a scrollport, so the timeline reaches the document
+ * scroller. That applies to every ancestor up the tree, not just the frame.
+ */
+
+/*
+ * With no timeline, or under reduced motion, the class must leave the image
+ * correctly framed rather than parked on a keyframe — the oversize exists only
+ * to give the travel room, so without travel it is not wanted.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .m3-parallax,
+  .m3-drift {
+    animation: none !important;
+    transform: none !important;
+  }
+}

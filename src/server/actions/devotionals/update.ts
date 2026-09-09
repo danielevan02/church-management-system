@@ -39,7 +39,7 @@ export async function updateDevotionalAction(
   try {
     const existing = await prisma.devotional.findFirst({
       where: { id, deletedAt: null },
-      select: { id: true },
+      select: { id: true, slug: true },
     });
     if (!existing) return { ok: false, error: "NOT_FOUND" };
 
@@ -52,6 +52,11 @@ export async function updateDevotionalAction(
         body: data.body,
         authorName: data.authorName || null,
         publishedAt: data.publishedAt ?? undefined,
+        // `slug` is deliberately absent. Once a devotional has a public URL,
+        // people share it and search engines index it; regenerating the slug
+        // because someone fixed a typo in the title would 404 every one of
+        // those links. The address is fixed at creation. See the field's note
+        // in schema.prisma.
       },
     });
     revalidatePath("/admin/devotionals");
@@ -59,6 +64,9 @@ export async function updateDevotionalAction(
     revalidatePath("/me/dashboard");
     revalidatePath(`/admin/devotionals/${id}`);
     revalidatePath(`/me/devotionals/${id}`);
+    revalidatePath("/renungan");
+    revalidatePath(`/renungan/${existing.slug}`);
+    revalidatePath("/", "page");
     return { ok: true, data: { id } };
   } catch (e) {
     console.error("[updateDevotional]", e);

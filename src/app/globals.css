@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "../styles/m3/index.css";
+@import "../styles/landing.css";
 @plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
@@ -12,6 +13,39 @@
    * it Tailwind would bake the light values into every utility.
    * ---------------------------------------------------------------------- */
   --color-primary: var(--md-sys-color-primary);
+  /*
+   * A deliberately theme-*independent* pair, for the one band that is dark in
+   * both light and dark mode: the landing hero.
+   *
+   * It comes from the reference tonal palette rather than a system role
+   * because every role flips with the scheme — `primary` is tone 40 in light
+   * and tone 80 in dark — and a hero that inverts is a hero that stops being
+   * dark. Tone 10 against tone 95 is the same 15-step separation M3 uses for
+   * its own dark surfaces, so the contrast holds either way.
+   *
+   * This is also what makes the light blooms work: a blurred accent pool only
+   * reads as luminous against a dark ground. See `cinematic.css`.
+   */
+  --color-brand-dark: var(--md-ref-primary-10);
+  --color-brand-dark-raised: var(--md-ref-primary-17);
+  --color-on-brand-dark: var(--md-ref-primary-95);
+  /*
+   * The global navigation progress bar, and the second theme-*independent*
+   * token for the same reason as the pair above.
+   *
+   * The bar is drawn over whatever happens to be underneath it: the landing
+   * page, which is always light paper, and the authenticated app, which
+   * follows the OS. `primary` cannot serve both — it is tone 40 in light and
+   * tone 80 in dark, and tone 80 (#81d5cb) over the landing page's paper is a
+   * pale mint line at 2.2:1, which is not a progress bar so much as a rumour
+   * of one.
+   *
+   * Tone 50 is the one step that clears the 3:1 WCAG floor for non-text UI on
+   * every ground the bar can land on — 4.33 on landing paper, 4.25 on the M3
+   * light surface, 3.82 on the M3 dark surface — so it is pinned rather than
+   * left to the scheme.
+   */
+  --color-brand-progress: var(--md-ref-primary-50);
   --color-on-primary: var(--md-sys-color-on-primary);
   --color-primary-container: var(--md-sys-color-primary-container);
   --color-on-primary-container: var(--md-sys-color-on-primary-container);
@@ -83,7 +117,8 @@
   /* ---------------------------------------------------------------------- */
   --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-mono), ui-monospace, SFMono-Regular, monospace;
-  --font-heading: var(--font-sans);
+  --font-heading: var(--font-heading), var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-accent: var(--font-heading), var(--font-sans), ui-sans-serif, system-ui, sans-serif;
 }
 
 @layer base {
@@ -95,6 +130,9 @@
   }
   html {
     @apply font-sans;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
   }
   /* M3 draws focus as a 3px secondary outline offset 2px from the container,
    * rather than shadcn's tinted ring. Applied globally so anything focusable
