@@ -180,15 +180,23 @@
  * areas and text*, where restraint is correct; a 4px bar segment needs more
  * chroma than a button fill.
  *
- * So slot 1 is the brand hue re-stepped to a chromatic step (#0f8f7a, the same
- * teal family as the #0F766E seed) and the rest are a warm/cool alternation
- * chosen so adjacent pairs survive colour-vision deficiency.
+ * So slot 1 is the brand hue re-stepped to a chromatic step, and the rest are
+ * a warm/cool alternation chosen so adjacent pairs survive colour-vision
+ * deficiency.
  *
- * Both columns are validated, not eyeballed, against the card surface each
- * mode actually uses (`surface-container-low`: #e8f7f3 light, #111e1c dark):
+ * Slots 1 and 3 were swapped when the deployment reseeded from the example
+ * teal (#0F766E) to the church's own blue (#0060c0). Slot 3 was already
+ * #2a78d6 at hue 213 degrees — three degrees off the new seed — so the brand
+ * hue was in the palette all along, in the wrong slot, while slot 1 held a
+ * teal that no longer referred to anything. The swap costs no new colour and
+ * keeps chart-1 a *distinct step* from the CTA fill (#0068d0), so a mark can
+ * never be mistaken for a control.
+ *
+ * Both columns are re-validated, not eyeballed, against the card surface each
+ * mode actually uses after the reseed (`surface-container-low`: #f1f3ff light,
+ * #171c25 dark):
  *
  *   light  5 slots pass adjacent — worst CVD dE 11.2 (protan), normal-vision 19.6
- *          first 3 pass all-pairs with every slot >= 3:1 contrast
  *   dark   5 slots pass everything, all >= 3:1 contrast
  *
  * Slots 4 and 5 sit below 3:1 on the light surface, so a chart that reaches
@@ -199,17 +207,17 @@
  * "Other" or becomes small multiples; it does not get a generated hue.
  * ------------------------------------------------------------------------ */
 :root {
-  --chart-1: #0f8f7a;
+  --chart-1: #2a78d6;
   --chart-2: #d95926;
-  --chart-3: #2a78d6;
+  --chart-3: #0f8f7a;
   --chart-4: #eda100;
   --chart-5: #e87ba4;
 }
 
 .dark {
-  --chart-1: #0d9488;
+  --chart-1: #3987e5;
   --chart-2: #d95926;
-  --chart-3: #3987e5;
+  --chart-3: #0d9488;
   --chart-4: #c98500;
   --chart-5: #d55181;
 }

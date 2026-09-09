@@ -2258,5 +2258,362 @@
     "children": "Pelayanan Anak",
     "search": "Pencarian",
     "help": "Bantuan"
+  },
+  "lp": {
+    "meta": {
+      "title": "Ruang untuk Bernapas, Komunitas untuk Bertumbuh",
+      "description": "Gereja Kristen Jakarta Jemaat Tangerang — ibadah setiap Minggu pagi dan Sabtu malam. Terbuka untuk keluarga, kaum muda, dan siapa pun yang datang pertama kali."
+    },
+    "nav": {
+      "skip": "Lewati ke konten utama",
+      "gatherings": "Ibadah",
+      "stories": "Cerita",
+      "expect": "Kunjungan Pertama",
+      "generosity": "Persembahan",
+      "visit": "Rencanakan Kunjungan",
+      "menu": "Menu",
+      "close": "Tutup",
+      "portal": "Portal Jemaat",
+      "staff": "Pengurus",
+      "language": "Bahasa",
+      "navLabel": "Navigasi utama"
+    },
+    "hero": {
+      "eyebrow": "Ibadah setiap Minggu, Rabu & Sabtu",
+      "headlineA": "Sebuah Ruang",
+      "headlineB": "untuk Bernapas.",
+      "headlineC": "Komunitas untuk Bertumbuh.",
+      "standfirst": "Di kota yang tidak pernah berhenti bergerak, ada satu ruangan yang sengaja dibuat lambat. Pintunya terbuka setiap Minggu pagi — juga untuk Anda yang datang tanpa membawa apa-apa.",
+      "location": "Tangerang · Banten",
+      "cta": "Rencanakan Kunjungan",
+      "ctaSecondary": "Lihat Jadwal Ibadah",
+      "scroll": "Gulir untuk masuk",
+      "ambientOn": "Dengarkan ruangnya",
+      "ambientOff": "Senyapkan",
+      "posterAlt": "Ruang ibadah GKJ Tangerang yang lengang, memandang ke arah salib di depan"
+    },
+    "countdown": {
+      "next": "Ibadah berikutnya",
+      "live": "Sedang berlangsung",
+      "days": "Hari",
+      "hours": "Jam",
+      "minutes": "Menit",
+      "seconds": "Detik"
+    },
+    "vision": {
+      "label": "Mengapa kami berkumpul",
+      "verse": "Aku bersukacita ketika dikatakan kepadaku: “Mari kita pergi ke rumah TUHAN.”",
+      "verseRef": "Mazmur 122:1",
+      "statementLabel": "Visi",
+      "statement": "Memberitakan Anugerah Keselamatan dan Mendewasakan Jemaat Dalam Kasih, Kuasa dan Kebenaran Allah.",
+      "body": "Kami bukan gereja yang menjanjikan hidup tanpa masalah. Kami percaya pada anugerah yang lebih besar daripada masalah itu — dan pada satu komunitas yang mau menemani Anda menjalaninya, minggu demi minggu, tanpa mempercepat prosesnya.",
+      "since": "Melayani jemaat di Tangerang"
+    },
+    "liturgy": {
+      "label": "Pengalaman hari Minggu",
+      "title": "Apa yang sebenarnya terjadi selama dua jam itu",
+      "lead": "Bagi banyak orang, hambatan terbesar datang ke gereja bukan soal iman — tetapi soal tidak tahu apa yang akan terjadi. Jadi kami tuliskan semuanya di sini, urut, tanpa dilebih-lebihkan.",
+      "progress": "Bagian",
+      "of": "dari",
+      "prev": "Bagian sebelumnya",
+      "next": "Bagian berikutnya",
+      "hint": "Gulir, klik nomor, atau gunakan tombol panah",
+      "chapters": {
+        "arrival": {
+          "title": "Kedatangan & Selasar",
+          "when": "20 menit sebelum ibadah",
+          "body": "Tidak ada meja pendaftaran dan tidak ada formulir. Ada kopi di selasar, dan biasanya ada orang yang menyapa Anda lebih dulu sebelum Anda perlu memperkenalkan diri.",
+          "note": "Datang terlambat pun tidak masalah. Pintu samping tetap terbuka sepanjang ibadah."
+        },
+        "worship": {
+          "title": "Musik & Refleksi",
+          "when": "±25 menit",
+          "body": "Beberapa lagu bersama, lalu keheningan yang cukup panjang untuk terasa. Tidak ada yang akan meminta Anda mengangkat tangan, dan tidak ada yang akan memperhatikan kalau Anda memilih duduk.",
+          "note": "Lirik ditampilkan di layar. Anda tidak perlu tahu lagunya."
+        },
+        "word": {
+          "title": "Firman & Pengajaran",
+          "when": "±30 menit",
+          "body": "Satu bagian Alkitab dibaca, lalu dijelaskan — dengan konteksnya, dengan kejujuran soal bagian yang sulit, dan dengan kaitan yang nyata ke hidup di Tangerang hari Senin pagi.",
+          "note": "Alkitab tersedia di setiap baris kursi. Tidak perlu membawa sendiri."
+        },
+        "table": {
+          "title": "Persekutuan Meja",
+          "when": "Pada ibadah tertentu",
+          "body": "Perjamuan Kudus dilayankan pada jadwal yang diumumkan lebih dulu. Roti dan cawan diedarkan; Anda bebas menerima atau membiarkannya lewat tanpa penjelasan apa pun.",
+          "note": "Tidak ada yang mencatat siapa mengambil dan siapa tidak."
+        },
+        "life": {
+          "title": "Kehidupan Bersama",
+          "when": "Sesudah ibadah",
+          "body": "Ini bagian yang paling sering dilewatkan orang, dan paling penting. Kopi kedua, percakapan yang tidak terencana, dan kelompok kecil yang bertemu di rumah-rumah sepanjang minggu.",
+          "note": "Anda boleh langsung pulang. Kami juga sering begitu."
+        }
+      }
+    },
+    "firstTime": {
+      "trigger": "Pertama kali di sini?",
+      "title": "Pertanyaan yang biasanya tidak sempat ditanyakan",
+      "lead": "Jawaban langsung, tanpa basa-basi.",
+      "close": "Tutup",
+      "items": {
+        "dress": {
+          "q": "Saya sebaiknya memakai apa?",
+          "a": "Apa pun yang membuat Anda nyaman. Pada hari Minggu yang sama Anda akan melihat batik, kemeja, kaus, dan sandal di ruangan yang sama. Tidak ada yang menghitung."
+        },
+        "kids": {
+          "q": "Bagaimana dengan anak saya?",
+          "a": "Sekolah Minggu berjalan paralel dengan Ibadah Umum II pukul 10.00. Antar anak Anda ke ruang Sekolah Minggu, catat nama dan nomor ponsel Anda di lembar penjemputan, lalu ambil kembali kartu yang sama saat menjemput. Bayi dan balita boleh tetap bersama Anda di ruang ibadah."
+        },
+        "parking": {
+          "q": "Di mana saya parkir?",
+          "a": "Halaman gereja menampung mobil dan sepeda motor, dan ada petugas yang mengatur arah masuk pada jam ibadah. Kalau halaman penuh, bahu jalan di depan gereja biasa dipakai — petugas akan menunjukkan tempatnya."
+        },
+        "facilities": {
+          "q": "Fasilitasnya bagaimana?",
+          "a": "Toilet ada di sisi selasar, dekat kafe. Ruang ibadah berada di lantai dasar dan dapat diakses kursi roda tanpa tangga. Untuk ruang menyusui atau kebutuhan khusus lain, sampaikan ke petugas di pintu dan akan disiapkan."
+        },
+        "late": {
+          "q": "Kalau saya terlambat?",
+          "a": "Masuk saja. Pintu samping dekat selasar tetap terbuka sepanjang ibadah, dan barisan kursi paling belakang memang disisakan untuk itu."
+        },
+        "language": {
+          "q": "Ibadahnya berbahasa apa?",
+          "a": "Bahasa Indonesia. Beberapa lagu memakai bahasa Inggris, dan situs ini tersedia dalam dua bahasa. Kalau Anda butuh pendampingan bahasa, hubungi sekretariat lebih dulu."
+        }
+      }
+    },
+    "sermon": {
+      "label": "Ruang & Suara",
+      "title": "Sepuluh detik sebelum siapa pun datang",
+      "lead": "Ini rekaman ruang ibadah kami sendiri, direkam saat kosong. Putar sambil membaca urutan ibadah — supaya Minggu pertama Anda tidak terasa seperti masuk ke ruangan yang asing.",
+      "play": "Putar",
+      "pause": "Jeda",
+      "restart": "Ulang dari awal",
+      "seek": "Geser posisi audio",
+      "waveform": "Gelombang suara ruang ibadah",
+      "orderLabel": "Urutan ibadah",
+      "note": "Rekaman suara ruangan, bukan rekaman ibadah.",
+      "teachingLabel": "Pengajaran",
+      "teachingTitle": "Bagaimana kami mengajar",
+      "teachingLead": "Bukan renungan motivasi, bukan juga kuliah teologi. Satu bagian Alkitab, dibaca dalam konteksnya, dijelaskan sampai jelas, lalu dibawa ke keputusan-keputusan nyata minggu itu.",
+      "watch": "Tonton ruang ibadah",
+      "watchTitle": "Ruang ibadah GKJ Tangerang",
+      "watchBody": "Rekaman ruang ibadah dari lorong tengah menuju mimbar.",
+      "closeVideo": "Tutup video",
+      "seriesLabel": "Seri saat ini",
+      "speakerLabel": "Pelayan firman",
+      "scriptureLabel": "Bacaan",
+      "archiveNote": "Rekaman khotbah dan renungan harian tersedia di Portal Jemaat."
+    },
+    "schedule": {
+      "label": "Jadwal & Lokasi",
+      "title": "Lima ibadah setiap minggu, dan sebuah kursi yang belum terisi",
+      "lead": "Dua Ibadah Umum pagi punya isi yang sama — yang berbeda hanya jumlah orang di ruangan. Sisanya punya ritmenya sendiri.",
+      "duration": "menit",
+      "services": {
+        "umumEarly": {
+          "name": "Ibadah Umum I",
+          "audience": "Lebih lengang, banyak jemaat senior",
+          "room": "Ruang Ibadah Utama"
+        },
+        "umumLate": {
+          "name": "Ibadah Umum II",
+          "audience": "Paling ramai, banyak keluarga muda",
+          "room": "Ruang Ibadah Utama"
+        },
+        "tyog": {
+          "name": "Ibadah TYOG",
+          "audience": "Pemuda & remaja, paralel dengan Ibadah Umum II",
+          "room": "Ruang Ibadah Utama"
+        },
+        "sekolahMinggu": {
+          "name": "Sekolah Minggu",
+          "audience": "Usia 3–12 tahun, paralel dengan Ibadah Umum II",
+          "room": "Ruang Sekolah Minggu"
+        },
+        "doa": {
+          "name": "Persekutuan Doa",
+          "audience": "Terbuka untuk semua, tengah minggu",
+          "room": "Ruang Ibadah Utama"
+        },
+        "yifalian": {
+          "name": "Ibadah Yi Fa Lian",
+          "audience": "Persekutuan jemaat lansia",
+          "room": "Ruang Ibadah Utama"
+        }
+      },
+      "campusLabel": "Lokasi",
+      "addressLabel": "Alamat",
+      "route": "Buka rute di Google Maps",
+      "livestreamLabel": "Ibadah online",
+      "livestream": "Tonton siaran langsung",
+      "livestreamFallback": "Tanya tautan siaran ke sekretariat",
+      "askSecretariat": "Hubungi sekretariat",
+      "addToCalendar": "Simpan ke kalender",
+      "calendarTitle": "Ibadah di {church}",
+      "parkingLabel": "Parkir",
+      "parkingBody": "Halaman gereja, dengan petugas pada jam ibadah.",
+      "every": "Setiap {day}"
+    },
+    "nextgen": {
+      "label": "Sekolah Minggu & Remaja",
+      "title": "Anak Anda tidak dititipkan. Mereka diajar.",
+      "lead": "Sekolah Minggu berjalan bersamaan dengan Ibadah Umum II pukul 10.00, dengan kurikulum yang berurutan sepanjang tahun — bukan aktivitas pengisi waktu sampai orang tuanya selesai.",
+      "points": {
+        "safety": {
+          "title": "Penjemputan tercatat",
+          "body": "Setiap anak diantar dan dijemput dengan kartu bernomor yang sama. Anak hanya diserahkan kepada pemegang kartu."
+        },
+        "curriculum": {
+          "title": "Kurikulum berurutan",
+          "body": "Satu alur cerita Alkitab sepanjang tahun, dibagi menurut kelompok umur, sehingga anak tidak mendengar cerita yang sama berulang tanpa arah."
+        },
+        "teachers": {
+          "title": "Pengajar yang sama",
+          "body": "Pengajar dan pendamping melayani dalam kelompok tetap, supaya anak mengenal orang dewasa yang mengajarnya."
+        },
+        "youth": {
+          "title": "Remaja & pemuda",
+          "body": "Ibadah Sabtu malam dengan format yang lebih terbuka untuk bertanya, dilanjutkan kelompok kecil pada hari lain."
+        }
+      },
+      "cta": "Tanya soal Sekolah Minggu",
+      "waMessage": "Selamat pagi, saya ingin bertanya tentang Sekolah Minggu di {church}."
+    },
+    "mission": {
+      "label": "Cara kami bekerja",
+      "acronym": "PIKP3",
+      "expansion": "Persatuan · Ibadah dan Doa · Kelompok Kecil · Pembinaan · Penginjilan · Pelayanan Sosial",
+      "lead": "Enam komitmen yang menentukan ke mana waktu, tenaga, dan dana jemaat ini pergi.",
+      "item1": "Memperkokoh Persatuan dan Kesatuan GKJ.",
+      "item2": "Membimbing setiap jemaat intim dengan Tuhan melalui Ibadah dan Doa.",
+      "item3": "Menggembalakan jemaat melalui Kelompok Kecil.",
+      "item4": "Melatih dan memperlengkapi jemaat melalui pembinaan yang berkesinambungan.",
+      "item5": "Mengobarkan semangat jemaat dalam memberitakan Anugerah keselamatan.",
+      "item6": "Melakukan Pelayanan Sosial dengan kasih."
+    },
+    "photo": {
+      "gathering": {
+        "alt": "Jemaat GKJ Tangerang menundukkan kepala dalam doa di ruang ibadah berlangit-langit kayu",
+        "caption": "Doa bersama, Ibadah Umum II",
+        "credit": "Ruang Ibadah Utama"
+      },
+      "fellowship": {
+        "alt": "Beberapa keluarga dan kaum muda berbincang sambil minum kopi di kafe gereja",
+        "caption": "Selasar, sesudah ibadah",
+        "credit": "Kopi kedua"
+      },
+      "nextgen": {
+        "alt": "Anak-anak Sekolah Minggu mewarnai gambar merpati di meja bersama pengajarnya",
+        "caption": "Sekolah Minggu, kelompok usia 4–6",
+        "credit": "Ruang Sekolah Minggu"
+      },
+      "visit": {
+        "alt": "Seorang penyambut mempersilakan satu keluarga masuk melalui pintu kayu gereja",
+        "caption": "Pintu utama, Minggu pagi",
+        "credit": "Anda tidak perlu tahu harus ke mana"
+      },
+      "detail": {
+        "alt": "Alkitab terbuka dengan pembatas kain merah dan cawan perjamuan dari keramik di atas linen",
+        "caption": "Perjamuan Kudus",
+        "credit": "Roti, cawan, dan satu meja"
+      }
+    },
+    "giving": {
+      "label": "Persembahan",
+      "title": "Diberikan dengan bebas, dicatat dengan terbuka",
+      "lead": "Tidak ada target di layar dan tidak ada kantong yang diedarkan dua kali. Kalau Anda baru pertama kali datang, kami justru berharap Anda tidak memberi apa-apa minggu ini.",
+      "qrisTab": "QRIS",
+      "bankTab": "Transfer Bank",
+      "qrisTitle": "Pindai dengan aplikasi apa pun",
+      "qrisBody": "QRIS dapat dibaca oleh seluruh aplikasi bank dan dompet digital di Indonesia.",
+      "qrisMissing": "Kode QRIS belum diunggah untuk deployment ini. Gunakan transfer bank di samping, atau minta kode terbaru ke sekretariat.",
+      "qrisAlt": "Kode QRIS untuk persembahan",
+      "bankLabel": "Bank",
+      "accountLabel": "Nomor rekening",
+      "holderLabel": "Atas nama",
+      "copy": "Salin",
+      "copied": "Tersalin",
+      "copyFailed": "Tidak bisa menyalin otomatis — silakan salin manual",
+      "open": "Cara memberi",
+      "close": "Tutup",
+      "confirm": "Konfirmasi lewat WhatsApp",
+      "confirmMessage": "Selamat pagi, saya baru mengirim persembahan ke rekening {bank} {account}.",
+      "transparencyLabel": "Ke mana dananya",
+      "transparency": "Persembahan dipakai untuk operasional gereja, pembinaan jemaat, dan pelayanan sosial. Laporan keuangan dibacakan dalam kebaktian jemaat dan tersedia bagi anggota melalui Portal Jemaat."
+    },
+    "visit": {
+      "label": "Rencanakan kunjungan",
+      "title": "Datang saja. Sisanya kami urus.",
+      "lead": "Kalau Anda ingin ditemani pada kunjungan pertama, kirim pesan ke sekretariat dan sebutkan jam ibadah yang Anda pilih. Akan ada yang menunggu Anda di pintu.",
+      "steps": {
+        "one": {
+          "title": "Pilih jam",
+          "body": "Minggu 07.00, Minggu 10.00, Rabu 19.00, atau Sabtu 13.00."
+        },
+        "two": {
+          "title": "Kirim pesan",
+          "body": "Satu baris ke sekretariat sudah cukup."
+        },
+        "three": {
+          "title": "Ditemui di pintu",
+          "body": "Termasuk mengantar anak ke Sekolah Minggu."
+        }
+      },
+      "cta": "Kirim pesan ke sekretariat",
+      "waMessage": "Selamat pagi, saya ingin datang beribadah di {church} untuk pertama kali. Boleh dibantu?",
+      "secondary": "Buka rute"
+    },
+    "footer": {
+      "legalLabel": "Nama lengkap",
+      "addressLabel": "Alamat",
+      "contactLabel": "Kontak",
+      "hoursLabel": "Jam sekretariat",
+      "hours": "Selasa – Jumat, 09.00 – 16.00 WIB",
+      "whatsappLabel": "WhatsApp sekretariat",
+      "faithLabel": "Dasar iman",
+      "faithBody": "Kami mengaku Alkitab sebagai firman Allah yang tertulis, satu-satunya dasar iman dan kehidupan jemaat; dan Yesus Kristus sebagai Tuhan dan Juruselamat, oleh anugerah, melalui iman.",
+      "faithVerse": "Efesus 2:8",
+      "navLabel": "Halaman",
+      "accessLabel": "Masuk",
+      "portal": "Portal Jemaat",
+      "staff": "Pengurus & Staf",
+      "rights": "Seluruh hak dilindungi.",
+      "backToTop": "Kembali ke atas"
+    },
+    "stories": {
+      "label": "Cerita",
+      "title": "Empat generasi, satu ruangan, setiap Minggu.",
+      "lead": "Nenek yang hafal semua lagu, anak yang baru belajar duduk tenang, dan mahasiswa yang minggu lalu datang sendirian — semuanya di baris kursi yang sama."
+    },
+    "devotional": {
+      "label": "Renungan",
+      "title": "Satu bacaan pendek, setiap hari",
+      "lead": "Ditulis oleh pendeta dan pelayan jemaat kami sendiri — bukan kutipan yang diteruskan dari tempat lain. Bisa dibaca tanpa akun, dalam dua menit, sebelum hari Anda dimulai.",
+      "todayLabel": "Renungan terbaru",
+      "read": "Baca renungan",
+      "all": "Lihat semua renungan",
+      "archiveTitle": "Renungan",
+      "archiveLead": "Seluruh arsip renungan harian {church}, terbuka untuk siapa pun. Bacaan terbaru di atas.",
+      "archiveEmpty": "Belum ada renungan yang diterbitkan. Sekretariat menerbitkan bacaan baru setiap pekan — coba lagi nanti, atau ikuti lewat Portal Jemaat.",
+      "articleBack": "Semua renungan",
+      "prev": "Renungan sebelumnya",
+      "next": "Renungan berikutnya",
+      "by": "Ditulis oleh",
+      "publishedOn": "Diterbitkan",
+      "page": "Halaman {page} dari {pageCount}",
+      "newer": "Lebih baru",
+      "older": "Lebih lama",
+      "count": "{count} renungan",
+      "metaDescription": "Renungan harian dari {church}. Satu bacaan Alkitab pendek, ditulis untuk dijalani hari itu."
+    },
+    "notFound": {
+      "code": "404",
+      "title": "Halaman ini tidak ada — tetapi Anda tetap kami sambut.",
+      "body": "Tautannya mungkin sudah berubah, atau kami salah tulis. Yang jelas jadwal ibadah dan renungan harian masih di tempatnya.",
+      "home": "Kembali ke halaman utama",
+      "devotionalCta": "Baca renungan"
+    }
   }
 }

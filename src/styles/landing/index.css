@@ -1,0 +1,3127 @@
+/* ==========================================================================
+ * SACRED MODERNISM — the landing page's own design system.
+ *
+ * Deliberately NOT built on the app's M3 tokens. The member/admin app is a
+ * utilitarian Material 3 product; this page is an editorial artefact with one
+ * committed art direction, and mixing the two produced the incoherence the
+ * page was rebuilt to remove. Nothing here reads a `--md-sys-*` variable and
+ * nothing here is theme-switchable.
+ *
+ * Every colour below was sampled from the supplied footage and photography
+ * (`hero.mp4`, `detail.jpeg`, `gathering.jpeg`) rather than picked from a
+ * palette generator, which is why the page and the photographs read as the
+ * same material rather than as a UI wrapped around images.
+ *
+ * Type styles are COMPLETE utilities — family, weight, size, leading and
+ * tracking in one class. Splitting family into one class and size into a
+ * Tailwind `text-*` does not work: Tailwind's size utilities also set
+ * `line-height`, so the two fight and the winner depends on stylesheet order.
+ * Never reach for `text-*` / `font-*` / `tracking-*` on landing markup.
+ *
+ * This file is unlayered on purpose. Tailwind v4 emits into real
+ * `@layer utilities`, and unlayered CSS outranks every cascade layer, so these
+ * classes win their property conflicts regardless of import order.
+ * ========================================================================== */
+
+.sm-root {
+  /* --- ground: limestone ------------------------------------------------ */
+  --sm-page: #f3eee5;
+  --sm-page-2: #e9e1d4;
+  --sm-linen: #dcd1bf;
+
+  /* --- ground: obsidian (warm, never neutral black) --------------------- */
+  --sm-obsidian: #161210;
+  --sm-obsidian-2: #201a16;
+  --sm-obsidian-3: #2c241e;
+
+  /* --- ink -------------------------------------------------------------- */
+  --sm-ink: #201a16;
+  --sm-ink-2: #5e534a;
+  /* Measured against the rendered page, not chosen by eye. The original
+   * #857868 gave 3.72:1 on limestone, which is fine for display sizes and not
+   * fine for the 11px schedule labels and the "add to calendar" link that
+   * actually used it. This value clears 4.5:1 on both limestone (5.13) and
+   * recessed stone (4.57) while staying a clear step below `--sm-ink-2`. */
+  --sm-ink-3: #6e6255;
+  --sm-paper: #f6f1e8;
+  --sm-paper-2: #cbbfae;
+  --sm-paper-3: #9c9081;
+
+  /* --- interactive accent: the crest's blue ----------------------------
+   * Taken from the Sinode GKJ seal, which is 58% blue at 197-210 degrees.
+   * The app previously carried `#0F766E`, byte-identical to the value in
+   * `.env.example` — a placeholder that had never been replaced, and a hue
+   * that appears nowhere in the church's identity.
+   *
+   * Blue is what lets one accent serve both surfaces. A warm accent cannot:
+   * every warm seed lands within 6 degrees of the M3 `warning` role (seeded
+   * `#f59e0b`), and their containers come out visually identical — in an app
+   * whose warning role guards children's check-in and volunteer assignment,
+   * "the primary action" and "something needs attention" must not match.
+   * Blue sits 178 degrees away.
+   *
+   * One value per mode clears AA on every ground: 6.70 / 5.97 / 5.13 on
+   * limestone, stone and linen; 8.66 on obsidian. The amber it replaces
+   * managed only 3.01 on limestone and needed a second darker hex for small
+   * text at all.
+   * -------------------------------------------------------------------- */
+  /* Exact tones of the same palette `scripts/build-theme.cjs` generates for
+   * the app from this seed, so the two surfaces are provably the same hue and
+   * the relationship is traceable rather than eyeballed. The landing sits on
+   * warmer, darker grounds than the app's near-white surface, so it takes the
+   * step-darker tone on light and the step-richer tone on obsidian:
+   *
+   *   landing light ground   tone 35   app light surface   tone 40
+   *   landing obsidian       tone 70   app dark surface    tone 80
+   */
+  /* The primary call to action: one fill for the entire product.
+   *
+   * This is the crest blue as sampled (#0060c0) lifted eight units, which is
+   * the least change that clears 3:1 against *every* ground the page uses —
+   * limestone, stone, linen, obsidian and obsidian-2 — so the most important
+   * control on the site is the same colour everywhere instead of swapping
+   * tone per section. At full chroma it holds its own against the warm
+   * footage; the M3 tonalspot tones below are deliberately desaturated and
+   * read as washed-out lavender when used as a button on the hero. */
+  --sm-cta: #0068d0;
+  --sm-cta-deep: #00559f; /* hover, on light grounds only — see the button */
+
+  --sm-blue: #345284; /* tone 35 */
+  --sm-blue-lit: #8face3; /* tone 70 */
+  --sm-blue-quiet: #d7e3ff; /* tone 90 */
+  --sm-blue-deep: #284777; /* tone 30 */
+
+  /* --- accents: timber and morning amber -------------------------------- */
+  --sm-timber: #a9784a;
+  --sm-amber: #c07a21;
+  /* Small amber text on limestone needs 4.5:1; `--sm-amber` only reaches
+   * 3.01:1 and is therefore restricted to display sizes and rules. */
+  --sm-amber-ink: #8a4f0e;
+  --sm-amber-lit: #e7b267;
+  --sm-crimson: #7c1f22;
+
+  /* --- tone contract ---------------------------------------------------
+   * Sections swap these four, and every component inside reads them. This is
+   * what makes section rhythm a change of light rather than a repeated badge.
+   * -------------------------------------------------------------------- */
+  --sm-bg: var(--sm-page);
+  --sm-fg: var(--sm-ink);
+  --sm-fg-muted: var(--sm-ink-2);
+  --sm-fg-faint: var(--sm-ink-3);
+  --sm-rule: rgba(32, 26, 22, 0.14);
+  --sm-rule-strong: rgba(32, 26, 22, 0.28);
+  --sm-lift: rgba(255, 255, 255, 0.5);
+  /* Two accent roles, and the split is the whole point of the scheme.
+   *
+   * `--sm-accent`         interactive. Anything that answers to a person:
+   *                       buttons, links, focus rings, hover and active
+   *                       states, controls. Shared with the app.
+   * `--sm-accent-display` material. The building's own light — chapter
+   *                       numerals, Scripture citations, hairline rules, the
+   *                       clerestory. Stays warm, because every supplied
+   *                       photograph sits at 20-35 degrees and the accent has
+   *                       to be the same substance as the room. */
+  --sm-accent: var(--sm-blue);
+  --sm-accent-display: var(--sm-amber);
+
+  /* --- motion ----------------------------------------------------------- */
+  --sm-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --sm-ease-io: cubic-bezier(0.65, 0, 0.35, 1);
+  --sm-dur: 720ms;
+  --sm-dur-fast: 340ms;
+
+  --sm-serif-stack: var(--font-sm-serif), "Iowan Old Style", "Palatino Linotype",
+    ui-serif, Georgia, serif;
+  --sm-sans-stack: var(--font-sm-sans), ui-sans-serif, "Helvetica Neue", Arial,
+    sans-serif;
+
+  background: var(--sm-bg);
+  color: var(--sm-fg);
+  font-family: var(--sm-sans-stack);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Overscroll bounce and the area behind a short page both paint from <html>,
+ * so the document has to know the page opens on obsidian. */
+html:has(.sm-root) {
+  background: #161210;
+  /* Horizontal overflow is clipped at the root, NOT on `.sm-root`.
+   * The page pins sections, and GSAP pins with `position: fixed`; an
+   * `overflow: clip` on an ancestor element clips fixed descendants, so
+   * putting it there would silently swallow every pinned chapter. At the root
+   * the clip is the viewport's own, which fixed positioning already respects. */
+  overflow-x: clip;
+}
+html:has(.sm-root) body {
+  background: transparent;
+}
+
+/* --- tonal rooms --------------------------------------------------------- */
+.sm-tone-dark {
+  --sm-bg: var(--sm-obsidian);
+  --sm-fg: var(--sm-paper);
+  --sm-fg-muted: var(--sm-paper-2);
+  --sm-fg-faint: var(--sm-paper-3);
+  --sm-rule: rgba(246, 241, 232, 0.16);
+  --sm-rule-strong: rgba(246, 241, 232, 0.34);
+  --sm-lift: rgba(246, 241, 232, 0.1);
+  --sm-accent: var(--sm-blue-lit);
+  --sm-accent-display: var(--sm-amber-lit);
+  background: var(--sm-bg);
+  color: var(--sm-fg);
+}
+.sm-tone-dark-2 {
+  --sm-bg: var(--sm-obsidian-2);
+}
+.sm-tone-light {
+  --sm-bg: var(--sm-page);
+  --sm-fg: var(--sm-ink);
+  --sm-fg-muted: var(--sm-ink-2);
+  --sm-fg-faint: var(--sm-ink-3);
+  --sm-rule: rgba(32, 26, 22, 0.14);
+  --sm-rule-strong: rgba(32, 26, 22, 0.28);
+  --sm-lift: rgba(255, 255, 255, 0.5);
+  --sm-accent: var(--sm-blue);
+  --sm-accent-display: var(--sm-amber);
+  background: var(--sm-bg);
+  color: var(--sm-fg);
+}
+.sm-tone-stone {
+  --sm-bg: var(--sm-page-2);
+  background: var(--sm-bg);
+}
+/* Linen is the deepest of the light grounds, so its whole ink ramp shifts
+ * down with it — the page-level muted and faint roles do not clear 4.5:1
+ * against it. */
+.sm-tone-linen {
+  --sm-bg: var(--sm-linen);
+  --sm-fg-muted: #4e443c;
+  --sm-fg-faint: #5a4f45;
+  --sm-rule: rgba(32, 26, 22, 0.2);
+  background: var(--sm-bg);
+}
+
+/* ==========================================================================
+ * TYPE SCALE
+ * Sizes are clamp() rather than breakpoint steps. The preferred (vw) term can
+ * undershoot its ceiling and silently render smaller than intended, so any
+ * change here gets checked at 390px AND 1440px.
+ * ========================================================================== */
+
+.sm-display {
+  font-family: var(--sm-serif-stack);
+  font-weight: 300;
+  font-size: clamp(2.875rem, 8.4vw, 8.25rem);
+  line-height: 0.94;
+  letter-spacing: -0.028em;
+  font-variation-settings: "opsz" 60;
+}
+.sm-h1 {
+  font-family: var(--sm-serif-stack);
+  font-weight: 300;
+  font-size: clamp(2.25rem, 5.4vw, 4.75rem);
+  line-height: 1;
+  letter-spacing: -0.024em;
+  font-variation-settings: "opsz" 48;
+}
+.sm-h2 {
+  font-family: var(--sm-serif-stack);
+  font-weight: 300;
+  font-size: clamp(1.75rem, 3.4vw, 3rem);
+  line-height: 1.08;
+  letter-spacing: -0.018em;
+  font-variation-settings: "opsz" 36;
+}
+.sm-h3 {
+  font-family: var(--sm-serif-stack);
+  font-weight: 400;
+  font-size: clamp(1.3125rem, 2vw, 1.75rem);
+  line-height: 1.16;
+  letter-spacing: -0.012em;
+  font-variation-settings: "opsz" 24;
+}
+/* The one heading role that goes to the grotesque: it labels operational
+ * blocks (schedule rows, giving methods) where a serif would read as prose. */
+.sm-h4 {
+  font-family: var(--sm-sans-stack);
+  font-weight: 600;
+  font-size: clamp(1rem, 1.15vw, 1.125rem);
+  line-height: 1.32;
+  letter-spacing: -0.008em;
+}
+.sm-quote {
+  font-family: var(--sm-serif-stack);
+  font-weight: 300;
+  font-style: italic;
+  font-size: clamp(1.5rem, 3.5vw, 3.25rem);
+  line-height: 1.16;
+  letter-spacing: -0.02em;
+  font-variation-settings: "opsz" 40;
+}
+.sm-numeral {
+  font-family: var(--sm-serif-stack);
+  font-weight: 200;
+  font-size: clamp(3.5rem, 7vw, 7rem);
+  line-height: 0.8;
+  letter-spacing: -0.03em;
+  font-variant-numeric: lining-nums;
+  font-variation-settings: "opsz" 72;
+}
+.sm-lead {
+  font-family: var(--sm-sans-stack);
+  font-weight: 400;
+  font-size: clamp(1.0625rem, 1.45vw, 1.375rem);
+  line-height: 1.6;
+  letter-spacing: -0.006em;
+}
+.sm-body {
+  font-family: var(--sm-sans-stack);
+  font-weight: 400;
+  font-size: clamp(0.9375rem, 1.05vw, 1.0625rem);
+  line-height: 1.7;
+  letter-spacing: -0.003em;
+}
+.sm-small {
+  font-family: var(--sm-sans-stack);
+  font-weight: 400;
+  font-size: 0.8125rem;
+  line-height: 1.62;
+  letter-spacing: 0;
+}
+.sm-label {
+  font-family: var(--sm-sans-stack);
+  font-weight: 500;
+  font-size: 0.6875rem;
+  line-height: 1;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-feature-settings: "tnum" 1;
+}
+/* A margin kicker wraps to two lines at narrow widths, and `line-height: 1`
+ * collides the uppercase forms when it does. Set on the shared roles rather
+ * than patched per call site. */
+.sm-label,
+.sm-label-lg {
+  line-height: 1.4;
+}
+.sm-label-lg {
+  font-family: var(--sm-sans-stack);
+  font-weight: 500;
+  font-size: 0.8125rem;
+  line-height: 1.1;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+.sm-nav {
+  font-family: var(--sm-sans-stack);
+  font-weight: 500;
+  font-size: 0.8125rem;
+  line-height: 1;
+  letter-spacing: 0.005em;
+}
+.sm-action {
+  font-family: var(--sm-sans-stack);
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1;
+  letter-spacing: 0.01em;
+}
+.sm-num {
+  font-family: var(--sm-sans-stack);
+  font-weight: 500;
+  font-size: clamp(1.5rem, 2.4vw, 2.125rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+.sm-num-sm {
+  font-family: var(--sm-sans-stack);
+  font-weight: 500;
+  font-size: 0.9375rem;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+.sm-account {
+  font-family: var(--sm-sans-stack);
+  font-weight: 500;
+  font-size: clamp(1.125rem, 1.7vw, 1.5rem);
+  line-height: 1.1;
+  letter-spacing: 0.07em;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+/* Newsreader ships a true italic, so `<em>` is safe here — unlike Manrope
+ * elsewhere in the app, which has no italic cut and gets synthesised. */
+.sm-em {
+  font-style: italic;
+}
+
+/* ==========================================================================
+ * SHELL & GRID — the liturgical margin
+ * A narrow metadata column (chapter numerals, Scripture refs, timestamps)
+ * runs beside a wide narrative column. It is the page's signature and the
+ * reason nothing here needs a card border to feel structured.
+ * ========================================================================== */
+
+.sm-shell {
+  width: 100%;
+  max-width: 96rem;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 4.6vw, 5.5rem);
+}
+.sm-shell-wide {
+  width: 100%;
+  max-width: 110rem;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 4.6vw, 5.5rem);
+}
+.sm-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: clamp(1rem, 2.2vw, 2.5rem);
+}
+.sm-col-margin {
+  grid-column: 1 / -1;
+}
+.sm-col-main {
+  grid-column: 1 / -1;
+}
+.sm-col-half {
+  grid-column: 1 / -1;
+}
+.sm-col-wide {
+  grid-column: 1 / -1;
+}
+@media (min-width: 62rem) {
+  .sm-col-margin {
+    grid-column: 1 / span 2;
+  }
+  .sm-col-main {
+    grid-column: 4 / span 7;
+  }
+  .sm-col-half {
+    grid-column: 4 / span 5;
+  }
+  .sm-col-wide {
+    grid-column: 3 / span 10;
+  }
+}
+
+/* Vertical rhythm: tall before a change of tone, tight inside a chapter. */
+.sm-section {
+  padding-block: clamp(4.5rem, 11vh, 9rem);
+}
+.sm-section-tall {
+  padding-block: clamp(6rem, 17vh, 14rem);
+}
+.sm-section-tight {
+  padding-block: clamp(3rem, 6vh, 5rem);
+}
+
+/* ==========================================================================
+ * RULES & MARKERS — structure without card borders
+ * ========================================================================== */
+
+.sm-rule-t {
+  border-top: 1px solid var(--sm-rule);
+}
+.sm-rule-b {
+  border-bottom: 1px solid var(--sm-rule);
+}
+.sm-rule-l {
+  border-left: 1px solid var(--sm-rule);
+}
+
+/* A short amber tick that opens a metadata line. Replaces the pill badge. */
+.sm-tick {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--sm-fg-muted);
+}
+.sm-tick::before {
+  content: "";
+  width: clamp(1.5rem, 3vw, 2.75rem);
+  height: 1px;
+  background: var(--sm-accent-display);
+  flex: none;
+}
+
+.sm-eyebrow {
+  color: var(--sm-fg-muted);
+}
+
+/* ==========================================================================
+ * CONTROLS
+ * ========================================================================== */
+
+.sm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  padding: 1.0625rem 1.75rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    background-color var(--sm-dur-fast) var(--sm-ease),
+    color var(--sm-dur-fast) var(--sm-ease),
+    border-color var(--sm-dur-fast) var(--sm-ease),
+    box-shadow var(--sm-dur-fast) var(--sm-ease),
+    transform var(--sm-dur-fast) var(--sm-ease);
+}
+.sm-btn:active {
+  transform: translateY(1px);
+}
+/* The primary call to action, tone-aware.
+ *
+ * A single blue cannot serve both grounds: `--sm-blue` on obsidian is 2.4:1,
+ * so the hero's button would sink into the footage, and `--sm-blue-lit` on
+ * limestone is 1.6:1. Each ground gets the tone that has presence on it, and
+ * the label takes whichever of ink or paper clears 4.5:1 against that fill. */
+/* One fill, every ground.
+ *
+ * Hover works differently on the two grounds, and not for taste — the base
+ * fill sits at the only point that satisfies both gates at once (paper label
+ * 4.80:1, shape 3.45:1 on obsidian), so on a dark ground *any* change to the
+ * fill breaks one of them: lighter drops the label under 4.5, darker drops the
+ * shape under 3. Limestone has room to deepen, so it does. Obsidian keeps the
+ * fill and takes a paper ring instead. */
+.sm-btn-primary {
+  background: var(--sm-cta);
+  color: var(--sm-paper);
+  box-shadow: 0 0 0 0 transparent;
+}
+.sm-btn-primary:hover {
+  background: var(--sm-cta-deep);
+}
+.sm-tone-dark .sm-btn-primary:hover,
+.sm-nav-bar .sm-btn-primary:hover {
+  background: var(--sm-cta);
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--sm-paper) 62%, transparent);
+}
+.sm-btn-solid {
+  background: var(--sm-fg);
+  color: var(--sm-bg);
+}
+.sm-btn-solid:hover {
+  background: var(--sm-accent);
+  color: var(--sm-bg);
+}
+.sm-btn-ghost {
+  border-color: var(--sm-rule-strong);
+  color: var(--sm-fg);
+  background: transparent;
+}
+.sm-btn-ghost:hover {
+  border-color: var(--sm-fg);
+  background: color-mix(in oklab, var(--sm-fg) 7%, transparent);
+}
+.sm-btn-sm {
+  padding: 0.75rem 1.25rem;
+}
+
+/* An underline that draws from the left on hover — the page's one recurring
+ * link affordance, used instead of a colour change so nav reads as engraved. */
+.sm-link {
+  position: relative;
+  color: var(--sm-fg);
+  text-decoration: none;
+  padding-block: 0.25rem;
+}
+.sm-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 1px;
+  width: 100%;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--sm-dur-fast) var(--sm-ease);
+}
+.sm-link:hover::after,
+.sm-link[aria-current="true"]::after {
+  transform: scaleX(1);
+}
+.sm-link-muted {
+  color: var(--sm-fg-muted);
+  transition: color var(--sm-dur-fast) var(--sm-ease);
+}
+.sm-link-muted:hover {
+  color: var(--sm-fg);
+}
+
+/* One focus treatment for the whole page: a warm ring that reads on both
+ * limestone and obsidian. */
+/* One focus treatment, and it follows the tone contract rather than being
+ * pinned to a single hex: amber-on-obsidian was fine, but the same amber on
+ * limestone is 3.01:1 — under the 3:1 floor once antialiasing is accounted
+ * for. `--sm-accent` is 6.70 on limestone and 8.66 on obsidian. */
+.sm-root :where(a, button, [tabindex]):focus-visible,
+.sm-root :where(input, textarea, summary):focus-visible {
+  outline: 2px solid var(--sm-accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ==========================================================================
+ * PHOTOGRAPHY
+ * Warm multiply shadow, never a black scrim — a black overlay desaturates
+ * skin tones and is what makes stock-photo church sites look cold.
+ * ========================================================================== */
+
+.sm-figure {
+  position: relative;
+  overflow: hidden;
+  background: var(--sm-obsidian-2);
+}
+.sm-figure img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.sm-figure-shade::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to top,
+    rgba(22, 18, 16, 0.82) 0%,
+    rgba(22, 18, 16, 0.34) 42%,
+    rgba(22, 18, 16, 0) 78%
+  );
+}
+.sm-figure-warm::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  background: linear-gradient(
+    155deg,
+    rgba(243, 238, 229, 0) 30%,
+    rgba(169, 120, 74, 0.22) 100%
+  );
+}
+.sm-figure-caption {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 2;
+  padding: clamp(1rem, 2.4vw, 2rem);
+  color: var(--sm-paper);
+}
+
+/* ==========================================================================
+ * REVEAL BASE — hidden state is opt-IN, not opt-out
+ *
+ * The pre-animation state is gated on `.sm-root[data-motion="on"]`, which a
+ * parse-blocking inline script sets before first paint. Three cases fall out
+ * of that, and all three are correct:
+ *
+ *   no JavaScript     -> the attribute is never written, nothing is hidden,
+ *                        the page reads as a static editorial document
+ *   reduced motion    -> the script writes "off", nothing is hidden
+ *   normal            -> the script writes "on" during parse, so the hidden
+ *                        state is in place before the first paint and there
+ *                        is no flash of the resolved layout
+ *
+ * Doing this the usual way — `gsap.set()` in an effect — flashes, because
+ * React hydrates after the browser has already painted.
+ * ========================================================================== */
+
+.sm-root[data-motion="on"] [data-sm-reveal] {
+  opacity: 0;
+  will-change: transform, opacity;
+}
+.sm-root[data-motion="on"] [data-sm-reveal="up"] {
+  transform: translate3d(0, 2.25rem, 0);
+}
+.sm-root[data-motion="on"] [data-sm-reveal="rise"] {
+  transform: translate3d(0, 4.5rem, 0);
+}
+.sm-root[data-motion="on"] [data-sm-reveal="fade"] {
+  transform: none;
+}
+/* Figures wipe open from the bottom edge rather than fading: a fade over
+ * photography reads as a loading state, a wipe reads as a curtain. */
+.sm-root[data-motion="on"] [data-sm-mask] {
+  clip-path: inset(0 0 100% 0);
+  will-change: clip-path;
+}
+.sm-root[data-motion="on"] [data-sm-split] {
+  opacity: 0;
+}
+
+/* ==========================================================================
+ * LENIS
+ * Only the rules Lenis actually needs, rather than importing its stylesheet:
+ * the package's CSS also styles horizontal instances we do not use.
+ * ========================================================================== */
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+/* ==========================================================================
+ * REDUCED MOTION
+ * Graceful static fades: reveals resolve, masks open, parallax is inert.
+ * ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .sm-root *,
+  .sm-root *::before,
+  .sm-root *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .sm-root [data-sm-mask] {
+    clip-path: none !important;
+  }
+  .sm-root [data-sm-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    will-change: auto;
+  }
+}
+
+/* SplitText inserts these; `overflow: clip` on the mask wrapper is what lets a
+ * line slide out from behind its own edge instead of appearing through it. */
+.sm-split-line {
+  will-change: transform;
+}
+.sm-root [data-sm-split] > div {
+  overflow: clip;
+}
+
+/* ==========================================================================
+ * NAVIGATION
+ * The bar sits on obsidian glass in both states so its text colour never has
+ * to track the section behind it — the page alternates limestone and obsidian
+ * rooms, and a nav that recolours per section is a permanent source of
+ * one-frame-wrong contrast.
+ * ========================================================================== */
+
+.sm-nav-bar {
+  --sm-fg: var(--sm-paper);
+  --sm-fg-muted: var(--sm-paper-2);
+  --sm-rule: rgba(246, 241, 232, 0.16);
+  --sm-rule-strong: rgba(246, 241, 232, 0.34);
+  --sm-accent: var(--sm-amber-lit);
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  z-index: 60;
+  color: var(--sm-fg);
+  padding-block: clamp(1rem, 2vw, 1.75rem);
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  transition:
+    padding-block var(--sm-dur) var(--sm-ease),
+    background-color var(--sm-dur) var(--sm-ease),
+    border-color var(--sm-dur) var(--sm-ease),
+    backdrop-filter var(--sm-dur) var(--sm-ease);
+}
+/* A gradient scrim only over the top edge, so the wordmark keeps its contrast
+ * against the brightest part of the footage without dimming the whole frame. */
+.sm-nav-bar::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 190%;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(22, 18, 16, 0.66) 0%,
+    rgba(22, 18, 16, 0.28) 45%,
+    rgba(22, 18, 16, 0) 100%
+  );
+  transition: opacity var(--sm-dur) var(--sm-ease);
+}
+/* The condensed bar carries its legibility in the background alpha alone.
+ *
+ * At 0.78 an amber CTA or a serif chapter title scrolling underneath read
+ * straight through it. The obvious fix was to gate the translucent value on
+ * `@supports (backdrop-filter: ...)` — but that query passes in contexts where
+ * the property is then inert (GPU compositing unavailable being the common
+ * one), so the guard guarded nothing and the bleed-through stayed. One value
+ * that works everywhere beats a feature query that lies: the blur is now pure
+ * polish on top of a background that is already opaque enough. */
+.sm-nav-bar[data-condensed] {
+  padding-block: 0.75rem;
+  background: rgba(22, 18, 16, 0.95);
+  border-bottom-color: var(--sm-rule);
+  backdrop-filter: blur(20px) saturate(1.15);
+  -webkit-backdrop-filter: blur(20px) saturate(1.15);
+}
+.sm-nav-bar[data-condensed]::before {
+  opacity: 0;
+}
+
+.sm-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+}
+.sm-lockup-crest {
+  width: auto;
+  height: clamp(1.75rem, 2.6vw, 2.375rem);
+  flex: none;
+  transition: transform var(--sm-dur) var(--sm-ease);
+}
+.sm-lockup:hover .sm-lockup-crest {
+  transform: scale(1.05);
+}
+.sm-lockup-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1875rem;
+  border-left: 1px solid var(--sm-rule);
+  padding-left: 0.75rem;
+}
+.sm-lockup {
+  min-width: 0;
+}
+.sm-lockup-line1 {
+  font-family: var(--sm-sans-stack);
+  font-weight: 500;
+  font-size: 0.5rem;
+  line-height: 1;
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--sm-fg-muted);
+  white-space: nowrap;
+}
+.sm-lockup-line2 {
+  font-family: var(--sm-serif-stack);
+  font-weight: 400;
+  font-size: clamp(0.9375rem, 1.2vw, 1.0625rem);
+  line-height: 1;
+  letter-spacing: -0.012em;
+  white-space: nowrap;
+}
+
+.sm-menu-trigger {
+  border: 1px solid var(--sm-rule-strong);
+  border-radius: 999px;
+  padding: 0.625rem 1rem;
+  background: transparent;
+  color: var(--sm-fg);
+  cursor: pointer;
+  transition:
+    border-color var(--sm-dur-fast) var(--sm-ease),
+    background-color var(--sm-dur-fast) var(--sm-ease);
+}
+.sm-menu-trigger:hover {
+  border-color: var(--sm-fg);
+  background: rgba(246, 241, 232, 0.08);
+}
+
+.sm-menu-panel {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  /* Fully opaque: it is a navigation surface, not a scrim. */
+  background: var(--sm-obsidian);
+}
+.sm-menu-item {
+  display: flex;
+  align-items: baseline;
+  gap: 1.25rem;
+  width: 100%;
+  padding-block: 0.5rem;
+  background: none;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+  transition:
+    color var(--sm-dur-fast) var(--sm-ease),
+    padding-left var(--sm-dur) var(--sm-ease);
+}
+.sm-menu-item:hover {
+  padding-left: 0.625rem;
+  color: var(--sm-blue-lit);
+}
+.sm-menu-index {
+  color: var(--sm-fg-faint);
+  flex: none;
+  width: 2rem;
+}
+
+.sm-locale {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.125rem;
+  border: 1px solid var(--sm-rule);
+  border-radius: 999px;
+  padding: 0.1875rem;
+}
+.sm-locale-item {
+  border-radius: 999px;
+  padding: 0.375rem 0.5rem;
+  color: var(--sm-fg-muted);
+  text-decoration: none;
+  transition:
+    background-color var(--sm-dur-fast) var(--sm-ease),
+    color var(--sm-dur-fast) var(--sm-ease);
+}
+.sm-locale-item:hover {
+  color: var(--sm-fg);
+}
+.sm-locale-item[aria-current="true"] {
+  background: var(--sm-fg);
+  color: var(--sm-obsidian);
+}
+
+/* ==========================================================================
+ * HERO
+ * ========================================================================== */
+
+.sm-hero {
+  position: relative;
+  /* dvh so the first screen is not cut off behind a mobile URL bar, with vh as
+   * the fallback for engines that do not know dvh. */
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  isolation: isolate;
+  overflow: hidden;
+}
+.sm-hero-plate {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  /* The scale tween in the release timeline runs on this element, and scaling
+   * from the centre keeps the aisle's vanishing point where it started. */
+  transform-origin: 50% 55%;
+}
+.sm-hero-still,
+.sm-hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* The footage is a slow dolly toward the chancel; biasing the crop upward
+   * keeps the cross and the lit wall in frame on tall phone viewports rather
+   * than filling the screen with chair backs. */
+  object-position: 50% 42%;
+}
+.sm-hero-video {
+  opacity: 0;
+  transition: opacity 900ms var(--sm-ease);
+}
+.sm-hero-video[data-ready] {
+  opacity: 1;
+}
+/* Warm grade, multiplied into the footage rather than laid over it: an
+ * opaque black overlay flattens the limestone and kills the skin tones the
+ * rest of the page depends on. */
+.sm-hero-grade {
+  position: absolute;
+  inset: 0;
+  mix-blend-mode: multiply;
+  /* Restrained on purpose. The first version multiplied hard enough to turn
+   * the sanctuary's cream limestone into sepia mud — which threw away the
+   * single best quality of the footage. The grade now only warms the light
+   * and deepens the corners; the type gets its contrast from the directional
+   * scrim below, not from dimming the whole frame. */
+  background:
+    radial-gradient(
+      130% 85% at 52% 14%,
+      rgba(255, 243, 222, 0.52) 0%,
+      rgba(206, 162, 112, 0.34) 58%,
+      rgba(70, 55, 44, 0.62) 100%
+    );
+}
+/* Contrast floor for the type, weighted to the bottom third where it sits. */
+/* Two scrims doing two different jobs. The vertical one guarantees the rail's
+ * contrast at the bottom edge; the raking horizontal one carries the headline,
+ * and because the type is left-aligned it can fall away entirely on the right
+ * and leave the chancel and the lit wall visible. A single flat overlay heavy
+ * enough for the type would have to dim all of it. */
+.sm-hero-plate::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      100deg,
+      rgba(16, 12, 10, 0.88) 0%,
+      rgba(16, 12, 10, 0.66) 34%,
+      rgba(16, 12, 10, 0.22) 66%,
+      rgba(16, 12, 10, 0.04) 100%
+    ),
+    linear-gradient(
+      to top,
+      rgba(16, 12, 10, 0.82) 0%,
+      rgba(16, 12, 10, 0.4) 26%,
+      rgba(16, 12, 10, 0) 56%
+    );
+}
+/* Driven from 0 -> 1 on scroll. It resolves to the exact obsidian the next
+ * section opens on, which is what removes the seam at the handoff. */
+.sm-hero-scrim {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: #161210;
+}
+
+.sm-hero-body {
+  position: relative;
+  z-index: 1;
+  /* Every vertical measure in the hero is budgeted against `vh`, not just
+   * `vw`. The first version sized the headline on width alone and the utility
+   * rail — countdown, place, room tone — fell below the fold on a 900px-tall
+   * laptop, which is precisely the "scroll to find out who we are" failure the
+   * hero exists to avoid. */
+  padding-top: clamp(4.5rem, 9.5vh, 9.5rem);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 4.5vh, 3.5rem);
+}
+.sm-hero-type {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1rem, 2.2vh, 1.75rem);
+  max-width: 72rem;
+}
+.sm-hero-eyebrow {
+  color: var(--sm-amber-lit);
+}
+.sm-hero-headline {
+  /* Overrides `.sm-display`'s width-only clamp with one that also answers to
+   * viewport height, so a short laptop gets smaller type instead of a hero
+   * that overflows. `balance` is deliberately absent: the two lines are
+   * separate spans, and balancing across them produced a ragged four-line
+   * stack out of what should read as two statements. */
+  font-size: clamp(2.5rem, min(7.4vw, 10.4vh), 7.5rem);
+  color: var(--sm-paper);
+  max-width: 30ch;
+}
+.sm-hero-headline-b {
+  color: var(--sm-amber-lit);
+}
+/* Standfirst and calls to action share one row at desk widths. It buys back
+ * about 90px of the vertical budget, and reads better: the sentence and the
+ * thing it asks you to do sit on the same line of the composition. */
+.sm-hero-lower {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.25rem, 3vh, 2rem);
+}
+@media (min-width: 62rem) {
+  .sm-hero-lower {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: clamp(2rem, 5vw, 5rem);
+  }
+}
+.sm-hero-standfirst {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(1rem, 2vw, 2rem);
+  max-width: 42rem;
+}
+.sm-hero-standfirst p {
+  color: var(--sm-paper-2);
+}
+/* One notch down from `.sm-lead` on a phone: at 17px/1.6 the standfirst ran to
+ * six lines and pushed the utility rail off the bottom of an iPhone viewport. */
+@media (max-width: 29.99rem) {
+  .sm-hero-standfirst p {
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+}
+.sm-hero-rule {
+  flex: none;
+  width: clamp(2rem, 5vw, 4.5rem);
+  height: 1px;
+  margin-top: 0.85em;
+  background: var(--sm-amber-lit);
+  transform-origin: left;
+}
+.sm-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  flex: none;
+}
+
+/* Three stacked rows cost the phone layout about 40px it does not have, and
+ * the ambient toggle fell below the fold. Countdown gets its own row; the
+ * scroll cue, place and room tone share the next one. */
+.sm-hero-rail {
+  display: grid;
+  grid-template-areas:
+    "countdown countdown"
+    "cue       utility";
+  grid-template-columns: auto 1fr;
+  gap: clamp(0.875rem, 2vh, 1.5rem) 1rem;
+  padding-block: clamp(0.875rem, 2.4vh, 1.75rem) clamp(1rem, 2.6vh, 2.25rem);
+  align-items: center;
+}
+@media (min-width: 62rem) {
+  .sm-hero-rail {
+    grid-template-areas: "cue countdown utility";
+    grid-template-columns: auto 1fr auto;
+    gap: clamp(1.25rem, 3vw, 2rem);
+  }
+}
+.sm-hero-cue {
+  grid-area: cue;
+}
+.sm-hero-rail-mid {
+  grid-area: countdown;
+  color: var(--sm-paper);
+  min-width: 0;
+}
+
+/* Number over label on a phone, inline on the baseline from 26rem up. Set
+ * inline, the four units plus their separators measured 398px inside a 350px
+ * column. */
+.sm-countdown {
+  display: flex;
+  align-items: baseline;
+  gap: 0.875rem;
+}
+.sm-countdown-unit {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3125rem;
+}
+.sm-countdown-sep {
+  display: none;
+}
+@media (min-width: 26rem) {
+  .sm-countdown {
+    gap: 1rem;
+  }
+  .sm-countdown-unit {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 0.375rem;
+  }
+  .sm-countdown-sep {
+    display: inline;
+  }
+}
+@media (min-width: 48rem) {
+  .sm-countdown {
+    gap: 1.25rem;
+  }
+}
+@media (min-width: 62rem) {
+  .sm-hero-rail-mid {
+    justify-self: center;
+  }
+}
+.sm-hero-rail-end {
+  grid-area: utility;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem clamp(1rem, 2vw, 1.75rem);
+}
+@media (min-width: 62rem) {
+  .sm-hero-rail-end {
+    justify-self: end;
+  }
+}
+
+.sm-hero-cue,
+.sm-hero-audio {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  background: none;
+  border: 0;
+  padding: 0.25rem 0;
+  color: var(--sm-paper-2);
+  cursor: pointer;
+  transition: color var(--sm-dur-fast) var(--sm-ease);
+}
+.sm-hero-cue:hover,
+.sm-hero-audio:hover {
+  color: var(--sm-paper);
+}
+.sm-hero-cue-label {
+  display: none;
+}
+@media (min-width: 30rem) {
+  .sm-hero-cue-label {
+    display: inline;
+  }
+}
+.sm-hero-cue-track {
+  position: relative;
+  display: block;
+  width: 1px;
+  height: 2.25rem;
+  background: var(--sm-rule-strong);
+  overflow: hidden;
+  flex: none;
+}
+.sm-hero-cue-dot {
+  position: absolute;
+  inset-inline: -1px;
+  top: 0;
+  height: 45%;
+  background: var(--sm-amber-lit);
+  animation: sm-cue 2.4s var(--sm-ease-io) infinite;
+}
+@keyframes sm-cue {
+  0% {
+    transform: translateY(-110%);
+  }
+  55%,
+  100% {
+    transform: translateY(230%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sm-hero-cue-dot {
+    animation: none;
+    top: 30%;
+  }
+}
+
+/* ==========================================================================
+ * SHEET (native <dialog>)
+ * ========================================================================== */
+
+.sm-sheet {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  max-width: none;
+  max-height: none;
+  color: var(--sm-ink);
+}
+.sm-sheet::backdrop {
+  /* Warm, not neutral: a grey backdrop over a limestone page reads as a
+   * screenshot of a different site. */
+  background: rgba(22, 18, 16, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.sm-sheet-panel {
+  position: relative;
+  background: var(--sm-page);
+  color: var(--sm-ink);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.sm-sheet-close {
+  position: absolute;
+  top: clamp(1rem, 2vw, 1.5rem);
+  right: clamp(1rem, 2vw, 1.5rem);
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--sm-rule);
+  border-radius: 999px;
+  background: var(--sm-page);
+  color: var(--sm-ink-2);
+  cursor: pointer;
+  transition:
+    color var(--sm-dur-fast) var(--sm-ease),
+    border-color var(--sm-dur-fast) var(--sm-ease);
+}
+.sm-sheet-close:hover {
+  color: var(--sm-ink);
+  border-color: var(--sm-ink);
+}
+
+/* Side sheet: full-height drawer on desktop, bottom sheet on a phone, because
+ * a 90vw-wide drawer on a 390px screen is just a badly-placed page. */
+.sm-sheet-side {
+  inset: auto 0 0 0;
+  width: 100%;
+  margin: 0;
+}
+.sm-sheet-side .sm-sheet-panel {
+  max-height: 88dvh;
+  border-top-left-radius: 1.5rem;
+  border-top-right-radius: 1.5rem;
+  padding: clamp(1.75rem, 4vw, 3rem);
+}
+@media (min-width: 48rem) {
+  .sm-sheet-side {
+    inset: 0 0 0 auto;
+    width: min(38rem, 92vw);
+    height: 100dvh;
+  }
+  .sm-sheet-side .sm-sheet-panel {
+    height: 100%;
+    max-height: none;
+    border-radius: 0;
+    padding: clamp(2.5rem, 4vw, 3.75rem);
+  }
+}
+
+.sm-sheet-center {
+  inset: 0;
+  margin: auto;
+  width: min(64rem, 94vw);
+}
+.sm-sheet-center .sm-sheet-panel {
+  max-height: 92dvh;
+  border-radius: 1.25rem;
+  padding: clamp(1.25rem, 2.5vw, 2rem);
+}
+
+/* ==========================================================================
+ * FIRST-TIME DRAWER TRIGGER
+ * ========================================================================== */
+
+.sm-firsttime-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.9375rem 1.375rem 0.9375rem 1.25rem;
+  border: 1px solid var(--sm-rule-strong);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--sm-fg);
+  cursor: pointer;
+  transition:
+    border-color var(--sm-dur-fast) var(--sm-ease),
+    background-color var(--sm-dur-fast) var(--sm-ease),
+    color var(--sm-dur-fast) var(--sm-ease);
+}
+.sm-firsttime-trigger:hover {
+  border-color: var(--sm-accent);
+  color: var(--sm-accent);
+  background: color-mix(in oklab, var(--sm-accent) 10%, transparent);
+}
+
+.sm-qa {
+  display: grid;
+  gap: 0.5rem;
+  padding-block: 1.375rem;
+}
+.sm-qa-q {
+  display: flex;
+  align-items: baseline;
+  gap: 0.875rem;
+}
+.sm-qa-index {
+  color: var(--sm-amber-ink);
+  flex: none;
+  padding-top: 0.2em;
+}
+.sm-qa-a {
+  padding-left: 2.375rem;
+  color: var(--sm-ink-2);
+}
+
+/* ==========================================================================
+ * THE SUNDAY EXPERIENCE — pinned horizontal liturgy
+ * ========================================================================== */
+
+.sm-liturgy {
+  position: relative;
+}
+.sm-liturgy-intro {
+  padding-block: clamp(5rem, 14vh, 10rem) clamp(2.5rem, 6vh, 4.5rem);
+}
+.sm-liturgy-kicker {
+  padding-top: 0.55em;
+}
+@media (max-width: 61.99rem) {
+  .sm-liturgy-kicker {
+    padding-bottom: 1.25rem;
+  }
+}
+
+.sm-liturgy-stage {
+  overflow: hidden;
+}
+.sm-liturgy-track {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(3rem, 8vh, 6rem);
+  outline: none;
+}
+/* The horizontal track has to answer to the SAME query that gates the pin.
+ *
+ * The JS builds its pinned timeline under
+ * `(min-width: 62rem) and (prefers-reduced-motion: no-preference)`; this rule
+ * originally keyed on width alone, so a reduced-motion visitor on a desktop
+ * got a five-viewport-wide flex row with nothing to translate it — chapters
+ * two through five sat off-screen and were unreachable by any means. Matching
+ * the queries is what makes the reduced-motion fallback an actual fallback:
+ * five chapters stacked vertically, all readable, no pin. */
+@media (min-width: 62rem) and (prefers-reduced-motion: no-preference) {
+  .sm-liturgy-stage {
+    height: 100dvh;
+    display: flex;
+    align-items: center;
+  }
+  .sm-liturgy-track {
+    flex-direction: row;
+    gap: 0;
+    width: 100%;
+    /* `will-change` on the track and not on each panel: one composited layer
+     * that moves, rather than five that all have to be uploaded. */
+    will-change: transform;
+  }
+  /* That one layer is five viewports wide, and the frame the pin engages on is
+   * already the most expensive on the page — GSAP rewrites the stage to
+   * `fixed` and re-pads the spacer in it. Containment bounds the work to one
+   * panel at a time so four screens of photograph are not in scope for the
+   * same recalculation. Safe here because a chapter's only overflow is the
+   * figure's parallax inner, which `.sm-figure` already clips. */
+  .sm-chapter {
+    contain: layout paint;
+  }
+}
+
+.sm-chapter {
+  flex: none;
+  width: 100%;
+}
+.sm-chapter-inner {
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+}
+@media (min-width: 62rem) and (prefers-reduced-motion: no-preference) {
+  .sm-chapter-inner {
+    grid-template-columns: 7rem minmax(0, 1fr) minmax(0, 1.05fr);
+    /* Top-aligned, not centred. Centring each cell independently left the
+     * copy floating in the middle of the column with the photograph towering
+     * beside it; aligning the tops makes the photograph the tall anchor of an
+     * asymmetric spread, which is the composition this section is after. */
+    align-items: start;
+    gap: clamp(2rem, 4vw, 4.5rem);
+  }
+  .sm-chapter-copy {
+    padding-top: clamp(0.5rem, 3vh, 2.75rem);
+  }
+}
+.sm-chapter-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+}
+@media (min-width: 62rem) {
+  .sm-chapter-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
+    align-self: start;
+    padding-top: 0.25rem;
+  }
+}
+.sm-chapter-numeral {
+  color: var(--sm-fg);
+  opacity: 0.22;
+  transition: opacity var(--sm-dur) var(--sm-ease), color var(--sm-dur) var(--sm-ease);
+}
+.sm-chapter[data-active] .sm-chapter-numeral {
+  opacity: 1;
+  color: var(--sm-accent-display);
+}
+.sm-chapter-copy {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1rem, 1.6vw, 1.5rem);
+  max-width: 46ch;
+}
+/* The note is the practical reassurance in each chapter, so it gets the one
+ * piece of structure on the panel: an amber rule, not a bordered box. */
+.sm-chapter-note {
+  border-left: 1px solid var(--sm-accent-display);
+  padding-left: 1rem;
+  color: var(--sm-fg-faint);
+}
+.sm-chapter-figure {
+  aspect-ratio: 4 / 5;
+  border-radius: 0.25rem;
+}
+@media (min-width: 62rem) and (prefers-reduced-motion: no-preference) {
+  .sm-chapter-figure {
+    aspect-ratio: 3 / 4;
+    max-height: 68dvh;
+  }
+}
+/* Stacked fallback: a full-width row per chapter, copy beside a landscape
+ * frame, which is the right shape when the panel is not a slide. */
+@media (min-width: 62rem) and (prefers-reduced-motion: reduce) {
+  .sm-chapter-inner {
+    grid-template-columns: 6rem minmax(0, 1fr) minmax(0, 0.8fr);
+    align-items: center;
+    gap: clamp(2rem, 4vw, 4rem);
+  }
+  .sm-chapter-figure {
+    aspect-ratio: 4 / 3;
+  }
+}
+/* The inner element carries the parallax so the frame itself never moves —
+ * the photograph slides behind a fixed aperture. */
+.sm-chapter-figure-inner {
+  position: absolute;
+  inset: -6% -10%;
+}
+.sm-chapter-figure-inner img {
+  object-fit: cover;
+}
+
+.sm-liturgy-rail {
+  position: sticky;
+  bottom: 0;
+  z-index: 4;
+  padding-block: 1rem;
+  background: linear-gradient(
+    to top,
+    var(--sm-obsidian) 20%,
+    rgba(22, 18, 16, 0)
+  );
+}
+@media (min-width: 62rem) {
+  .sm-liturgy-rail {
+    padding-block: 1.25rem 1.75rem;
+  }
+}
+.sm-liturgy-dots {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.sm-liturgy-dots::-webkit-scrollbar {
+  display: none;
+}
+.sm-liturgy-dot {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.875rem 1rem 0.875rem 0;
+  margin-right: 1rem;
+  border: 0;
+  border-top: 1px solid var(--sm-rule);
+  background: none;
+  color: var(--sm-fg-faint);
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    color var(--sm-dur-fast) var(--sm-ease),
+    border-color var(--sm-dur) var(--sm-ease);
+}
+.sm-liturgy-dot:hover {
+  color: var(--sm-fg);
+}
+.sm-liturgy-dot[aria-current="true"] {
+  color: var(--sm-accent);
+  border-top-color: var(--sm-accent);
+}
+.sm-liturgy-dot-num {
+  font-variant-numeric: tabular-nums;
+}
+.sm-liturgy-dot-name {
+  display: none;
+}
+@media (min-width: 48rem) {
+  .sm-liturgy-dot-name {
+    display: inline;
+  }
+}
+/* Five named chapters plus the keyboard hint overflow 1440px and the hint
+ * lands on top of chapter five. The hint is the least important thing in the
+ * row, so it only appears once there is genuinely room for it. */
+.sm-liturgy-hint {
+  display: none;
+}
+@media (min-width: 100rem) {
+  .sm-liturgy-hint {
+    display: block;
+  }
+}
+
+/* ==========================================================================
+ * ROOM AUDIO
+ * ========================================================================== */
+
+.sm-audio {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.25rem, 2.4vw, 2rem);
+}
+/* Two rows on a phone. Squeezed onto one, the fixed furniture — play button,
+ * clock, restart — left the waveform about 130px, which is not a waveform. */
+.sm-audio-deck {
+  display: grid;
+  grid-template-areas:
+    "play wave wave"
+    "play clock reset";
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.5rem 0.875rem;
+  padding: 0.875rem 1.125rem;
+  border: 1px solid var(--sm-rule);
+  border-radius: 1.75rem;
+  background: color-mix(in oklab, var(--sm-fg) 4%, transparent);
+}
+@media (min-width: 40rem) {
+  .sm-audio-deck {
+    grid-template-areas: "play wave clock reset";
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
+    gap: clamp(0.75rem, 1.6vw, 1.25rem);
+    padding: clamp(0.875rem, 1.6vw, 1.125rem);
+    border-radius: 999px;
+  }
+}
+.sm-audio-play {
+  grid-area: play;
+}
+.sm-audio-track {
+  grid-area: wave;
+}
+.sm-audio-time {
+  grid-area: clock;
+}
+.sm-audio-icon {
+  grid-area: reset;
+  justify-self: end;
+}
+.sm-audio-play {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.875rem;
+  height: 2.875rem;
+  flex: none;
+  border: 0;
+  border-radius: 999px;
+  background: var(--sm-accent);
+  color: var(--sm-obsidian);
+  cursor: pointer;
+  transition: transform var(--sm-dur-fast) var(--sm-ease);
+}
+.sm-audio-play:hover {
+  transform: scale(1.06);
+}
+.sm-audio-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  flex: none;
+  border: 1px solid var(--sm-rule);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--sm-fg-muted);
+  cursor: pointer;
+  transition:
+    color var(--sm-dur-fast) var(--sm-ease),
+    border-color var(--sm-dur-fast) var(--sm-ease);
+}
+.sm-audio-icon:hover {
+  color: var(--sm-fg);
+  border-color: var(--sm-fg);
+}
+
+.sm-audio-track {
+  --sm-progress: 0%;
+  position: relative;
+  height: 2.5rem;
+  min-width: 0;
+}
+@media (min-width: 40rem) {
+  .sm-audio-track {
+    height: 2.75rem;
+  }
+}
+.sm-audio-track:focus-within {
+  outline: 2px solid var(--sm-accent);
+  outline-offset: 6px;
+  border-radius: 2px;
+}
+.sm-audio-wave-base,
+.sm-audio-wave-fill {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  display: block;
+}
+.sm-audio-wave-base rect {
+  fill: var(--sm-fg);
+  opacity: 0.24;
+}
+/* The played portion is the same drawing clipped to the play head, so
+ * animating progress is one style write per frame rather than a re-render. */
+.sm-audio-wave-fill {
+  clip-path: inset(0 calc(100% - var(--sm-progress)) 0 0);
+}
+.sm-audio-wave-fill rect {
+  fill: var(--sm-accent);
+}
+.sm-audio-range {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+  opacity: 0;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+}
+.sm-audio-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 2.75rem;
+  height: 2.75rem;
+}
+.sm-audio-time {
+  color: var(--sm-fg-muted);
+  white-space: nowrap;
+}
+.sm-audio-time-sep {
+  color: var(--sm-fg-faint);
+}
+.sm-audio-note {
+  color: var(--sm-fg-faint);
+}
+
+.sm-audio-order {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.sm-order-list {
+  display: flex;
+  flex-direction: column;
+}
+.sm-order-item {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+  align-items: baseline;
+  gap: 0.25rem 0.75rem;
+  padding-block: 0.8125rem;
+  border-top: 1px solid var(--sm-rule);
+  color: var(--sm-fg-faint);
+  transition:
+    color var(--sm-dur) var(--sm-ease),
+    border-color var(--sm-dur) var(--sm-ease),
+    padding-left var(--sm-dur) var(--sm-ease);
+}
+.sm-order-item[data-active] {
+  color: var(--sm-fg);
+  border-top-color: var(--sm-accent);
+  padding-left: 0.5rem;
+}
+.sm-order-index {
+  transition: color var(--sm-dur) var(--sm-ease);
+}
+.sm-order-item[data-active] .sm-order-index {
+  color: var(--sm-accent);
+}
+.sm-order-when {
+  grid-column: 2;
+  color: var(--sm-fg-faint);
+}
+
+/* ==========================================================================
+ * SANCTUARY REPLAY (Flip container transform)
+ * ========================================================================== */
+
+.sm-replay-thumb {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border: 0;
+  padding: 0;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  overflow: hidden;
+}
+.sm-replay-thumb img {
+  transition: transform 1.2s var(--sm-ease);
+}
+.sm-replay-thumb:hover img {
+  transform: scale(1.045);
+}
+.sm-replay-badge {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: clamp(1rem, 2vw, 1.5rem);
+  color: var(--sm-paper);
+}
+.sm-replay-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.375rem;
+  height: 2.375rem;
+  flex: none;
+  border-radius: 999px;
+  background: var(--sm-blue-lit);
+  color: var(--sm-obsidian);
+  transition: transform var(--sm-dur) var(--sm-ease);
+}
+.sm-replay-thumb:hover .sm-replay-icon {
+  transform: scale(1.1);
+}
+
+.sm-replay-stage {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transform-origin: top left;
+}
+.sm-replay-video {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  display: block;
+  border-radius: 0.5rem;
+  background: var(--sm-obsidian);
+}
+.sm-replay-caption {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  padding-inline: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
+/* ==========================================================================
+ * GENEROSITY
+ * ========================================================================== */
+
+.sm-give {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 2.6vw, 2.25rem);
+}
+.sm-give-tabs {
+  display: flex;
+  gap: 1.75rem;
+  border-bottom: 1px solid var(--sm-rule);
+}
+.sm-give-tab {
+  position: relative;
+  border: 0;
+  background: none;
+  padding: 0 0 0.875rem;
+  color: var(--sm-fg-faint);
+  cursor: pointer;
+  transition: color var(--sm-dur-fast) var(--sm-ease);
+}
+.sm-give-tab:hover {
+  color: var(--sm-fg-muted);
+}
+.sm-give-tab::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  height: 1px;
+  width: 100%;
+  background: var(--sm-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--sm-dur) var(--sm-ease);
+}
+.sm-give-tab[aria-selected="true"] {
+  color: var(--sm-fg);
+}
+.sm-give-tab[aria-selected="true"]::after {
+  transform: scaleX(1);
+}
+.sm-give-panel {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.25rem, 2vw, 1.75rem);
+}
+.sm-give-qris {
+  display: grid;
+  gap: clamp(1.25rem, 2.5vw, 2rem);
+  align-items: center;
+}
+@media (min-width: 40rem) {
+  .sm-give-qris {
+    grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
+  }
+}
+.sm-give-qris-plate {
+  padding: clamp(0.75rem, 1.6vw, 1.125rem);
+  background: #fff;
+  border: 1px solid var(--sm-rule);
+  border-radius: 0.75rem;
+}
+.sm-give-qris-plate img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.sm-give-empty {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: clamp(1.25rem, 2.4vw, 1.75rem);
+  border: 1px dashed var(--sm-rule-strong);
+  border-radius: 0.75rem;
+  color: var(--sm-fg-muted);
+}
+
+.sm-give-rows {
+  display: flex;
+  flex-direction: column;
+}
+.sm-give-row {
+  display: grid;
+  gap: 0.4375rem;
+  padding-block: 1.125rem;
+  border-top: 1px solid var(--sm-rule);
+}
+.sm-give-row-value {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+}
+.sm-give-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4375rem;
+  border: 1px solid var(--sm-rule);
+  border-radius: 999px;
+  padding: 0.4375rem 0.75rem;
+  background: transparent;
+  color: var(--sm-fg-muted);
+  cursor: pointer;
+  transition:
+    color var(--sm-dur-fast) var(--sm-ease),
+    border-color var(--sm-dur-fast) var(--sm-ease);
+}
+.sm-give-copy:hover {
+  color: var(--sm-fg);
+  border-color: var(--sm-fg);
+}
+.sm-give-failed {
+  color: var(--sm-crimson);
+  flex-basis: 100%;
+}
+
+/* ==========================================================================
+ * SKIP LINK
+ * ========================================================================== */
+
+.sm-skip {
+  position: fixed;
+  top: 0.75rem;
+  left: 50%;
+  z-index: 90;
+  transform: translate(-50%, -160%);
+  padding: 0.875rem 1.375rem;
+  border-radius: 999px;
+  background: var(--sm-cta);
+  color: var(--sm-paper);
+  text-decoration: none;
+  transition: transform var(--sm-dur-fast) var(--sm-ease);
+}
+.sm-skip:focus-visible {
+  transform: translate(-50%, 0);
+}
+
+/* ==========================================================================
+ * CLERESTORY
+ * Where the page steps from an obsidian room into a limestone one, a thin
+ * warm band sits on the seam — light entering high on a wall. It is the only
+ * gradient on the page that is not part of the footage, and it exists to make
+ * the tonal cut read as architecture instead of as two stacked <section>s.
+ * ========================================================================== */
+
+.sm-clerestory {
+  position: relative;
+}
+.sm-clerestory::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: clamp(6rem, 14vh, 11rem);
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(192, 122, 33, 0.16) 0%,
+    rgba(192, 122, 33, 0.05) 42%,
+    rgba(192, 122, 33, 0) 100%
+  );
+}
+
+/* ==========================================================================
+ * SECTION OPENER
+ * A three-part masthead — kicker in the liturgical margin, title across the
+ * middle six columns, standfirst in the outer four and dropped a little.
+ * Stacking the title and standfirst in one centre column instead left the
+ * right 30% of every section opener empty, which is what made the first pass
+ * feel underfilled rather than spacious.
+ * ========================================================================== */
+
+.sm-opener {
+  display: grid;
+  gap: 1.5rem;
+}
+@media (min-width: 62rem) {
+  .sm-opener {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(1rem, 2.2vw, 2.5rem);
+    align-items: start;
+  }
+  .sm-opener-kicker {
+    grid-column: 1 / span 2;
+    padding-top: 0.6em;
+  }
+  .sm-opener-title {
+    grid-column: 3 / span 6;
+  }
+  .sm-opener-lead {
+    grid-column: 9 / span 4;
+    padding-top: clamp(0.5rem, 2.5vh, 2rem);
+  }
+}
+
+/* Kickers in the liturgical margin sit on the cap-height of the heading they
+ * label rather than on its baseline box. */
+.sm-nave-kicker {
+  padding-top: 0.55em;
+}
+@media (max-width: 61.99rem) {
+  .sm-nave-kicker {
+    padding-top: 0;
+    padding-bottom: 1.5rem;
+  }
+}
+
+/* ==========================================================================
+ * THE NAVE
+ * ========================================================================== */
+
+.sm-nave-quote {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 34ch;
+}
+.sm-nave-quote p {
+  color: var(--sm-paper);
+  text-wrap: pretty;
+}
+.sm-nave-cite {
+  color: var(--sm-accent-display);
+  font-style: normal;
+}
+.sm-nave-statement {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-top: clamp(1.5rem, 4vh, 3rem);
+  border-top: 1px solid var(--sm-rule);
+  max-width: 56ch;
+}
+
+/* ==========================================================================
+ * PHOTO ESSAY
+ * ========================================================================== */
+
+/* Full-bleed breakout. It escapes the shell entirely — the reset the eye
+ * needs between two text-led sections. */
+.sm-breakout {
+  position: relative;
+  margin: 0;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  background: var(--sm-obsidian);
+}
+@media (min-width: 48rem) {
+  .sm-breakout {
+    aspect-ratio: 21 / 9;
+  }
+}
+/* Oversized so the parallax has somewhere to travel without exposing an edge. */
+.sm-breakout-media {
+  position: absolute;
+  inset: -8% 0;
+}
+.sm-breakout-img {
+  object-fit: cover;
+  object-position: 50% 58%;
+}
+/* Weighted hard at the bottom edge: the caption is 11px paper, and how legible
+ * it is must not depend on whether a pew or a window happens to sit behind it. */
+.sm-breakout::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to top,
+    rgba(22, 18, 16, 0.9) 0%,
+    rgba(22, 18, 16, 0.5) 22%,
+    rgba(22, 18, 16, 0.1) 46%,
+    rgba(22, 18, 16, 0) 66%
+  );
+}
+.sm-breakout-caption {
+  position: absolute;
+  z-index: 2;
+  inset-inline: 0;
+  bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 1.25rem;
+  padding: clamp(1.25rem, 3vw, 2.75rem) clamp(1.25rem, 4.6vw, 5.5rem);
+  color: var(--sm-paper);
+}
+.sm-breakout-credit {
+  color: var(--sm-paper-2);
+}
+
+/* Two figures at different heights with the note wedged between them. The
+ * offsets are the composition — a 2-up of equal cards is the thing this
+ * section exists to avoid. */
+.sm-essay {
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+}
+@media (min-width: 62rem) {
+  .sm-essay {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    align-items: start;
+  }
+  .sm-essay-wide {
+    grid-column: 1 / span 7;
+  }
+  .sm-essay-note {
+    grid-column: 9 / span 4;
+    padding-top: clamp(2rem, 6vh, 5rem);
+  }
+  .sm-essay-square {
+    grid-column: 5 / span 5;
+    margin-top: clamp(-6rem, -6vh, -2rem);
+  }
+}
+.sm-essay-wide,
+.sm-essay-square {
+  margin: 0;
+  border-radius: 0.25rem;
+}
+.sm-essay-wide img,
+.sm-essay-square img {
+  width: 100%;
+  height: auto;
+}
+.sm-essay-note {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+.sm-essay-caption {
+  padding-top: 0.875rem;
+  color: var(--sm-fg-faint);
+}
+
+/* ==========================================================================
+ * RUANG & SUARA
+ * ========================================================================== */
+
+.sm-suara {
+  display: grid;
+  gap: clamp(2.5rem, 6vw, 5rem);
+}
+@media (min-width: 62rem) {
+  .sm-suara {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.86fr);
+  }
+}
+.sm-suara-teaching {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 3vw, 2.25rem);
+}
+.sm-suara-archive {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  padding-top: 1.25rem;
+  color: var(--sm-fg-faint);
+}
+.sm-suara-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  color: var(--sm-accent);
+}
+
+/* ==========================================================================
+ * SCHEDULE & CAMPUS
+ * ========================================================================== */
+
+.sm-jadwal {
+  display: grid;
+  gap: clamp(2rem, 5vw, 4rem);
+  padding-top: clamp(2.5rem, 6vh, 4.5rem);
+}
+@media (min-width: 62rem) {
+  .sm-jadwal {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.62fr);
+    align-items: start;
+  }
+}
+.sm-jadwal-list {
+  display: flex;
+  flex-direction: column;
+}
+/* A schedule is a table of facts, so it is set as ruled rows rather than as
+ * cards: the hairlines do the aligning work a card border cannot. */
+.sm-jadwal-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.5rem 1.25rem;
+  align-items: baseline;
+  padding-block: clamp(1.25rem, 2.4vw, 1.75rem);
+  border-top: 1px solid var(--sm-rule);
+}
+@media (min-width: 48rem) {
+  .sm-jadwal-row {
+    grid-template-columns: 7.5rem 5.5rem minmax(0, 1fr) auto;
+    gap: 0.375rem 1.5rem;
+  }
+}
+.sm-jadwal-day {
+  color: var(--sm-fg-faint);
+  grid-column: 1;
+}
+.sm-jadwal-time {
+  color: var(--sm-fg);
+  grid-column: 1;
+}
+.sm-jadwal-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  grid-column: 1 / -1;
+}
+.sm-jadwal-room {
+  color: var(--sm-fg-faint);
+  grid-column: 1 / -1;
+}
+.sm-jadwal-cal {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+  color: var(--sm-fg-faint);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition:
+    color var(--sm-dur-fast) var(--sm-ease),
+    border-color var(--sm-dur-fast) var(--sm-ease);
+}
+.sm-jadwal-cal:hover {
+  color: var(--sm-accent);
+  border-bottom-color: var(--sm-accent);
+}
+@media (min-width: 48rem) {
+  .sm-jadwal-day {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .sm-jadwal-time {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .sm-jadwal-detail {
+    grid-column: 3;
+    grid-row: 1;
+  }
+  .sm-jadwal-room {
+    grid-column: 3;
+    grid-row: 2;
+  }
+  .sm-jadwal-cal {
+    grid-column: 4;
+    grid-row: 1;
+  }
+}
+
+.sm-campus {
+  display: flex;
+  flex-direction: column;
+  background: color-mix(in oklab, var(--sm-fg) 4%, transparent);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+.sm-campus-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: clamp(1.25rem, 2.4vw, 1.75rem);
+}
+
+/* ==========================================================================
+ * NEXT GEN
+ * ========================================================================== */
+
+.sm-nextgen {
+  display: grid;
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: start;
+}
+@media (min-width: 62rem) {
+  .sm-nextgen {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .sm-nextgen-figure {
+    /* Runs slightly past the section's top padding so the photograph leads
+     * the copy rather than sitting level with it. */
+    margin-top: clamp(-3rem, -4vh, -1rem);
+  }
+}
+.sm-nextgen-figure {
+  margin: 0;
+  border-radius: 0.25rem;
+}
+.sm-nextgen-figure img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.sm-nextgen-copy {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1rem, 1.8vw, 1.5rem);
+}
+.sm-points {
+  display: grid;
+  gap: 0;
+  padding-top: 0.5rem;
+}
+@media (min-width: 40rem) {
+  .sm-points {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(1.25rem, 2.4vw, 2rem);
+  }
+}
+.sm-point {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  padding-block: 1.125rem;
+  border-top: 1px solid var(--sm-rule);
+}
+
+/* ==========================================================================
+ * GENEROSITY LAYOUT
+ * ========================================================================== */
+
+.sm-give-layout {
+  display: grid;
+  gap: clamp(2.5rem, 6vw, 5rem);
+  align-items: start;
+}
+@media (min-width: 62rem) {
+  .sm-give-layout {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
+  }
+}
+.sm-give-transparency {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  padding-top: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+/* ==========================================================================
+ * MISSION
+ * ========================================================================== */
+
+.sm-misi-acronym {
+  letter-spacing: 0.06em;
+  color: var(--sm-accent-display);
+}
+.sm-misi-expansion {
+  color: var(--sm-fg-muted);
+  letter-spacing: 0.1em;
+  line-height: 1.7;
+}
+.sm-misi-list {
+  display: grid;
+  gap: 0;
+  padding-top: clamp(2.5rem, 6vh, 4.5rem);
+}
+@media (min-width: 48rem) {
+  .sm-misi-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(2rem, 5vw, 5rem);
+  }
+}
+/* Numbered rules, not a card deck. Six identical rounded boxes is precisely
+ * the pattern this page was rebuilt to remove. */
+.sm-misi-item {
+  display: grid;
+  grid-template-columns: 3rem minmax(0, 1fr);
+  gap: 1rem;
+  align-items: baseline;
+  padding-block: clamp(1.25rem, 2.4vw, 1.75rem);
+  border-top: 1px solid var(--sm-rule);
+  transition: border-color var(--sm-dur) var(--sm-ease);
+}
+.sm-misi-item:hover {
+  border-top-color: var(--sm-accent);
+}
+.sm-misi-index {
+  color: var(--sm-accent);
+  padding-top: 0.45em;
+}
+
+/* ==========================================================================
+ * VISIT
+ * ========================================================================== */
+
+/* A split, not an overlay.
+ *
+ * The first version ran the greeting photograph full-bleed with the copy laid
+ * across it, and the type landed squarely on the greeter's arm and the
+ * family's faces. Preserving facial authenticity is a stated requirement of
+ * this photograph, and no amount of scrim tuning fixes type sitting on a
+ * face — so on desk widths the image takes the right half outright, feathered
+ * into the obsidian rather than cut against it, and the copy gets clean
+ * ground of its own. Narrow viewports keep the full-bleed treatment, where
+ * the copy stacks below the subject instead of across it. */
+.sm-visit {
+  position: relative;
+  isolation: isolate;
+  padding-block: clamp(4.5rem, 14vh, 10rem);
+  overflow: hidden;
+}
+.sm-visit-plate {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+.sm-visit-img {
+  object-fit: cover;
+  object-position: 44% 46%;
+}
+.sm-visit-plate::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(16, 12, 10, 0.93) 0%,
+    rgba(16, 12, 10, 0.6) 46%,
+    rgba(16, 12, 10, 0.34) 100%
+  );
+}
+@media (min-width: 62rem) {
+  .sm-visit-plate {
+    inset: 0 0 0 auto;
+    width: 52%;
+  }
+  .sm-visit-plate::after {
+    /* Feathered on the inboard edge so the photograph dissolves into the
+     * obsidian instead of butting against it with a visible seam. */
+    background: linear-gradient(
+      90deg,
+      rgb(22, 18, 16) 0%,
+      rgba(22, 18, 16, 0.72) 22%,
+      rgba(22, 18, 16, 0.1) 62%,
+      rgba(22, 18, 16, 0) 100%
+    );
+  }
+}
+.sm-visit-body {
+  display: grid;
+  gap: clamp(2.5rem, 6vw, 4rem);
+  align-items: start;
+}
+@media (min-width: 62rem) {
+  .sm-visit-body {
+    /* Copy and steps both live in the left 52%, clear of the photograph. */
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.75fr);
+    width: 56%;
+    align-items: end;
+  }
+}
+.sm-visit-copy {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1rem, 1.8vw, 1.5rem);
+}
+.sm-visit-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding-top: 0.5rem;
+}
+.sm-visit-steps {
+  display: grid;
+  gap: 0;
+}
+.sm-visit-step {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  gap: 0.25rem 1rem;
+  padding-block: 1.125rem;
+  border-top: 1px solid var(--sm-rule);
+}
+.sm-visit-step-index {
+  grid-row: 1 / span 2;
+  color: var(--sm-accent-display);
+  padding-top: 0.3em;
+}
+
+/* ==========================================================================
+ * FOOTER
+ * ========================================================================== */
+
+.sm-footer {
+  padding-block: clamp(3.5rem, 9vh, 6rem) clamp(2rem, 4vh, 3rem);
+  border-top: 1px solid var(--sm-rule);
+}
+.sm-footer-top {
+  display: grid;
+  gap: clamp(2rem, 5vw, 4rem);
+  padding-bottom: clamp(2.5rem, 6vh, 4rem);
+}
+@media (min-width: 62rem) {
+  .sm-footer-top {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+.sm-footer-identity {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 2vw, 1.75rem);
+}
+.sm-footer-crest {
+  width: auto;
+  height: clamp(4rem, 7vw, 6rem);
+  flex: none;
+}
+.sm-footer-faith {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  max-width: 52ch;
+}
+.sm-footer-verse {
+  color: var(--sm-accent-display);
+}
+.sm-footer-grid {
+  display: grid;
+  gap: clamp(1.75rem, 3vw, 2.5rem);
+  padding-top: clamp(2rem, 5vh, 3rem);
+  padding-bottom: clamp(2rem, 5vh, 3rem);
+}
+@media (min-width: 40rem) {
+  .sm-footer-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 62rem) {
+  .sm-footer-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+.sm-footer-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+.sm-footer-sub {
+  padding-top: 0.875rem;
+}
+.sm-footer-service {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+.sm-footer-base {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: clamp(1.25rem, 3vh, 2rem);
+}
+
+/* ==========================================================================
+ * RESPONSIVE VISIBILITY — owned here, not borrowed from Tailwind
+ *
+ * This file is unlayered so its type roles beat Tailwind's layered utilities,
+ * and that cuts both ways: `.sm-btn { display: inline-flex }` also outranks
+ * `hidden`, so `class="sm-btn hidden sm:inline-flex"` stayed visible at every
+ * width. On a 390px viewport that pushed the nav 85px past the viewport and
+ * gave the whole page a horizontal scrollbar. Anything on this page that
+ * appears or disappears by breakpoint therefore declares it here, where it is
+ * in the same layer as the rule it has to beat.
+ *
+ * It also has to be LAST in the file. `.sm-nav-locale` and `.sm-locale` are
+ * both single class selectors, so specificity ties and source order decides;
+ * declared earlier, `display: none` lost to `.sm-locale { display: inline-flex }`
+ * and the toggle stayed in the bar at 390px, which was the remaining 85px of
+ * horizontal overflow.
+ * ========================================================================== */
+
+.sm-nav-links,
+.sm-nav-portal,
+.sm-nav-cta,
+.sm-nav-locale {
+  display: none;
+}
+.sm-nav-menu {
+  display: inline-flex;
+}
+/* The locale toggle goes first: it is duplicated at the foot of the mobile
+ * menu panel, so hiding it in the bar costs the visitor nothing. */
+@media (min-width: 30rem) {
+  .sm-nav-cta {
+    display: inline-flex;
+  }
+}
+@media (min-width: 26rem) {
+  .sm-lockup-line1 {
+    font-size: 0.5625rem;
+  }
+}
+@media (min-width: 48rem) {
+  .sm-nav-locale {
+    display: inline-flex;
+  }
+  .sm-nav-portal {
+    display: inline-flex;
+  }
+}
+@media (min-width: 62rem) {
+  .sm-nav-links {
+    display: flex;
+  }
+  .sm-nav-menu {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+ * DEVOTIONALS — the landing section, the archive, and the article
+ * ========================================================================== */
+
+/* --- landing section: one lead piece against a ruled list ----------------- */
+.sm-renungan {
+  display: grid;
+  gap: clamp(2rem, 5vw, 4rem);
+  padding-top: clamp(2.5rem, 6vh, 4.5rem);
+  align-items: start;
+}
+@media (min-width: 62rem) {
+  .sm-renungan {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.7fr);
+  }
+  .sm-renungan[data-solo] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .sm-renungan[data-solo] .sm-renungan-lead {
+    max-width: 62ch;
+  }
+}
+
+/* The lead devotional. A hairline box rather than a card: no fill, no shadow,
+ * one amber rule along the top that thickens on hover. */
+.sm-renungan-lead {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.875rem, 1.6vw, 1.25rem);
+  padding-top: clamp(1.25rem, 2.4vw, 1.75rem);
+  border-top: 2px solid var(--sm-accent-display);
+  text-decoration: none;
+  color: inherit;
+}
+.sm-renungan-lead-title {
+  color: var(--sm-fg);
+  text-wrap: balance;
+  transition: color var(--sm-dur-fast) var(--sm-ease);
+}
+.sm-renungan-lead:hover .sm-renungan-lead-title {
+  color: var(--sm-accent);
+}
+/* The Scripture reference is the one place crimson appears in running text —
+ * it is the colour of the ribbon in the supplied photograph, and it marks
+ * Scripture rather than decorating it. */
+.sm-verse {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-left: 2px solid var(--sm-crimson);
+  padding-left: clamp(0.875rem, 1.6vw, 1.25rem);
+}
+.sm-tone-dark .sm-verse {
+  border-left-color: var(--sm-amber-lit);
+}
+.sm-verse-ref {
+  color: var(--sm-crimson);
+}
+.sm-tone-dark .sm-verse-ref {
+  color: var(--sm-amber-lit);
+}
+.sm-verse-text {
+  color: var(--sm-fg-muted);
+}
+
+.sm-renungan-more {
+  display: flex;
+  flex-direction: column;
+}
+.sm-renungan-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 0.375rem 1rem;
+  padding-block: clamp(0.875rem, 1.8vw, 1.25rem);
+  border-top: 1px solid var(--sm-rule);
+  text-decoration: none;
+  color: inherit;
+  transition:
+    border-color var(--sm-dur) var(--sm-ease),
+    padding-left var(--sm-dur) var(--sm-ease);
+}
+.sm-renungan-row:hover {
+  border-top-color: var(--sm-accent);
+  padding-left: 0.5rem;
+}
+.sm-renungan-row-date {
+  grid-column: 1 / -1;
+  color: var(--sm-fg-faint);
+}
+.sm-renungan-row-title {
+  grid-column: 1;
+  color: var(--sm-fg);
+  transition: color var(--sm-dur-fast) var(--sm-ease);
+}
+.sm-renungan-row:hover .sm-renungan-row-title {
+  color: var(--sm-accent);
+}
+.sm-renungan-row-arrow {
+  grid-column: 2;
+  grid-row: 2;
+  color: var(--sm-fg-faint);
+  transition:
+    transform var(--sm-dur) var(--sm-ease),
+    color var(--sm-dur-fast) var(--sm-ease);
+}
+.sm-renungan-row:hover .sm-renungan-row-arrow {
+  transform: translateX(3px);
+  color: var(--sm-accent);
+}
+.sm-renungan-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: clamp(1.25rem, 2.4vh, 1.75rem);
+}
+
+/* --- archive index -------------------------------------------------------- */
+.sm-archive {
+  display: flex;
+  flex-direction: column;
+}
+/* Date in the liturgical margin, title and excerpt in the body column. The
+ * same three-part rhythm as the schedule table, because both are indexes. */
+.sm-archive-item {
+  display: grid;
+  gap: 0.5rem 1.5rem;
+  padding-block: clamp(1.5rem, 3vw, 2.25rem);
+  border-top: 1px solid var(--sm-rule);
+  text-decoration: none;
+  color: inherit;
+  transition:
+    border-color var(--sm-dur) var(--sm-ease),
+    padding-left var(--sm-dur) var(--sm-ease);
+}
+.sm-archive-item:hover {
+  border-top-color: var(--sm-accent);
+  padding-left: 0.625rem;
+}
+@media (min-width: 48rem) {
+  .sm-archive-item {
+    grid-template-columns: 9rem minmax(0, 1fr) auto;
+    align-items: start;
+  }
+}
+.sm-archive-date {
+  color: var(--sm-fg-faint);
+  padding-top: 0.4em;
+}
+.sm-archive-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  max-width: 62ch;
+}
+.sm-archive-title {
+  color: var(--sm-fg);
+  text-wrap: pretty;
+  transition: color var(--sm-dur-fast) var(--sm-ease);
+}
+.sm-archive-item:hover .sm-archive-title {
+  color: var(--sm-accent);
+}
+.sm-archive-excerpt {
+  color: var(--sm-fg-muted);
+}
+.sm-archive-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  color: var(--sm-fg-faint);
+}
+.sm-archive-arrow {
+  align-self: center;
+  color: var(--sm-fg-faint);
+  transition:
+    transform var(--sm-dur) var(--sm-ease),
+    color var(--sm-dur-fast) var(--sm-ease);
+}
+.sm-archive-item:hover .sm-archive-arrow {
+  transform: translateX(4px);
+  color: var(--sm-accent);
+}
+.sm-archive-empty {
+  padding-block: clamp(2.5rem, 6vh, 4rem);
+  border-top: 1px solid var(--sm-rule);
+  color: var(--sm-fg-muted);
+  max-width: 48ch;
+}
+
+.sm-pager {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: clamp(1.75rem, 4vh, 2.75rem);
+  border-top: 1px solid var(--sm-rule);
+}
+.sm-pager-count {
+  color: var(--sm-fg-faint);
+}
+.sm-pager-links {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* --- article -------------------------------------------------------------- */
+.sm-article {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+}
+@media (min-width: 62rem) {
+  .sm-article {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(1rem, 2.2vw, 2.5rem);
+    align-items: start;
+  }
+  /* Sticky metadata in the margin: the date, the author and the back link stay
+   * with the reader down a long devotional instead of scrolling away. */
+  .sm-article-meta {
+    grid-column: 1 / span 3;
+    position: sticky;
+    top: 7rem;
+  }
+  .sm-article-main {
+    grid-column: 5 / span 7;
+  }
+}
+.sm-article-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.sm-article-main {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 3vh, 2.5rem);
+  min-width: 0;
+}
+.sm-article-title {
+  color: var(--sm-fg);
+  text-wrap: balance;
+}
+.sm-article-adjacent {
+  display: grid;
+  gap: clamp(1rem, 2vw, 1.5rem);
+  padding-top: clamp(1.75rem, 4vh, 2.75rem);
+  border-top: 1px solid var(--sm-rule);
+}
+@media (min-width: 40rem) {
+  .sm-article-adjacent {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.sm-adjacent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: clamp(1rem, 2vw, 1.375rem) 0;
+  text-decoration: none;
+  color: inherit;
+  border-top: 1px solid transparent;
+  transition: border-color var(--sm-dur) var(--sm-ease);
+}
+.sm-adjacent:hover {
+  border-top-color: var(--sm-accent);
+}
+.sm-adjacent-next {
+  text-align: right;
+}
+.sm-adjacent-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4375rem;
+  color: var(--sm-fg-faint);
+}
+.sm-adjacent-next .sm-adjacent-label {
+  justify-content: flex-end;
+}
+.sm-adjacent-title {
+  color: var(--sm-fg);
+  transition: color var(--sm-dur-fast) var(--sm-ease);
+}
+.sm-adjacent:hover .sm-adjacent-title {
+  color: var(--sm-accent);
+}
+.sm-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--sm-fg-muted);
+  text-decoration: none;
+  transition: color var(--sm-dur-fast) var(--sm-ease);
+}
+.sm-back:hover {
+  color: var(--sm-accent);
+}
+.sm-back svg {
+  transition: transform var(--sm-dur) var(--sm-ease);
+}
+.sm-back:hover svg {
+  transform: translateX(-3px);
+}
+
+/* ==========================================================================
+ * PROSE
+ * The devotional body, typeset in the page's own scale rather than through
+ * @tailwindcss/typography. The plugin brings its own sizes, leading and
+ * families, which is exactly the incoherence the complete `sm-*` type roles
+ * exist to prevent — a devotional would have read in a different typographic
+ * voice from the page around it.
+ * ========================================================================== */
+
+.sm-prose {
+  color: var(--sm-fg-muted);
+  max-width: 68ch;
+}
+.sm-prose > * + * {
+  margin-top: 1.15em;
+}
+.sm-prose p,
+.sm-prose li {
+  font-family: var(--sm-sans-stack);
+  font-weight: 400;
+  font-size: clamp(1rem, 1.15vw, 1.125rem);
+  line-height: 1.78;
+  letter-spacing: -0.003em;
+}
+.sm-prose h2,
+.sm-prose h3,
+.sm-prose h4 {
+  font-family: var(--sm-serif-stack);
+  font-weight: 400;
+  color: var(--sm-fg);
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  margin-top: 1.9em;
+}
+.sm-prose h2 {
+  font-size: clamp(1.5rem, 2.2vw, 1.875rem);
+}
+.sm-prose h3 {
+  font-size: clamp(1.25rem, 1.7vw, 1.5rem);
+}
+.sm-prose h4 {
+  font-size: clamp(1.0625rem, 1.3vw, 1.25rem);
+}
+.sm-prose strong {
+  color: var(--sm-fg);
+  font-weight: 600;
+}
+.sm-prose em {
+  font-style: italic;
+}
+.sm-prose a {
+  color: var(--sm-accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+.sm-prose a:hover {
+  color: var(--sm-fg);
+}
+.sm-prose ul,
+.sm-prose ol {
+  padding-left: 1.35em;
+}
+.sm-prose ul {
+  list-style: disc;
+}
+.sm-prose ol {
+  list-style: decimal;
+}
+.sm-prose li::marker {
+  color: var(--sm-fg-faint);
+}
+.sm-prose li + li {
+  margin-top: 0.4em;
+}
+.sm-prose blockquote {
+  border-left: 2px solid var(--sm-accent-display);
+  padding-left: 1.15em;
+  font-family: var(--sm-serif-stack);
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(1.125rem, 1.6vw, 1.375rem);
+  line-height: 1.5;
+  color: var(--sm-fg);
+}
+.sm-prose blockquote p {
+  font: inherit;
+  letter-spacing: inherit;
+}
+.sm-prose code {
+  font-family: ui-monospace, SFMono-Regular, monospace;
+  font-size: 0.9em;
+  background: color-mix(in oklab, var(--sm-fg) 8%, transparent);
+  border-radius: 0.25rem;
+  padding: 0.15em 0.4em;
+}
+.sm-prose hr {
+  border: 0;
+  border-top: 1px solid var(--sm-rule);
+  margin-block: 2.25em;
+}
+
+/* ==========================================================================
+ * NOT FOUND
+ * ========================================================================== */
+
+.sm-nf {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1.25rem, 3vh, 2rem);
+  text-align: center;
+  padding: clamp(6rem, 14vh, 10rem) clamp(1.25rem, 4.6vw, 5.5rem);
+}
+.sm-nf-code {
+  color: var(--sm-accent-display);
+}
+.sm-nf-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  padding-top: 0.5rem;
+}
+
+/* ==========================================================================
+ * SKELETONS
+ * A shimmer rather than a pulse, and a warm one: `bg-muted` from the app's M3
+ * palette is a cool grey that reads as a different site against limestone.
+ * ========================================================================== */
+
+.sm-skeleton-page {
+  background: var(--sm-page);
+  min-height: 100dvh;
+  padding-top: clamp(4.5rem, 9vh, 7rem);
+}
+.sm-sk {
+  display: block;
+  border-radius: 0.25rem;
+  background:
+    linear-gradient(
+      90deg,
+      color-mix(in oklab, var(--sm-ink) 7%, transparent) 0%,
+      color-mix(in oklab, var(--sm-ink) 13%, transparent) 45%,
+      color-mix(in oklab, var(--sm-ink) 7%, transparent) 100%
+    )
+    0 0 / 200% 100%;
+  animation: sm-sk-sweep 1.5s linear infinite;
+}
+@keyframes sm-sk-sweep {
+  to {
+    background-position: -200% 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sm-sk {
+    animation: none;
+  }
+}

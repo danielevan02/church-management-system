@@ -24,7 +24,7 @@ export async function deleteDevotionalAction(
   try {
     const existing = await prisma.devotional.findFirst({
       where: { id, deletedAt: null },
-      select: { id: true },
+      select: { id: true, slug: true },
     });
     if (!existing) return { ok: false, error: "NOT_FOUND" };
 
@@ -35,6 +35,11 @@ export async function deleteDevotionalAction(
     revalidatePath("/admin/devotionals");
     revalidatePath("/me/devotionals");
     revalidatePath("/me/dashboard");
+    // A soft-deleted devotional must stop being reachable publicly, and must
+    // drop out of the sitemap, immediately — not at the next deploy.
+    revalidatePath("/renungan");
+    revalidatePath(`/renungan/${existing.slug}`);
+    revalidatePath("/", "page");
     return { ok: true };
   } catch (e) {
     console.error("[deleteDevotional]", e);

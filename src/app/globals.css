@@ -12,6 +12,20 @@
    * it Tailwind would bake the light values into every utility.
    * ---------------------------------------------------------------------- */
   --color-primary: var(--md-sys-color-primary);
+  /*
+   * The global navigation progress bar, pinned to a fixed tone rather than
+   * left to a system role.
+   *
+   * The bar is drawn over whatever happens to be underneath it: the public
+   * pages, which are always warm paper or obsidian, and the authenticated app,
+   * which follows the OS. `primary` cannot serve both — it is tone 40 in light
+   * and tone 80 in dark, and tone 80 over paper is a pale mint line at 2.2:1,
+   * which is not a progress bar so much as a rumour of one.
+   *
+   * Tone 50 is the one step that clears the 3:1 WCAG floor for non-text UI on
+   * every ground the bar can land on.
+   */
+  --color-brand-progress: var(--md-ref-primary-50);
   --color-on-primary: var(--md-sys-color-on-primary);
   --color-primary-container: var(--md-sys-color-primary-container);
   --color-on-primary-container: var(--md-sys-color-on-primary-container);

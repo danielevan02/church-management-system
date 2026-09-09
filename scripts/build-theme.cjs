@@ -40,8 +40,9 @@
  *      always builds. Tone is CIE L*, identical to HCT tone, so contrast holds
  *      exactly. Chroma is approximated, and the approximation is *not* always
  *      cosmetic: CAM16 M and Lab C diverge most at high lightness on cyan-ish
- *      hues, where sRGB allows huge Lab chroma. On this deployment's teal seed
- *      the fallback turns primary-90 into near-neon (#00fdec vs the correct
+ *      hues, where sRGB allows huge Lab chroma. On a teal seed — which this
+ *      deployment carried until it was reseeded to the church's own blue — the
+ *      fallback turns primary-90 into near-neon (#00fdec vs the correct
  *      #72f7ea), which is unusable as a container role. Treat engine 2 as a
  *      build-doesn't-break measure, not as a shipping palette.
  *

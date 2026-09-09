@@ -5,6 +5,24 @@ import { cn } from "@/lib/utils";
 type Props = {
   source: string;
   className?: string;
+  /**
+   * Which palette and type scale to render in.
+   *
+   * `app` (default) uses the M3 roles and Tailwind Typography, and follows the
+   * visitor's theme — right for the member portal and the admin screens.
+   *
+   * `paper` hands the body to `.sm-prose` in the public stylesheet instead.
+   * Two reasons, and the second is the one that made it necessary:
+   *
+   * 1. The M3 roles flip under `.dark`. A public devotional read by someone
+   *    whose OS is in dark mode would render as light-on-dark prose inside a
+   *    warm paper page.
+   * 2. `@tailwindcss/typography` brings its own families, sizes and leading.
+   *    On a page whose whole typographic argument is one serif against one
+   *    grotesque at fixed roles, prose in a third voice is exactly the
+   *    incoherence the `sm-*` scale exists to prevent.
+   */
+  tone?: "app" | "paper";
 };
 
 /**
@@ -13,7 +31,14 @@ type Props = {
  * blockquotes, code spans. No raw HTML, no iframes — react-markdown
  * default behavior, safe by construction.
  */
-export function MarkdownContent({ source, className }: Props) {
+export function MarkdownContent({ source, className, tone = "app" }: Props) {
+  if (tone === "paper") {
+    return (
+      <div className={cn("sm-prose", className)}>
+        <ReactMarkdown>{source}</ReactMarkdown>
+      </div>
+    );
+  }
   return (
     <div
       className={cn(

@@ -436,6 +436,11 @@ model Announcement {
 
 model Devotional {
   id          String    @id @default(cuid())
+  /// URL segment for the public page. Generated from the title on create and
+  /// then never changed — a devotional that has been shared or indexed keeps
+  /// the address it was shared under, so editing a typo in a title must not
+  /// silently 404 every link to it.
+  slug        String    @unique
   title       String
   verseRef    String?
   verseText   String?

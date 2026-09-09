@@ -4,7 +4,17 @@ import createNextIntlPlugin from "next-intl/plugin";
 
 const withNextIntl = createNextIntlPlugin("./src/lib/i18n/request.ts");
 
-const nextConfig: NextConfig = {};
+const nextConfig: NextConfig = {
+  images: {
+    /**
+     * The landing page tunes `quality` per photograph — the sanctuary stills
+     * hold up at 78 while the 1:1 communion detail shows banding below 80.
+     * Next 16 refuses any quality not declared here, so the set is explicit
+     * rather than left to the default 75.
+     */
+    qualities: [76, 78, 80, 82],
+  },
+};
 
 const sentryEnabled = Boolean(
   process.env.SENTRY_DSN ?? process.env.NEXT_PUBLIC_SENTRY_DSN,

@@ -2258,5 +2258,362 @@
     "children": "Children",
     "search": "Search",
     "help": "Help"
+  },
+  "lp": {
+    "meta": {
+      "title": "Room to Breathe, a Community to Grow In",
+      "description": "Gereja Kristen Jakarta Jemaat Tangerang — services every Sunday morning and Saturday evening. Open to families, young adults, and anyone arriving for the first time."
+    },
+    "nav": {
+      "skip": "Skip to main content",
+      "gatherings": "Gatherings",
+      "stories": "Stories",
+      "expect": "What to Expect",
+      "generosity": "Generosity",
+      "visit": "Plan a Visit",
+      "menu": "Menu",
+      "close": "Close",
+      "portal": "Member Portal",
+      "staff": "Staff",
+      "language": "Language",
+      "navLabel": "Primary navigation"
+    },
+    "hero": {
+      "eyebrow": "Services every Sunday, Wednesday & Saturday",
+      "headlineA": "Room",
+      "headlineB": "to Breathe.",
+      "headlineC": "A Community to Grow In.",
+      "standfirst": "In a city that never stops moving, there is one room built deliberately slow. The doors open every Sunday morning — including for you, arriving with nothing in hand.",
+      "location": "Tangerang · Banten",
+      "cta": "Plan Your Visit",
+      "ctaSecondary": "See Service Times",
+      "scroll": "Scroll to enter",
+      "ambientOn": "Hear the room",
+      "ambientOff": "Mute",
+      "posterAlt": "The empty sanctuary at GKJ Tangerang, looking down the centre aisle toward the cross"
+    },
+    "countdown": {
+      "next": "Next gathering",
+      "live": "In progress",
+      "days": "Days",
+      "hours": "Hours",
+      "minutes": "Min",
+      "seconds": "Sec"
+    },
+    "vision": {
+      "label": "Why we gather",
+      "verse": "I rejoiced with those who said to me, “Let us go to the house of the Lord.”",
+      "verseRef": "Psalm 122:1",
+      "statementLabel": "Vision",
+      "statement": "To proclaim the grace of salvation and to mature the congregation in God's love, power, and truth.",
+      "body": "We are not a church that promises a life without trouble. We believe in a grace larger than the trouble — and in a community willing to walk it with you, week after week, without rushing the process.",
+      "since": "Serving the congregation in Tangerang"
+    },
+    "liturgy": {
+      "label": "The Sunday experience",
+      "title": "What actually happens in those two hours",
+      "lead": "For most people the hardest part of walking into a church is not belief — it is not knowing what is about to happen. So here it is, in order, with nothing oversold.",
+      "progress": "Chapter",
+      "of": "of",
+      "prev": "Previous chapter",
+      "next": "Next chapter",
+      "hint": "Scroll, click a number, or use the arrow keys",
+      "chapters": {
+        "arrival": {
+          "title": "Arrival & the Walkway",
+          "when": "20 minutes before the service",
+          "body": "There is no welcome desk and no form to fill in. There is coffee on the walkway, and usually someone says hello before you have to introduce yourself.",
+          "note": "Arriving late is fine too. The side door stays open through the whole service."
+        },
+        "worship": {
+          "title": "Music & Reflection",
+          "when": "About 25 minutes",
+          "body": "A few songs together, then a silence long enough to actually feel. Nobody will ask you to raise your hands, and nobody notices if you stay seated.",
+          "note": "Lyrics go up on the screens. You do not need to know the songs."
+        },
+        "word": {
+          "title": "Scripture & Teaching",
+          "when": "About 30 minutes",
+          "body": "One passage read aloud, then explained — with its context, with honesty about the difficult parts, and with a real connection to life in Tangerang on Monday morning.",
+          "note": "Bibles sit in every row. You do not need to bring one."
+        },
+        "table": {
+          "title": "The Table",
+          "when": "On announced Sundays",
+          "body": "Communion is served on dates announced in advance. Bread and cup are passed along the row; you are free to receive or to let them pass without explaining anything.",
+          "note": "Nobody keeps a record of who took part."
+        },
+        "life": {
+          "title": "Life Together",
+          "when": "After the service",
+          "body": "This is the part people skip most often, and it matters most. A second coffee, unplanned conversation, and small groups meeting in homes through the week.",
+          "note": "You are also free to go straight home. We often do."
+        }
+      }
+    },
+    "firstTime": {
+      "trigger": "First time here?",
+      "title": "The questions people rarely get to ask",
+      "lead": "Direct answers, no preamble.",
+      "close": "Close",
+      "items": {
+        "dress": {
+          "q": "What should I wear?",
+          "a": "Whatever you are comfortable in. On any given Sunday you will see batik, button-downs, t-shirts and sandals in the same room. Nobody is counting."
+        },
+        "kids": {
+          "q": "What about my kids?",
+          "a": "Sunday School runs alongside Morning Service II at 10am. Walk your child to the Sunday School room, write your name and mobile number on the pickup sheet, and collect them with the same numbered card. Babies and toddlers are welcome to stay with you in the sanctuary."
+        },
+        "parking": {
+          "q": "Where do I park?",
+          "a": "The church yard takes both cars and motorbikes, and an attendant directs traffic during service hours. If the yard is full, the shoulder in front of the church is normally used — the attendant will show you where."
+        },
+        "facilities": {
+          "q": "What are the facilities like?",
+          "a": "Restrooms are off the walkway, near the café. The sanctuary is on the ground floor and step-free for wheelchair access. For a nursing room or any other need, mention it to someone at the door and it will be arranged."
+        },
+        "late": {
+          "q": "What if I am late?",
+          "a": "Just come in. The side door by the walkway stays open through the service, and the back rows are deliberately kept free for exactly this."
+        },
+        "language": {
+          "q": "What language is the service in?",
+          "a": "Indonesian. Some songs are in English, and this site is available in both languages. If you need language support, message the secretariat ahead of time."
+        }
+      }
+    },
+    "sermon": {
+      "label": "Room & Sound",
+      "title": "Ten seconds before anyone arrives",
+      "lead": "This is a recording of our own sanctuary, captured empty. Play it while you read the order of service — so your first Sunday does not feel like walking into an unfamiliar room.",
+      "play": "Play",
+      "pause": "Pause",
+      "restart": "Restart",
+      "seek": "Scrub audio position",
+      "waveform": "Waveform of the sanctuary room tone",
+      "orderLabel": "Order of service",
+      "note": "A recording of the room, not of a service.",
+      "teachingLabel": "Teaching",
+      "teachingTitle": "How we teach",
+      "teachingLead": "Not a motivational talk, and not a theology lecture. One passage of Scripture, read in its context, explained until it is clear, then carried into the actual decisions of that week.",
+      "watch": "Watch the sanctuary",
+      "watchTitle": "The sanctuary at GKJ Tangerang",
+      "watchBody": "Footage of the sanctuary, from the centre aisle toward the pulpit.",
+      "closeVideo": "Close video",
+      "seriesLabel": "Current series",
+      "speakerLabel": "Speaker",
+      "scriptureLabel": "Scripture",
+      "archiveNote": "Sermon recordings and daily devotionals are available in the Member Portal."
+    },
+    "schedule": {
+      "label": "Times & Location",
+      "title": "Five gatherings a week, and one seat still empty",
+      "lead": "The two morning services carry the same content — only the number of people in the room changes. The rest keep a rhythm of their own.",
+      "duration": "min",
+      "services": {
+        "umumEarly": {
+          "name": "Morning Service I",
+          "audience": "Quieter, many senior members",
+          "room": "Main Sanctuary"
+        },
+        "umumLate": {
+          "name": "Morning Service II",
+          "audience": "The fullest, many young families",
+          "room": "Main Sanctuary"
+        },
+        "tyog": {
+          "name": "TYOG Service",
+          "audience": "Youth & students, alongside Service II",
+          "room": "Main Sanctuary"
+        },
+        "sekolahMinggu": {
+          "name": "Sunday School",
+          "audience": "Ages 3–12, alongside Service II",
+          "room": "Sunday School Room"
+        },
+        "doa": {
+          "name": "Prayer Fellowship",
+          "audience": "Open to all, midweek",
+          "room": "Main Sanctuary"
+        },
+        "yifalian": {
+          "name": "Yi Fa Lian Service",
+          "audience": "Fellowship for senior members",
+          "room": "Main Sanctuary"
+        }
+      },
+      "campusLabel": "Location",
+      "addressLabel": "Address",
+      "route": "Open route in Google Maps",
+      "livestreamLabel": "Online service",
+      "livestream": "Watch the live stream",
+      "livestreamFallback": "Ask the secretariat for the stream link",
+      "askSecretariat": "Contact the secretariat",
+      "addToCalendar": "Add to calendar",
+      "calendarTitle": "Service at {church}",
+      "parkingLabel": "Parking",
+      "parkingBody": "On-site yard, with an attendant during service hours.",
+      "every": "Every {day}"
+    },
+    "nextgen": {
+      "label": "Sunday School & Youth",
+      "title": "Your child is not parked. They are taught.",
+      "lead": "Sunday School runs alongside Morning Service II at 10am on a curriculum that progresses through the year — not an activity to fill the time until their parents are done.",
+      "points": {
+        "safety": {
+          "title": "Recorded pickup",
+          "body": "Every child is dropped off and collected against the same numbered card. Children are released only to the card holder."
+        },
+        "curriculum": {
+          "title": "A curriculum that progresses",
+          "body": "One arc through the Bible across the year, split by age group, so children are not hearing the same story on repeat with no direction."
+        },
+        "teachers": {
+          "title": "The same teachers",
+          "body": "Teachers and helpers serve in fixed groups, so children come to know the adults who teach them."
+        },
+        "youth": {
+          "title": "Youth & students",
+          "body": "A Saturday evening service in a format more open to questions, continuing in small groups through the week."
+        }
+      },
+      "cta": "Ask about Sunday School",
+      "waMessage": "Good morning, I would like to ask about Sunday School at {church}."
+    },
+    "mission": {
+      "label": "How we work",
+      "acronym": "PIKP3",
+      "expansion": "Unity · Worship and Prayer · Small Groups · Discipleship · Evangelism · Social Service",
+      "lead": "Six commitments that decide where this congregation's time, energy and money go.",
+      "item1": "Strengthen the unity of GKJ.",
+      "item2": "Guide every member into intimacy with God through worship and prayer.",
+      "item3": "Shepherd the congregation through small groups.",
+      "item4": "Train and equip the congregation through continuous discipleship.",
+      "item5": "Ignite the congregation's passion to proclaim the grace of salvation.",
+      "item6": "Carry out social service in love."
+    },
+    "photo": {
+      "gathering": {
+        "alt": "The GKJ Tangerang congregation with heads bowed in prayer beneath a timber-framed ceiling",
+        "caption": "Prayer together, Morning Service II",
+        "credit": "Main Sanctuary"
+      },
+      "fellowship": {
+        "alt": "Families and young adults talking over coffee in the church café",
+        "caption": "The walkway, after the service",
+        "credit": "The second coffee"
+      },
+      "nextgen": {
+        "alt": "Sunday School children colouring paper doves at a table with their teacher",
+        "caption": "Sunday School, ages 4–6",
+        "credit": "Sunday School Room"
+      },
+      "visit": {
+        "alt": "A greeter welcoming a family through the church's timber front door",
+        "caption": "The front door, Sunday morning",
+        "credit": "You do not need to know where to go"
+      },
+      "detail": {
+        "alt": "An open Bible with a crimson ribbon marker beside a ceramic communion cup on linen",
+        "caption": "Communion",
+        "credit": "Bread, cup, and one table"
+      }
+    },
+    "giving": {
+      "label": "Generosity",
+      "title": "Given freely, recorded openly",
+      "lead": "There is no target on a screen and no bag passed twice. If this is your first visit, we would honestly rather you gave nothing this week.",
+      "qrisTab": "QRIS",
+      "bankTab": "Bank Transfer",
+      "qrisTitle": "Scan with any app",
+      "qrisBody": "QRIS is readable by every bank app and digital wallet in Indonesia.",
+      "qrisMissing": "No QRIS code has been uploaded for this deployment yet. Use the bank transfer alongside, or ask the secretariat for the current code.",
+      "qrisAlt": "QRIS code for giving",
+      "bankLabel": "Bank",
+      "accountLabel": "Account number",
+      "holderLabel": "Account name",
+      "copy": "Copy",
+      "copied": "Copied",
+      "copyFailed": "Could not copy automatically — please copy it manually",
+      "open": "How to give",
+      "close": "Close",
+      "confirm": "Confirm over WhatsApp",
+      "confirmMessage": "Good morning, I have just sent an offering to the {bank} account {account}.",
+      "transparencyLabel": "Where it goes",
+      "transparency": "Offerings fund church operations, member discipleship, and social service. Financial reports are read out in congregational meetings and are available to members through the Member Portal."
+    },
+    "visit": {
+      "label": "Plan a visit",
+      "title": "Just come. We will handle the rest.",
+      "lead": "If you would like someone with you on a first visit, message the secretariat and name the service you have chosen. Someone will be waiting at the door.",
+      "steps": {
+        "one": {
+          "title": "Pick a time",
+          "body": "Sunday 7am, Sunday 10am, Wednesday 7pm, or Saturday 1pm."
+        },
+        "two": {
+          "title": "Send a message",
+          "body": "One line to the secretariat is enough."
+        },
+        "three": {
+          "title": "Met at the door",
+          "body": "Including walking your child to Sunday School."
+        }
+      },
+      "cta": "Message the secretariat",
+      "waMessage": "Good morning, I would like to visit {church} for the first time. Could you help me?",
+      "secondary": "Open route"
+    },
+    "footer": {
+      "legalLabel": "Registered name",
+      "addressLabel": "Address",
+      "contactLabel": "Contact",
+      "hoursLabel": "Secretariat hours",
+      "hours": "Tuesday – Friday, 09:00 – 16:00 WIB",
+      "whatsappLabel": "Secretariat WhatsApp",
+      "faithLabel": "Statement of faith",
+      "faithBody": "We confess the Bible as the written word of God, the sole foundation of the congregation's faith and life; and Jesus Christ as Lord and Saviour, by grace, through faith.",
+      "faithVerse": "Ephesians 2:8",
+      "navLabel": "Pages",
+      "accessLabel": "Sign in",
+      "portal": "Member Portal",
+      "staff": "Staff & Admin",
+      "rights": "All rights reserved.",
+      "backToTop": "Back to top"
+    },
+    "stories": {
+      "label": "Stories",
+      "title": "Four generations, one room, every Sunday.",
+      "lead": "A grandmother who knows every hymn by heart, a toddler still learning to sit still, and a student who came alone last week — all in the same row of chairs."
+    },
+    "devotional": {
+      "label": "Devotionals",
+      "title": "One short reading, every day",
+      "lead": "Written by our own pastors and members — not reposted from somewhere else. Readable without an account, in two minutes, before your day starts.",
+      "todayLabel": "Latest devotional",
+      "read": "Read the devotional",
+      "all": "See every devotional",
+      "archiveTitle": "Devotionals",
+      "archiveLead": "The full archive of daily devotionals from {church}, open to anyone. Newest reading first.",
+      "archiveEmpty": "No devotionals have been published yet. The secretariat publishes a new reading each week — check back soon, or follow along in the Member Portal.",
+      "articleBack": "All devotionals",
+      "prev": "Previous devotional",
+      "next": "Next devotional",
+      "by": "Written by",
+      "publishedOn": "Published",
+      "page": "Page {page} of {pageCount}",
+      "newer": "Newer",
+      "older": "Older",
+      "count": "{count} devotionals",
+      "metaDescription": "Daily devotionals from {church}. One short passage of Scripture, written to be lived that day."
+    },
+    "notFound": {
+      "code": "404",
+      "title": "This page does not exist — but you are still welcome.",
+      "body": "The link may have changed, or we mistyped it. Either way, the service times and the daily devotionals are still where they were.",
+      "home": "Back to the home page",
+      "devotionalCta": "Read a devotional"
+    }
   }
 }
