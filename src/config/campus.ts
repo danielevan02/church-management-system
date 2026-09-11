@@ -87,10 +87,19 @@ export const campus = {
     env("NEXT_PUBLIC_CHURCH_GIVING_CONFIRM_WA")
   ).replace(/[^\d]/g, ""),
   email: env("NEXT_PUBLIC_CHURCH_EMAIL"),
-  /** Rendered only when set — an unset livestream falls back to the secretariat. */
-  livestreamUrl: env("NEXT_PUBLIC_CHURCH_LIVESTREAM_URL"),
-  instagramUrl: env("NEXT_PUBLIC_CHURCH_INSTAGRAM_URL"),
-  youtubeUrl: env("NEXT_PUBLIC_CHURCH_YOUTUBE_URL"),
+  /** Rendered only when set — an unset livestream falls back to the secretariat or YouTube channel. */
+  livestreamUrl:
+    env("NEXT_PUBLIC_CHURCH_LIVESTREAM_URL") ||
+    "https://www.youtube.com/@gkjtangerang7135",
+  instagramUrl:
+    env("NEXT_PUBLIC_CHURCH_INSTAGRAM_URL") ||
+    "https://www.instagram.com/gkjtangerang/",
+  youtubeUrl:
+    env("NEXT_PUBLIC_CHURCH_YOUTUBE_URL") ||
+    "https://www.youtube.com/@gkjtangerang7135",
+  facebookUrl:
+    env("NEXT_PUBLIC_CHURCH_FACEBOOK_URL") ||
+    "https://www.facebook.com/gkj.tangerang.79/",
 } as const;
 
 export function whatsappLink(text: string, number = campus.whatsapp): string {

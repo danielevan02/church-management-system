@@ -1,6 +1,6 @@
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
-import { Roboto, Roboto_Mono } from "next/font/google";
+import { Manrope } from "next/font/google";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
@@ -14,20 +14,8 @@ import { routing } from "@/lib/i18n/routing";
 
 import "../globals.css";
 
-// M3's baseline typeface. Static weights rather than Roboto Flex on purpose:
-// the type scale only needs 400/500 (700 covers stray font-bold call sites),
-// and this is a PWA served to members on Indonesian mobile networks — three
-// subsetted woff2 files beat one multi-axis variable font. Roboto Flex is the
-// upgrade path if/when you adopt M3 Expressive's weight-axis animation.
-const robotoSans = Roboto({
+const manrope = Manrope({
   variable: "--font-sans",
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
-  display: "swap",
-});
-
-const robotoMono = Roboto_Mono({
-  variable: "--font-mono",
   subsets: ["latin"],
   display: "swap",
 });
@@ -59,7 +47,7 @@ export default async function LocaleLayout({
   return (
     <html
       lang={locale}
-      className={`${robotoSans.variable} ${robotoMono.variable}`}
+      className={`${manrope.variable}`}
       suppressHydrationWarning
     >
       <body className="antialiased font-sans" suppressHydrationWarning>

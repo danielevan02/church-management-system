@@ -2,13 +2,12 @@
 
 import * as Sentry from "@sentry/nextjs";
 import { AlertTriangle, RefreshCw } from "lucide-react";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Manrope } from "next/font/google";
 import { useEffect } from "react";
 
 import "./globals.css";
 
-const geistSans = Geist({ variable: "--font-sans", subsets: ["latin"] });
-const geistMono = Geist_Mono({ variable: "--font-mono", subsets: ["latin"] });
+const manrope = Manrope({ variable: "--font-sans", subsets: ["latin"] });
 
 /**
  * Global error boundary for the App Router. Reports the error to Sentry
@@ -17,7 +16,7 @@ const geistMono = Geist_Mono({ variable: "--font-mono", subsets: ["latin"] });
  *
  * Renders its own <html>/<body> because it replaces the root layout when
  * the layout itself fails to render — so we re-import globals.css and the
- * Geist fonts here to keep the styling consistent.
+ * Manrope font here to keep the styling consistent.
  */
 export default function GlobalError({
   error,
@@ -33,7 +32,7 @@ export default function GlobalError({
   return (
     <html
       lang="id"
-      className={`${geistSans.variable} ${geistMono.variable}`}
+      className={manrope.variable}
     >
       <body className="antialiased font-sans bg-surface text-on-surface">
         <main className="flex min-h-dvh items-center justify-center p-6">

@@ -23,7 +23,7 @@ type Resolved = {
  * this run on the client with no timezone library at all — the server did the
  * only calendar-aware part when it resolved the first occurrence.
  */
-function resolveNow(slots: readonly NextService[], now: number): Resolved {
+export function resolveNow(slots: readonly NextService[], now: number): Resolved {
   const rolled = slots.map((s) => {
     let start = Date.parse(s.startsAtIso);
     let end = Date.parse(s.endsAtIso);

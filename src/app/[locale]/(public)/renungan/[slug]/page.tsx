@@ -1,6 +1,6 @@
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
-import { Inter, Newsreader } from "next/font/google";
+import { Manrope } from "next/font/google";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
@@ -22,17 +22,9 @@ import {
 
 import "@/styles/landing/index.css";
 
-const displaySerif = Newsreader({
+const manrope = Manrope({
   subsets: ["latin"],
-  axes: ["opsz"],
-  style: ["normal", "italic"],
-  variable: "--font-sm-serif",
-  display: "swap",
-});
-
-const operationalSans = Inter({
-  subsets: ["latin"],
-  variable: "--font-sm-sans",
+  variable: "--font-manrope",
   display: "swap",
 });
 
@@ -152,7 +144,8 @@ export default async function PublicDevotionalPage({
   return (
     <div
       id="sm-root"
-      className={`sm-root ${displaySerif.variable} ${operationalSans.variable}`}
+      className={`sm-root ${manrope.variable}`}
+      style={{ "--hero-primary": church.primaryColor } as React.CSSProperties}
       suppressHydrationWarning
     >
       <MotionGate />

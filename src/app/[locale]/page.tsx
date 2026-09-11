@@ -3,13 +3,14 @@ import path from "node:path";
 
 import { getLocale, getTranslations } from "next-intl/server";
 import Image from "next/image";
-import { Inter, Newsreader } from "next/font/google";
+import { Manrope } from "next/font/google";
 import { ArrowUpRight, MapPin, Navigation, Radio } from "lucide-react";
 import type { Metadata } from "next";
 
 import { DevotionalList } from "@/components/landing/devotional-list";
 import { GivingPanel } from "@/components/landing/giving-panel";
 import { HeroSanctuary } from "@/components/landing/hero-sanctuary";
+import { NaveFeatureGrid } from "@/components/landing/nave-feature-grid";
 import { LandingNav } from "@/components/landing/landing-nav";
 import { PublicFooter } from "@/components/landing/public-footer";
 import { RevealStage } from "@/components/landing/reveal";
@@ -34,26 +35,9 @@ import { listPublicDevotionals } from "@/server/queries/devotionals";
 
 import "@/styles/landing/index.css";
 
-/**
- * An architectural serif against a hyper-legible grotesque.
- *
- * Newsreader is loaded as a variable font (no `weight`, plus the `opsz` axis)
- * because the page needs it at 300 for large narrative lines and at 400 for
- * chapter titles from one file, and because the optical-size axis is what
- * keeps its thin strokes from going wiry at display sizes. It also ships a
- * true italic, so the emphasis in the headline is drawn rather than sheared.
- */
-const displaySerif = Newsreader({
+const manrope = Manrope({
   subsets: ["latin"],
-  axes: ["opsz"],
-  style: ["normal", "italic"],
-  variable: "--font-sm-serif",
-  display: "swap",
-});
-
-const operationalSans = Inter({
-  subsets: ["latin"],
-  variable: "--font-sm-sans",
+  variable: "--font-manrope",
   display: "swap",
 });
 
@@ -96,9 +80,6 @@ export default async function Home() {
     ? qrisPath
     : null;
 
-  const serviceNames = Object.fromEntries(
-    SERVICE_SLOTS.map((s) => [s.key, t(`schedule.services.${s.key}.name`)]),
-  );
   const slots = countdownSchedule();
   const schedule = fullSchedule();
   // Four: one lead plus three in the index beside it.
@@ -124,7 +105,8 @@ export default async function Home() {
   return (
     <div
       id="sm-root"
-      className={`sm-root ${displaySerif.variable} ${operationalSans.variable}`}
+      className={`sm-root ${manrope.variable}`}
+      style={{ "--hero-primary": church.primaryColor } as React.CSSProperties}
       /* `MotionGate` writes `data-motion` on this element during HTML parsing,
        * before React has hydrated. React then finds an attribute it did not
        * render and reports a mismatch it explicitly will not patch up. This is
@@ -145,51 +127,55 @@ export default async function Home() {
         <LandingNav />
 
         <main id="utama">
-          <HeroSanctuary slots={slots} serviceNames={serviceNames} />
+          <div className="hero-curtain-stage">
+            <HeroSanctuary />
 
-          {/* ============================================================
-           * THE NAVE — opens on the exact obsidian the hero fades to, so the
-           * handoff has no seam. The verse gets a whole dark room to itself;
-           * the light does not return until the next section.
-           * ============================================================ */}
-          <section
-            id="mengapa"
-            className="sm-tone-dark sm-section-tall"
-            aria-labelledby="sm-nave-title"
-          >
-            <div className="sm-shell sm-opener">
-              <p className="sm-opener-kicker sm-label sm-eyebrow">
-                {t("vision.label")}
-              </p>
-              <blockquote className="sm-opener-title sm-nave-quote">
-                <p className="sm-quote" data-sm-split>
-                  {t("vision.verse")}
-                </p>
-                <cite className="sm-label sm-nave-cite">
-                  {t("vision.verseRef")}
-                </cite>
-              </blockquote>
+            {/* ============================================================
+             * THE NAVE — opens on the exact obsidian the hero fades to, so the
+             * handoff has no seam. The 4-card feature strip sits at the top,
+             * followed by the verse and vision statement.
+             * ============================================================ */}
+            <section
+              id="mengapa"
+              className="sm-tone-dark sm-section-tall sm-nave-stacked"
+              aria-labelledby="sm-nave-title"
+            >
+              <NaveFeatureGrid slots={slots} />
 
-              <div
-                className="sm-opener-lead sm-nave-statement"
-                data-sm-stagger
-              >
-                <p className="sm-label sm-eyebrow" data-sm-reveal="up">
-                  {t("vision.statementLabel")}
+              <div className="sm-shell sm-opener">
+                <p className="sm-opener-kicker sm-label sm-eyebrow">
+                  {t("vision.label")}
                 </p>
-                <h2 id="sm-nave-title" className="sm-h4" data-sm-reveal="up">
-                  {t("vision.statement")}
-                </h2>
-                <p
-                  className="sm-body"
-                  style={{ color: "var(--sm-fg-muted)" }}
-                  data-sm-reveal="up"
+                <blockquote className="sm-opener-title sm-nave-quote">
+                  <p className="sm-quote" data-sm-split>
+                    {t("vision.verse")}
+                  </p>
+                  <cite className="sm-label sm-nave-cite">
+                    {t("vision.verseRef")}
+                  </cite>
+                </blockquote>
+
+                <div
+                  className="sm-opener-lead sm-nave-statement"
+                  data-sm-stagger
                 >
-                  {t("vision.body")}
-                </p>
+                  <p className="sm-label sm-eyebrow" data-sm-reveal="up">
+                    {t("vision.statementLabel")}
+                  </p>
+                  <h2 id="sm-nave-title" className="sm-h4" data-sm-reveal="up">
+                    {t("vision.statement")}
+                  </h2>
+                  <p
+                    className="sm-body"
+                    style={{ color: "var(--sm-fg-muted)" }}
+                    data-sm-reveal="up"
+                  >
+                    {t("vision.body")}
+                  </p>
+                </div>
               </div>
-            </div>
-          </section>
+            </section>
+          </div>
 
           {/* ============================================================
            * CERITA — the photo essay. Asymmetric on purpose: a full-bleed

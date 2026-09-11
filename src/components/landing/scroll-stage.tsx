@@ -80,23 +80,49 @@ function ScrollTriggerBridge() {
 }
 
 /**
- * Anchor navigation routed through Lenis so in-page jumps use the same easing
- * as the wheel. A plain `href="#id"` would hard-jump and desynchronise every
- * pinned timeline on the way past.
+ * The Lenis-eased jump to an in-page anchor, shared by every in-page nav
+ * control on the landing page (the hero's row of section links, the "Pelajari
+ * Lebih Lanjut" card, and the condensed nav bar). A plain `href="#id"` would
+ * hard-jump and desynchronise every pinned timeline on the way past.
+ *
+ * Returns whether it found the target and actually scrolled, so callers can
+ * decide whether to swallow the click (`preventDefault`) or let a real anchor
+ * navigate normally — which matters when the id lives on another route.
  */
-export function useSmoothScrollTo() {
+export function scrollToId(
+  id: string,
+  lenis: ReturnType<typeof useLenis>,
+  reduce: boolean,
+): boolean {
+  const el = document.getElementById(id);
+  if (!el) return false;
+  if (lenis && !reduce) {
+    lenis.start();
+    lenis.scrollTo(el, { duration: 1.4, force: true });
+  } else {
+    el.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
+  }
+  return true;
+}
+
+/**
+ * Click handler factory for a real `<a href="/#id">` section link.
+ *
+ * Real anchors, not buttons: a button has no `href`, so it offers no
+ * middle-click, no "open in new tab", and nothing for a crawler to follow.
+ * Returning false from a modified click lets the browser handle it normally;
+ * everything else glides there through Lenis instead of hard-jumping.
+ */
+export function useAnchorNav() {
   const lenis = useLenis();
   const reduce = useReducedMotion();
 
   return React.useCallback(
-    (target: string) => {
-      const el = document.querySelector(target);
-      if (!el) return;
-      if (!lenis || reduce) {
-        el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+    (id: string) => (e: React.MouseEvent) => {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) {
         return;
       }
-      lenis.scrollTo(el as HTMLElement, { duration: 1.5, offset: 0 });
+      if (scrollToId(id, lenis, reduce)) e.preventDefault();
     },
     [lenis, reduce],
   );

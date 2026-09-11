@@ -148,6 +148,30 @@ export async function PublicFooter() {
             <Link href="/give" className="sm-small sm-link-muted">
               {t("giving.label")}
             </Link>
+            <a
+              href={campus.youtubeUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="sm-small sm-link-muted"
+            >
+              YouTube
+            </a>
+            <a
+              href={campus.instagramUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="sm-small sm-link-muted"
+            >
+              Instagram
+            </a>
+            <a
+              href={campus.facebookUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="sm-small sm-link-muted"
+            >
+              Facebook
+            </a>
           </div>
         </div>
 
