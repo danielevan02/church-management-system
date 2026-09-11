@@ -15,6 +15,9 @@ import { campus } from "@/config/campus";
 
 import { scrollToId } from "./scroll-stage";
 
+const useIsomorphicLayoutEffect =
+  typeof window !== "undefined" ? React.useLayoutEffect : React.useEffect;
+
 const SECTIONS = [
   { id: "ibadah", key: "gatherings" },
   { id: "cerita", key: "stories" },
@@ -190,8 +193,15 @@ export function LandingNav({
 
       const tl = gsap.timeline({
         onComplete: () => {
+          // The panel is deliberately left parked at opacity 0 instead of
+          // cleared. `setOpen(false)` is called from GSAP's ticker, not a React
+          // event, so React flushes it — and with it `hidden` — on a later
+          // task. A `clearProps` here therefore restored the panel's full-bleed
+          // obsidian background several frames before the element actually left
+          // the page, while every link inside was still sitting at opacity 0:
+          // a black blink on every close. The entrance effect writes its own
+          // start state, so nothing downstream needs these props cleared.
           setOpen(false);
-          gsap.set(panel, { clearProps: "all" });
           onClosed?.();
         },
       });
@@ -249,8 +259,12 @@ export function LandingNav({
     return () => lenis.start();
   }, [open, lenis]);
 
-  // Entrance animation for full-screen menu drawer
-  React.useEffect(() => {
+  // Entrance animation for full-screen menu drawer.
+  // A layout effect, not a plain one: React drops `hidden` during the commit,
+  // and a passive effect would set the panel's start state only after the
+  // browser had already painted a frame of it at its CSS default — the same
+  // black flash as on close, mirrored.
+  useIsomorphicLayoutEffect(() => {
     if (!open || !panelRef.current) return;
 
     if (reduce) {
