@@ -21,7 +21,17 @@ const VIDEO_POSTER = "/landing-page/hero-poster.jpg";
  *  slides out from under the hero. */
 const EXIT_TRAVEL_VH = 0.6;
 /** How far under the hero section "mengapa" starts tucked before it emerges. */
-const MENGAPA_LIFT_VH = 0.2;
+const MENGAPA_LIFT_VH = 0.4;
+/** How small the hero card scrubs down to as it hands off. */
+const CARD_SHRINK_SCALE = 0.92;
+/** Bottom corner radius, in px, the card reaches at full shrink. */
+const CARD_SHRINK_RADIUS = 44;
+/** Quantisation step for that radius, in px. See the `onUpdate` below. */
+const RADIUS_STEP_PX = 4;
+/** How far the plate drifts down inside the card, as a fraction of hero
+ *  height, while the card scrubs away — the parallax lag. Must stay under
+ *  `--hero-plate-overhang` in the stylesheet or the plate's top edge shows. */
+const PLATE_PARALLAX_RATIO = 0.25;
 
 export function HeroSanctuary() {
   const t = useTranslations("lp.hero");
@@ -66,11 +76,14 @@ export function HeroSanctuary() {
     if (!root || reduce) return;
 
     const stage = (root.closest(".hero-curtain-stage") as HTMLElement | null) || root.parentElement;
-    const mengapaEl =
-      (stage ? stage.querySelector<HTMLElement>("#mengapa") : null) ||
+    const nextSectionEl =
+      (stage ? stage.querySelector<HTMLElement>("#ibadah, #mengapa") : null) ||
+      document.getElementById("ibadah") ||
       document.getElementById("mengapa");
 
     gsap.registerPlugin(ScrollTrigger);
+
+    const cardEl = root.querySelector<HTMLElement>(".hero-card");
 
     const ctx = gsap.context(() => {
       // 1. Entrance Timeline: Headline, nav links, and subtitle/portal button
@@ -121,28 +134,79 @@ export function HeroSanctuary() {
           trigger: root,
           start: "top top",
           end: () => `+=${window.innerHeight * EXIT_TRAVEL_VH}`,
-          scrub: true,
+          // Numeric, not `true`. `scrub: true` pins progress to the raw scroll
+          // position, so the animation inherits every irregularity in how the
+          // browser dispatches scroll — trackpad and smooth-scroll events do
+          // not arrive one per frame, which is what reads as stutter. A number
+          // makes GSAP lerp toward the target on rAF instead: one update per
+          // painted frame, and the ~0.6s catch-up smooths the gaps.
+          scrub: 0.6,
+          // The plate drift and the section lift are both function-based
+          // values measured off the viewport; without this they keep their
+          // first-run numbers after a resize or orientation change.
+          invalidateOnRefresh: true,
         },
       });
-      if (mengapaEl) {
+      if (nextSectionEl) {
         exitTl.fromTo(
-          mengapaEl,
+          nextSectionEl,
           { y: () => -window.innerHeight * MENGAPA_LIFT_VH },
           { y: 0, ease: "none" },
           0,
         );
       }
       exitTl
+        // The card scrubs smaller and rounds its bottom corners. The shadow is
+        // deliberately NOT animated here — it is static in the stylesheet.
+        // Interpolating a 60px-blur shadow meant re-rasterizing a full-viewport
+        // layer with a playing video in it on every frame, which is the bulk of
+        // the jank; parked in CSS it is rasterized once and the compositor just
+        // scales the result. It stays below the fold at rest and slides into
+        // view on its own as the card lifts, so nothing is lost visually.
         .fromTo(
-          root,
-          { boxShadow: "0px 32px 80px 12px rgba(0, 0, 0, 0.95)" },
-          { boxShadow: "0px 0px 0px 0px rgba(0, 0, 0, 0)", ease: "none" },
+          ".hero-card",
+          { scale: 1 },
+          { scale: CARD_SHRINK_SCALE, ease: "none" },
+          0,
+        )
+        // The plate sinks inside the card as the card itself lifts away, so the
+        // footage lags the frame rather than moving locked to it.
+        .fromTo(
+          ".hero-plate",
+          { y: 0 },
+          { y: () => root.clientHeight * PLATE_PARALLAX_RATIO, ease: "none" },
           0,
         )
         .to("[data-hero-scrim]", { opacity: 0.35, ease: "none" }, 0);
+
+      // The bottom radius is driven here rather than tweened, and quantised to
+      // 4px steps. `border-radius` is a paint property: every distinct value
+      // re-rasterizes the card's layer, and that layer is a full-viewport box
+      // wrapping a playing video — so tweening it continuously meant a full
+      // repaint on every single frame of the scrub, which is what was left of
+      // the stutter. Stepping it drops that from ~60 repaints to ~11 across the
+      // whole handoff; a 4px difference in corner radius on a moving card is
+      // below the threshold where anyone can see the stepping, so the corners
+      // still read as easing in. Everything else in this timeline is now
+      // transform- or opacity-only, i.e. compositor work.
+      if (cardEl) {
+        let lastRadius = -1;
+        exitTl.eventCallback("onUpdate", () => {
+          const stepped =
+            Math.round((exitTl.progress() * CARD_SHRINK_RADIUS) / RADIUS_STEP_PX) *
+            RADIUS_STEP_PX;
+          if (stepped === lastRadius) return;
+          lastRadius = stepped;
+          cardEl.style.setProperty("--hero-card-radius", `${stepped}px`);
+        });
+      }
     }, stage || root);
 
-    return () => ctx.revert();
+    return () => {
+      ctx.revert();
+      // Set outside GSAP's bookkeeping, so `revert()` will not clear it.
+      cardEl?.style.removeProperty("--hero-card-radius");
+    };
   }, [reduce]);
 
   return (
@@ -182,7 +246,7 @@ export function HeroSanctuary() {
         </div>
 
         {/* Main Hero Content Stage (Row 1: Title + Navlinks; Row 2: Subtitle + Portal Action) */}
-        <div className="hero-stage-content">
+        <div className="hero-stage-content sm-shell">
           {/* Row 1: Big Headline + 4 Nav Links */}
           <div className="hero-stage-row hero-stage-row-title">
             <h1 className="hero-display-headline">

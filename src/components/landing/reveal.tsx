@@ -57,6 +57,19 @@ export function RevealStage() {
                   start: "top 88%",
                   once: true,
                 },
+                onComplete: () => {
+                  self.lines.forEach((line) => {
+                    if (line instanceof HTMLElement) {
+                      line.style.overflow = "visible";
+                      if (line.parentElement instanceof HTMLElement) {
+                        line.parentElement.style.overflow = "visible";
+                      }
+                    }
+                  });
+                  if (el instanceof HTMLElement) {
+                    el.style.overflow = "visible";
+                  }
+                },
               },
             ),
         });
@@ -73,13 +86,19 @@ export function RevealStage() {
           group,
         );
         if (!items.length) return;
+        const triggerSelector = group.getAttribute("data-sm-trigger");
+        const trigger = triggerSelector
+          ? document.querySelector<HTMLElement>(triggerSelector) || group
+          : group;
+        const start = group.getAttribute("data-sm-start") || "top 85%";
+
         gsap.to(items, {
           opacity: 1,
           y: 0,
           duration: 1,
           stagger: 0.09,
           ease: EASE,
-          scrollTrigger: { trigger: group, start: "top 85%", once: true },
+          scrollTrigger: { trigger, start, once: true },
         });
       });
 
@@ -88,12 +107,18 @@ export function RevealStage() {
         .toArray<HTMLElement>("[data-sm-reveal]")
         .filter((el) => !el.closest("[data-sm-stagger]"))
         .forEach((el) => {
+          const triggerSelector = el.getAttribute("data-sm-trigger");
+          const trigger = triggerSelector
+            ? document.querySelector<HTMLElement>(triggerSelector) || el
+            : el;
+          const start = el.getAttribute("data-sm-start") || "top 88%";
+
           gsap.to(el, {
             opacity: 1,
             y: 0,
             duration: 1.1,
             ease: EASE,
-            scrollTrigger: { trigger: el, start: "top 88%", once: true },
+            scrollTrigger: { trigger, start, once: true },
           });
         });
 

@@ -4,13 +4,12 @@ import path from "node:path";
 import { getLocale, getTranslations } from "next-intl/server";
 import Image from "next/image";
 import { Manrope } from "next/font/google";
-import { ArrowUpRight, MapPin, Navigation, Radio } from "lucide-react";
+import { ArrowUpRight, MapPin } from "lucide-react";
 import type { Metadata } from "next";
 
 import { DevotionalList } from "@/components/landing/devotional-list";
 import { GivingPanel } from "@/components/landing/giving-panel";
 import { HeroSanctuary } from "@/components/landing/hero-sanctuary";
-import { NaveFeatureGrid } from "@/components/landing/nave-feature-grid";
 import { LandingNav } from "@/components/landing/landing-nav";
 import { PublicFooter } from "@/components/landing/public-footer";
 import { RevealStage } from "@/components/landing/reveal";
@@ -18,19 +17,15 @@ import { RoomAudio } from "@/components/landing/room-audio";
 import { SanctuaryReplay } from "@/components/landing/sanctuary-replay";
 import { ScrollStage } from "@/components/landing/scroll-stage";
 import { SundayExperience } from "@/components/landing/sunday-experience";
+import { WorshipSchedule } from "@/components/landing/worship-schedule";
 import { MotionGate } from "@/components/landing/motion-gate";
 import { Link } from "@/lib/i18n/navigation";
 import { church } from "@/config/church";
 import {
-  SERVICE_SLOTS,
   campus,
-  countdownSchedule,
-  formatAddress,
-  fullSchedule,
-  googleCalendarUrl,
   whatsappLink,
 } from "@/config/campus";
-import { dateFnsLocale, formatJakarta } from "@/lib/datetime";
+import { dateFnsLocale } from "@/lib/datetime";
 import { listPublicDevotionals } from "@/server/queries/devotionals";
 
 import "@/styles/landing/index.css";
@@ -57,13 +52,8 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function Home() {
   const t = await getTranslations("lp");
-  // Weekday names come from the resolved date rather than from a message key
-  // per day. With services on Sunday, Wednesday and Saturday, hardcoded
-  // `sunday`/`saturday` keys had already run out.
   const locale = await getLocale();
   const df = dateFnsLocale(locale);
-  const weekdayOf = (iso: string) =>
-    t("schedule.every", { day: formatJakarta(new Date(iso), "EEEE", df) });
 
   /**
    * Whether this deployment has actually shipped a QRIS image.
@@ -80,8 +70,6 @@ export default async function Home() {
     ? qrisPath
     : null;
 
-  const slots = countdownSchedule();
-  const schedule = fullSchedule();
   // Four: one lead plus three in the index beside it.
   const devotionals = await listPublicDevotionals(4);
 
@@ -129,6 +117,8 @@ export default async function Home() {
         <main id="utama">
           <div className="hero-curtain-stage">
             <HeroSanctuary />
+            <WorshipSchedule />
+          </div>
 
             {/* ============================================================
              * THE NAVE — opens on the exact obsidian the hero fades to, so the
@@ -140,14 +130,12 @@ export default async function Home() {
               className="sm-tone-dark sm-section-tall sm-nave-stacked"
               aria-labelledby="sm-nave-title"
             >
-              <NaveFeatureGrid slots={slots} />
-
               <div className="sm-shell sm-opener">
-                <p className="sm-opener-kicker sm-label sm-eyebrow">
+                <p className="sm-opener-kicker sm-label sm-eyebrow sm-nave-kicker">
                   {t("vision.label")}
                 </p>
                 <blockquote className="sm-opener-title sm-nave-quote">
-                  <p className="sm-quote" data-sm-split>
+                  <p className="sm-quote sm-nave-quote-text" data-sm-split>
                     {t("vision.verse")}
                   </p>
                   <cite className="sm-label sm-nave-cite">
@@ -159,14 +147,14 @@ export default async function Home() {
                   className="sm-opener-lead sm-nave-statement"
                   data-sm-stagger
                 >
-                  <p className="sm-label sm-eyebrow" data-sm-reveal="up">
+                  <p className="sm-label sm-eyebrow sm-nave-statement-kicker" data-sm-reveal="up">
                     {t("vision.statementLabel")}
                   </p>
-                  <h2 id="sm-nave-title" className="sm-h4" data-sm-reveal="up">
+                  <h2 id="sm-nave-title" className="sm-h4 sm-nave-statement-title" data-sm-reveal="up">
                     {t("vision.statement")}
                   </h2>
                   <p
-                    className="sm-body"
+                    className="sm-body sm-nave-statement-desc"
                     style={{ color: "var(--sm-fg-muted)" }}
                     data-sm-reveal="up"
                   >
@@ -175,7 +163,6 @@ export default async function Home() {
                 </div>
               </div>
             </section>
-          </div>
 
           {/* ============================================================
            * CERITA — the photo essay. Asymmetric on purpose: a full-bleed
@@ -246,13 +233,13 @@ export default async function Home() {
 
                 <div className="sm-essay-note" data-sm-stagger>
                   <p className="sm-label sm-eyebrow" data-sm-reveal="up">
-                    {t("liturgy.chapters.life.when")}
+                    {t("stories.noteWhen")}
                   </p>
                   <h3 className="sm-h3" data-sm-reveal="up">
-                    {t("liturgy.chapters.life.title")}
+                    {t("stories.noteTitle")}
                   </h3>
                   <p className="sm-body" data-sm-reveal="up">
-                    {t("liturgy.chapters.life.body")}
+                    {t("stories.noteBody")}
                   </p>
                 </div>
 
@@ -375,155 +362,6 @@ export default async function Home() {
               </div>
             </section>
           ) : null}
-
-          {/* ============================================================
-           * JADWAL & LOKASI
-           * ============================================================ */}
-          <section
-            id="ibadah"
-            className="sm-tone-stone sm-section"
-            aria-labelledby="sm-jadwal-title"
-          >
-            <div className="sm-shell">
-              <div className="sm-opener">
-                <p className="sm-opener-kicker sm-label sm-eyebrow">
-                  {t("schedule.label")}
-                </p>
-                <h2
-                  id="sm-jadwal-title"
-                  className="sm-opener-title sm-h1"
-                  data-sm-split
-                >
-                  {t("schedule.title")}
-                </h2>
-                <p
-                  className="sm-opener-lead sm-lead"
-                  style={{ color: "var(--sm-ink-2)" }}
-                  data-sm-reveal="up"
-                >
-                  {t("schedule.lead")}
-                </p>
-              </div>
-
-              <div className="sm-jadwal">
-                <ol className="sm-jadwal-list" data-sm-stagger>
-                  {SERVICE_SLOTS.map((slot, i) => {
-                    const resolved = schedule[i];
-                    return (
-                      <li
-                        key={slot.key}
-                        className="sm-jadwal-row"
-                        data-sm-reveal="up"
-                      >
-                        <p className="sm-label sm-jadwal-day">
-                          {weekdayOf(resolved.startsAtIso)}
-                        </p>
-                        <p className="sm-num sm-jadwal-time">
-                          {formatJakarta(
-                            new Date(resolved.startsAtIso),
-                            "HH.mm",
-                          )}
-                        </p>
-                        <div className="sm-jadwal-detail">
-                          <p className="sm-h4">
-                            {t(`schedule.services.${slot.key}.name`)}
-                          </p>
-                          <p
-                            className="sm-small"
-                            style={{ color: "var(--sm-ink-2)" }}
-                          >
-                            {t(`schedule.services.${slot.key}.audience`)}
-                          </p>
-                        </div>
-                        <p className="sm-small sm-jadwal-room">
-                          {t(`schedule.services.${slot.key}.room`)}
-                          <span aria-hidden> · </span>
-                          {slot.durationMin} {t("schedule.duration")}
-                        </p>
-                        <a
-                          className="sm-jadwal-cal sm-label"
-                          href={googleCalendarUrl({
-                            title: `${t(`schedule.services.${slot.key}.name`)} — ${church.shortName}`,
-                            slot,
-                            details: t("schedule.calendarTitle", {
-                              church: church.name,
-                            }),
-                          })}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {t("schedule.addToCalendar")}
-                        </a>
-                      </li>
-                    );
-                  })}
-                </ol>
-
-                <aside className="sm-campus" aria-label={t("schedule.campusLabel")}>
-                  <div className="sm-campus-block">
-                    <p className="sm-label sm-eyebrow">
-                      {t("schedule.addressLabel")}
-                    </p>
-                    <p className="sm-h4">{campus.signage}</p>
-                    <p className="sm-body" style={{ color: "var(--sm-ink-2)" }}>
-                      {formatAddress()}
-                    </p>
-                    <a
-                      href={campus.mapsUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="sm-btn sm-btn-solid sm-btn-sm sm-action self-start"
-                    >
-                      <Navigation className="h-4 w-4" aria-hidden />
-                      {t("schedule.route")}
-                    </a>
-                  </div>
-
-                  <div className="sm-campus-block sm-rule-t">
-                    <p className="sm-label sm-eyebrow">
-                      {t("schedule.livestreamLabel")}
-                    </p>
-                    {/* Rendered as a real destination only when one is
-                        configured. An unset stream falls through to the
-                        secretariat rather than to a link that goes nowhere. */}
-                    {campus.livestreamUrl ? (
-                      <a
-                        href={campus.livestreamUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="sm-link sm-h4 self-start"
-                      >
-                        <Radio className="mr-2 inline h-4 w-4" aria-hidden />
-                        {t("schedule.livestream")}
-                      </a>
-                    ) : secretariatHref ? (
-                      <a
-                        href={secretariatHref}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="sm-link sm-h4 self-start"
-                      >
-                        {t("schedule.livestreamFallback")}
-                      </a>
-                    ) : (
-                      <p className="sm-body" style={{ color: "var(--sm-ink-2)" }}>
-                        {t("schedule.livestreamFallback")}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="sm-campus-block sm-rule-t">
-                    <p className="sm-label sm-eyebrow">
-                      {t("schedule.parkingLabel")}
-                    </p>
-                    <p className="sm-body" style={{ color: "var(--sm-ink-2)" }}>
-                      {t("schedule.parkingBody")}
-                    </p>
-                  </div>
-                </aside>
-              </div>
-            </div>
-          </section>
 
           {/* ============================================================
            * SEKOLAH MINGGU & REMAJA

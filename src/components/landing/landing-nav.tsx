@@ -370,7 +370,7 @@ export function LandingNav({
         className="sm-nav-bar"
       >
         <div className="sm-nav-backdrop" aria-hidden="true" />
-        <div className="sm-shell-wide relative flex items-center justify-between gap-6">
+        <div className="sm-shell relative flex items-center justify-between gap-6">
           {/* Institutional Church Lockup (Logo + GKJ Tangerang) */}
           <Lockup onHome={onAnchor("atas")} variant={variant} />
 

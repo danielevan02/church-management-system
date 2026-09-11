@@ -8,7 +8,15 @@ import { SANCTUARY_DURATION, SANCTUARY_PEAKS } from "./sanctuary-peaks";
 
 const SRC_WEBM = "/landing-page/sanctuary.webm";
 const SRC_M4A = "/landing-page/sanctuary.m4a";
-const ORDER = ["arrival", "worship", "word", "table", "life"] as const;
+const ORDER = [
+  "sambutan",
+  "persiapan",
+  "pembukaan",
+  "pujian",
+  "firman",
+  "persembahan",
+  "penutup",
+] as const;
 
 const clock = (s: number) => {
   const total = Math.max(0, Math.floor(s));

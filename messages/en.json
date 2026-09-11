@@ -2329,43 +2329,55 @@
     },
     "liturgy": {
       "label": "The Sunday experience",
-      "title": "What actually happens in those two hours",
-      "lead": "For most people the hardest part of walking into a church is not belief — it is not knowing what is about to happen. So here it is, in order, with nothing oversold.",
-      "progress": "Chapter",
+      "title": "What Is Worship Like at GKJ Tangerang?",
+      "lead": "In worship, together we praise God, listen to His Word, pray, and respond to His truth in our daily lives. Walk through our order of service with us.",
+      "progress": "Part",
       "of": "of",
-      "prev": "Previous chapter",
-      "next": "Next chapter",
+      "prev": "Previous part",
+      "next": "Next part",
       "hint": "Scroll, click a number, or use the arrow keys",
       "chapters": {
-        "arrival": {
-          "title": "Arrival & the Walkway",
-          "when": "20 minutes before the service",
-          "body": "There is no welcome desk and no form to fill in. There is coffee on the walkway, and usually someone says hello before you have to introduce yourself.",
-          "note": "Arriving late is fine too. The side door stays open through the whole service."
+        "sambutan": {
+          "title": "Welcome & Greeting",
+          "when": "Before the service",
+          "body": "Congregants are welcomed by ushers before entering the sanctuary.",
+          "note": "Ushers are ready to greet you and assist in finding comfortable seating."
         },
-        "worship": {
-          "title": "Music & Reflection",
-          "when": "About 25 minutes",
-          "body": "A few songs together, then a silence long enough to actually feel. Nobody will ask you to raise your hands, and nobody notices if you stay seated.",
-          "note": "Lyrics go up on the screens. You do not need to know the songs."
+        "persiapan": {
+          "title": "Preparation",
+          "when": "Entering the sanctuary",
+          "body": "Step into the sanctuary and prepare your heart before the service begins.",
+          "note": "A quiet atmosphere for personal prayer and stillness before worship."
         },
-        "word": {
-          "title": "Scripture & Teaching",
-          "when": "About 30 minutes",
-          "body": "One passage read aloud, then explained — with its context, with honesty about the difficult parts, and with a real connection to life in Tangerang on Monday morning.",
-          "note": "Bibles sit in every row. You do not need to bring one."
+        "pembukaan": {
+          "title": "Opening & Call to Worship",
+          "when": "Opening",
+          "body": "Opening Scripture reading and votum.",
+          "note": "The liturgy begins with a call to worship and surrender to God."
         },
-        "table": {
-          "title": "The Table",
-          "when": "On announced Sundays",
-          "body": "Communion is served on dates announced in advance. Bread and cup are passed along the row; you are free to receive or to let them pass without explaining anything.",
-          "note": "Nobody keeps a record of who took part."
+        "pujian": {
+          "title": "Praise & Worship",
+          "when": "Congregational singing",
+          "body": "The congregation praises God together in song and worship.",
+          "note": "Hymn and praise lyrics are displayed clearly on screen."
         },
-        "life": {
-          "title": "Life Together",
-          "when": "After the service",
-          "body": "This is the part people skip most often, and it matters most. A second coffee, unplanned conversation, and small groups meeting in homes through the week.",
-          "note": "You are also free to go straight home. We often do."
+        "firman": {
+          "title": "The Word of God",
+          "when": "Sermon",
+          "body": "Sermon and reflection on God's Word.",
+          "note": "Biblical teaching that speaks relevantly into daily life."
+        },
+        "persembahan": {
+          "title": "Offering & Announcements",
+          "when": "Congregational response",
+          "body": "Giving offerings and listening to community updates.",
+          "note": "An expression of gratitude and information on ministry throughout the week."
+        },
+        "penutup": {
+          "title": "Closing Prayer",
+          "when": "Closing",
+          "body": "Concluding the worship service in prayer.",
+          "note": "The service concludes with a pastoral blessing sending you into the week ahead."
         }
       }
     },
@@ -2425,45 +2437,60 @@
       "archiveNote": "Sermon recordings and daily devotionals are available in the Member Portal."
     },
     "schedule": {
-      "label": "Times & Location",
-      "title": "Five gatherings a week, and one seat still empty",
-      "lead": "The two morning services carry the same content — only the number of people in the room changes. The rest keep a rhythm of their own.",
+      "label": "Worship Schedule",
+      "title": "Worship Schedule",
+      "lead": "Come and worship and grow together with us.",
       "duration": "min",
+      "sundayLabel": "Sunday",
+      "wednesdayLabel": "Wednesday",
+      "saturdayLabel": "Saturday",
+      "mainSunday": "Main Services",
+      "sanctuaryRoom": "Main Sanctuary",
+      "sanctuaryCaption": "Main Sanctuary · GKJ Tangerang",
+      "atmosphereTitle": "Sanctuary & Fellowship",
+      "atmosphereLead": "Welcoming every member and visitor to worship and grow together in the love of Christ.",
+      "nextServiceLabel": "Next Service",
       "services": {
         "umumEarly": {
-          "name": "Morning Service I",
+          "name": "Kebaktian Umum I",
+          "englishNote": "Morning Service I",
           "audience": "Quieter, many senior members",
           "room": "Main Sanctuary"
         },
         "umumLate": {
-          "name": "Morning Service II",
+          "name": "Kebaktian Umum II",
+          "englishNote": "Morning Service II",
           "audience": "The fullest, many young families",
           "room": "Main Sanctuary"
         },
         "tyog": {
-          "name": "TYOG Service",
-          "audience": "Youth & students, alongside Service II",
+          "name": "TYOG / Pemuda",
+          "englishNote": "Youth & young adults service",
+          "audience": "Youth & young adults service",
           "room": "Main Sanctuary"
         },
         "sekolahMinggu": {
-          "name": "Sunday School",
-          "audience": "Ages 3–12, alongside Service II",
+          "name": "Sekolah Minggu",
+          "englishNote": "Sunday School",
+          "audience": "Ages 3–12, parallel with Kebaktian Umum II",
           "room": "Sunday School Room"
         },
         "doa": {
-          "name": "Prayer Fellowship",
-          "audience": "Open to all, midweek",
+          "name": "Persekutuan Doa",
+          "englishNote": "Prayer Fellowship",
+          "audience": "Open to all, midweek gathering",
           "room": "Main Sanctuary"
         },
         "yifalian": {
-          "name": "Yi Fa Lian Service",
+          "name": "Yi Fa Lian",
+          "englishNote": "Senior fellowship service",
           "audience": "Fellowship for senior members",
           "room": "Main Sanctuary"
         }
       },
-      "campusLabel": "Location",
+      "campusLabel": "Church Location",
       "addressLabel": "Address",
-      "route": "Open route in Google Maps",
+      "route": "Open in Google Maps",
       "livestreamLabel": "Online service",
       "livestream": "Watch the live stream",
       "livestreamFallback": "Ask the secretariat for the stream link",
@@ -2601,9 +2628,12 @@
       "backToTop": "Back to top"
     },
     "stories": {
-      "label": "Stories",
-      "title": "Four generations, one room, every Sunday.",
-      "lead": "A grandmother who knows every hymn by heart, a toddler still learning to sit still, and a student who came alone last week — all in the same row of chairs."
+      "label": "Four Generations, One Room",
+      "title": "One Family in Christ",
+      "lead": "GKJ Tangerang is a place for people of all ages and backgrounds to worship and grow together. Children, youth, young adults, adults, and seniors all have a place to grow and serve together.",
+      "noteWhen": "After the service",
+      "noteTitle": "Life Together",
+      "noteBody": "A second cup of coffee, warm conversations, and community supporting one another through the week."
     },
     "devotional": {
       "label": "Devotionals",

@@ -18,15 +18,13 @@ type Chapter = {
 };
 
 const CHAPTERS: readonly Chapter[] = [
-  { key: "arrival", image: "/landing-page/visit.jpeg", position: "42% 50%" },
-  { key: "worship", image: "/landing-page/gathering.jpeg", position: "50% 62%" },
-  { key: "word", image: "/landing-page/hero-poster.jpg", position: "50% 46%" },
-  { key: "table", image: "/landing-page/detail.jpeg", position: "50% 50%" },
-  {
-    key: "life",
-    image: "/landing-page/fellowship.jpeg",
-    position: "52% 55%",
-  },
+  { key: "sambutan", image: "/landing-page/visit.jpeg", position: "42% 50%" },
+  { key: "persiapan", image: "/landing-page/gathering.jpeg", position: "50% 65%" },
+  { key: "pembukaan", image: "/landing-page/liturgy-pembukaan.jpg", position: "50% 50%" },
+  { key: "pujian", image: "/landing-page/liturgy-pujian.jpg", position: "50% 50%" },
+  { key: "firman", image: "/landing-page/liturgy-firman.jpg", position: "50% 50%" },
+  { key: "persembahan", image: "/landing-page/liturgy-persembahan.jpg", position: "50% 45%" },
+  { key: "penutup", image: "/landing-page/liturgy-penutup.jpg", position: "50% 35%" },
 ];
 
 /** Scroll distance, in viewport heights, spent on each chapter after the first. */

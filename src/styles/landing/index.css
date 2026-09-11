@@ -216,7 +216,7 @@ html:has(.sm-root) body {
   font-family: var(--sm-serif-stack);
   font-weight: 300;
   font-size: clamp(2.875rem, 8.4vw, 8.25rem);
-  line-height: 0.94;
+  line-height: 1.08;
   letter-spacing: -0.028em;
   font-variation-settings: "opsz" 60;
 }
@@ -224,7 +224,7 @@ html:has(.sm-root) body {
   font-family: var(--sm-serif-stack);
   font-weight: 300;
   font-size: clamp(2.25rem, 5.4vw, 4.75rem);
-  line-height: 1;
+  line-height: 1.16;
   letter-spacing: -0.024em;
   font-variation-settings: "opsz" 48;
 }
@@ -232,7 +232,7 @@ html:has(.sm-root) body {
   font-family: var(--sm-serif-stack);
   font-weight: 300;
   font-size: clamp(1.75rem, 3.4vw, 3rem);
-  line-height: 1.08;
+  line-height: 1.2;
   letter-spacing: -0.018em;
   font-variation-settings: "opsz" 36;
 }
@@ -240,7 +240,7 @@ html:has(.sm-root) body {
   font-family: var(--sm-serif-stack);
   font-weight: 400;
   font-size: clamp(1.3125rem, 2vw, 1.75rem);
-  line-height: 1.16;
+  line-height: 1.24;
   letter-spacing: -0.012em;
   font-variation-settings: "opsz" 24;
 }
@@ -258,7 +258,7 @@ html:has(.sm-root) body {
   font-weight: 300;
   font-style: italic;
   font-size: clamp(1.5rem, 3.5vw, 3.25rem);
-  line-height: 1.16;
+  line-height: 1.28;
   letter-spacing: -0.02em;
   font-variation-settings: "opsz" 40;
 }
@@ -374,7 +374,7 @@ html:has(.sm-root) body {
 }
 .sm-shell-wide {
   width: 100%;
-  max-width: 110rem;
+  max-width: 96rem;
   margin-inline: auto;
   padding-inline: clamp(1.25rem, 4.6vw, 5.5rem);
 }
@@ -704,12 +704,18 @@ html.lenis body {
 }
 
 /* SplitText inserts these; `overflow: clip` on the mask wrapper is what lets a
- * line slide out from behind its own edge instead of appearing through it. */
+ * line slide out from behind its own edge instead of appearing through it.
+ * Bottom padding and matching negative margin allow letter descenders (g, p, y, j, q)
+ * to render without being sliced off by the overflow mask. */
 .sm-split-line {
   will-change: transform;
+  padding-bottom: 0.25em;
+  margin-bottom: -0.25em;
 }
 .sm-root [data-sm-split] > div {
   overflow: clip;
+  padding-bottom: 0.25em;
+  margin-bottom: -0.25em;
 }
 
 /* ==========================================================================
@@ -1000,14 +1006,22 @@ html.lenis body {
   min-height: 100vh;
   min-height: 100svh;
   z-index: 30;
-  box-shadow: 0px 32px 80px 12px rgba(0, 0, 0, 0.95);
-  overflow: hidden;
+  /* No shadow and no clipping here. The shadow belongs to `.hero-card` — cast
+   * from this full-bleed box it fell from the container's bottom EDGE onto the
+   * schedule section, painting the hard band that broke the seam. `overflow`
+   * has to stay visible so the card's shadow can spill past this box; the card
+   * clips its own plate, so nothing else needs the clip. */
+  overflow: visible;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   color: #ffffff;
-  background: #0e0b0a;
+  /* Byte-identical ink to `.sm-worship-section`, and flat — no gradient, no
+   * shadow. The gutter this shows once the card shrinks is then the same
+   * surface as the section below it, so the seam has nothing to give it away
+   * and the card reads as floating on one continuous field. */
+  background: var(--sm-obsidian);
 }
 
 .hero-card {
@@ -1019,14 +1033,36 @@ html.lenis body {
   justify-content: center;
   align-items: center;
   overflow: hidden;
+  /* Shrinks from the top edge so the card stays tucked under the fixed nav
+   * while its bottom lifts away; GSAP drives scale and bottom radius on
+   * scroll. `will-change` names transform ONLY — hinting box-shadow forces the
+   * layer to be treated as repaint-bound for the whole scroll, which is the
+   * opposite of what we want now that the shadow never changes. */
+  transform-origin: 50% 0%;
+  will-change: transform;
+  /* Stepped in 4px increments by the hero's scroll timeline rather than
+   * tweened, to keep repaints of this (video-bearing) layer down. */
+  border-bottom-left-radius: var(--hero-card-radius, 0px);
+  border-bottom-right-radius: var(--hero-card-radius, 0px);
+  /* Static, not tweened. At rest the card is full-bleed so this sits entirely
+   * below the fold; it comes into view by itself as the card shrinks away from
+   * the viewport bottom. Tight falloff (negative spread) so it reads as depth
+   * under the rounded edge rather than as a band across the section below. */
+  box-shadow: 0px 28px 60px -24px rgba(0, 0, 0, 0.75);
 }
 
 .hero-plate {
   position: absolute;
-  inset: 0;
+  /* Overhangs the card so the parallax drift (25% of card height, driven by
+   * GSAP on scroll) never exposes a bare edge — the extra 4% is slack for the
+   * card's own scale-down compressing the translate. Raising this crops the
+   * cover-fitted footage tighter, so keep it just ahead of the drift. */
+  --hero-plate-overhang: 29%;
+  inset: calc(-1 * var(--hero-plate-overhang)) 0 auto 0;
   width: 100%;
-  height: 100%;
+  height: calc(100% + var(--hero-plate-overhang));
   z-index: 1;
+  will-change: transform;
 }
 
 .hero-bg-img {
@@ -1072,6 +1108,11 @@ html.lenis body {
   opacity: 0;
   background: #161210;
   pointer-events: none;
+  /* Earns its own compositor layer. Chrome only promotes opacity animations it
+   * runs itself; this one is driven frame by frame from JS, so without the hint
+   * each step repainted a full-viewport rectangle. With it the change is pure
+   * compositing. */
+  will-change: opacity;
 }
 
 .hero-social-row {
@@ -1107,7 +1148,9 @@ html.lenis body {
   position: relative;
   z-index: 15;
   width: 100%;
-  padding-inline: clamp(1.5rem, 4vw, 4rem);
+  max-width: 96rem;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 4.6vw, 5.5rem);
   padding-top: clamp(2.5rem, 5vh, 4.5rem);
   padding-bottom: clamp(1.5rem, 3vh, 2.5rem);
   margin-block: auto;
@@ -2619,36 +2662,96 @@ html.lenis body {
   position: relative;
   z-index: 10;
   background: var(--sm-obsidian);
-  padding-top: 0;
-  padding-bottom: clamp(6rem, 16vh, 13rem);
+  padding-block: clamp(6rem, 16vh, 13rem);
   will-change: transform;
 }
 
-.sm-nave-stacked .nave-feature-grid {
-  margin-bottom: clamp(3.5rem, 8vh, 6.5rem);
+@media (min-width: 62rem) {
+  .sm-nave-stacked .sm-opener {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(1.25rem, 2.5vw, 2.5rem);
+    align-items: start;
+  }
+  .sm-nave-stacked .sm-opener-kicker {
+    grid-column: 1 / span 2;
+    padding-top: 0.5em;
+  }
+  .sm-nave-stacked .sm-opener-title {
+    grid-column: 3 / span 6;
+    width: 100%;
+    max-width: none;
+  }
+  .sm-nave-stacked .sm-opener-lead {
+    grid-column: 9 / span 4;
+    padding-top: 0.35rem;
+  }
+}
+
+.sm-nave-kicker {
+  color: var(--sm-accent-display);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
 }
 
 .sm-nave-quote {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  max-width: 34ch;
+  width: 100%;
+  max-width: none;
 }
-.sm-nave-quote p {
+
+.sm-nave-quote-text {
   color: var(--sm-paper);
-  text-wrap: pretty;
+  font-family: var(--sm-serif-stack);
+  font-weight: 300;
+  font-style: italic;
+  font-size: clamp(2rem, 3.2vw, 3.25rem);
+  line-height: 1.28;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  width: 100%;
+  max-width: none;
 }
+
 .sm-nave-cite {
   color: var(--sm-accent-display);
   font-style: normal;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
 }
+
+/* Vision Statement (Clean, NO divider border, tight alignment with quote) */
 .sm-nave-statement {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  padding-top: clamp(1.5rem, 4vh, 3rem);
-  border-top: 1px solid var(--sm-rule);
+  gap: 1.25rem;
+  border-top: none;
+  padding-top: 0;
   max-width: 56ch;
+}
+
+.sm-nave-statement-kicker {
+  color: var(--sm-accent-display);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.sm-nave-statement-title {
+  color: var(--sm-paper);
+  font-family: var(--sm-sans-stack);
+  font-weight: 500;
+  font-size: clamp(1.25rem, 1.8vw, 1.65rem);
+  line-height: 1.38;
+  letter-spacing: -0.01em;
+}
+
+.sm-nave-statement-desc {
+  color: var(--sm-fg-muted);
+  font-size: clamp(0.9375rem, 1.05vw, 1.0625rem);
+  line-height: 1.68;
 }
 
 /* ==========================================================================
@@ -2788,108 +2891,444 @@ html.lenis body {
 }
 
 /* ==========================================================================
- * SCHEDULE & CAMPUS
+ * WORSHIP SCHEDULE — CINEMATIC NEO-GROTESQUE + BENTO GRID
  * ========================================================================== */
 
-.sm-jadwal {
-  display: grid;
-  gap: clamp(2rem, 5vw, 4rem);
-  padding-top: clamp(2.5rem, 6vh, 4.5rem);
-}
-@media (min-width: 62rem) {
-  .sm-jadwal {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 0.62fr);
-    align-items: start;
-  }
-}
-.sm-jadwal-list {
-  display: flex;
-  flex-direction: column;
-}
-/* A schedule is a table of facts, so it is set as ruled rows rather than as
- * cards: the hairlines do the aligning work a card border cannot. */
-.sm-jadwal-row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 0.5rem 1.25rem;
-  align-items: baseline;
-  padding-block: clamp(1.25rem, 2.4vw, 1.75rem);
-  border-top: 1px solid var(--sm-rule);
-}
-@media (min-width: 48rem) {
-  .sm-jadwal-row {
-    grid-template-columns: 7.5rem 5.5rem minmax(0, 1fr) auto;
-    gap: 0.375rem 1.5rem;
-  }
-}
-.sm-jadwal-day {
-  color: var(--sm-fg-faint);
-  grid-column: 1;
-}
-.sm-jadwal-time {
-  color: var(--sm-fg);
-  grid-column: 1;
-}
-.sm-jadwal-detail {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  grid-column: 1 / -1;
-}
-.sm-jadwal-room {
-  color: var(--sm-fg-faint);
-  grid-column: 1 / -1;
-}
-.sm-jadwal-cal {
-  grid-column: 2;
-  grid-row: 1;
-  justify-self: end;
-  color: var(--sm-fg-faint);
-  text-decoration: none;
-  border-bottom: 1px solid transparent;
-  transition:
-    color var(--sm-dur-fast) var(--sm-ease),
-    border-color var(--sm-dur-fast) var(--sm-ease);
-}
-.sm-jadwal-cal:hover {
-  color: var(--sm-accent);
-  border-bottom-color: var(--sm-accent);
-}
-@media (min-width: 48rem) {
-  .sm-jadwal-day {
-    grid-column: 1;
-    grid-row: 1;
-  }
-  .sm-jadwal-time {
-    grid-column: 2;
-    grid-row: 1;
-  }
-  .sm-jadwal-detail {
-    grid-column: 3;
-    grid-row: 1;
-  }
-  .sm-jadwal-room {
-    grid-column: 3;
-    grid-row: 2;
-  }
-  .sm-jadwal-cal {
-    grid-column: 4;
-    grid-row: 1;
-  }
-}
-
-.sm-campus {
-  display: flex;
-  flex-direction: column;
-  background: color-mix(in oklab, var(--sm-fg) 4%, transparent);
-  border-radius: 0.5rem;
+.sm-worship-section {
+  position: relative;
+  background: var(--sm-obsidian);
+  color: var(--sm-paper);
+  padding-block: clamp(4.5rem, 9vh, 7.5rem);
   overflow: hidden;
 }
-.sm-campus-block {
+
+/* --- Section Header --- */
+.sm-worship-header {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+
+.sm-worship-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.sm-worship-tick {
+  width: 2rem;
+  height: 1px;
+  background: var(--sm-accent-display);
+}
+
+.sm-worship-kicker {
+  color: var(--sm-accent-display);
+  font-family: var(--sm-sans-stack);
+  font-weight: 600;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.sm-worship-header-body {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  padding: clamp(1.25rem, 2.4vw, 1.75rem);
+  max-width: 54rem;
+}
+
+.sm-worship-title {
+  font-family: var(--sm-sans-stack);
+  font-weight: 600;
+  font-size: clamp(2.25rem, 5vw, 4.25rem);
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  color: var(--sm-paper);
+}
+
+.sm-worship-lead {
+  font-family: var(--sm-sans-stack);
+  font-weight: 400;
+  font-size: clamp(1.0625rem, 1.3vw, 1.25rem);
+  line-height: 1.6;
+  color: var(--sm-paper-2);
+  max-width: 46ch;
+}
+
+/* --- Bento Grid Structure --- */
+.sm-worship-bento {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+@media (min-width: 48rem) {
+  .sm-worship-bento {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+@media (min-width: 64rem) {
+  .sm-worship-bento {
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+/* Shared Card Shell */
+.sm-worship-cell {
+  position: relative;
+  background: #1c1714;
+  border: 1px solid rgba(246, 241, 232, 0.12);
+  border-radius: 0.75rem;
+  padding: clamp(1.5rem, 2.5vw, 2.25rem);
+  display: flex;
+  flex-direction: column;
+  transition:
+    border-color var(--sm-dur-fast) var(--sm-ease),
+    background-color var(--sm-dur-fast) var(--sm-ease),
+    box-shadow var(--sm-dur-fast) var(--sm-ease);
+  overflow: hidden;
+}
+
+.sm-worship-cell:hover {
+  border-color: rgba(246, 241, 232, 0.24);
+  background: #201a16;
+  box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* --- CELL 1: Dominant Sunday Cell --- */
+@media (min-width: 64rem) {
+  .sm-worship-cell-sunday {
+    grid-column: span 8;
+  }
+}
+
+.sm-worship-cell-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid rgba(246, 241, 232, 0.1);
+  margin-bottom: 1.5rem;
+}
+
+.sm-worship-badge-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.sm-worship-day-tag {
+  font-family: var(--sm-sans-stack);
+  font-weight: 700;
+  font-size: 0.8125rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sm-accent-display);
+}
+
+.sm-worship-meta-divider {
+  color: rgba(246, 241, 232, 0.25);
+  font-size: 0.8125rem;
+}
+
+.sm-worship-meta-sub {
+  font-family: var(--sm-sans-stack);
+  font-weight: 500;
+  font-size: 0.8125rem;
+  letter-spacing: 0.04em;
+  color: var(--sm-paper-2);
+}
+
+.sm-worship-meta-room {
+  font-family: var(--sm-sans-stack);
+  font-size: 0.8125rem;
+  color: var(--sm-paper-3);
+}
+
+/* Sunday Internal 3-Column Shelf */
+.sm-worship-sunday-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.75rem;
+  flex: 1;
+}
+
+@media (min-width: 48rem) {
+  .sm-worship-sunday-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+.sm-worship-sunday-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.25rem;
+  padding-block: 0.5rem;
+}
+
+@media (min-width: 48rem) {
+  .sm-worship-sunday-item:not(:last-child) {
+    padding-right: 1.25rem;
+    border-right: 1px solid rgba(246, 241, 232, 0.08);
+  }
+}
+
+/* Large Neo-Grotesque Display Time */
+.sm-worship-time-wrap {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.375rem;
+}
+
+.sm-worship-time {
+  font-family: var(--sm-sans-stack);
+  font-weight: 600;
+  font-size: clamp(2.25rem, 3.4vw, 3.125rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums lining-nums;
+  color: var(--sm-paper);
+}
+
+.sm-worship-time-sm {
+  font-size: clamp(1.75rem, 2.6vw, 2.25rem);
+}
+
+.sm-worship-tz {
+  font-family: var(--sm-sans-stack);
+  font-weight: 600;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--sm-accent-display);
+}
+
+/* Service Info */
+.sm-worship-service-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.sm-worship-service-name {
+  font-family: var(--sm-sans-stack);
+  font-weight: 600;
+  font-size: clamp(1.0625rem, 1.25vw, 1.25rem);
+  line-height: 1.25;
+  letter-spacing: -0.012em;
+  color: var(--sm-paper);
+}
+
+.sm-worship-lang-hint {
+  font-family: var(--sm-sans-stack);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--sm-accent);
+}
+
+.sm-worship-audience {
+  font-family: var(--sm-sans-stack);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--sm-paper-2);
+}
+
+/* Action row */
+.sm-worship-action-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  padding-top: 0.75rem;
+  border-top: 1px dashed rgba(246, 241, 232, 0.1);
+}
+
+.sm-worship-duration {
+  font-family: var(--sm-sans-stack);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: var(--sm-paper-3);
+}
+
+.sm-worship-cal-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-family: var(--sm-sans-stack);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--sm-accent);
+  text-decoration: none;
+  transition: color var(--sm-dur-fast) var(--sm-ease);
+}
+
+.sm-worship-cal-link:hover {
+  color: var(--sm-paper);
+}
+
+/* --- CELL 2: Atmosphere Photo Tile --- */
+@media (min-width: 64rem) {
+  .sm-worship-cell-photo {
+    grid-column: span 4;
+    min-height: 320px;
+  }
+}
+
+.sm-worship-cell-photo {
+  padding: 0;
+  border: 1px solid rgba(246, 241, 232, 0.12);
+  min-height: 260px;
+}
+
+.sm-worship-photo-wrap {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.sm-worship-photo {
+  object-fit: cover;
+  object-position: center 40%;
+  transition: transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sm-worship-cell-photo:hover .sm-worship-photo {
+  transform: scale(1.03);
+}
+
+.sm-worship-photo-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(22, 18, 16, 0.25) 0%,
+    rgba(22, 18, 16, 0.5) 45%,
+    rgba(22, 18, 16, 0.92) 100%
+  );
+  pointer-events: none;
+}
+
+.sm-worship-photo-caption {
+  position: relative;
+  z-index: 2;
+  margin-top: auto;
+  padding: clamp(1.25rem, 2vw, 1.75rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sm-worship-photo-badge {
+  align-self: flex-start;
+  font-family: var(--sm-sans-stack);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--sm-accent-display);
+  background: rgba(10, 8, 7, 0.6);
+  padding: 0.25rem 0.625rem;
+  border-radius: 999px;
+  border: 1px solid rgba(231, 178, 103, 0.25);
+  backdrop-filter: blur(8px);
+}
+
+.sm-worship-photo-text {
+  font-family: var(--sm-sans-stack);
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--sm-paper);
+}
+
+/* --- CELLS 3 & 4: Secondary Midweek & Saturday Cards --- */
+@media (min-width: 64rem) {
+  .sm-worship-cell-secondary {
+    grid-column: span 4;
+  }
+}
+
+.sm-worship-cell-secondary {
+  gap: 1rem;
+}
+
+.sm-worship-secondary-bottom {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px dashed rgba(246, 241, 232, 0.1);
+}
+
+/* --- CELL 5: Church Location Card --- */
+@media (min-width: 64rem) {
+  .sm-worship-cell-location {
+    grid-column: span 4;
+  }
+}
+
+.sm-worship-cell-location {
+  gap: 1.25rem;
+}
+
+.sm-worship-location-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sm-worship-campus-name {
+  font-family: var(--sm-sans-stack);
+  font-weight: 600;
+  font-size: clamp(1.125rem, 1.3vw, 1.35rem);
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  color: var(--sm-paper);
+}
+
+.sm-worship-campus-address {
+  font-family: var(--sm-sans-stack);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--sm-paper-2);
+}
+
+.sm-worship-location-actions {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 1px dashed rgba(246, 241, 232, 0.1);
+}
+
+.sm-worship-maps-btn {
+  width: 100%;
+  padding-block: 0.75rem;
+  font-size: 0.8125rem;
+  justify-content: space-between;
+}
+
+.sm-worship-livestream-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--sm-sans-stack);
+  font-size: 0.8125rem;
+  color: var(--sm-paper-2);
+  text-decoration: none;
+  transition: color var(--sm-dur-fast) var(--sm-ease);
+}
+
+.sm-worship-livestream-link:hover {
+  color: var(--sm-paper);
 }
 
 /* ==========================================================================

@@ -2329,43 +2329,55 @@
     },
     "liturgy": {
       "label": "Pengalaman hari Minggu",
-      "title": "Apa yang sebenarnya terjadi selama dua jam itu",
-      "lead": "Bagi banyak orang, hambatan terbesar datang ke gereja bukan soal iman — tetapi soal tidak tahu apa yang akan terjadi. Jadi kami tuliskan semuanya di sini, urut, tanpa dilebih-lebihkan.",
+      "title": "Seperti Apa Ibadah di GKJ Tangerang?",
+      "lead": "Dalam ibadah, kita bersama-sama memuji Tuhan, mendengarkan firman-Nya, berdoa, dan merespons firman melalui kehidupan kita. Ikuti rangkaian ibadah bersama kami.",
       "progress": "Bagian",
       "of": "dari",
       "prev": "Bagian sebelumnya",
       "next": "Bagian berikutnya",
       "hint": "Gulir, klik nomor, atau gunakan tombol panah",
       "chapters": {
-        "arrival": {
-          "title": "Kedatangan & Selasar",
-          "when": "20 menit sebelum ibadah",
-          "body": "Tidak ada meja pendaftaran dan tidak ada formulir. Ada kopi di selasar, dan biasanya ada orang yang menyapa Anda lebih dulu sebelum Anda perlu memperkenalkan diri.",
-          "note": "Datang terlambat pun tidak masalah. Pintu samping tetap terbuka sepanjang ibadah."
+        "sambutan": {
+          "title": "Sambutan",
+          "when": "Sebelum ibadah dimulai",
+          "body": "Jemaat disambut oleh usher sebelum memasuki ruang ibadah.",
+          "note": "Usher siap menyambut dan membantu Anda menemukan tempat duduk dengan nyaman."
         },
-        "worship": {
-          "title": "Musik & Refleksi",
-          "when": "±25 menit",
-          "body": "Beberapa lagu bersama, lalu keheningan yang cukup panjang untuk terasa. Tidak ada yang akan meminta Anda mengangkat tangan, dan tidak ada yang akan memperhatikan kalau Anda memilih duduk.",
-          "note": "Lirik ditampilkan di layar. Anda tidak perlu tahu lagunya."
+        "persiapan": {
+          "title": "Persiapan",
+          "when": "Memasuki ruang ibadah",
+          "body": "Masuk ke ruang ibadah dan mempersiapkan hati sebelum ibadah dimulai.",
+          "note": "Suasana teduh untuk berdoa pribadi dan menenangkan hati sebelum ibadah."
         },
-        "word": {
-          "title": "Firman & Pengajaran",
-          "when": "±30 menit",
-          "body": "Satu bagian Alkitab dibaca, lalu dijelaskan — dengan konteksnya, dengan kejujuran soal bagian yang sulit, dan dengan kaitan yang nyata ke hidup di Tangerang hari Senin pagi.",
-          "note": "Alkitab tersedia di setiap baris kursi. Tidak perlu membawa sendiri."
+        "pembukaan": {
+          "title": "Pembukaan",
+          "when": "Awal ibadah",
+          "body": "Pembacaan ayat pembuka dan votum.",
+          "note": "Liturgi dimulai dengan panggilan beribadah dan penyerahan diri kepada Tuhan."
         },
-        "table": {
-          "title": "Persekutuan Meja",
-          "when": "Pada ibadah tertentu",
-          "body": "Perjamuan Kudus dilayankan pada jadwal yang diumumkan lebih dulu. Roti dan cawan diedarkan; Anda bebas menerima atau membiarkannya lewat tanpa penjelasan apa pun.",
-          "note": "Tidak ada yang mencatat siapa mengambil dan siapa tidak."
+        "pujian": {
+          "title": "Pujian & Penyembahan",
+          "when": "Pujian bersama",
+          "body": "Jemaat bersama-sama memuji Tuhan.",
+          "note": "Lirik kidung pujian ditampilkan di layar proyektor untuk diikuti bersama."
         },
-        "life": {
-          "title": "Kehidupan Bersama",
-          "when": "Sesudah ibadah",
-          "body": "Ini bagian yang paling sering dilewatkan orang, dan paling penting. Kopi kedua, percakapan yang tidak terencana, dan kelompok kecil yang bertemu di rumah-rumah sepanjang minggu.",
-          "note": "Anda boleh langsung pulang. Kami juga sering begitu."
+        "firman": {
+          "title": "Firman Tuhan",
+          "when": "Pemberitaan firman",
+          "body": "Khotbah dan perenungan firman Tuhan.",
+          "note": "Khotbah Alkitabiah yang relevan untuk membimbing kehidupan sehari-hari."
+        },
+        "persembahan": {
+          "title": "Persembahan & Warta Jemaat",
+          "when": "Respons jemaat",
+          "body": "Memberikan persembahan dan mendengarkan informasi jemaat.",
+          "note": "Ungkapan syukur jemaat dan informasi pelayanan gereja sepekan ke depan."
+        },
+        "penutup": {
+          "title": "Doa Penutup",
+          "when": "Akhir ibadah",
+          "body": "Menutup ibadah dalam doa.",
+          "note": "Ibadah diakhiri dengan doa berkat untuk menyertai jemaat kembali beraktivitas."
         }
       }
     },
@@ -2425,29 +2437,38 @@
       "archiveNote": "Rekaman khotbah dan renungan harian tersedia di Portal Jemaat."
     },
     "schedule": {
-      "label": "Jadwal & Lokasi",
-      "title": "Lima ibadah setiap minggu, dan sebuah kursi yang belum terisi",
-      "lead": "Dua Ibadah Umum pagi punya isi yang sama — yang berbeda hanya jumlah orang di ruangan. Sisanya punya ritmenya sendiri.",
+      "label": "Jadwal Ibadah",
+      "title": "Jadwal Ibadah",
+      "lead": "Mari beribadah dan bertumbuh bersama kami.",
       "duration": "menit",
+      "sundayLabel": "Minggu",
+      "wednesdayLabel": "Rabu",
+      "saturdayLabel": "Sabtu",
+      "mainSunday": "Ibadah Utama",
+      "sanctuaryRoom": "Ruang Ibadah Utama",
+      "sanctuaryCaption": "Ruang Ibadah Utama · GKJ Tangerang",
+      "atmosphereTitle": "Ruang Ibadah & Persekutuan",
+      "atmosphereLead": "Menyambut setiap jemaat untuk beribadah dan bertumbuh bersama dalam kasih Kristus.",
+      "nextServiceLabel": "Ibadah Berikutnya",
       "services": {
         "umumEarly": {
-          "name": "Ibadah Umum I",
+          "name": "Kebaktian Umum I",
           "audience": "Lebih lengang, banyak jemaat senior",
           "room": "Ruang Ibadah Utama"
         },
         "umumLate": {
-          "name": "Ibadah Umum II",
+          "name": "Kebaktian Umum II",
           "audience": "Paling ramai, banyak keluarga muda",
           "room": "Ruang Ibadah Utama"
         },
         "tyog": {
-          "name": "Ibadah TYOG",
-          "audience": "Pemuda & remaja, paralel dengan Ibadah Umum II",
+          "name": "TYOG / Pemuda",
+          "audience": "Ibadah pemuda & remaja",
           "room": "Ruang Ibadah Utama"
         },
         "sekolahMinggu": {
           "name": "Sekolah Minggu",
-          "audience": "Usia 3–12 tahun, paralel dengan Ibadah Umum II",
+          "audience": "Usia 3–12 tahun, paralel dengan Kebaktian Umum II",
           "room": "Ruang Sekolah Minggu"
         },
         "doa": {
@@ -2456,14 +2477,14 @@
           "room": "Ruang Ibadah Utama"
         },
         "yifalian": {
-          "name": "Ibadah Yi Fa Lian",
+          "name": "Yi Fa Lian",
           "audience": "Persekutuan jemaat lansia",
           "room": "Ruang Ibadah Utama"
         }
       },
-      "campusLabel": "Lokasi",
+      "campusLabel": "Lokasi Gereja",
       "addressLabel": "Alamat",
-      "route": "Buka rute di Google Maps",
+      "route": "Buka di Google Maps",
       "livestreamLabel": "Ibadah online",
       "livestream": "Tonton siaran langsung",
       "livestreamFallback": "Tanya tautan siaran ke sekretariat",
@@ -2601,9 +2622,12 @@
       "backToTop": "Kembali ke atas"
     },
     "stories": {
-      "label": "Cerita",
-      "title": "Empat generasi, satu ruangan, setiap Minggu.",
-      "lead": "Nenek yang hafal semua lagu, anak yang baru belajar duduk tenang, dan mahasiswa yang minggu lalu datang sendirian — semuanya di baris kursi yang sama."
+      "label": "Empat Generasi, Satu Ruangan",
+      "title": "Satu Keluarga dalam Kristus",
+      "lead": "GKJ Tangerang menjadi tempat bagi jemaat dari berbagai usia dan latar belakang untuk beribadah dan bertumbuh bersama. Anak-anak, remaja, pemuda, dewasa, hingga lanjut usia memiliki tempat untuk bertumbuh dan melayani bersama.",
+      "noteWhen": "Sesudah ibadah",
+      "noteTitle": "Kehidupan Bersama",
+      "noteBody": "Kopi kedua, percakapan yang hangat, dan persekutuan yang saling mendukung sepanjang minggu."
     },
     "devotional": {
       "label": "Renungan",
