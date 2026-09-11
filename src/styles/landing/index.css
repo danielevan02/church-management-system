@@ -985,10 +985,20 @@ html.lenis body {
 .hero-container {
   position: relative;
   width: 100%;
+  /* `svh`, deliberately not `dvh`. `dvh` tracks the live viewport, so every
+   * time mobile Chrome collapses or restores its URL bar the hero's height
+   * animates by the bar's height — and because the plate's video and still are
+   * `object-fit: cover`, re-measuring the box re-crops the footage frame by
+   * frame. It reads as the hero jump-zooming on the first flick of a scroll
+   * and again on the flick back up. `svh` is the viewport with the bar shown,
+   * which is a fixed number: the box never re-measures, so the crop holds. At
+   * the top of the page — the only place the hero is fully in frame — Chrome
+   * always shows the bar, so `svh` is exactly the visible viewport there.
+   * `vh` first as the fallback for engines without `svh`. */
   height: 100vh;
-  height: 100dvh;
+  height: 100svh;
   min-height: 100vh;
-  min-height: 100dvh;
+  min-height: 100svh;
   z-index: 30;
   box-shadow: 0px 32px 80px 12px rgba(0, 0, 0, 0.95);
   overflow: hidden;
