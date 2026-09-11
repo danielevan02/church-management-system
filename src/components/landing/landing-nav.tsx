@@ -18,7 +18,7 @@ import { scrollToId } from "./scroll-stage";
 const useIsomorphicLayoutEffect =
   typeof window !== "undefined" ? React.useLayoutEffect : React.useEffect;
 
-const SECTIONS = [
+const NAV_SECTIONS = [
   { id: "ibadah", key: "gatherings" },
   { id: "cerita", key: "stories" },
   { id: "kunjungan-pertama", key: "expect" },
@@ -60,12 +60,51 @@ function InstagramIcon({ className = "w-3.5 h-3.5" }: { className?: string }) {
   );
 }
 
-const NAV_LINKS = [
-  { id: "ibadah", key: "gatherings" },
-  { id: "cerita", key: "stories" },
-  { id: "kunjungan-pertama", key: "expect" },
-  { id: "persembahan", key: "generosity" },
-] as const;
+function SocialRow({
+  className = "hero-social-row",
+  iconClass = "w-3.5 h-3.5",
+}: {
+  className?: string;
+  iconClass?: string;
+}) {
+  return (
+    <div className={className}>
+      {campus.youtubeUrl && (
+        <a
+          href={campus.youtubeUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hero-social-circle"
+          aria-label={`YouTube ${church.shortName}`}
+        >
+          <YoutubeIcon className={iconClass} />
+        </a>
+      )}
+      {campus.facebookUrl && (
+        <a
+          href={campus.facebookUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hero-social-circle"
+          aria-label={`Facebook ${church.shortName}`}
+        >
+          <FacebookIcon className={iconClass} />
+        </a>
+      )}
+      {campus.instagramUrl && (
+        <a
+          href={campus.instagramUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hero-social-circle"
+          aria-label={`Instagram ${church.shortName}`}
+        >
+          <InstagramIcon className={iconClass} />
+        </a>
+      )}
+    </div>
+  );
+}
 
 /**
  * @param variant `landing` intercepts the section links and glides to them
@@ -83,7 +122,6 @@ export function LandingNav({
   const [open, setOpen] = React.useState(false);
   const [condensed, setCondensed] = React.useState(false);
   const [showCenterLinks, setShowCenterLinks] = React.useState(false);
-  const barRef = React.useRef<HTMLElement>(null);
   const centerNavRef = React.useRef<HTMLElement>(null);
   const isLinksMounted = React.useRef(false);
   const panelRef = React.useRef<HTMLDivElement>(null);
@@ -365,13 +403,12 @@ export function LandingNav({
   return (
     <>
       <header
-        ref={barRef}
         data-condensed={condensed || undefined}
         className="sm-nav-bar"
       >
         <div className="sm-nav-backdrop" aria-hidden="true" />
         <div className="sm-shell relative flex items-center justify-between gap-6">
-          {/* Institutional Church Lockup (Logo + GKJ Tangerang) */}
+          {/* Institutional Church Lockup (Logo + Church Brand) */}
           <Lockup onHome={onAnchor("atas")} variant={variant} />
 
           {/* Center Navigation Links (Appears when hero nav links scroll out of view) */}
@@ -381,8 +418,8 @@ export function LandingNav({
             className="sm-nav-center"
             data-visible={showCenterLinks || undefined}
           >
-            {NAV_LINKS.map((s) => (
-              <a
+            {NAV_SECTIONS.map((s) => (
+              <Link
                 key={s.id}
                 href={`/#${s.id}`}
                 onClick={onAnchor(s.id)}
@@ -390,7 +427,7 @@ export function LandingNav({
                 data-center-link
               >
                 <span>{t(s.key)}</span>
-              </a>
+              </Link>
             ))}
           </nav>
 
@@ -398,35 +435,7 @@ export function LandingNav({
           <div className="flex items-center gap-2 sm:gap-3">
             <LocaleToggle inBar />
 
-            <div className="hero-social-row sm-nav-social">
-              <a
-                href={campus.youtubeUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hero-social-circle"
-                aria-label="YouTube GKJ Tangerang"
-              >
-                <YoutubeIcon className="w-3.5 h-3.5" />
-              </a>
-              <a
-                href={campus.facebookUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hero-social-circle"
-                aria-label="Facebook GKJ Tangerang"
-              >
-                <FacebookIcon className="w-3.5 h-3.5" />
-              </a>
-              <a
-                href={campus.instagramUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hero-social-circle"
-                aria-label="Instagram GKJ Tangerang"
-              >
-                <InstagramIcon className="w-3.5 h-3.5" />
-              </a>
-            </div>
+            <SocialRow className="hero-social-row sm-nav-social" />
 
             <button
               ref={triggerRef}
@@ -465,7 +474,7 @@ export function LandingNav({
           </div>
 
           <nav className="flex flex-col gap-1 py-8" aria-label={t("menu")}>
-            {SECTIONS.map((s) => (
+            {NAV_SECTIONS.map((s) => (
               <Link
                 key={s.id}
                 href={`/#${s.id}`}
@@ -505,35 +514,7 @@ export function LandingNav({
 
             {/* Bottom utility controls: Social channels on left, Language switcher on right */}
             <div className="flex items-center justify-between gap-4">
-              <div className="hero-social-row">
-                <a
-                  href={campus.youtubeUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hero-social-circle"
-                  aria-label="YouTube GKJ Tangerang"
-                >
-                  <YoutubeIcon className="w-3.5 h-3.5" />
-                </a>
-                <a
-                  href={campus.facebookUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hero-social-circle"
-                  aria-label="Facebook GKJ Tangerang"
-                >
-                  <FacebookIcon className="w-3.5 h-3.5" />
-                </a>
-                <a
-                  href={campus.instagramUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hero-social-circle"
-                  aria-label="Instagram GKJ Tangerang"
-                >
-                  <InstagramIcon className="w-3.5 h-3.5" />
-                </a>
-              </div>
+              <SocialRow />
 
               <LocaleToggle />
             </div>
@@ -576,8 +557,8 @@ function Lockup({
         className="sm-lockup-crest"
       />
       <span className="sm-lockup-text">
-        <span className="sm-lockup-line1">Gereja Kristen Jakarta</span>
-        <span className="sm-lockup-line2">Jemaat Tangerang</span>
+        <span className="sm-lockup-line1">{church.nameLine1}</span>
+        <span className="sm-lockup-line2">{church.nameLine2}</span>
       </span>
     </Link>
   );

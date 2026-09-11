@@ -18,11 +18,10 @@ const EASE = "power3.out";
  * actually on screen rather than to the component tree.
  *
  * Markup contract:
- *   data-sm-reveal="up|rise|fade"   translate + fade on entering the viewport
- *   data-sm-mask                    clip-path wipe, for figures
- *   data-sm-split                   line-by-line serif reveal, for headings
- *   data-sm-stagger                 stagger this element's reveal children
- *   data-sm-parallax="<amount>"     scroll-linked drift, in percent of height
+ *   data-sm-reveal="up|fade"   translate + fade on entering the viewport
+ *   data-sm-mask               clip-path wipe, for figures
+ *   data-sm-split              line-by-line serif reveal, for headings
+ *   data-sm-stagger            stagger this element's reveal children
  */
 export function RevealStage() {
   const reduce = useReducedMotion();
@@ -36,7 +35,7 @@ export function RevealStage() {
       // `mask: "lines"` wraps each line so it can slide out from behind its own
       // edge; without it the ascenders of the next line clip through.
       gsap.utils.toArray<HTMLElement>("[data-sm-split]").forEach((el) => {
-        const split = SplitText.create(el, {
+        SplitText.create(el, {
           type: "lines",
           mask: "lines",
           linesClass: "sm-split-line",
@@ -61,6 +60,7 @@ export function RevealStage() {
                   self.lines.forEach((line) => {
                     if (line instanceof HTMLElement) {
                       line.style.overflow = "visible";
+                      line.style.willChange = "auto";
                       if (line.parentElement instanceof HTMLElement) {
                         line.parentElement.style.overflow = "visible";
                       }
@@ -76,7 +76,6 @@ export function RevealStage() {
         // The element itself is held at opacity 0 by CSS until the split has
         // run, so a slow font load cannot flash unsplit text.
         gsap.set(el, { opacity: 1 });
-        return split;
       });
 
       // --- staggered groups --------------------------------------------------
@@ -99,6 +98,9 @@ export function RevealStage() {
           stagger: 0.09,
           ease: EASE,
           scrollTrigger: { trigger, start, once: true },
+          onComplete: () => {
+            gsap.set(items, { willChange: "auto" });
+          },
         });
       });
 
@@ -119,6 +121,9 @@ export function RevealStage() {
             duration: 1.1,
             ease: EASE,
             scrollTrigger: { trigger, start, once: true },
+            onComplete: () => {
+              gsap.set(el, { willChange: "auto" });
+            },
           });
         });
 
@@ -129,27 +134,10 @@ export function RevealStage() {
           duration: 1.45,
           ease: "power2.inOut",
           scrollTrigger: { trigger: el, start: "top 90%", once: true },
-        });
-      });
-
-      // --- parallax ----------------------------------------------------------
-      // Scrubbed rather than tweened, so it reads correctly scrolling back up.
-      gsap.utils.toArray<HTMLElement>("[data-sm-parallax]").forEach((el) => {
-        const amount = Number(el.dataset.smParallax ?? 8);
-        gsap.fromTo(
-          el,
-          { yPercent: -amount / 2 },
-          {
-            yPercent: amount / 2,
-            ease: "none",
-            scrollTrigger: {
-              trigger: el.parentElement ?? el,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: true,
-            },
+          onComplete: () => {
+            gsap.set(el, { willChange: "auto" });
           },
-        );
+        });
       });
     });
 

@@ -97,8 +97,11 @@ export function scrollToId(
   const el = document.getElementById(id);
   if (!el) return false;
   if (lenis && !reduce) {
+    const navOffset = Math.round(
+      parseFloat(window.getComputedStyle(el).scrollMarginTop) || 72,
+    );
     lenis.start();
-    lenis.scrollTo(el, { duration: 1.4, force: true });
+    lenis.scrollTo(el, { duration: 1.4, force: true, offset: -navOffset });
   } else {
     el.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
   }

@@ -48,10 +48,7 @@ export function HeroSanctuary() {
     const video = bgVideoRef.current;
     if (!video) return;
 
-    if (
-      typeof window.matchMedia === "function" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    ) {
+    if (reduce) {
       video.removeAttribute("src");
       video.pause();
       setBgVideoReady(false);
@@ -63,11 +60,12 @@ export function HeroSanctuary() {
     video.load();
 
     const onReady = () => setBgVideoReady(true);
-    video.addEventListener("loadeddata", onReady);
-    const play = video.play();
-    if (play) play.catch(() => setBgVideoReady(false));
+    video.addEventListener("canplay", onReady);
+    video.play().catch(() => {});
 
-    return () => video.removeEventListener("loadeddata", onReady);
+    return () => {
+      video.removeEventListener("canplay", onReady);
+    };
   }, [reduce]);
 
   // GSAP Animations: Arrival and Scroll Exit
@@ -267,38 +265,38 @@ export function HeroSanctuary() {
               aria-label={tNav("navLabel")}
               className="hero-stage-nav-primary"
             >
-              <a
-                href={`/#ibadah`}
+              <Link
+                href="/#ibadah"
                 onClick={onAnchor("ibadah")}
                 className="hero-nav-anchor"
                 data-hero-nav-item
               >
                 {t("navIbadah")}
-              </a>
-              <a
-                href={`/#cerita`}
+              </Link>
+              <Link
+                href="/#cerita"
                 onClick={onAnchor("cerita")}
                 className="hero-nav-anchor"
                 data-hero-nav-item
               >
                 {t("navCerita")}
-              </a>
-              <a
-                href={`/#kunjungan-pertama`}
+              </Link>
+              <Link
+                href="/#kunjungan-pertama"
                 onClick={onAnchor("kunjungan-pertama")}
                 className="hero-nav-anchor"
                 data-hero-nav-item
               >
                 {t("navKunjungan")}
-              </a>
-              <a
-                href={`/#persembahan`}
+              </Link>
+              <Link
+                href="/#persembahan"
                 onClick={onAnchor("persembahan")}
                 className="hero-nav-anchor"
                 data-hero-nav-item
               >
                 {t("navPersembahan")}
-              </a>
+              </Link>
             </nav>
           </div>
 

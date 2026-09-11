@@ -4,24 +4,23 @@ import path from "node:path";
 import { getLocale, getTranslations } from "next-intl/server";
 import Image from "next/image";
 import { Manrope } from "next/font/google";
-import { ArrowUpRight, MapPin } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import type { Metadata } from "next";
 
+import { CommunityFellowship } from "@/components/landing/community-fellowship";
 import { DevotionalList } from "@/components/landing/devotional-list";
 import { GivingPanel } from "@/components/landing/giving-panel";
 import { HeroSanctuary } from "@/components/landing/hero-sanctuary";
 import { LandingNav } from "@/components/landing/landing-nav";
 import { PublicFooter } from "@/components/landing/public-footer";
 import { RevealStage } from "@/components/landing/reveal";
-import { RoomAudio } from "@/components/landing/room-audio";
-import { SanctuaryReplay } from "@/components/landing/sanctuary-replay";
 import { ScrollStage } from "@/components/landing/scroll-stage";
 import { SundayExperience } from "@/components/landing/sunday-experience";
 import { WorshipSchedule } from "@/components/landing/worship-schedule";
 import { MotionGate } from "@/components/landing/motion-gate";
-import { Link } from "@/lib/i18n/navigation";
 import { church } from "@/config/church";
 import {
+  SERVICE_SLOTS,
   campus,
   whatsappLink,
 } from "@/config/campus";
@@ -164,158 +163,13 @@ export default async function Home() {
               </div>
             </section>
 
-          {/* ============================================================
-           * CERITA — the photo essay. Asymmetric on purpose: a full-bleed
-           * breakout, then an offset pair at different heights, so the eye
-           * never settles into a grid of equal cards.
-           * ============================================================ */}
-          <section
-            id="cerita"
-            className="sm-tone-light sm-clerestory"
-            aria-labelledby="sm-cerita-title"
-          >
-            <div className="sm-section sm-shell sm-opener">
-              <p className="sm-opener-kicker sm-label sm-eyebrow">
-                {t("stories.label")}
-              </p>
-              <h2
-                id="sm-cerita-title"
-                className="sm-opener-title sm-h1"
-                data-sm-split
-              >
-                {t("stories.title")}
-              </h2>
-              <p
-                className="sm-opener-lead sm-lead"
-                style={{ color: "var(--sm-ink-2)" }}
-                data-sm-reveal="up"
-              >
-                {t("stories.lead")}
-              </p>
-            </div>
-
-            {/* Full-bleed breakout. 21:9 keeps the congregation's symmetry and
-                gives the type somewhere to overlap without covering faces. */}
-            <figure className="sm-breakout" data-sm-mask>
-              <div className="sm-breakout-media" data-sm-parallax="9">
-                <Image
-                  src="/landing-page/gathering.jpeg"
-                  alt={t("photo.gathering.alt")}
-                  fill
-                  sizes="100vw"
-                  quality={80}
-                  className="sm-breakout-img"
-                />
-              </div>
-              <figcaption className="sm-breakout-caption">
-                <span className="sm-label">{t("photo.gathering.caption")}</span>
-                <span className="sm-small sm-breakout-credit">
-                  {t("photo.gathering.credit")}
-                </span>
-              </figcaption>
-            </figure>
-
-            <div className="sm-section sm-shell">
-              <div className="sm-essay">
-                <figure className="sm-essay-wide sm-figure" data-sm-mask>
-                  <Image
-                    src="/landing-page/fellowship.jpeg"
-                    alt={t("photo.fellowship.alt")}
-                    width={2752}
-                    height={1536}
-                    sizes="(max-width: 62rem) 92vw, 56vw"
-                    quality={78}
-                  />
-                  <figcaption className="sm-essay-caption sm-small">
-                    {t("photo.fellowship.caption")}
-                  </figcaption>
-                </figure>
-
-                <div className="sm-essay-note" data-sm-stagger>
-                  <p className="sm-label sm-eyebrow" data-sm-reveal="up">
-                    {t("stories.noteWhen")}
-                  </p>
-                  <h3 className="sm-h3" data-sm-reveal="up">
-                    {t("stories.noteTitle")}
-                  </h3>
-                  <p className="sm-body" data-sm-reveal="up">
-                    {t("stories.noteBody")}
-                  </p>
-                </div>
-
-                <figure className="sm-essay-square sm-figure" data-sm-mask>
-                  <Image
-                    src="/landing-page/detail.jpeg"
-                    alt={t("photo.detail.alt")}
-                    width={2048}
-                    height={2048}
-                    sizes="(max-width: 62rem) 92vw, 34vw"
-                    quality={80}
-                  />
-                  <figcaption className="sm-essay-caption sm-small">
-                    {t("photo.detail.caption")}
-                  </figcaption>
-                </figure>
-              </div>
-            </div>
-          </section>
-
           {/* THE SUNDAY EXPERIENCE — pinned five-chapter liturgy */}
           <SundayExperience whatsappHref={secretariatHref} />
 
           {/* ============================================================
-           * RUANG & SUARA — the room's own recording, and how we teach.
-           * A second chapter of the same dark room, divided by a hairline
-           * rather than by a change of ground.
+           * PERSEKUTUAN & KOMUNITAS — Editorial Bento Grid
            * ============================================================ */}
-          <section
-            className="sm-tone-dark sm-tone-dark-2 sm-section sm-rule-t"
-            aria-labelledby="sm-suara-title"
-          >
-            <div className="sm-shell sm-suara">
-              <div className="flex flex-col gap-8">
-                <div className="flex flex-col gap-5">
-                  <p className="sm-label sm-eyebrow">{t("sermon.label")}</p>
-                  <h2 id="sm-suara-title" className="sm-h2" data-sm-split>
-                    {t("sermon.title")}
-                  </h2>
-                  <p
-                    className="sm-body max-w-[48ch]"
-                    style={{ color: "var(--sm-fg-muted)" }}
-                    data-sm-reveal="up"
-                  >
-                    {t("sermon.lead")}
-                  </p>
-                </div>
-                <RoomAudio />
-              </div>
-
-              <div className="sm-suara-teaching">
-                <div className="flex flex-col gap-4">
-                  <p className="sm-label sm-eyebrow">
-                    {t("sermon.teachingLabel")}
-                  </p>
-                  <h3 className="sm-h3">{t("sermon.teachingTitle")}</h3>
-                  <p
-                    className="sm-body"
-                    style={{ color: "var(--sm-fg-muted)" }}
-                  >
-                    {t("sermon.teachingLead")}
-                  </p>
-                </div>
-
-                <SanctuaryReplay />
-
-                <p className="sm-small sm-suara-archive sm-rule-t">
-                  {t("sermon.archiveNote")}
-                  <Link href="/auth/member" className="sm-link sm-suara-link">
-                    {t("nav.portal")}
-                    <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />
-                  </Link>
-                </p>
-              </div>
-            </div>
-          </section>
+          <CommunityFellowship />
 
           {/* ============================================================
            * RENUNGAN — the church's own writing, public and crawlable.
@@ -326,7 +180,7 @@ export default async function Home() {
           {devotionals.length ? (
             <section
               id="renungan"
-              className="sm-tone-light sm-clerestory sm-section"
+              className="sm-tone-light sm-section"
               aria-labelledby="sm-renungan-title"
             >
               <div className="sm-shell">
@@ -339,7 +193,9 @@ export default async function Home() {
                     className="sm-opener-title sm-h1"
                     data-sm-split
                   >
-                    {t("devotional.title")}
+                    {t("devotional.titleLine1")}
+                    <br />
+                    {t("devotional.titleLine2")}
                   </h2>
                   <p
                     className="sm-opener-lead sm-lead"
@@ -395,7 +251,7 @@ export default async function Home() {
                 </p>
 
                 <dl className="sm-points" data-sm-stagger>
-                  {(["safety", "curriculum", "teachers", "youth"] as const).map(
+                  {(["curriculum", "teachers", "safety", "youth"] as const).map(
                     (k) => (
                       <div key={k} className="sm-point" data-sm-reveal="up">
                         <dt className="sm-h4">{t(`nextgen.points.${k}.title`)}</dt>
@@ -511,15 +367,21 @@ export default async function Home() {
           </section>
 
           {/* ============================================================
-           * RENCANAKAN KUNJUNGAN — the threshold, closing the page where the
-           * footage opened it: at a door.
+           * VISIT — KUNJUNGI GKJ TANGERANG
+           * The threshold: welcoming copy, actions & Sunday schedule on the
+           * left, large photographic plate feathered into obsidian on the right.
            * ============================================================ */}
           <section
             id="rencanakan"
             className="sm-tone-dark sm-visit"
             aria-labelledby="sm-visit-title"
           >
-            <div className="sm-visit-plate" aria-hidden>
+            <div
+              className="sm-visit-plate"
+              data-sm-reveal="fade"
+              data-sm-trigger="#rencanakan"
+              aria-hidden="true"
+            >
               <Image
                 src="/landing-page/visit.jpeg"
                 alt=""
@@ -528,58 +390,70 @@ export default async function Home() {
                 quality={80}
                 className="sm-visit-img"
               />
+              <div className="sm-visit-scrim" aria-hidden="true" />
             </div>
 
-            <div className="sm-shell sm-visit-body">
-              <div className="sm-visit-copy">
-                <p className="sm-label sm-eyebrow">{t("visit.label")}</p>
-                <h2 id="sm-visit-title" className="sm-h1" data-sm-split>
-                  {t("visit.title")}
-                </h2>
-                <p
-                  className="sm-lead max-w-[44ch]"
-                  style={{ color: "var(--sm-fg-muted)" }}
-                  data-sm-reveal="up"
-                >
-                  {t("visit.lead")}
-                </p>
-                <div className="sm-visit-actions" data-sm-reveal="up">
-                  {visitHref ? (
+            <div className="sm-shell relative z-10">
+              <div className="sm-visit-content">
+                <div className="sm-visit-copy">
+                  <p className="sm-label sm-eyebrow">{t("visit.label")}</p>
+                  <h2 id="sm-visit-title" className="sm-h1" data-sm-split>
+                    {t("visit.title")}
+                  </h2>
+                  <p
+                    className="sm-lead max-w-[46ch]"
+                    style={{ color: "var(--sm-fg-muted)" }}
+                    data-sm-reveal="up"
+                  >
+                    {t("visit.lead")}
+                  </p>
+                  <div className="sm-visit-actions" data-sm-reveal="up">
+                    {visitHref ? (
+                      <a
+                        href={visitHref}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="sm-btn sm-btn-primary sm-action"
+                      >
+                        <span>{t("visit.cta")}</span>
+                        <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                      </a>
+                    ) : null}
                     <a
-                      href={visitHref}
+                      href={campus.mapsUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="sm-btn sm-btn-primary sm-action"
+                      className="sm-btn sm-btn-ghost sm-action"
                     >
-                      {t("visit.cta")}
-                      <ArrowUpRight className="h-4 w-4" aria-hidden />
+                      <span>{t("visit.secondary")}</span>
+                      <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
                     </a>
-                  ) : null}
-                  <a
-                    href={campus.mapsUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="sm-btn sm-btn-ghost sm-action"
-                  >
-                    <MapPin className="h-4 w-4" aria-hidden />
-                    {t("visit.secondary")}
-                  </a>
+                  </div>
+                </div>
+
+                <div className="sm-visit-schedule" data-sm-reveal="up">
+                  <p className="sm-label sm-eyebrow sm-visit-schedule-label">
+                    {t("visit.scheduleLabel")}
+                  </p>
+                  <ul className="sm-visit-schedule-list">
+                    {SERVICE_SLOTS.filter(
+                      (s) => s.weekday === 0 && s.key !== "sekolahMinggu",
+                    ).map((slot) => (
+                      <li key={slot.key} className="sm-visit-schedule-item">
+                        <span className="sm-visit-schedule-time">
+                          {slot.time.replace(":", ".")} WIB
+                        </span>
+                        <span className="sm-visit-schedule-sep" aria-hidden="true">
+                          ·
+                        </span>
+                        <span className="sm-visit-schedule-name">
+                          {t(`schedule.services.${slot.key}.name`)}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
-
-              <ol className="sm-visit-steps" data-sm-stagger>
-                {(["one", "two", "three"] as const).map((k, i) => (
-                  <li key={k} className="sm-visit-step" data-sm-reveal="up">
-                    <span className="sm-label sm-visit-step-index">
-                      0{i + 1}
-                    </span>
-                    <p className="sm-h4">{t(`visit.steps.${k}.title`)}</p>
-                    <p className="sm-small" style={{ color: "var(--sm-fg-muted)" }}>
-                      {t(`visit.steps.${k}.body`)}
-                    </p>
-                  </li>
-                ))}
-              </ol>
             </div>
           </section>
         </main>

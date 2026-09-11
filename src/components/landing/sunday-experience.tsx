@@ -345,7 +345,7 @@ export function SundayExperience({ whatsappHref }: { whatsappHref: string }) {
       {/* Progress rail. Sticky rather than pinned so it survives the unpinned
           mobile layout unchanged, where it becomes a plain chapter jump list. */}
       <div className="sm-liturgy-rail">
-        <div className="sm-shell flex items-center justify-between gap-6">
+        <div className="sm-shell">
           <ol className="sm-liturgy-dots" aria-label={t("progress")}>
             {CHAPTERS.map((c, i) => (
               <li key={c.key}>
@@ -365,9 +365,6 @@ export function SundayExperience({ whatsappHref }: { whatsappHref: string }) {
               </li>
             ))}
           </ol>
-          <p className="sm-label sm-eyebrow sm-liturgy-hint shrink-0">
-            {t("hint")}
-          </p>
         </div>
       </div>
     </section>

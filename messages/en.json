@@ -2267,7 +2267,7 @@
     "nav": {
       "skip": "Skip to main content",
       "gatherings": "Gatherings",
-      "stories": "Stories",
+      "stories": "Community",
       "expect": "What to Expect",
       "generosity": "Generosity",
       "visit": "Plan a Visit",
@@ -2280,8 +2280,6 @@
       "navLabel": "Primary navigation"
     },
     "hero": {
-      "brandA": "Christ Family",
-      "brandB": "Church",
       "headlineA": "Welcome to",
       "headlineB": "GKJ Tangerang",
       "subtitleA": "A place to worship, grow in faith,",
@@ -2290,25 +2288,7 @@
       "navCerita": "Stories",
       "navKunjungan": "First Visit",
       "navPersembahan": "Generosity",
-      "quote": "We want to be a family where people can connect and benefit from friendships in Christ.",
-      "serviceTitle": "Sunday Worship Service",
-      "serviceTime": "Dec 7th, 10-11:30am",
-      "learnMore": "Learn More",
-      "watch": "Watch sanctuary replay",
-      "closeVideo": "Close video replay",
-      "watchTitle": "Sanctuary Atmosphere",
-      "watchBody": "Moments of reverence, scripture, and music from our Sunday gatherings.",
-      "eyebrow": "Services every Sunday, Wednesday & Saturday",
-      "location": "Tangerang · Banten",
-      "cta": "Plan Your Visit",
-      "ctaSecondary": "See Service Times",
-      "scroll": "Scroll to enter",
-      "ambientOn": "Hear the room",
-      "ambientOff": "Mute",
-      "posterAlt": "Majestic sanctuary chancel and altar bathed in light",
-      "highlightsLabel": "Community & worship highlights",
-      "photoAlt": "Warm fellowship among church members",
-      "videoAlt": "Scripture reading and Bible study session"
+      "posterAlt": "Majestic sanctuary chancel and altar bathed in light"
     },
     "countdown": {
       "next": "Next gathering",
@@ -2413,29 +2393,6 @@
         }
       }
     },
-    "sermon": {
-      "label": "Room & Sound",
-      "title": "Ten seconds before anyone arrives",
-      "lead": "This is a recording of our own sanctuary, captured empty. Play it while you read the order of service — so your first Sunday does not feel like walking into an unfamiliar room.",
-      "play": "Play",
-      "pause": "Pause",
-      "restart": "Restart",
-      "seek": "Scrub audio position",
-      "waveform": "Waveform of the sanctuary room tone",
-      "orderLabel": "Order of service",
-      "note": "A recording of the room, not of a service.",
-      "teachingLabel": "Teaching",
-      "teachingTitle": "How we teach",
-      "teachingLead": "Not a motivational talk, and not a theology lecture. One passage of Scripture, read in its context, explained until it is clear, then carried into the actual decisions of that week.",
-      "watch": "Watch the sanctuary",
-      "watchTitle": "The sanctuary at GKJ Tangerang",
-      "watchBody": "Footage of the sanctuary, from the centre aisle toward the pulpit.",
-      "closeVideo": "Close video",
-      "seriesLabel": "Current series",
-      "speakerLabel": "Speaker",
-      "scriptureLabel": "Scripture",
-      "archiveNote": "Sermon recordings and daily devotionals are available in the Member Portal."
-    },
     "schedule": {
       "label": "Worship Schedule",
       "title": "Worship Schedule",
@@ -2447,9 +2404,6 @@
       "mainSunday": "Main Services",
       "sanctuaryRoom": "Main Sanctuary",
       "sanctuaryCaption": "Main Sanctuary · GKJ Tangerang",
-      "atmosphereTitle": "Sanctuary & Fellowship",
-      "atmosphereLead": "Welcoming every member and visitor to worship and grow together in the love of Christ.",
-      "nextServiceLabel": "Next Service",
       "services": {
         "umumEarly": {
           "name": "Kebaktian Umum I",
@@ -2489,38 +2443,33 @@
         }
       },
       "campusLabel": "Church Location",
-      "addressLabel": "Address",
       "route": "Open in Google Maps",
-      "livestreamLabel": "Online service",
       "livestream": "Watch the live stream",
-      "livestreamFallback": "Ask the secretariat for the stream link",
       "askSecretariat": "Contact the secretariat",
       "addToCalendar": "Add to calendar",
       "calendarTitle": "Service at {church}",
-      "parkingLabel": "Parking",
-      "parkingBody": "On-site yard, with an attendant during service hours.",
       "every": "Every {day}"
     },
     "nextgen": {
-      "label": "Sunday School & Youth",
-      "title": "Your child is not parked. They are taught.",
-      "lead": "Sunday School runs alongside Morning Service II at 10am on a curriculum that progresses through the year — not an activity to fill the time until their parents are done.",
+      "label": "SUNDAY SCHOOL",
+      "title": "Children Growing in Faith",
+      "lead": "Sunday School runs alongside Morning Service II every Sunday at 10:00 AM. Children learn God's Word through Bible lessons, prayer, praise, and age-appropriate activities.",
       "points": {
-        "safety": {
-          "title": "Recorded pickup",
-          "body": "Every child is dropped off and collected against the same numbered card. Children are released only to the card holder."
-        },
         "curriculum": {
-          "title": "A curriculum that progresses",
-          "body": "One arc through the Bible across the year, split by age group, so children are not hearing the same story on repeat with no direction."
+          "title": "Bible Learning",
+          "body": "Learning materials are tailored by age group and themed throughout the year."
         },
         "teachers": {
-          "title": "The same teachers",
-          "body": "Teachers and helpers serve in fixed groups, so children come to know the adults who teach them."
+          "title": "Teachers & Mentors",
+          "body": "Children are guided by teachers and mentors who serve consistently within their groups."
+        },
+        "safety": {
+          "title": "Child Safety",
+          "body": "An identification system helps ensure child safety throughout Sunday School activities."
         },
         "youth": {
-          "title": "Youth & students",
-          "body": "A Saturday evening service in a format more open to questions, continuing in small groups through the week."
+          "title": "Youth & Students",
+          "body": "A dedicated space for youth and students to fellowship, grow in faith, and support one another."
         }
       },
       "cta": "Ask about Sunday School",
@@ -2589,56 +2538,78 @@
       "transparency": "Offerings fund church operations, member discipleship, and social service. Financial reports are read out in congregational meetings and are available to members through the Member Portal."
     },
     "visit": {
-      "label": "Plan a visit",
-      "title": "Just come. We will handle the rest.",
-      "lead": "If you would like someone with you on a first visit, message the secretariat and name the service you have chosen. Someone will be waiting at the door.",
-      "steps": {
-        "one": {
-          "title": "Pick a time",
-          "body": "Sunday 7am, Sunday 10am, Wednesday 7pm, or Saturday 1pm."
-        },
-        "two": {
-          "title": "Send a message",
-          "body": "One line to the secretariat is enough."
-        },
-        "three": {
-          "title": "Met at the door",
-          "body": "Including walking your child to Sunday School."
-        }
-      },
-      "cta": "Message the secretariat",
+      "label": "VISIT GKJ TANGERANG",
+      "title": "We Welcome You",
+      "lead": "Join us in worship. Find our service schedules and church location to plan your visit.",
+      "cta": "Plan a Visit",
+      "secondary": "Open Google Maps",
       "waMessage": "Good morning, I would like to visit {church} for the first time. Could you help me?",
-      "secondary": "Open route"
+      "scheduleLabel": "SUNDAY SERVICES"
     },
     "footer": {
-      "legalLabel": "Registered name",
-      "addressLabel": "Address",
-      "contactLabel": "Contact",
-      "hoursLabel": "Secretariat hours",
+      "visitLabel": "Visit Us",
+      "contactLabel": "Contact Us",
+      "scheduleLabel": "Worship Schedule",
+      "linksLabel": "Links",
+      "hoursLabel": "Secretariat Hours",
+      "hoursDays": "Tuesday – Friday",
+      "hoursTime": "09:00 – 16:00 WIB",
       "hours": "Tuesday – Friday, 09:00 – 16:00 WIB",
       "whatsappLabel": "Secretariat WhatsApp",
-      "faithLabel": "Statement of faith",
+      "openMaps": "Open in Google Maps",
+      "viewSchedule": "View full schedule",
+      "faithLabel": "Statement of Faith",
       "faithBody": "We confess the Bible as the written word of God, the sole foundation of the congregation's faith and life; and Jesus Christ as Lord and Saviour, by grace, through faith.",
       "faithVerse": "Ephesians 2:8",
-      "navLabel": "Pages",
-      "accessLabel": "Sign in",
       "portal": "Member Portal",
       "staff": "Staff & Admin",
-      "rights": "All rights reserved.",
-      "backToTop": "Back to top"
+      "giving": "Giving",
+      "rights": "All rights reserved."
     },
     "stories": {
-      "label": "Four Generations, One Room",
-      "title": "One Family in Christ",
-      "lead": "GKJ Tangerang is a place for people of all ages and backgrounds to worship and grow together. Children, youth, young adults, adults, and seniors all have a place to grow and serve together.",
-      "noteWhen": "After the service",
-      "noteTitle": "Life Together",
-      "noteBody": "A second cup of coffee, warm conversations, and community supporting one another through the week."
+      "label": "After Worship",
+      "title": "Fellowship & Community",
+      "lead": "Church life does not end when worship concludes. We have many opportunities to gather, know one another, and grow together in faith.",
+      "photoBadge": "Church Walkway",
+      "photoCaption": "A welcoming space for members and families to meet and connect after Sunday service.",
+      "photoCredit": "GKJ Tangerang",
+      "pillars": {
+        "fellowship": {
+          "num": "01",
+          "tag": "Fellowship",
+          "title": "Meeting & Sharing",
+          "desc": "Connecting, sharing, and supporting one another in a warm setting after worship.",
+          "note": "Open to all visitors who wish to meet church members at their own pace."
+        },
+        "groups": {
+          "num": "02",
+          "tag": "Small Groups",
+          "title": "Growing in Community",
+          "desc": "A dedicated space to study Scripture, share daily life, and pray together through the week.",
+          "note": "Regular gatherings in homes and online."
+        },
+        "activities": {
+          "num": "03",
+          "tag": "Ministries & Gatherings",
+          "title": "Gathering & Serving",
+          "desc": "Community ministries to nurture faith and serve together across all generations.",
+          "tag1": "Prayer Meeting",
+          "tag2": "TYOG / Youth",
+          "tag3": "Yi Fa Lian",
+          "tag4": "Sunday School"
+        }
+      },
+      "detailCaption": "Scripture & Communion",
+      "detailVerse": "Growing together in Christ's love",
+      "cta": "Contact secretariat about small groups",
+      "waMessage": "Hello, I would like to learn more about fellowship and small groups at {church}."
     },
     "devotional": {
-      "label": "Devotionals",
-      "title": "One short reading, every day",
-      "lead": "Written by our own pastors and members — not reposted from somewhere else. Readable without an account, in two minutes, before your day starts.",
+      "label": "DEVOTIONALS",
+      "title": "Daily Devotionals",
+      "titleLine1": "Daily",
+      "titleLine2": "Devotionals",
+      "lead": "Take a moment to read, reflect on God's Word, and carry it into your daily life.",
       "todayLabel": "Latest devotional",
       "read": "Read the devotional",
       "all": "See every devotional",

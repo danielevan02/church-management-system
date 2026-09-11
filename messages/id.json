@@ -2267,7 +2267,7 @@
     "nav": {
       "skip": "Lewati ke konten utama",
       "gatherings": "Ibadah",
-      "stories": "Cerita",
+      "stories": "Komunitas",
       "expect": "Kunjungan Pertama",
       "generosity": "Persembahan",
       "visit": "Rencanakan Kunjungan",
@@ -2280,8 +2280,6 @@
       "navLabel": "Navigasi utama"
     },
     "hero": {
-      "brandA": "Christ Family",
-      "brandB": "Church",
       "headlineA": "Selamat Datang",
       "headlineB": "di GKJ Tangerang",
       "subtitleA": "Tempat untuk beribadah, bertumbuh dalam iman,",
@@ -2290,25 +2288,7 @@
       "navCerita": "Cerita",
       "navKunjungan": "Kunjungan Pertama",
       "navPersembahan": "Persembahan",
-      "quote": "Kami rindu menjadi keluarga tempat setiap orang terhubung dan bertumbuh dalam persahabatan di dalam Kristus.",
-      "serviceTitle": "Ibadah Hari Minggu",
-      "serviceTime": "Minggu ini, 09.00 & 17.00 WIB",
-      "learnMore": "Pelajari Lebih Lanjut",
-      "watch": "Tonton suasana ibadah",
-      "closeVideo": "Tutup video",
-      "watchTitle": "Suasana Ibadah",
-      "watchBody": "Momen teduh doa, firman, dan puji-pujian dalam persekutuan kami.",
-      "eyebrow": "Ibadah setiap Minggu, Rabu & Sabtu",
-      "location": "Tangerang · Banten",
-      "cta": "Rencanakan Kunjungan",
-      "ctaSecondary": "Lihat Jadwal Ibadah",
-      "scroll": "Gulir untuk masuk",
-      "ambientOn": "Dengarkan ruangnya",
-      "ambientOff": "Senyapkan",
-      "posterAlt": "Altar dan ruang ibadah yang tenang disinari cahaya lembut",
-      "highlightsLabel": "Sorotan komunitas & ibadah",
-      "photoAlt": "Anggota jemaat dalam suasana kebersamaan yang hangat",
-      "videoAlt": "Alkitab dan sesi pembacaan Firman"
+      "posterAlt": "Altar dan ruang ibadah yang tenang disinari cahaya lembut"
     },
     "countdown": {
       "next": "Ibadah berikutnya",
@@ -2413,29 +2393,6 @@
         }
       }
     },
-    "sermon": {
-      "label": "Ruang & Suara",
-      "title": "Sepuluh detik sebelum siapa pun datang",
-      "lead": "Ini rekaman ruang ibadah kami sendiri, direkam saat kosong. Putar sambil membaca urutan ibadah — supaya Minggu pertama Anda tidak terasa seperti masuk ke ruangan yang asing.",
-      "play": "Putar",
-      "pause": "Jeda",
-      "restart": "Ulang dari awal",
-      "seek": "Geser posisi audio",
-      "waveform": "Gelombang suara ruang ibadah",
-      "orderLabel": "Urutan ibadah",
-      "note": "Rekaman suara ruangan, bukan rekaman ibadah.",
-      "teachingLabel": "Pengajaran",
-      "teachingTitle": "Bagaimana kami mengajar",
-      "teachingLead": "Bukan renungan motivasi, bukan juga kuliah teologi. Satu bagian Alkitab, dibaca dalam konteksnya, dijelaskan sampai jelas, lalu dibawa ke keputusan-keputusan nyata minggu itu.",
-      "watch": "Tonton ruang ibadah",
-      "watchTitle": "Ruang ibadah GKJ Tangerang",
-      "watchBody": "Rekaman ruang ibadah dari lorong tengah menuju mimbar.",
-      "closeVideo": "Tutup video",
-      "seriesLabel": "Seri saat ini",
-      "speakerLabel": "Pelayan firman",
-      "scriptureLabel": "Bacaan",
-      "archiveNote": "Rekaman khotbah dan renungan harian tersedia di Portal Jemaat."
-    },
     "schedule": {
       "label": "Jadwal Ibadah",
       "title": "Jadwal Ibadah",
@@ -2447,9 +2404,6 @@
       "mainSunday": "Ibadah Utama",
       "sanctuaryRoom": "Ruang Ibadah Utama",
       "sanctuaryCaption": "Ruang Ibadah Utama · GKJ Tangerang",
-      "atmosphereTitle": "Ruang Ibadah & Persekutuan",
-      "atmosphereLead": "Menyambut setiap jemaat untuk beribadah dan bertumbuh bersama dalam kasih Kristus.",
-      "nextServiceLabel": "Ibadah Berikutnya",
       "services": {
         "umumEarly": {
           "name": "Kebaktian Umum I",
@@ -2483,41 +2437,36 @@
         }
       },
       "campusLabel": "Lokasi Gereja",
-      "addressLabel": "Alamat",
       "route": "Buka di Google Maps",
-      "livestreamLabel": "Ibadah online",
       "livestream": "Tonton siaran langsung",
-      "livestreamFallback": "Tanya tautan siaran ke sekretariat",
       "askSecretariat": "Hubungi sekretariat",
       "addToCalendar": "Simpan ke kalender",
       "calendarTitle": "Ibadah di {church}",
-      "parkingLabel": "Parkir",
-      "parkingBody": "Halaman gereja, dengan petugas pada jam ibadah.",
       "every": "Setiap {day}"
     },
     "nextgen": {
-      "label": "Sekolah Minggu & Remaja",
-      "title": "Anak Anda tidak dititipkan. Mereka diajar.",
-      "lead": "Sekolah Minggu berjalan bersamaan dengan Ibadah Umum II pukul 10.00, dengan kurikulum yang berurutan sepanjang tahun — bukan aktivitas pengisi waktu sampai orang tuanya selesai.",
+      "label": "SEKOLAH MINGGU",
+      "title": "Anak-anak Bertumbuh dalam Iman",
+      "lead": "Sekolah Minggu berlangsung bersamaan dengan Ibadah Umum II setiap Minggu pukul 10.00 WIB. Anak-anak belajar mengenal firman Tuhan melalui pembelajaran Alkitab, doa, pujian, dan kegiatan yang sesuai dengan usia mereka.",
       "points": {
-        "safety": {
-          "title": "Penjemputan tercatat",
-          "body": "Setiap anak diantar dan dijemput dengan kartu bernomor yang sama. Anak hanya diserahkan kepada pemegang kartu."
-        },
         "curriculum": {
-          "title": "Kurikulum berurutan",
-          "body": "Satu alur cerita Alkitab sepanjang tahun, dibagi menurut kelompok umur, sehingga anak tidak mendengar cerita yang sama berulang tanpa arah."
+          "title": "Pembelajaran Alkitab",
+          "body": "Materi pembelajaran disusun sesuai dengan kelompok usia dan tema yang dipelajari sepanjang tahun."
         },
         "teachers": {
-          "title": "Pengajar yang sama",
-          "body": "Pengajar dan pendamping melayani dalam kelompok tetap, supaya anak mengenal orang dewasa yang mengajarnya."
+          "title": "Guru & Pendamping",
+          "body": "Anak-anak dibimbing oleh guru dan pendamping yang melayani secara rutin dalam kelompok mereka."
+        },
+        "safety": {
+          "title": "Keamanan Anak",
+          "body": "Sistem identifikasi membantu menjaga keamanan anak selama mengikuti kegiatan Sekolah Minggu."
         },
         "youth": {
-          "title": "Remaja & pemuda",
-          "body": "Ibadah Sabtu malam dengan format yang lebih terbuka untuk bertanya, dilanjutkan kelompok kecil pada hari lain."
+          "title": "Remaja & Pemuda",
+          "body": "Ruang bagi remaja dan pemuda untuk bersekutu, bertumbuh dalam iman, dan saling mendukung."
         }
       },
-      "cta": "Tanya soal Sekolah Minggu",
+      "cta": "Tanya tentang Sekolah Minggu",
       "waMessage": "Selamat pagi, saya ingin bertanya tentang Sekolah Minggu di {church}."
     },
     "mission": {
@@ -2583,56 +2532,78 @@
       "transparency": "Persembahan dipakai untuk operasional gereja, pembinaan jemaat, dan pelayanan sosial. Laporan keuangan dibacakan dalam kebaktian jemaat dan tersedia bagi anggota melalui Portal Jemaat."
     },
     "visit": {
-      "label": "Rencanakan kunjungan",
-      "title": "Datang saja. Sisanya kami urus.",
-      "lead": "Kalau Anda ingin ditemani pada kunjungan pertama, kirim pesan ke sekretariat dan sebutkan jam ibadah yang Anda pilih. Akan ada yang menunggu Anda di pintu.",
-      "steps": {
-        "one": {
-          "title": "Pilih jam",
-          "body": "Minggu 07.00, Minggu 10.00, Rabu 19.00, atau Sabtu 13.00."
-        },
-        "two": {
-          "title": "Kirim pesan",
-          "body": "Satu baris ke sekretariat sudah cukup."
-        },
-        "three": {
-          "title": "Ditemui di pintu",
-          "body": "Termasuk mengantar anak ke Sekolah Minggu."
-        }
-      },
-      "cta": "Kirim pesan ke sekretariat",
+      "label": "KUNJUNGI GKJ TANGERANG",
+      "title": "Kami Menyambut Anda",
+      "lead": "Mari beribadah bersama kami. Temukan jadwal ibadah dan lokasi GKJ Tangerang untuk merencanakan kunjungan Anda.",
+      "cta": "Rencanakan Kunjungan",
+      "secondary": "Buka Google Maps",
       "waMessage": "Selamat pagi, saya ingin datang beribadah di {church} untuk pertama kali. Boleh dibantu?",
-      "secondary": "Buka rute"
+      "scheduleLabel": "IBADAH MINGGU"
     },
     "footer": {
-      "legalLabel": "Nama lengkap",
-      "addressLabel": "Alamat",
-      "contactLabel": "Kontak",
-      "hoursLabel": "Jam sekretariat",
+      "visitLabel": "Kunjungi Kami",
+      "contactLabel": "Hubungi Kami",
+      "scheduleLabel": "Jadwal Ibadah",
+      "linksLabel": "Tautan",
+      "hoursLabel": "Jam Sekretariat",
+      "hoursDays": "Selasa – Jumat",
+      "hoursTime": "09.00 – 16.00 WIB",
       "hours": "Selasa – Jumat, 09.00 – 16.00 WIB",
-      "whatsappLabel": "WhatsApp sekretariat",
-      "faithLabel": "Dasar iman",
+      "whatsappLabel": "WhatsApp Sekretariat",
+      "openMaps": "Buka di Google Maps",
+      "viewSchedule": "Lihat semua jadwal",
+      "faithLabel": "Dasar Iman",
       "faithBody": "Kami mengaku Alkitab sebagai firman Allah yang tertulis, satu-satunya dasar iman dan kehidupan jemaat; dan Yesus Kristus sebagai Tuhan dan Juruselamat, oleh anugerah, melalui iman.",
       "faithVerse": "Efesus 2:8",
-      "navLabel": "Halaman",
-      "accessLabel": "Masuk",
       "portal": "Portal Jemaat",
       "staff": "Pengurus & Staf",
-      "rights": "Seluruh hak dilindungi.",
-      "backToTop": "Kembali ke atas"
+      "giving": "Persembahan",
+      "rights": "Seluruh hak dilindungi."
     },
     "stories": {
-      "label": "Empat Generasi, Satu Ruangan",
-      "title": "Satu Keluarga dalam Kristus",
-      "lead": "GKJ Tangerang menjadi tempat bagi jemaat dari berbagai usia dan latar belakang untuk beribadah dan bertumbuh bersama. Anak-anak, remaja, pemuda, dewasa, hingga lanjut usia memiliki tempat untuk bertumbuh dan melayani bersama.",
-      "noteWhen": "Sesudah ibadah",
-      "noteTitle": "Kehidupan Bersama",
-      "noteBody": "Kopi kedua, percakapan yang hangat, dan persekutuan yang saling mendukung sepanjang minggu."
+      "label": "Sesudah Ibadah",
+      "title": "Persekutuan & Komunitas",
+      "lead": "Kehidupan bergereja tidak berhenti setelah ibadah selesai. Kami memiliki berbagai kesempatan untuk bersekutu, saling mengenal, dan bertumbuh bersama.",
+      "photoBadge": "Selasar Gereja",
+      "photoCaption": "Ruang kebersamaan untuk saling menyapa dan berkenalan seusai ibadah.",
+      "photoCredit": "Gereja Kristen Tangerang",
+      "pillars": {
+        "fellowship": {
+          "num": "01",
+          "tag": "Persekutuan",
+          "title": "Saling Menyapa & Berbagi",
+          "desc": "Bertemu, berbagi, dan saling mendukung dalam kehidupan bersama sesudah kebaktian.",
+          "note": "Terbuka bagi setiap jemaat dan tamu yang ingin saling mengenal dengan akrab."
+        },
+        "groups": {
+          "num": "02",
+          "tag": "Kelompok Kecil",
+          "title": "Komunitas Belajar Firman",
+          "desc": "Ruang untuk belajar firman Tuhan, berbagi kehidupan, dan saling mendoakan dalam kelompok kecil.",
+          "note": "Pertemuan berkala di rumah-rumah jemaat sepanjang minggu."
+        },
+        "activities": {
+          "num": "03",
+          "tag": "Kegiatan Jemaat",
+          "title": "Pelayanan & Kebersamaan",
+          "desc": "Berbagai kegiatan untuk membangun kebersamaan dan mengambil bagian dalam pelayanan jemaat.",
+          "tag1": "Persekutuan Doa",
+          "tag2": "TYOG / Pemuda",
+          "tag3": "Yi Fa Lian",
+          "tag4": "Sekolah Minggu"
+        }
+      },
+      "detailCaption": "Alkitab & Perjamuan",
+      "detailVerse": "Bertumbuh bersama dalam kasih Kristus",
+      "cta": "Tanya seputar persekutuan & kelompok kecil",
+      "waMessage": "Selamat pagi, saya ingin bertanya tentang persekutuan dan kelompok kecil di {church}."
     },
     "devotional": {
-      "label": "Renungan",
-      "title": "Satu bacaan pendek, setiap hari",
-      "lead": "Ditulis oleh pendeta dan pelayan jemaat kami sendiri — bukan kutipan yang diteruskan dari tempat lain. Bisa dibaca tanpa akun, dalam dua menit, sebelum hari Anda dimulai.",
+      "label": "RENUNGAN",
+      "title": "Renungan Harian",
+      "titleLine1": "Renungan",
+      "titleLine2": "Harian",
+      "lead": "Luangkan waktu sejenak untuk membaca, merenungkan firman Tuhan, dan membawanya dalam kehidupan sehari-hari.",
       "todayLabel": "Renungan terbaru",
       "read": "Baca renungan",
       "all": "Lihat semua renungan",

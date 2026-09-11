@@ -13,28 +13,64 @@ import {
 
 const SANCTUARY_PHOTO = "/landing-page/gathering.jpeg";
 
+function CalendarLink({
+  href,
+  serviceName,
+  label,
+}: {
+  href: string;
+  serviceName: string;
+  label: string;
+}) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="sm-worship-cal-link group"
+      aria-label={`${label}: ${serviceName}`}
+    >
+      <Calendar
+        className="h-3.5 w-3.5 shrink-0 opacity-70 transition-transform group-hover:scale-110"
+        aria-hidden="true"
+      />
+      <span>{label}</span>
+      <ArrowUpRight
+        className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+        aria-hidden="true"
+      />
+    </a>
+  );
+}
+
 export async function WorshipSchedule() {
   const t = await getTranslations("lp.schedule");
   const locale = await getLocale();
 
   // Primary Sunday Services (Visual Anchor 1)
-  const sundaySlots: ServiceSlot[] = [
-    SERVICE_SLOTS.find((s) => s.key === "umumEarly")!,
-    SERVICE_SLOTS.find((s) => s.key === "umumLate")!,
-    SERVICE_SLOTS.find((s) => s.key === "tyog")!,
-  ].filter(Boolean);
+  const sundayKeys = ["umumEarly", "umumLate", "tyog"] as const;
+  const sundaySlots = sundayKeys
+    .map((key) => SERVICE_SLOTS.find((s) => s.key === key))
+    .filter((s): s is ServiceSlot => Boolean(s));
 
   // Other Weekly Services (Visual Anchor 2)
-  const otherSlots = [
-    {
-      slot: SERVICE_SLOTS.find((s) => s.key === "doa")!,
-      dayKey: "wednesdayLabel" as const,
-    },
-    {
-      slot: SERVICE_SLOTS.find((s) => s.key === "yifalian")!,
-      dayKey: "saturdayLabel" as const,
-    },
-  ].filter((item) => Boolean(item.slot));
+  const otherConfig = [
+    { key: "doa", dayKey: "wednesdayLabel" as const },
+    { key: "yifalian", dayKey: "saturdayLabel" as const },
+  ];
+  const otherSlots = otherConfig
+    .map(({ key, dayKey }) => {
+      const slot = SERVICE_SLOTS.find((s) => s.key === key);
+      return slot ? { slot, dayKey } : null;
+    })
+    .filter(
+      (
+        item,
+      ): item is {
+        slot: ServiceSlot;
+        dayKey: "wednesdayLabel" | "saturdayLabel";
+      } => Boolean(item),
+    );
 
   const address = formatAddress();
 
@@ -63,25 +99,20 @@ export async function WorshipSchedule() {
         </header>
 
         {/* ============================================================
-         * BENTO GRID COMPOSITION
+         * BENTO GRID — High Contrast Asymmetric Visual Rhythm
          * ============================================================ */}
-        <div
-          className="sm-worship-bento"
-          data-sm-stagger
-          data-sm-trigger="#atas"
-          data-sm-start="bottom 50%"
-        >
+        <div className="sm-worship-bento">
           {/* ────────────────────────────────────────────────────────────
-           * CELL 1: DOMINANT SUNDAY ANCHOR (Desktop: 8-col / 2-row)
+           * CELL 1: DOMINANT SUNDAY HERO CELL (Span 8)
            * ──────────────────────────────────────────────────────────── */}
           <article
             className="sm-worship-cell sm-worship-cell-sunday"
             data-sm-reveal="fade"
           >
-            {/* Cell Meta Header */}
             <div className="sm-worship-cell-header">
               <div className="sm-worship-badge-group">
                 <span className="sm-worship-day-tag">
+                  <Radio className="h-3 w-3 animate-pulse text-amber-400" />
                   {t("sundayLabel")}
                 </span>
                 <span className="sm-worship-meta-divider" aria-hidden="true">
@@ -106,9 +137,9 @@ export async function WorshipSchedule() {
                     : null;
                 const audienceNote = t(`services.${slot.key}.audience`);
                 const calUrl = googleCalendarUrl({
-                  title: `${serviceName} — ${church.shortName}`,
+                  title: `${church.name} — ${serviceName}`,
                   slot,
-                  details: t("calendarTitle", { church: church.name }),
+                  details: `${t("calendarTitle", { church: church.name })}\n\n${campus.mapsUrl}`,
                 });
 
                 return (
@@ -127,13 +158,11 @@ export async function WorshipSchedule() {
 
                     {/* Service Information */}
                     <div className="sm-worship-service-info">
-                      <h3 className="sm-worship-service-name">
+                      <h4 className="sm-worship-service-name">
                         {serviceName}
-                      </h3>
+                      </h4>
                       {englishNote && englishNote !== serviceName && (
-                        <p className="sm-worship-lang-hint">
-                          {englishNote}
-                        </p>
+                        <p className="sm-worship-lang-hint">{englishNote}</p>
                       )}
                       <p className="sm-worship-audience">{audienceNote}</p>
                     </div>
@@ -143,23 +172,11 @@ export async function WorshipSchedule() {
                       <span className="sm-worship-duration">
                         {slot.durationMin} {t("duration")}
                       </span>
-                      <a
+                      <CalendarLink
                         href={calUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="sm-worship-cal-link group"
-                        aria-label={`${t("addToCalendar")}: ${serviceName}`}
-                      >
-                        <Calendar
-                          className="h-3.5 w-3.5 shrink-0 opacity-70 transition-transform group-hover:scale-110"
-                          aria-hidden="true"
-                        />
-                        <span>{t("addToCalendar")}</span>
-                        <ArrowUpRight
-                          className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                          aria-hidden="true"
-                        />
-                      </a>
+                        serviceName={serviceName}
+                        label={t("addToCalendar")}
+                      />
                     </div>
                   </div>
                 );
@@ -168,7 +185,7 @@ export async function WorshipSchedule() {
           </article>
 
           {/* ────────────────────────────────────────────────────────────
-           * CELL 2: SANCTUARY ATMOSPHERE (Desktop: 4-col)
+           * CELL 2: ATMOSPHERE PHOTO TILE (Span 4)
            * ──────────────────────────────────────────────────────────── */}
           <aside
             className="sm-worship-cell sm-worship-cell-photo"
@@ -179,7 +196,7 @@ export async function WorshipSchedule() {
                 src={SANCTUARY_PHOTO}
                 alt={t("sanctuaryCaption")}
                 fill
-                sizes="(max-width: 64rem) 100vw, 33vw"
+                sizes="(max-width: 62rem) 100vw, 33vw"
                 quality={82}
                 className="sm-worship-photo"
               />
@@ -190,7 +207,7 @@ export async function WorshipSchedule() {
             </div>
             <div className="sm-worship-photo-caption">
               <span className="sm-worship-photo-badge">
-                GKJ Tangerang
+                {church.shortName}
               </span>
               <p className="sm-worship-photo-text">
                 {t("sanctuaryCaption")}
@@ -203,16 +220,17 @@ export async function WorshipSchedule() {
            * ──────────────────────────────────────────────────────────── */}
           {otherSlots.map(({ slot, dayKey }) => {
             const serviceName = t(`services.${slot.key}.name`);
+            const audienceNote = t(`services.${slot.key}.audience`);
             const englishNote =
               locale === "en"
                 ? t(`services.${slot.key}.englishNote`)
                 : null;
-            const audienceNote = t(`services.${slot.key}.audience`);
             const dayName = t(dayKey);
+
             const calUrl = googleCalendarUrl({
-              title: `${serviceName} — ${church.shortName}`,
+              title: `${church.name} — ${serviceName}`,
               slot,
-              details: t("calendarTitle", { church: church.name }),
+              details: `${t("calendarTitle", { church: church.name })}\n\n${campus.mapsUrl}`,
             });
 
             return (
@@ -246,23 +264,11 @@ export async function WorshipSchedule() {
                 </div>
 
                 <div className="sm-worship-secondary-bottom">
-                  <a
+                  <CalendarLink
                     href={calUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="sm-worship-cal-link group"
-                    aria-label={`${t("addToCalendar")}: ${serviceName}`}
-                  >
-                    <Calendar
-                      className="h-3.5 w-3.5 shrink-0 opacity-70 transition-transform group-hover:scale-110"
-                      aria-hidden="true"
-                    />
-                    <span>{t("addToCalendar")}</span>
-                    <ArrowUpRight
-                      className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                      aria-hidden="true"
-                    />
-                  </a>
+                    serviceName={serviceName}
+                    label={t("addToCalendar")}
+                  />
                 </div>
               </article>
             );

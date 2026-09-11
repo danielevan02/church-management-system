@@ -50,6 +50,9 @@ function readSiteUrl(): string {
 export const church = {
   name: process.env.NEXT_PUBLIC_CHURCH_NAME ?? "Church Management System",
   shortName: process.env.NEXT_PUBLIC_CHURCH_SHORT_NAME ?? "ChMS",
+  nameLine1:
+    process.env.NEXT_PUBLIC_CHURCH_NAME_LINE1 ?? "Gereja Kristen Jakarta",
+  nameLine2: process.env.NEXT_PUBLIC_CHURCH_NAME_LINE2 ?? "Jemaat Tangerang",
   domain: process.env.NEXT_PUBLIC_CHURCH_DOMAIN ?? "localhost",
   /** Absolute origin, no trailing slash — e.g. `https://gkjtangerang.org`. */
   siteUrl: readSiteUrl(),

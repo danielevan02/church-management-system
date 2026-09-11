@@ -47,6 +47,8 @@ export function Sheet({
     const panel = panelRef.current;
     if (!dialog) return;
 
+    if (panel) gsap.killTweensOf(panel);
+
     if (open) {
       if (!dialog.open) dialog.showModal();
       lenis?.stop();
@@ -66,7 +68,9 @@ export function Sheet({
           },
         );
       }
-      return;
+      return () => {
+        if (panel) gsap.killTweensOf(panel);
+      };
     }
 
     if (!dialog.open) return;
@@ -76,11 +80,17 @@ export function Sheet({
         opacity: 0,
         duration: 0.24,
         ease: "power2.in",
-        onComplete: () => dialog.close(),
+        onComplete: () => {
+          if (dialog.open) dialog.close();
+        },
       });
     } else {
       dialog.close();
     }
+
+    return () => {
+      if (panel) gsap.killTweensOf(panel);
+    };
   }, [open, lenis, reduce, variant]);
 
   // The Escape key closes a native dialog on its own; this keeps React's state
