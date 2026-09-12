@@ -52,7 +52,15 @@ export function DevotionalCard({
       href={href}
       aria-label={`${labels.badge}: ${devotional.title}`}
       className={cn(
-        "group relative block h-full overflow-hidden rounded-3xl bg-surface-container-low p-5 shadow-level-0 sm:p-6",
+        // No `h-full`. The card's only mount is a direct child of the
+        // dashboard's `flex flex-col`, whose height is decided by its own
+        // content — so `height: 100%` there is circular, and it made the card
+        // claim the whole column as its flex basis. That is what left it with
+        // ~100px of dead space under the link while the hero banner above it
+        // was squeezed short enough to clip its own description and buttons.
+        // A caller that ever does need equal-height cards can pass it through
+        // `className`.
+        "group relative block overflow-hidden rounded-3xl bg-surface-container-low p-5 shadow-level-0 sm:p-6",
         "motion-effects-fast transition-[background-color,box-shadow,transform]",
         "hover:bg-surface-container hover:shadow-level-1 active:scale-[0.99]",
         "m3-focus-ring",
