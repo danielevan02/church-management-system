@@ -3,7 +3,7 @@
 import * as React from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { ArrowUpRight, Check, Copy, QrCode } from "lucide-react";
+import { ArrowUpRight, Check, Copy } from "lucide-react";
 
 type Tab = "qris" | "bank";
 const TABS: readonly Tab[] = ["qris", "bank"];
@@ -98,7 +98,6 @@ export function GivingPanel({
              method that does work, which is the only honest thing to render
              when a deployment has not uploaded its code yet. */
           <div className="sm-give-empty">
-            <QrCode className="h-6 w-6" aria-hidden />
             <p className="sm-body">{t("qrisMissing")}</p>
             <button
               type="button"

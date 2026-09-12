@@ -11,6 +11,7 @@ import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { Link } from "@/lib/i18n/navigation";
 
 import { useAnchorNav } from "./scroll-stage";
+import { NAV_SECTIONS } from "./landing-nav";
 
 const VIDEO_LG = "/landing-page/hero-loop.mp4";
 const VIDEO_SM = "/landing-page/hero-loop-sm.mp4";
@@ -265,38 +266,17 @@ export function HeroSanctuary() {
               aria-label={tNav("navLabel")}
               className="hero-stage-nav-primary"
             >
-              <Link
-                href="/#ibadah"
-                onClick={onAnchor("ibadah")}
-                className="hero-nav-anchor"
-                data-hero-nav-item
-              >
-                {t("navIbadah")}
-              </Link>
-              <Link
-                href="/#cerita"
-                onClick={onAnchor("cerita")}
-                className="hero-nav-anchor"
-                data-hero-nav-item
-              >
-                {t("navCerita")}
-              </Link>
-              <Link
-                href="/#kunjungan-pertama"
-                onClick={onAnchor("kunjungan-pertama")}
-                className="hero-nav-anchor"
-                data-hero-nav-item
-              >
-                {t("navKunjungan")}
-              </Link>
-              <Link
-                href="/#persembahan"
-                onClick={onAnchor("persembahan")}
-                className="hero-nav-anchor"
-                data-hero-nav-item
-              >
-                {t("navPersembahan")}
-              </Link>
+              {NAV_SECTIONS.map((s) => (
+                <Link
+                  key={s.id}
+                  href={`/#${s.id}`}
+                  onClick={onAnchor(s.id)}
+                  className="hero-nav-anchor"
+                  data-hero-nav-item
+                >
+                  {tNav(s.key)}
+                </Link>
+              ))}
             </nav>
           </div>
 

@@ -513,6 +513,30 @@ html:has(.sm-root) body {
   height: 100%;
   object-fit: cover;
 }
+/* --- Photographic parallax -----------------------------------------------
+ * A frame is an aperture and the photograph inside it is taller than the
+ * opening, so the image can drift against the scroll without ever exposing a
+ * bare edge. The wrapper overhangs top and bottom by `--sm-parallax-overhang`
+ * and `RevealStage` drives it by a little less, so the slack is never spent.
+ *
+ * The wrapper exists because `next/image` with `fill` writes its own inset as
+ * an INLINE style — a stylesheet cannot oversize the image itself, and an
+ * inline style is not something to fight with `!important`. It is the same
+ * arrangement the liturgy chapters already use (`.sm-chapter-figure-inner`).
+ *
+ * Under reduced motion nothing drives it and the overhang is symmetric, so
+ * the image simply sits centred in its frame.
+ * ---------------------------------------------------------------------- */
+.sm-parallax {
+  position: absolute;
+  inset: calc(-1 * var(--sm-parallax-overhang, 10%)) 0;
+  z-index: 0;
+  will-change: transform;
+}
+.sm-parallax img {
+  object-fit: cover;
+}
+
 .sm-figure-warm::before {
   content: "";
   position: absolute;
@@ -681,7 +705,7 @@ html.lenis body {
   display: none;
 }
 
-@media (min-width: 52rem) {
+@media (min-width: 62rem) {
   .sm-nav-center {
     position: absolute;
     left: 50%;
@@ -689,7 +713,7 @@ html.lenis body {
     transform: translate(-50%, -50%);
     display: flex;
     align-items: center;
-    gap: clamp(0.75rem, 1.6vw, 1.75rem);
+    gap: clamp(0.5rem, 1vw, 1.25rem);
     pointer-events: none;
     z-index: 2;
   }
@@ -700,11 +724,11 @@ html.lenis body {
   align-items: center;
   gap: 0.3125rem;
   font-family: var(--sm-sans-stack);
-  font-size: clamp(0.8125rem, 0.9vw, 0.875rem);
+  font-size: clamp(0.8125rem, 0.85vw, 0.875rem);
   font-weight: 500;
   letter-spacing: -0.01em;
   color: rgba(246, 241, 232, 0.72);
-  padding: 0.375rem 0.625rem;
+  padding: 0.35rem 0.55rem;
   border-radius: 9999px;
   background: transparent;
   text-decoration: none;
@@ -883,6 +907,14 @@ html.lenis body {
 .hero-curtain-stage {
   position: relative;
   width: 100%;
+  /* The hero's exit timeline translates `.sm-worship-section` up by 40vh and
+   * scrubs it back to 0. A transform leaves the layout box behind, so while
+   * the section is lifted there is a real 40vh hole between its painted bottom
+   * edge and where `#mengapa` starts. On a fast flick the scrub lags far enough
+   * behind the real scroll position that the hole reaches the viewport, and an
+   * unpainted hole rasterises white. Same obsidian as every surface on both
+   * sides of it, so when it is exposed there is nothing to see. */
+  background: var(--sm-obsidian);
 }
 
 .hero-container {
@@ -1103,7 +1135,7 @@ html.lenis body {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: clamp(0.45rem, 1.2vh, 0.85rem);
+  gap: clamp(0.35rem, 1vh, 0.7rem);
   text-align: right;
   flex-shrink: 0;
 }
@@ -1169,14 +1201,14 @@ html.lenis body {
 
 .hero-nav-anchor {
   font-family: var(--sm-sans-stack);
-  font-size: clamp(1.05rem, 1.25vw, 1.25rem);
+  font-size: clamp(0.95rem, 1.15vw, 1.15rem);
   font-weight: 400;
   letter-spacing: -0.01em;
   color: #ffffff;
   background: transparent;
   border: none;
   cursor: pointer;
-  padding: 0.2rem 0;
+  padding: 0.15rem 0;
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
@@ -1477,7 +1509,11 @@ html.lenis body {
 }
 .sm-chapter-figure {
   aspect-ratio: 4 / 5;
-  border-radius: 0.25rem;
+  /* Matches the plates in `#cerita` and `#ibadah`. A radius reads optically
+   * against the size of the box it rounds: at 4px a photograph this large did
+   * not read as sharp-edged, it read as unset — and it sat in the same scroll
+   * as a hero card that rounds to 44px. */
+  border-radius: 1.25rem;
 }
 @media (min-width: 62rem) and (prefers-reduced-motion: no-preference) {
   .sm-chapter-figure {
@@ -1512,10 +1548,16 @@ html.lenis body {
   bottom: 0;
   z-index: 4;
   padding-block: 1rem;
+  /* Opaque behind the controls, feathered only ABOVE them. At `obsidian 20%`
+   * the solid part stopped below the dots, so chapter copy scrolled straight
+   * through the numerals and their rules. The feather exists to keep the rail
+   * from having a hard top edge, which it still does — it just no longer does
+   * it across the row it is meant to be carrying. */
   background: linear-gradient(
     to top,
-    var(--sm-obsidian) 20%,
-    rgba(22, 18, 16, 0)
+    var(--sm-obsidian) 0%,
+    var(--sm-obsidian) 74%,
+    rgba(22, 18, 16, 0) 100%
   );
 }
 @media (min-width: 62rem) {
@@ -1588,7 +1630,11 @@ html.lenis body {
 .sm-give-tabs {
   display: flex;
   gap: 1.75rem;
-  border-bottom: 1px solid var(--sm-rule);
+  /* No rule of its own. This carried a full-width `border-bottom` while the
+   * first `.sm-give-row` below it carried a `border-top`, so the panel opened
+   * with two hairlines about 36px apart and nothing between them. The row
+   * rules are the table's structure; the selected tab's own short accent is
+   * what marks the selection. */
 }
 .sm-give-tab {
   position: relative;
@@ -1635,24 +1681,31 @@ html.lenis body {
     grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
   }
 }
+/* White stays — a QR code needs its quiet zone to scan reliably, so this is
+ * functional, not decorative. The border does not: white on limestone already
+ * separates the plate, and the hairline was the last of the bordered-box
+ * idiom in this section. Radius matches every other plate on the page. */
 .sm-give-qris-plate {
   padding: clamp(0.75rem, 1.6vw, 1.125rem);
   background: #fff;
-  border: 1px solid var(--sm-rule);
-  border-radius: 0.75rem;
+  border-radius: 1.25rem;
 }
 .sm-give-qris-plate img {
   display: block;
   width: 100%;
   height: auto;
 }
+/* A tinted plate, not a dashed outline. The dash was the only one left in the
+ * stylesheet and it read as a placeholder box in a wireframe — which is
+ * exactly the wrong signal for a state a visitor may actually meet. */
 .sm-give-empty {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 1rem;
-  padding: clamp(1.25rem, 2.4vw, 1.75rem);
-  border: 1px dashed var(--sm-rule-strong);
-  border-radius: 0.75rem;
+  padding: clamp(1.5rem, 2.8vw, 2rem);
+  background: rgba(32, 26, 22, 0.04);
+  border-radius: 1.25rem;
   color: var(--sm-fg-muted);
 }
 
@@ -1901,8 +1954,13 @@ html.lenis body {
 
 .sm-fellowship-bento {
   display: grid;
-  gap: clamp(1rem, 1.8vw, 1.5rem);
-  align-items: stretch;
+  /* Wider than the gap the bordered version used, and wider across than down.
+   * Once the pillars lost their shells the gutter is the only thing separating
+   * one column of type from the next, so it has to be a real column gap — at
+   * 1.5rem the paragraphs read as one running block of text. */
+  column-gap: clamp(1.5rem, 3.2vw, 3.25rem);
+  row-gap: clamp(2.5rem, 5vw, 4.5rem);
+  align-items: start;
 }
 
 @media (min-width: 62rem) {
@@ -1911,7 +1969,8 @@ html.lenis body {
   }
   .sm-fellowship-cell-hero {
     grid-column: span 7;
-    min-height: 28rem;
+    min-height: 32rem;
+    align-self: stretch;
   }
   .sm-fellowship-cell-main {
     grid-column: span 5;
@@ -1924,7 +1983,10 @@ html.lenis body {
   }
   .sm-fellowship-cell-detail {
     grid-column: span 3;
-    min-height: 20rem;
+    min-height: 24rem;
+    /* Hung from the top of its row like the pillars beside it, so the three
+     * row-2 cells share one baseline instead of the plate floating. */
+    align-self: stretch;
   }
 }
 
@@ -1955,7 +2017,7 @@ html.lenis body {
   .sm-fellowship-bento {
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    gap: 2.75rem;
   }
   .sm-fellowship-cell-hero {
     min-height: 22rem;
@@ -1965,42 +2027,49 @@ html.lenis body {
   }
 }
 
-/* --- Shared Cell Foundation --- */
+/* --- Cell foundations ---------------------------------------------------
+ * Two kinds of cell, deliberately not one. The photographs are OBJECTS: a
+ * filled, softly-rounded plate that sits on the page. The pillars are FIELD:
+ * type set straight onto the limestone under a grid rule, with no shell at
+ * all. Giving all five the same bordered, tinted box is what made the section
+ * read as a document — five near-identical frames on a ground only 2% away
+ * from their own fill, so the hairline was carrying the entire composition.
+ * ---------------------------------------------------------------------- */
+
 .sm-fellowship-cell {
   position: relative;
-  overflow: hidden;
-  border-radius: 0.625rem;
-  border: 1px solid var(--sm-rule);
-  background: color-mix(in oklab, var(--sm-page-2) 35%, var(--sm-page));
-  padding: clamp(1.5rem, 3vw, 2.25rem);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  transition:
-    border-color var(--sm-dur-fast) var(--sm-ease),
-    box-shadow var(--sm-dur-fast) var(--sm-ease),
-    transform var(--sm-dur-fast) var(--sm-ease);
 }
 
-.sm-fellowship-cell:hover {
-  border-color: var(--sm-rule-strong);
-  box-shadow: 0 16px 36px -12px rgba(32, 26, 22, 0.08);
+/* --- Field cells: the three pillars --- */
+.sm-fellowship-cell-main,
+.sm-fellowship-cell-groups,
+.sm-fellowship-cell-activities {
+  /* Sized by their own content and hung from the top of the row rather than
+   * stretched to the height of the photograph beside them. Stretching is what
+   * pushed the call-to-action ~250px below the paragraph it belongs to and
+   * opened the dead panel in cell 01. The space still exists — it is just
+   * below the type now, where it reads as air against the tall plate. */
+  align-self: start;
+  /* A rule ACROSS THE TOP of a column is structural — it states the grid.
+   * The rules this replaces sat under the paragraphs, which is the typographic
+   * signature of a footnote apparatus and the main reason the cards read as
+   * article furniture. */
+  border-top: 1px solid var(--sm-rule-strong);
 }
 
-/* --- Media Cells (Hero & Detail) --- */
+/* --- Object cells: the two photographs --- */
 .sm-fellowship-cell-hero,
 .sm-fellowship-cell-detail {
-  padding: 0;
+  overflow: hidden;
+  /* Larger than the 0.625rem the bordered cards carried. A radius reads
+   * optically relative to the box it rounds; at this size anything under
+   * ~1rem looks like a default rather than a decision. */
+  border-radius: 1.25rem;
   background: var(--sm-obsidian);
   color: var(--sm-paper);
-}
-
-.sm-fellowship-hero-media,
-.sm-fellowship-detail-media {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  overflow: hidden;
+  justify-content: flex-end;
 }
 
 .sm-fellowship-hero-img,
@@ -2008,192 +2077,192 @@ html.lenis body {
   object-fit: cover;
   width: 100%;
   height: 100%;
-  transition: transform 1200ms var(--sm-ease);
+  transition: transform 1400ms var(--sm-ease);
 }
 
-.sm-fellowship-cell:hover .sm-fellowship-hero-img,
-.sm-fellowship-cell:hover .sm-fellowship-detail-img {
-  transform: scale(1.03);
+.sm-fellowship-cell-hero:hover .sm-fellowship-hero-img,
+.sm-fellowship-cell-detail:hover .sm-fellowship-detail-img {
+  transform: scale(1.04);
 }
 
 .sm-fellowship-hero-overlay {
   position: absolute;
   inset: 0;
+  z-index: 1;
   background: linear-gradient(
     180deg,
-    rgba(22, 18, 16, 0.08) 0%,
-    rgba(22, 18, 16, 0.35) 45%,
-    rgba(22, 18, 16, 0.9) 100%
+    rgba(22, 18, 16, 0) 0%,
+    rgba(22, 18, 16, 0.22) 48%,
+    rgba(22, 18, 16, 0.88) 100%
   );
 }
 
 .sm-fellowship-detail-overlay {
   position: absolute;
   inset: 0;
+  z-index: 1;
   background: linear-gradient(
     180deg,
-    rgba(22, 18, 16, 0.2) 0%,
-    rgba(22, 18, 16, 0.55) 40%,
-    rgba(22, 18, 16, 0.92) 100%
+    rgba(22, 18, 16, 0.12) 0%,
+    rgba(22, 18, 16, 0.45) 42%,
+    rgba(22, 18, 16, 0.9) 100%
   );
 }
 
 .sm-fellowship-hero-caption {
   position: relative;
   z-index: 2;
-  margin-top: auto;
   display: flex;
   flex-direction: column;
-  padding: clamp(1.5rem, 3vw, 2.25rem);
+  align-items: flex-start;
+  padding: clamp(1.5rem, 3vw, 2.5rem);
 }
 
 .sm-fellowship-badge {
   display: inline-flex;
-  align-self: flex-start;
-  padding: 0.3rem 0.75rem;
+  padding: 0.35rem 0.8rem;
   border-radius: 9999px;
-  background: rgba(246, 241, 232, 0.16);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(246, 241, 232, 0.25);
+  background: rgba(246, 241, 232, 0.14);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(246, 241, 232, 0.22);
   color: var(--sm-paper);
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
 }
 
 .sm-fellowship-hero-text {
-  font-size: clamp(1.125rem, 2vw, 1.35rem);
+  /* The plate's own headline, so it carries display weight rather than the
+   * body weight it had — it was competing with the caption credit below it. */
+  font-size: clamp(1.25rem, 2.2vw, 1.75rem);
   font-weight: 500;
-  line-height: 1.35;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  max-width: 26ch;
   color: var(--sm-paper);
-  margin-bottom: 0.5rem;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+  margin-bottom: 0.65rem;
 }
 
 .sm-fellowship-hero-credit {
-  font-size: 0.75rem;
-  color: var(--sm-paper-2);
-  letter-spacing: 0.02em;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--sm-paper-3);
 }
 
 .sm-fellowship-detail-caption {
   position: relative;
   z-index: 2;
-  margin-top: auto;
   padding: clamp(1.5rem, 3vw, 2rem);
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.6rem;
 }
 
 .sm-fellowship-detail-title {
-  font-size: 0.8125rem;
-  font-weight: 700;
+  font-size: 0.625rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--sm-amber);
+  letter-spacing: 0.14em;
+  color: var(--sm-amber-lit);
 }
 
 .sm-fellowship-detail-verse {
-  font-size: clamp(0.9375rem, 1.4vw, 1.0625rem);
-  font-style: italic;
-  line-height: 1.45;
+  font-size: clamp(1rem, 1.5vw, 1.1875rem);
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: -0.015em;
   color: var(--sm-paper);
 }
 
-/* --- Card Headers & Typographic Elements --- */
+/* --- Pillar typography --------------------------------------------------
+ * The index is set as a large, thin numeral rather than a bordered amber
+ * chip. Same information, but a numeral at display size beside 11px tracked
+ * caps is a ratio — which is what makes a grid read as editorial design
+ * instead of as documentation. The lucide icon that sat opposite it is gone:
+ * a decorative glyph in the corner of every card is the single clearest tell
+ * of a generic SaaS card deck, and it was adding nothing the label did not.
+ * ---------------------------------------------------------------------- */
+
 .sm-fellowship-card-header {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
   gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.sm-fellowship-index-wrap {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
+  padding-top: 0.875rem;
+  margin-bottom: clamp(2rem, 3.5vw, 3rem);
 }
 
 .sm-fellowship-index {
   font-family: var(--sm-sans-stack);
-  font-size: 0.8125rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  color: var(--sm-timber);
-  background: rgba(169, 120, 74, 0.12);
-  padding: 0.2rem 0.55rem;
-  border-radius: 0.25rem;
-  border: 1px solid rgba(169, 120, 74, 0.24);
+  font-size: clamp(1.875rem, 3vw, 2.625rem);
+  font-weight: 200;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  color: var(--sm-ink);
 }
 
 .sm-fellowship-tag {
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: var(--sm-ink-3);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-}
-
-.sm-fellowship-icon {
-  color: var(--sm-timber);
-  opacity: 0.8;
-  transition: transform var(--sm-dur-fast) var(--sm-ease);
-}
-
-.sm-fellowship-cell:hover .sm-fellowship-icon {
-  transform: scale(1.12);
+  color: var(--sm-ink-3);
 }
 
 .sm-fellowship-card-content {
-  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
-  gap: 0.625rem;
+  gap: 0.875rem;
 }
 
 .sm-fellowship-card-title {
-  font-size: clamp(1.2rem, 2vw, 1.45rem);
+  font-size: clamp(1.5rem, 2.4vw, 1.9375rem);
   font-weight: 600;
-  line-height: 1.25;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
   color: var(--sm-ink);
+  max-width: 18ch;
   margin: 0;
 }
 
 .sm-fellowship-card-desc {
   font-size: 0.9375rem;
-  line-height: 1.6;
+  line-height: 1.65;
   color: var(--sm-ink-2);
+  /* A measure, not a column width. Without it the 5-column cells ran to 60+
+   * characters while the 4-column ones ran to 40, so no two paragraphs on the
+   * row shared a rhythm. */
+  max-width: 34ch;
   margin: 0;
 }
 
 .sm-fellowship-card-note {
-  font-size: 0.8125rem;
-  line-height: 1.5;
+  font-size: 0.875rem;
+  line-height: 1.6;
   color: var(--sm-ink-3);
-  margin-top: 0.25rem;
+  max-width: 34ch;
+  margin: 0;
 }
 
-/* --- Card Footers --- */
+/* --- Pillar footers: no rules, no boxes --- */
 .sm-fellowship-card-footer {
-  margin-top: 1.75rem;
-  padding-top: 1.25rem;
-  border-top: 1px solid var(--sm-rule);
+  margin-top: clamp(1.75rem, 3vw, 2.5rem);
   display: flex;
   align-items: center;
-  justify-content: space-between;
 }
 
 .sm-fellowship-action-link {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.8125rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
   color: var(--sm-cta);
   text-decoration: none;
   transition:
@@ -2203,31 +2272,33 @@ html.lenis body {
 
 .sm-fellowship-action-link:hover {
   color: var(--sm-cta-deep);
-  gap: 0.75rem;
+  gap: 0.8rem;
 }
 
 .sm-fellowship-meta-hint {
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
+  line-height: 1.6;
   color: var(--sm-ink-3);
+  max-width: 32ch;
 }
 
 .sm-fellowship-pills-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.45rem;
-  border-top: 1px solid var(--sm-rule);
-  padding-top: 1.25rem;
+  gap: 0.5rem;
 }
 
 .sm-fellowship-pill {
   display: inline-flex;
   align-items: center;
-  padding: 0.3rem 0.7rem;
+  padding: 0.4rem 0.85rem;
   border-radius: 9999px;
-  background: rgba(32, 26, 22, 0.05);
-  border: 1px solid var(--sm-rule);
+  /* Tint only. The border these carried put a second hairline system inside
+   * cells that no longer have one of their own. */
+  background: rgba(32, 26, 22, 0.055);
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 500;
+  letter-spacing: -0.005em;
   color: var(--sm-ink-2);
   transition:
     background var(--sm-dur-fast) var(--sm-ease),
@@ -2235,14 +2306,25 @@ html.lenis body {
 }
 
 .sm-fellowship-pill:hover {
-  background: rgba(32, 26, 22, 0.09);
+  background: rgba(32, 26, 22, 0.1);
   color: var(--sm-ink);
 }
 
-
-
 /* ==========================================================================
- * WORSHIP SCHEDULE — CINEMATIC NEO-GROTESQUE + BENTO GRID
+ * WORSHIP SCHEDULE — A TIMETABLE, NOT A CARD DECK
+ *
+ * The content here is a timetable, and a timetable is the most thoroughly
+ * solved problem in Swiss typography: a strong left axis of tabular figures,
+ * one hairline per entry, and nothing else. The bento of five bordered tiles
+ * this replaces fought that on every count — it carried five separate hairline
+ * systems (a header underline, dashed footer rules, a column divider, the cell
+ * borders themselves), set its cells 3% off the section ground so those
+ * borders had to do all the work, and boxed the one genuinely strong element,
+ * the display times, inside a card instead of letting them BE the composition.
+ *
+ * So: the schedule is FIELD — type straight on obsidian, ruled, no shells. The
+ * photograph and the location block are OBJECTS — softly rounded plates in the
+ * right rail. Same division as the fellowship section above it.
  * ========================================================================== */
 
 .sm-worship-section {
@@ -2251,213 +2333,199 @@ html.lenis body {
   color: var(--sm-paper);
   padding-block: clamp(4.5rem, 9vh, 7.5rem);
   overflow: hidden;
+  /* The hero's exit timeline scrubs a `translateY` on this whole section.
+   * Without the promotion Chrome repaints the full section every frame of that
+   * scrub, and on a fast scroll raster loses the race — the lower part of the
+   * section arrives as blank white before it fills in. Promoted, it is
+   * rasterised once and the compositor only moves the result. */
+  will-change: transform;
 }
 
-/* --- Section Header --- */
+/* --- Masthead ------------------------------------------------------------ */
+
 .sm-worship-header {
-  position: relative;
-  z-index: 1;
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  margin-bottom: clamp(2.5rem, 5vw, 4rem);
+  margin-bottom: clamp(3rem, 6vw, 5rem);
+  max-width: 46rem;
 }
 
-
-
-.sm-worship-header-body {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  max-width: 54rem;
+.sm-worship-kicker {
+  font-family: var(--sm-sans-stack);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--sm-paper-3);
 }
 
 .sm-worship-title {
   font-family: var(--sm-sans-stack);
   font-weight: 600;
   font-size: clamp(2.25rem, 5vw, 4.25rem);
-  line-height: 1.05;
-  letter-spacing: -0.035em;
+  line-height: 1.02;
+  letter-spacing: -0.04em;
   color: var(--sm-paper);
 }
 
 .sm-worship-lead {
   font-family: var(--sm-sans-stack);
   font-weight: 400;
-  font-size: clamp(1.0625rem, 1.3vw, 1.25rem);
+  font-size: clamp(1.0625rem, 1.3vw, 1.1875rem);
   line-height: 1.6;
   color: var(--sm-paper-2);
-  max-width: 46ch;
+  max-width: 42ch;
 }
 
-/* --- Bento Grid Structure --- */
-.sm-worship-bento {
-  position: relative;
-  z-index: 1;
+/* --- Layout: timetable + rail -------------------------------------------- */
+
+.sm-worship-layout {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.25rem;
-}
-
-@media (min-width: 48rem) {
-  .sm-worship-bento {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-  }
+  gap: clamp(3rem, 6vw, 4.5rem);
 }
 
 @media (min-width: 62rem) {
-  .sm-worship-bento {
-    grid-template-columns: repeat(12, 1fr);
-    gap: 1.5rem;
+  .sm-worship-layout {
+    grid-template-columns: minmax(0, 1.85fr) minmax(0, 1fr);
+    column-gap: clamp(2.5rem, 5vw, 4.5rem);
+    align-items: start;
   }
 }
 
-/* Shared Card Shell */
-.sm-worship-cell {
-  position: relative;
-  background: #1c1714;
-  border: 1px solid rgba(246, 241, 232, 0.12);
-  border-radius: 0.75rem;
-  padding: clamp(1.5rem, 2.5vw, 2.25rem);
+/* --- The timetable ------------------------------------------------------- */
+
+.sm-worship-table {
+  /* A grid item defaults to `min-width: auto`, which is the content's minimum
+   * — and the longest service name here is wider than the column it is given
+   * at the narrow end of the desktop range. Without this the table pushes the
+   * rail off the shell instead of wrapping. */
+  min-width: 0;
+}
+
+.sm-worship-group + .sm-worship-group {
+  margin-top: clamp(2.5rem, 4vw, 3.5rem);
+}
+
+/* The day is the only label in the table, set as a tracked amber cap against
+ * the room on the far right — the two ends of the rule that opens the group. */
+.sm-worship-group-head {
   display: flex;
-  flex-direction: column;
-  transition:
-    border-color var(--sm-dur-fast) var(--sm-ease),
-    background-color var(--sm-dur-fast) var(--sm-ease),
-    box-shadow var(--sm-dur-fast) var(--sm-ease);
-  overflow: hidden;
-}
-
-.sm-worship-cell:hover {
-  border-color: rgba(246, 241, 232, 0.24);
-  background: #201a16;
-  box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.5);
-}
-
-/* --- CELL 1: Dominant Sunday Cell --- */
-@media (min-width: 62rem) {
-  .sm-worship-cell-sunday {
-    grid-column: span 8;
-  }
-}
-
-.sm-worship-cell-header {
-  display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
   gap: 1rem;
-  padding-bottom: 1.25rem;
-  border-bottom: 1px solid rgba(246, 241, 232, 0.1);
-  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
 }
 
-.sm-worship-badge-group {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.625rem;
-}
-
-.sm-worship-day-tag {
+.sm-worship-day {
   font-family: var(--sm-sans-stack);
-  font-weight: 700;
-  font-size: 0.8125rem;
-  letter-spacing: 0.14em;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--sm-accent-display);
 }
 
-.sm-worship-meta-divider {
-  color: rgba(246, 241, 232, 0.25);
-  font-size: 0.8125rem;
-}
-
-.sm-worship-meta-sub {
+.sm-worship-room {
   font-family: var(--sm-sans-stack);
+  font-size: 0.6875rem;
   font-weight: 500;
-  font-size: 0.8125rem;
-  letter-spacing: 0.04em;
-  color: var(--sm-paper-2);
-}
-
-.sm-worship-meta-room {
-  font-family: var(--sm-sans-stack);
-  font-size: 0.8125rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   color: var(--sm-paper-3);
+  text-align: right;
 }
 
-/* Sunday Internal 3-Column Shelf */
-.sm-worship-sunday-grid {
+.sm-worship-row {
+  position: relative;
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.75rem;
-  flex: 1;
+  gap: 0.75rem;
+  padding-block: clamp(1.375rem, 2.2vw, 1.875rem);
+  border-top: 1px solid rgba(246, 241, 232, 0.14);
 }
 
-@media (min-width: 48rem) {
-  .sm-worship-sunday-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.25rem;
+.sm-worship-group:last-child .sm-worship-row:last-child {
+  border-bottom: 1px solid rgba(246, 241, 232, 0.14);
+}
+
+@media (min-width: 34rem) {
+  .sm-worship-row {
+    grid-template-columns: minmax(6rem, 0.8fr) minmax(0, 2fr) minmax(0, auto);
+    column-gap: clamp(1.25rem, 2.5vw, 2.25rem);
+    align-items: start;
   }
 }
 
-.sm-worship-sunday-item {
+/* The hover tint bleeds past the type into the gutters and rounds its own
+ * corners, so the row reads as a soft object for as long as the pointer is on
+ * it without ever becoming a permanent box. `z-index: -1` keeps it behind the
+ * row's own content and in front of the section ground; nothing above it in
+ * this subtree sets a z-index, so it has no stacking context to fall out of. */
+.sm-worship-row::before {
+  content: "";
+  position: absolute;
+  inset: 1px -1.25rem 0;
+  z-index: -1;
+  border-radius: 0.875rem;
+  background: rgba(246, 241, 232, 0);
+  transition: background-color var(--sm-dur-fast) var(--sm-ease);
+  pointer-events: none;
+}
+
+.sm-worship-row:hover::before {
+  background: rgba(246, 241, 232, 0.045);
+}
+
+/* --- Time: the display element ------------------------------------------- */
+
+.sm-worship-row-time {
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 1.25rem;
-  padding-block: 0.5rem;
-}
-
-@media (min-width: 48rem) {
-  .sm-worship-sunday-item:not(:last-child) {
-    padding-right: 1.25rem;
-    border-right: 1px solid rgba(246, 241, 232, 0.08);
-  }
-}
-
-/* Large Neo-Grotesque Display Time */
-.sm-worship-time-wrap {
-  display: inline-flex;
   align-items: baseline;
-  gap: 0.375rem;
+  gap: 0.4rem;
 }
 
 .sm-worship-time {
   font-family: var(--sm-sans-stack);
-  font-weight: 600;
-  font-size: clamp(2.25rem, 3.4vw, 3.125rem);
-  line-height: 0.95;
-  letter-spacing: -0.03em;
+  font-weight: 500;
+  font-size: clamp(2rem, 3.2vw, 2.875rem);
+  line-height: 0.9;
+  letter-spacing: -0.045em;
+  /* Lining tabular figures so every start time sits on the same vertical axis
+   * down the column. This is the whole reason the left column reads as a
+   * timetable rather than as a list that happens to begin with numbers. */
   font-variant-numeric: tabular-nums lining-nums;
   color: var(--sm-paper);
+  transition: color var(--sm-dur-fast) var(--sm-ease);
 }
 
-.sm-worship-time-sm {
-  font-size: clamp(1.75rem, 2.6vw, 2.25rem);
+.sm-worship-row:hover .sm-worship-time {
+  color: var(--sm-accent-display);
 }
 
 .sm-worship-tz {
   font-family: var(--sm-sans-stack);
+  font-size: 0.625rem;
   font-weight: 600;
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  color: var(--sm-accent-display);
+  letter-spacing: 0.14em;
+  color: var(--sm-paper-3);
 }
 
-/* Service Info */
-.sm-worship-service-info {
+/* --- Service --- */
+
+.sm-worship-row-body {
   display: flex;
   flex-direction: column;
-  gap: 0.375rem;
+  gap: 0.3rem;
+  padding-top: 0.15rem;
 }
 
 .sm-worship-service-name {
   font-family: var(--sm-sans-stack);
   font-weight: 600;
-  font-size: clamp(1.0625rem, 1.25vw, 1.25rem);
+  font-size: clamp(1.0625rem, 1.4vw, 1.25rem);
   line-height: 1.25;
-  letter-spacing: -0.012em;
+  letter-spacing: -0.02em;
   color: var(--sm-paper);
 }
 
@@ -2471,81 +2539,113 @@ html.lenis body {
 .sm-worship-audience {
   font-family: var(--sm-sans-stack);
   font-size: 0.8125rem;
-  line-height: 1.5;
+  line-height: 1.55;
   color: var(--sm-paper-2);
+  max-width: 32ch;
 }
 
-/* Action row */
-.sm-worship-action-row {
+/* --- Duration + calendar --- */
+
+.sm-worship-row-meta {
   display: flex;
   flex-direction: column;
-  gap: 0.625rem;
-  padding-top: 0.75rem;
-  border-top: 1px dashed rgba(246, 241, 232, 0.1);
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding-top: 0.2rem;
+}
+
+@media (min-width: 34rem) {
+  .sm-worship-row-meta {
+    align-items: flex-end;
+    text-align: right;
+  }
 }
 
 .sm-worship-duration {
   font-family: var(--sm-sans-stack);
-  font-size: 0.75rem;
-  letter-spacing: 0.04em;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   color: var(--sm-paper-3);
+  white-space: nowrap;
 }
 
 .sm-worship-cal-link {
   display: inline-flex;
   align-items: center;
-  gap: 0.375rem;
+  gap: 0.35rem;
   font-family: var(--sm-sans-stack);
   font-size: 0.8125rem;
   font-weight: 500;
-  color: var(--sm-accent);
+  letter-spacing: -0.01em;
+  color: var(--sm-paper-2);
   text-decoration: none;
-  transition: color var(--sm-dur-fast) var(--sm-ease);
+  white-space: nowrap;
+  transition:
+    color var(--sm-dur-fast) var(--sm-ease),
+    gap var(--sm-dur-fast) var(--sm-ease);
 }
 
 .sm-worship-cal-link:hover {
   color: var(--sm-paper);
+  gap: 0.55rem;
 }
 
-/* --- CELL 2: Atmosphere Photo Tile --- */
-@media (min-width: 62rem) {
-  .sm-worship-cell-photo {
-    grid-column: span 4;
-    min-height: 320px;
+/* --- The rail: two soft plates ------------------------------------------- */
+
+.sm-worship-rail {
+  display: grid;
+  gap: clamp(1rem, 2vw, 1.25rem);
+}
+
+@media (min-width: 48rem) and (max-width: 61.99rem) {
+  .sm-worship-rail {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
   }
 }
 
-.sm-worship-cell-photo {
-  padding: 0;
-  border: 1px solid rgba(246, 241, 232, 0.12);
-  min-height: 260px;
+.sm-worship-plate {
+  position: relative;
+  overflow: hidden;
+  /* The same 20px the fellowship plates carry. Radius reads optically against
+   * the size of the box; below ~1rem a plate this large just looks like a
+   * default rather than a decision. */
+  border-radius: 1.25rem;
+  min-height: 20rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: var(--sm-obsidian-2);
+  margin: 0;
 }
 
-.sm-worship-photo-wrap {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+@media (min-width: 62rem) {
+  .sm-worship-plate {
+    min-height: 24rem;
+  }
 }
 
 .sm-worship-photo {
   object-fit: cover;
   object-position: center 40%;
-  transition: transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 1400ms var(--sm-ease);
 }
 
-.sm-worship-cell-photo:hover .sm-worship-photo {
-  transform: scale(1.03);
+.sm-worship-plate:hover .sm-worship-photo {
+  transform: scale(1.04);
 }
 
 .sm-worship-photo-overlay {
   position: absolute;
   inset: 0;
+  z-index: 1;
   background: linear-gradient(
     180deg,
-    rgba(22, 18, 16, 0.25) 0%,
-    rgba(22, 18, 16, 0.5) 45%,
-    rgba(22, 18, 16, 0.92) 100%
+    rgba(22, 18, 16, 0) 0%,
+    rgba(22, 18, 16, 0.28) 46%,
+    rgba(22, 18, 16, 0.9) 100%
   );
   pointer-events: none;
 }
@@ -2553,75 +2653,63 @@ html.lenis body {
 .sm-worship-photo-caption {
   position: relative;
   z-index: 2;
-  margin-top: auto;
   padding: clamp(1.25rem, 2vw, 1.75rem);
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  align-items: flex-start;
+  gap: 0.75rem;
 }
 
 .sm-worship-photo-badge {
-  align-self: flex-start;
+  display: inline-flex;
   font-family: var(--sm-sans-stack);
-  font-size: 0.6875rem;
+  font-size: 0.625rem;
   font-weight: 600;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--sm-accent-display);
-  background: rgba(10, 8, 7, 0.6);
-  padding: 0.25rem 0.625rem;
-  border-radius: 999px;
-  border: 1px solid rgba(231, 178, 103, 0.25);
-  backdrop-filter: blur(8px);
+  color: var(--sm-paper);
+  background: rgba(246, 241, 232, 0.14);
+  border: 1px solid rgba(246, 241, 232, 0.22);
+  backdrop-filter: blur(10px);
+  padding: 0.3rem 0.75rem;
+  border-radius: 9999px;
 }
 
 .sm-worship-photo-text {
   font-family: var(--sm-sans-stack);
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   line-height: 1.45;
+  letter-spacing: -0.01em;
   color: var(--sm-paper);
 }
 
-/* --- CELLS 3 & 4: Secondary Midweek & Saturday Cards --- */
-@media (min-width: 62rem) {
-  .sm-worship-cell-secondary {
-    grid-column: span 4;
-  }
-}
-
-.sm-worship-cell-secondary {
-  gap: 1rem;
-}
-
-.sm-worship-secondary-bottom {
-  margin-top: auto;
-  padding-top: 1rem;
-  border-top: 1px dashed rgba(246, 241, 232, 0.1);
-}
-
-/* --- CELL 5: Church Location Card --- */
-@media (min-width: 62rem) {
-  .sm-worship-cell-location {
-    grid-column: span 4;
-  }
-}
-
-.sm-worship-cell-location {
-  gap: 1.25rem;
-}
-
-.sm-worship-location-body {
+/* The location block: a tint, not a border. A second hairline system in the
+ * rail would put the bordered-card look straight back into the section. */
+.sm-worship-place {
+  border-radius: 1.25rem;
+  background: rgba(246, 241, 232, 0.045);
+  padding: clamp(1.5rem, 2.5vw, 1.875rem);
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+}
+
+.sm-worship-place-label {
+  font-family: var(--sm-sans-stack);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--sm-paper-3);
+  margin-bottom: 0.35rem;
 }
 
 .sm-worship-campus-name {
   font-family: var(--sm-sans-stack);
   font-weight: 600;
-  font-size: clamp(1.125rem, 1.3vw, 1.35rem);
+  font-size: clamp(1.125rem, 1.4vw, 1.3125rem);
   line-height: 1.25;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.025em;
   color: var(--sm-paper);
 }
 
@@ -2632,20 +2720,37 @@ html.lenis body {
   color: var(--sm-paper-2);
 }
 
-.sm-worship-location-actions {
-  margin-top: auto;
+.sm-worship-place-actions {
+  margin-top: 1rem;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  padding-top: 1rem;
-  border-top: 1px dashed rgba(246, 241, 232, 0.1);
+  gap: 0.875rem;
+  align-items: flex-start;
 }
 
-.sm-worship-maps-btn {
-  width: 100%;
-  padding-block: 0.75rem;
-  font-size: 0.8125rem;
+.sm-worship-place-btn {
+  display: inline-flex;
+  align-items: center;
   justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 1.125rem;
+  border-radius: 9999px;
+  background: var(--sm-paper);
+  color: var(--sm-obsidian);
+  font-family: var(--sm-sans-stack);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  transition:
+    background-color var(--sm-dur-fast) var(--sm-ease),
+    transform var(--sm-dur-fast) var(--sm-ease);
+}
+
+.sm-worship-place-btn:hover {
+  background: #ffffff;
+  transform: translateY(-1px);
 }
 
 .sm-worship-livestream-link {
@@ -2654,6 +2759,7 @@ html.lenis body {
   gap: 0.5rem;
   font-family: var(--sm-sans-stack);
   font-size: 0.8125rem;
+  font-weight: 500;
   color: var(--sm-paper-2);
   text-decoration: none;
   transition: color var(--sm-dur-fast) var(--sm-ease);
@@ -2661,6 +2767,17 @@ html.lenis body {
 
 .sm-worship-livestream-link:hover {
   color: var(--sm-paper);
+}
+
+/* Six pixels of amber instead of a pulsing lucide `Radio`. The animated icon
+ * read as a live indicator on a schedule that is never live, and it pulled its
+ * colour from the raw Tailwind palette rather than the page's own ramp. */
+.sm-worship-live-dot {
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 9999px;
+  background: var(--sm-accent-display);
+  flex: none;
 }
 
 /* ==========================================================================
@@ -2684,12 +2801,16 @@ html.lenis body {
 }
 .sm-nextgen-figure {
   margin: 0;
-  border-radius: 0.25rem;
 }
-.sm-nextgen-figure img {
-  width: 100%;
-  height: auto;
-  display: block;
+/* The plate, separated from the figure so the caption is not inside the box
+ * that clips. A parallax aperture needs a definite height and `overflow:
+ * hidden`; with the caption still in there, both would have cropped it. The
+ * ratio is the source photograph's own, so nothing about the crop changes. */
+.sm-nextgen-plate {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  /* Same family as every other photographic plate on the page. */
+  border-radius: 1.25rem;
 }
 .sm-essay-caption {
   padding-top: 0.875rem;
@@ -2912,24 +3033,28 @@ html.lenis body {
 }
 
 /* Schedule Card Underneath Actions */
+/* The Sunday times again, as a ruled list rather than the bordered, blurred
+ * tile they used to sit in. This is the last card on the page that lifted its
+ * fill a few percent off the section ground and then asked a hairline to carry
+ * the shape — and it did it floating on a photographic scrim, where a small
+ * framed box in front of a large image is the one thing guaranteed to read as
+ * an overlay widget. It is the same content as the timetable in `#ibadah`, so
+ * it is now set the same way: tabular figures on a left axis, one rule per
+ * service, and the photograph left to be the only object in the section. */
 .sm-visit-schedule {
-  border: 1px solid var(--sm-rule);
-  border-radius: 0.625rem;
-  background: color-mix(in oklab, var(--sm-obsidian-2) 75%, var(--sm-obsidian));
-  backdrop-filter: blur(12px);
-  padding: clamp(1.25rem, 2vw, 1.5rem) clamp(1.25rem, 2.2vw, 1.75rem);
   display: flex;
   flex-direction: column;
-  gap: 0.875rem;
-  max-width: 32rem;
+  max-width: 27rem;
 }
 
 .sm-visit-schedule-label {
-  color: var(--sm-timber);
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
+  font-family: var(--sm-sans-stack);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
+  color: var(--sm-paper-3);
+  margin-bottom: 0.875rem;
 }
 
 .sm-visit-schedule-list {
@@ -2938,30 +3063,41 @@ html.lenis body {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.625rem;
 }
 
 .sm-visit-schedule-item {
-  display: flex;
-  align-items: center;
-  gap: 0.625rem;
-  font-size: 0.9375rem;
-  color: var(--sm-paper);
+  display: grid;
+  grid-template-columns: minmax(5rem, auto) minmax(0, 1fr);
+  align-items: baseline;
+  column-gap: clamp(1rem, 2vw, 1.75rem);
+  padding-block: 0.8125rem;
+  border-top: 1px solid rgba(246, 241, 232, 0.14);
 }
 
 .sm-visit-schedule-time {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35rem;
   font-family: var(--sm-sans-stack);
-  font-variant-numeric: tabular-nums;
-  font-weight: 700;
+  font-size: 1.0625rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  /* The same figure treatment as the `#ibadah` timetable — it is the axis the
+   * eye runs down, and it only works if every start time is the same width. */
+  font-variant-numeric: tabular-nums lining-nums;
   color: var(--sm-paper);
 }
 
-.sm-visit-schedule-sep {
-  color: var(--sm-timber);
-  opacity: 0.7;
+.sm-visit-schedule-tz {
+  font-size: 0.5625rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--sm-paper-3);
 }
 
 .sm-visit-schedule-name {
+  font-size: 0.9375rem;
+  line-height: 1.4;
   color: var(--sm-paper-2);
 }
 
@@ -2970,6 +3106,12 @@ html.lenis body {
  * ========================================================================== */
 
 .sm-footer {
+  /* Declared once and used by BOTH footer rows. They were separate templates
+   * before — a 2-track identity row over a 4-track utility row — so no edge in
+   * the upper row landed on any axis the lower row established. Sharing the
+   * tracks is what makes the alignment structural instead of coincidental. */
+  --sm-footer-cols: 1.15fr 1fr 1.35fr 0.9fr;
+  --sm-footer-col-gap: clamp(1.5rem, 3vw, 2.75rem);
   padding-block: clamp(3.5rem, 8vh, 5.5rem) clamp(2rem, 4vh, 3rem);
   border-top: 1px solid var(--sm-rule);
   background-color: var(--sm-obsidian);
@@ -2985,38 +3127,32 @@ html.lenis body {
 }
 @media (min-width: 62rem) {
   .sm-footer-identity-row {
-    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    grid-template-columns: var(--sm-footer-cols);
+    column-gap: var(--sm-footer-col-gap);
     align-items: center;
-    justify-content: space-between;
+  }
+  /* The seal opens the first column, on the same axis as "Kunjungi Kami". */
+  .sm-footer-crest {
+    grid-column: 1;
+    /* Explicit, not inherited from `stretch`. The seal has an intrinsic ratio
+     * so a stretch should not distort it, but the track is nearly three times
+     * its width and this is not a thing to leave to a should. */
+    justify-self: start;
+  }
+  /* The confession opens the third — the "Jadwal Ibadah" axis — and runs to
+   * the shell's right edge. Column 2 is left deliberately empty: a blank track
+   * in a declared grid is structure, which is what the previous arrangement's
+   * gap was not. */
+  .sm-footer-faith {
+    grid-column: 3 / -1;
   }
 }
-.sm-footer-brand-wrap {
-  display: flex;
-  align-items: center;
-  gap: clamp(1rem, 2.5vw, 1.75rem);
-}
+/* Capped at 11rem: the source is 364x512, so beyond this the seal is being
+ * scaled past its own pixels on a 2x display. */
 .sm-footer-crest {
   width: auto;
-  height: clamp(3.5rem, 6vw, 4.75rem);
-  flex: none;
+  height: clamp(5.5rem, 11vw, 11rem);
   opacity: 0.95;
-}
-.sm-footer-brand-text {
-  display: flex;
-  flex-direction: column;
-}
-
-/* Level 1 Brand Identity: 20-24px, 400-500 weight, calm and confident */
-.sm-footer-brand-name {
-  font-family: var(--sm-font-sans);
-  font-size: clamp(1.25rem, 2vw, 1.5rem);
-  font-weight: 450;
-  line-height: 1.28;
-  letter-spacing: -0.015em;
-  color: var(--sm-paper);
-}
-.sm-footer-brand-line {
-  display: block;
 }
 
 /* Statement of Faith */
@@ -3027,13 +3163,13 @@ html.lenis body {
   max-width: 50ch;
 }
 .sm-footer-faith-body {
-  font-family: var(--sm-font-sans);
-  font-size: 0.84375rem;
+  font-family: var(--sm-sans-stack);
+  font-size: 0.875rem;
   line-height: 1.6;
   color: var(--sm-fg-muted);
 }
 .sm-footer-faith-verse {
-  font-family: var(--sm-font-sans);
+  font-family: var(--sm-sans-stack);
   font-size: 0.6875rem;
   font-weight: 500;
   letter-spacing: 0.14em;
@@ -3043,7 +3179,7 @@ html.lenis body {
 
 /* Level 2 Section Labels */
 .sm-footer-label {
-  font-family: var(--sm-font-sans);
+  font-family: var(--sm-sans-stack);
   font-size: 0.6875rem;
   font-weight: 500;
   line-height: 1;
@@ -3053,7 +3189,7 @@ html.lenis body {
   margin-bottom: 0.875rem;
 }
 .sm-footer-label-sub {
-  font-family: var(--sm-font-sans);
+  font-family: var(--sm-sans-stack);
   font-size: 0.6875rem;
   font-weight: 500;
   line-height: 1;
@@ -3078,8 +3214,8 @@ html.lenis body {
 }
 @media (min-width: 62rem) {
   .sm-footer-grid {
-    grid-template-columns: 1.15fr 1fr 1.35fr 0.9fr;
-    gap: clamp(1.5rem, 3vw, 2.75rem);
+    grid-template-columns: var(--sm-footer-cols);
+    gap: var(--sm-footer-col-gap);
   }
 }
 
@@ -3107,17 +3243,17 @@ html.lenis body {
 
 /* Level 3 — Primary Information: 14-16px, 400-500 */
 .sm-footer-primary {
-  font-family: var(--sm-font-sans);
+  font-family: var(--sm-sans-stack);
   font-size: 0.9375rem;
-  font-weight: 450;
+  font-weight: 500;
   line-height: 1.45;
   color: var(--sm-paper);
 }
 
 /* Level 4 — Secondary Information: 13-14px, comfortable line-height */
 .sm-footer-secondary {
-  font-family: var(--sm-font-sans);
-  font-size: 0.84375rem;
+  font-family: var(--sm-sans-stack);
+  font-size: 0.8125rem;
   line-height: 1.55;
   color: var(--sm-fg-muted);
 }
@@ -3138,7 +3274,7 @@ html.lenis body {
 .sm-footer-link {
   color: var(--sm-paper-2);
   text-decoration: none;
-  transition: color 0.18s ease;
+  transition: color var(--sm-dur-fast) var(--sm-ease);
 }
 .sm-footer-link:hover,
 .sm-footer-link:focus-visible {
@@ -3150,12 +3286,12 @@ html.lenis body {
   align-items: center;
   gap: 0.375rem;
   margin-top: 1.125rem;
-  font-family: var(--sm-font-sans);
-  font-size: 0.84375rem;
+  font-family: var(--sm-sans-stack);
+  font-size: 0.8125rem;
   font-weight: 500;
   color: var(--sm-paper-2);
   text-decoration: none;
-  transition: color 0.18s ease;
+  transition: color var(--sm-dur-fast) var(--sm-ease);
 }
 .sm-footer-action:hover,
 .sm-footer-action:focus-visible {
@@ -3163,7 +3299,7 @@ html.lenis body {
 }
 .sm-footer-arrow {
   display: inline-block;
-  transition: transform 0.18s ease;
+  transition: transform var(--sm-dur-fast) var(--sm-ease);
 }
 .sm-footer-action:hover .sm-footer-arrow,
 .sm-footer-action:focus-visible .sm-footer-arrow {
@@ -3205,22 +3341,54 @@ html.lenis body {
   padding: 0;
   margin: 0;
 }
+/* Two columns, the same shape as the timetables in `#ibadah` and
+ * `#rencanakan`. The middot this replaces only ever existed because the line
+ * was a flex row with nothing holding the service names to a common axis. */
 .sm-footer-schedule-item {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(2.75rem, auto) minmax(0, 1fr);
   align-items: baseline;
-  gap: 0.375rem;
+  column-gap: 0.75rem;
 }
 .sm-footer-time {
   font-variant-numeric: tabular-nums;
   color: var(--sm-timber);
   flex-shrink: 0;
 }
-.sm-footer-dot {
-  color: var(--sm-timber);
-  opacity: 0.6;
-}
 .sm-footer-service-name {
   color: var(--sm-paper-2);
+}
+
+/* Colophon — the church's name, set as a mark rather than as a heading.
+ *
+ * Sized off `vw` with a cap so it fills the measure at every width without
+ * ever reaching the shell's padding. Crucially it does NOT set `white-space:
+ * nowrap`: this codebase ships one deployment per church, the next church's
+ * name is unknown, and a name longer than this one must wrap to a third line
+ * rather than hand the page the horizontal scrollbar it has had before.
+ *
+ * The colour is the whole idea — paper at 11% over obsidian resolves to about
+ * #2b2622, which is present as a shape and never competes with the utility
+ * type above it. Any more and it stops being a signature and starts being a
+ * headline. */
+.sm-footer-colophon {
+  padding-bottom: clamp(1.5rem, 3.5vh, 2.5rem);
+  font-family: var(--sm-sans-stack);
+  font-size: clamp(1.75rem, 7vw, 7rem);
+  font-weight: 600;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  color: rgba(246, 241, 232, 0.11);
+  user-select: none;
+  /* Centred, which is the one place on this left-aligned page that earns it: a
+   * colophon is a printer's mark at the end of a book and has been set on the
+   * centre axis for five centuries. It also gives the footer a symmetry the
+   * utility grid above it deliberately does not have. */
+  text-align: center;
+}
+.sm-footer-colophon-line {
+  display: block;
+  overflow-wrap: break-word;
 }
 
 /* Layer 3 — Bottom Utility Bar */
@@ -3233,26 +3401,20 @@ html.lenis body {
   padding-top: clamp(1.25rem, 3vh, 1.75rem);
 }
 .sm-footer-copyright {
-  font-family: var(--sm-font-sans);
-  font-size: 0.78125rem;
+  font-family: var(--sm-sans-stack);
+  font-size: 0.75rem;
   line-height: 1.5;
   color: var(--sm-fg-faint);
 }
 .sm-footer-location {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-family: var(--sm-font-sans);
+  /* Plain text since the glyph left — the flex row existed only to sit an
+   * icon beside it. */
+  font-family: var(--sm-sans-stack);
   font-size: 0.6875rem;
   font-weight: 500;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--sm-fg-faint);
-}
-.sm-footer-location-icon {
-  width: 0.875rem;
-  height: 0.875rem;
-  opacity: 0.7;
 }
 
 /* ==========================================================================

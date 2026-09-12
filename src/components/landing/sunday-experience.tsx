@@ -31,6 +31,17 @@ const CHAPTERS: readonly Chapter[] = [
 const PACE = 1.15;
 
 /**
+ * Vertical drift of a chapter photograph in the stacked layout, as a fraction
+ * of its frame's height in each direction.
+ *
+ * Held under the 6% `.sm-chapter-figure-inner` overhangs so the drift cannot
+ * run the image past its own edge. Smaller than the page-wide 8% because these
+ * frames are 4:5 portraits — the same fraction of a taller box is a longer
+ * throw, and at 8% the room visibly slid.
+ */
+const STACKED_DRIFT = 0.05;
+
+/**
  * Fraction of the pin spent accelerating the horizontal travel at each end.
  *
  * Small on purpose: it is a pick-up, not a run-up. At `PACE` this is a little
@@ -103,6 +114,24 @@ export function SundayExperience({ whatsappHref }: { whatsappHref: string }) {
             start: "top top",
             end: () => `+=${distance()}`,
             pin: true,
+            // Refreshes before every other trigger on the page, and it has to.
+            //
+            // Pinning wraps this stage in a spacer nearly seven viewport
+            // heights tall, which pushes the whole rest of the document down.
+            // ScrollTrigger refreshes in creation order, and `RevealStage`
+            // mounts above `SundayExperience` in the tree — so React runs its
+            // effect first and every trigger below this section measured its
+            // start/end against a document that did not have the spacer in it
+            // yet, landing them ~6900px too early.
+            //
+            // A scrubbed trigger makes that visible immediately: the range is
+            // already spent by the time the element reaches the viewport, so
+            // the photograph sits parked at its end value and never moves —
+            // which is exactly how every parallax below this section read.
+            // The `once: true` entrance reveals down there were mis-scheduled
+            // the same way and simply never looked wrong, because firing early
+            // leaves them in their correct final state.
+            refreshPriority: 1,
             // One source of smoothing, not two. Lenis already eases the
             // *scroll position itself* (`lerp: 0.085` in ScrollStage), so the
             // track tracks that eased position 1:1 rather than easing an
@@ -215,6 +244,83 @@ export function SundayExperience({ whatsappHref }: { whatsappHref: string }) {
         return () => {
           stRef.current = null;
         };
+      },
+    );
+
+    // Stacked layout: no horizontal travel for the photographs to drift
+    // against, so each one gets the vertical drift every other figure on the
+    // page has. A separate `mm.add` rather than a second key on the one above,
+    // because the two branches are mutually exclusive and `matchMedia` tears
+    // this down and rebuilds the pinned version on its own when the breakpoint
+    // is crossed — which is what keeps the transforms from being left behind.
+    //
+    // Reduced motion is excluded on purpose: the desktop-width stylesheet
+    // stacks the chapters under that query too, and the page's contract is
+    // that nothing moves on scroll there.
+    mm.add(
+      {
+        stacked:
+          "(max-width: 61.99rem) and (prefers-reduced-motion: no-preference)",
+      },
+      (context) => {
+        if (!context.conditions?.stacked) return;
+        gsap.utils
+          .toArray<HTMLElement>("[data-chapter-figure]", track)
+          .forEach((figure) => {
+            const frame = figure.parentElement;
+            if (!frame) return;
+            // `.sm-chapter-figure-inner` already overhangs its aperture by 6%
+            // vertically for the pinned version's drift; this stays inside it.
+            const drift = () => frame.offsetHeight * STACKED_DRIFT;
+            gsap.fromTo(
+              figure,
+              { y: () => -drift(), xPercent: 0, scale: 1 },
+              {
+                y: () => drift(),
+                ease: "none",
+                scrollTrigger: {
+                  trigger: frame,
+                  start: "top bottom",
+                  end: "bottom top",
+                  scrub: true,
+                  invalidateOnRefresh: true,
+                },
+              },
+            );
+          });
+      },
+    );
+
+    // Which chapter the rail marks, whenever the pinned timeline is NOT the
+    // thing driving it.
+    //
+    // `active` had exactly one writer: the pinned ScrollTrigger's `onUpdate`.
+    // Outside the pin nothing ever wrote it, so it sat at 0 for the life of
+    // the page and the rail marked chapter 01 no matter what you were reading
+    // — which is the whole of the "it doesn't follow" bug on mobile.
+    //
+    // The condition is the exact complement of the pinned one, not just a
+    // width: desktop under `prefers-reduced-motion: reduce` stacks the
+    // chapters too, and the indicator was stuck there for the same reason.
+    mm.add(
+      { unpinned: "(max-width: 61.99rem), (prefers-reduced-motion: reduce)" },
+      (context) => {
+        if (!context.conditions?.unpinned) return;
+        gsap.utils
+          .toArray<HTMLElement>("[data-chapter]", track)
+          .forEach((panel, i) => {
+            ScrollTrigger.create({
+              trigger: panel,
+              // The chapter that owns the middle of the screen is the one
+              // being read. Between two panels neither owns it, and `active`
+              // simply holds the last one rather than flickering to nothing.
+              start: "top center",
+              end: "bottom center",
+              onToggle: (self) => {
+                if (self.isActive) setActive(i);
+              },
+            });
+          });
       },
     );
 

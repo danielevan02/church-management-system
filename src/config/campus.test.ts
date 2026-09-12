@@ -23,18 +23,17 @@ describe("nextOccurrence", () => {
       tyog: "Sun 10:00",
       sekolahMinggu: "Sun 10:00",
       doa: "Wed 19:00",
-      yifalian: "Sat 13:00",
     });
   });
 
   it("skips to next week once a slot has started", () => {
-    const slot = SERVICE_SLOTS.find((s) => s.key === "yifalian")!;
-    // Sat 12:30 Jakarta — still ahead
-    const before = nextOccurrence(slot, new Date("2026-09-12T05:30:00Z"));
-    expect(before.toISOString()).toBe("2026-09-12T06:00:00.000Z");
-    // Sat 13:30 Jakarta — rolled to the following Saturday
-    const after = nextOccurrence(slot, new Date("2026-09-12T06:30:00Z"));
-    expect(after.toISOString()).toBe("2026-09-19T06:00:00.000Z");
+    const slot = SERVICE_SLOTS.find((s) => s.key === "umumLate")!;
+    // Sun 09:30 Jakarta — still ahead
+    const before = nextOccurrence(slot, new Date("2026-09-13T02:30:00Z"));
+    expect(before.toISOString()).toBe("2026-09-13T03:00:00.000Z");
+    // Sun 10:30 Jakarta — rolled to the following Sunday
+    const after = nextOccurrence(slot, new Date("2026-09-13T03:30:00Z"));
+    expect(after.toISOString()).toBe("2026-09-20T03:00:00.000Z");
   });
 
   it("resolves the midweek slot on its own weekday", () => {
@@ -65,10 +64,8 @@ describe("nextService", () => {
   it.each([
     ["2026-09-09T03:00:00Z", "doa"], // Wed 10:00 -> prayer fellowship tonight
     ["2026-09-09T12:27:00Z", "doa"], // Wed 19:27 -> running
-    ["2026-09-09T13:31:00Z", "yifalian"], // Wed 20:31 -> over, so Saturday
-    ["2026-09-12T05:30:00Z", "yifalian"], // Sat 12:30 -> this afternoon
-    ["2026-09-12T06:30:00Z", "yifalian"], // Sat 13:30 -> running
-    ["2026-09-12T08:00:00Z", "umumEarly"], // Sat 15:00 -> over, so Sunday
+    ["2026-09-09T13:31:00Z", "umumEarly"], // Wed 20:31 -> over, so Sunday
+    ["2026-09-12T08:00:00Z", "umumEarly"], // Sat 15:00 -> Sunday morning
     ["2026-09-13T00:30:00Z", "umumEarly"], // Sun 07:30 -> running
     ["2026-09-13T02:00:00Z", "umumLate"], // Sun 09:00 -> between the two
     ["2026-09-13T03:30:00Z", "umumLate"], // Sun 10:30 -> running
@@ -127,7 +124,7 @@ describe("in-progress services", () => {
     const after = new Date("2026-09-09T13:31:00Z");
     const doa = countdownSchedule(after).find((r) => r.slotKey === "doa")!;
     expect(doa.startsAtIso).toBe("2026-09-16T12:00:00.000Z");
-    expect(nextService(after).slotKey).toBe("yifalian");
+    expect(nextService(after).slotKey).toBe("umumEarly");
   });
 
   it("keeps every reported occurrence either running or ahead", () => {
@@ -148,7 +145,6 @@ describe("countdownSchedule", () => {
     const rows = countdownSchedule(new Date("2026-09-09T03:00:00Z"));
     expect(rows.map((r) => r.slotKey)).toEqual([
       "doa",
-      "yifalian",
       "umumEarly",
       "umumLate",
     ]);

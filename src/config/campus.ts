@@ -40,7 +40,7 @@ export type ServiceSlot = {
  * marking all three as countdown-eligible would have the hero pick one of
  * three simultaneous services by sort order and name it as "the next
  * gathering". The countdown therefore tracks only the slots that define a
- * unique time, and the schedule table below still lists all six.
+ * unique time, and the schedule table below still lists all five.
  *
  * Durations are estimates and are the other thing worth correcting on
  * handover; they only affect how long a service is reported as "in progress".
@@ -51,7 +51,6 @@ export const SERVICE_SLOTS: readonly ServiceSlot[] = [
   { key: "tyog", weekday: 0, time: "10:00", durationMin: 90, countdown: false },
   { key: "sekolahMinggu", weekday: 0, time: "10:00", durationMin: 75, countdown: false },
   { key: "doa", weekday: 3, time: "19:00", durationMin: 90, countdown: true },
-  { key: "yifalian", weekday: 6, time: "13:00", durationMin: 90, countdown: true },
 ] as const;
 
 export const campus = {

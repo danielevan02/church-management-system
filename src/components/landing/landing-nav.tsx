@@ -18,11 +18,12 @@ import { scrollToId } from "./scroll-stage";
 const useIsomorphicLayoutEffect =
   typeof window !== "undefined" ? React.useLayoutEffect : React.useEffect;
 
-const NAV_SECTIONS = [
-  { id: "ibadah", key: "gatherings" },
-  { id: "cerita", key: "stories" },
-  { id: "kunjungan-pertama", key: "expect" },
-  { id: "persembahan", key: "generosity" },
+export const NAV_SECTIONS = [
+  { id: "ibadah", key: "schedule" },
+  { id: "kunjungan-pertama", key: "experience" },
+  { id: "cerita", key: "fellowship" },
+  { id: "persembahan", key: "giving" },
+  { id: "rencanakan", key: "visit" },
 ] as const;
 
 function YoutubeIcon({ className = "w-3.5 h-3.5" }: { className?: string }) {
@@ -479,22 +480,18 @@ export function LandingNav({
                 key={s.id}
                 href={`/#${s.id}`}
                 onClick={onAnchor(s.id)}
-                className="sm-menu-item sm-h2 group"
+                className={`sm-menu-item sm-h2 group ${
+                  s.id === "rencanakan" ? "inline-flex items-center gap-2" : ""
+                }`}
+                style={s.id === "rencanakan" ? { color: "var(--sm-accent)" } : undefined}
                 data-menu-link
               >
-                {t(s.key)}
+                <span>{t(s.key)}</span>
+                {s.id === "rencanakan" && (
+                  <ArrowUpRight className="h-5 w-5" aria-hidden />
+                )}
               </Link>
             ))}
-            <Link
-              href="/#rencanakan"
-              onClick={onAnchor("rencanakan")}
-              className="sm-menu-item sm-h2 inline-flex items-center gap-2"
-              style={{ color: "var(--sm-accent)" }}
-              data-menu-link
-            >
-              <span>{t("visit")}</span>
-              <ArrowUpRight className="h-5 w-5" aria-hidden />
-            </Link>
           </nav>
 
           {/* Menu Drawer Footer (Unified single footer area without double divider lines or redundant label) */}

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
-import { ArrowUpRight, Users, BookOpen, HeartHandshake } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 
 import { church } from "@/config/church";
 import { whatsappLink } from "@/config/campus";
@@ -53,7 +53,11 @@ export async function CommunityFellowship() {
             className="sm-fellowship-cell sm-fellowship-cell-hero"
             data-sm-reveal="up"
           >
-            <div className="sm-fellowship-hero-media">
+            {/* The overlay is a sibling, not a child: it anchors the
+                caption's legibility to the FRAME, and riding along with the
+                drifting photograph would have slid its dark end off the
+                bottom of the card exactly where the text sits. */}
+            <div className="sm-parallax" data-sm-parallax>
               <Image
                 src={FELLOWSHIP_HERO_IMAGE}
                 alt={t("photoCaption")}
@@ -62,8 +66,8 @@ export async function CommunityFellowship() {
                 quality={82}
                 className="sm-fellowship-hero-img"
               />
-              <div className="sm-fellowship-hero-overlay" aria-hidden="true" />
             </div>
+            <div className="sm-fellowship-hero-overlay" aria-hidden="true" />
 
             <div className="sm-fellowship-hero-caption">
               <span className="sm-fellowship-badge">
@@ -85,17 +89,14 @@ export async function CommunityFellowship() {
             className="sm-fellowship-cell sm-fellowship-cell-main"
             data-sm-reveal="up"
           >
-            <div className="sm-fellowship-card-header">
-              <div className="sm-fellowship-index-wrap">
-                <span className="sm-fellowship-index">
-                  {t("pillars.fellowship.num")}
-                </span>
-                <span className="sm-label sm-eyebrow sm-fellowship-tag">
-                  {t("pillars.fellowship.tag")}
-                </span>
-              </div>
-              <HeartHandshake className="h-5 w-5 sm-fellowship-icon" aria-hidden="true" />
-            </div>
+            <header className="sm-fellowship-card-header">
+              <span className="sm-fellowship-index">
+                {t("pillars.fellowship.num")}
+              </span>
+              <span className="sm-fellowship-tag">
+                {t("pillars.fellowship.tag")}
+              </span>
+            </header>
 
             <div className="sm-fellowship-card-content">
               <h3 className="sm-h3 sm-fellowship-card-title">
@@ -131,17 +132,14 @@ export async function CommunityFellowship() {
             className="sm-fellowship-cell sm-fellowship-cell-groups"
             data-sm-reveal="up"
           >
-            <div className="sm-fellowship-card-header">
-              <div className="sm-fellowship-index-wrap">
-                <span className="sm-fellowship-index">
-                  {t("pillars.groups.num")}
-                </span>
-                <span className="sm-label sm-eyebrow sm-fellowship-tag">
-                  {t("pillars.groups.tag")}
-                </span>
-              </div>
-              <BookOpen className="h-5 w-5 sm-fellowship-icon" aria-hidden="true" />
-            </div>
+            <header className="sm-fellowship-card-header">
+              <span className="sm-fellowship-index">
+                {t("pillars.groups.num")}
+              </span>
+              <span className="sm-fellowship-tag">
+                {t("pillars.groups.tag")}
+              </span>
+            </header>
 
             <div className="sm-fellowship-card-content">
               <h3 className="sm-h3 sm-fellowship-card-title">
@@ -152,7 +150,7 @@ export async function CommunityFellowship() {
               </p>
             </div>
 
-            <div className="sm-fellowship-card-footer sm-fellowship-footer-plain">
+            <div className="sm-fellowship-card-footer">
               <span className="sm-fellowship-meta-hint">
                 {t("pillars.groups.note")}
               </span>
@@ -166,17 +164,14 @@ export async function CommunityFellowship() {
             className="sm-fellowship-cell sm-fellowship-cell-activities"
             data-sm-reveal="up"
           >
-            <div className="sm-fellowship-card-header">
-              <div className="sm-fellowship-index-wrap">
-                <span className="sm-fellowship-index">
-                  {t("pillars.activities.num")}
-                </span>
-                <span className="sm-label sm-eyebrow sm-fellowship-tag">
-                  {t("pillars.activities.tag")}
-                </span>
-              </div>
-              <Users className="h-5 w-5 sm-fellowship-icon" aria-hidden="true" />
-            </div>
+            <header className="sm-fellowship-card-header">
+              <span className="sm-fellowship-index">
+                {t("pillars.activities.num")}
+              </span>
+              <span className="sm-fellowship-tag">
+                {t("pillars.activities.tag")}
+              </span>
+            </header>
 
             <div className="sm-fellowship-card-content">
               <h3 className="sm-h3 sm-fellowship-card-title">
@@ -187,7 +182,7 @@ export async function CommunityFellowship() {
               </p>
             </div>
 
-            <div className="sm-fellowship-card-footer sm-fellowship-pills-row">
+            <div className="sm-fellowship-pills-row sm-fellowship-card-footer">
               <span className="sm-fellowship-pill">{t("pillars.activities.tag1")}</span>
               <span className="sm-fellowship-pill">{t("pillars.activities.tag2")}</span>
               <span className="sm-fellowship-pill">{t("pillars.activities.tag3")}</span>
@@ -203,7 +198,7 @@ export async function CommunityFellowship() {
             className="sm-fellowship-cell sm-fellowship-cell-detail"
             data-sm-reveal="up"
           >
-            <div className="sm-fellowship-detail-media">
+            <div className="sm-parallax" data-sm-parallax>
               <Image
                 src={FELLOWSHIP_DETAIL_IMAGE}
                 alt={t("detailCaption")}
@@ -212,8 +207,8 @@ export async function CommunityFellowship() {
                 quality={80}
                 className="sm-fellowship-detail-img"
               />
-              <div className="sm-fellowship-detail-overlay" aria-hidden="true" />
             </div>
+            <div className="sm-fellowship-detail-overlay" aria-hidden="true" />
 
             <div className="sm-fellowship-detail-caption">
               <p className="sm-fellowship-detail-title">

@@ -227,15 +227,18 @@ export default async function Home() {
             aria-labelledby="sm-nextgen-title"
           >
             <div className="sm-shell sm-nextgen">
-              <figure className="sm-nextgen-figure sm-figure sm-figure-warm" data-sm-mask>
-                <Image
-                  src="/landing-page/nextgen.jpeg"
-                  alt={t("photo.nextgen.alt")}
-                  width={2400}
-                  height={1792}
-                  sizes="(max-width: 62rem) 92vw, 48vw"
-                  quality={80}
-                />
+              <figure className="sm-nextgen-figure" data-sm-mask>
+                <div className="sm-nextgen-plate sm-figure sm-figure-warm">
+                  <div className="sm-parallax" data-sm-parallax>
+                    <Image
+                      src="/landing-page/nextgen.jpeg"
+                      alt={t("photo.nextgen.alt")}
+                      fill
+                      sizes="(max-width: 62rem) 92vw, 48vw"
+                      quality={80}
+                    />
+                  </div>
+                </div>
                 <figcaption className="sm-essay-caption sm-small">
                   {t("photo.nextgen.caption")}
                 </figcaption>
@@ -382,14 +385,16 @@ export default async function Home() {
               data-sm-trigger="#rencanakan"
               aria-hidden="true"
             >
-              <Image
-                src="/landing-page/visit.jpeg"
-                alt=""
-                fill
-                sizes="100vw"
-                quality={80}
-                className="sm-visit-img"
-              />
+              <div className="sm-parallax" data-sm-parallax>
+                <Image
+                  src="/landing-page/visit.jpeg"
+                  alt=""
+                  fill
+                  sizes="100vw"
+                  quality={80}
+                  className="sm-visit-img"
+                />
+              </div>
               <div className="sm-visit-scrim" aria-hidden="true" />
             </div>
 
@@ -432,7 +437,7 @@ export default async function Home() {
                 </div>
 
                 <div className="sm-visit-schedule" data-sm-reveal="up">
-                  <p className="sm-label sm-eyebrow sm-visit-schedule-label">
+                  <p className="sm-visit-schedule-label">
                     {t("visit.scheduleLabel")}
                   </p>
                   <ul className="sm-visit-schedule-list">
@@ -441,10 +446,8 @@ export default async function Home() {
                     ).map((slot) => (
                       <li key={slot.key} className="sm-visit-schedule-item">
                         <span className="sm-visit-schedule-time">
-                          {slot.time.replace(":", ".")} WIB
-                        </span>
-                        <span className="sm-visit-schedule-sep" aria-hidden="true">
-                          ·
+                          {slot.time.replace(":", ".")}
+                          <span className="sm-visit-schedule-tz">WIB</span>
                         </span>
                         <span className="sm-visit-schedule-name">
                           {t(`schedule.services.${slot.key}.name`)}

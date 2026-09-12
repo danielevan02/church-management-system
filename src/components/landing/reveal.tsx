@@ -10,6 +10,18 @@ import { useReducedMotion } from "@/hooks/use-reduced-motion";
 const EASE = "power3.out";
 
 /**
+ * How far a photograph drifts inside its aperture, as a fraction of the
+ * frame's height, in each direction.
+ *
+ * Must stay under the `--sm-parallax-overhang` the wrapper is oversized by
+ * (10%) or the drift runs the image past its own edge. The sign is the hero
+ * plate's: scrolling down moves the photograph DOWN inside the frame, so it
+ * lags the page rather than outrunning it. Every figure on the page reads in
+ * the same direction as a result.
+ */
+const PARALLAX_DRIFT = 0.08;
+
+/**
  * Registers the scroll-linked entrances for everything marked up declaratively.
  *
  * One ScrollTrigger factory for the whole page instead of a trigger per
@@ -126,6 +138,39 @@ export function RevealStage() {
             },
           });
         });
+
+      // --- photographic parallax ---------------------------------------------
+      // One trigger per photograph, measured off its own frame rather than a
+      // shared page-level progress: the figures are scattered down a very long
+      // page and a single mapping would have them drifting at wildly different
+      // rates depending on where they happen to sit.
+      gsap.utils.toArray<HTMLElement>("[data-sm-parallax]").forEach((el) => {
+        const frame = el.parentElement;
+        if (!frame) return;
+        // Read on every refresh, not captured once: these frames are sized in
+        // `vh`, `aspect-ratio` and `clamp()`, so a resize or an orientation
+        // change moves the correct drift.
+        const drift = () => frame.offsetHeight * PARALLAX_DRIFT;
+        gsap.fromTo(
+          el,
+          { y: () => -drift() },
+          {
+            y: () => drift(),
+            ease: "none",
+            scrollTrigger: {
+              trigger: frame,
+              // The whole time the frame is on screen, so the drift is spent
+              // evenly across the pass rather than finishing mid-viewport.
+              start: "top bottom",
+              end: "bottom top",
+              // One source of smoothing. Lenis already eases the scroll
+              // position itself; a numeric scrub would ease an eased signal.
+              scrub: true,
+              invalidateOnRefresh: true,
+            },
+          },
+        );
+      });
 
       // --- figure wipes ------------------------------------------------------
       gsap.utils.toArray<HTMLElement>("[data-sm-mask]").forEach((el) => {

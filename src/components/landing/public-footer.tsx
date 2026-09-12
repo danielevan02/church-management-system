@@ -1,4 +1,3 @@
-import { Church } from "lucide-react";
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 
@@ -49,7 +48,9 @@ export async function PublicFooter() {
         name: t(`schedule.services.${slot.key}.name`),
       })),
     },
-  ];
+    // A weekday whose only entry was removed from `SERVICE_SLOTS` would
+    // otherwise render as a day heading with nothing under it.
+  ].filter((group) => group.slots.length > 0);
 
   const usefulLinks = [
     { label: t("footer.portal"), href: "/auth/member", external: false },
@@ -73,22 +74,20 @@ export async function PublicFooter() {
          * LAYER 1 — CHURCH IDENTITY & THEOLOGICAL CONFESSION
          * ============================================================ */}
         <div className="sm-footer-identity-row">
-          <div className="sm-footer-brand-wrap">
-            <Image
-              src="/landing-page/crest-lg.png"
-              alt=""
-              aria-hidden="true"
-              width={364}
-              height={512}
-              className="sm-footer-crest"
-            />
-            <div className="sm-footer-brand-text">
-              <h2 className="sm-footer-brand-name">
-                <span className="sm-footer-brand-line">{church.nameLine1}</span>
-                <span className="sm-footer-brand-line">{church.nameLine2}</span>
-              </h2>
-            </div>
-          </div>
+          {/* The seal alone. With the name beside it gone, the crest is the
+              whole left column and is sized to carry it — a mark this small
+              next to a three-line confession would read as a stray favicon.
+              It stays decorative: the church is still named in text by the
+              "Kunjungi Kami" column below, so nothing is lost to a reader who
+              cannot see it, and an alt here would announce the name twice. */}
+          <Image
+            src="/landing-page/crest-lg.png"
+            alt=""
+            aria-hidden="true"
+            width={364}
+            height={512}
+            className="sm-footer-crest"
+          />
 
           <div className="sm-footer-faith">
             <p className="sm-footer-label">{t("footer.faithLabel")}</p>
@@ -165,9 +164,6 @@ export async function PublicFooter() {
                         className="sm-footer-secondary sm-footer-schedule-item"
                       >
                         <span className="sm-footer-time">{slot.time}</span>
-                        <span className="sm-footer-dot" aria-hidden="true">
-                          ·
-                        </span>
                         <span className="sm-footer-service-name">
                           {slot.name}
                         </span>
@@ -215,6 +211,28 @@ export async function PublicFooter() {
         </div>
 
         {/* ============================================================
+         * COLOPHON — the church's name at display scale.
+         *
+         * The page opens on a full-bleed hero and, before this, closed on a
+         * 12px copyright line: the footer was the one region with no display
+         * register at all. This signs the page off in the same register it
+         * opened in.
+         *
+         * Not the short name, and deliberately not an acronym: an institution
+         * signs with its name. It reads from `nameLine1`/`nameLine2` like the
+         * identity row above, so a deployment for another church re-skins it
+         * with everything else rather than inheriting this one's initials.
+         *
+         * `aria-hidden` because Layer 1 already announces the name as an
+         * <h2> — without it a screen reader reads the church three times in
+         * one footer. It is a mark, not content, hence `user-select: none`.
+         * ============================================================ */}
+        <p className="sm-footer-colophon" aria-hidden="true">
+          <span className="sm-footer-colophon-line">{church.nameLine1}</span>
+          <span className="sm-footer-colophon-line">{church.nameLine2}</span>
+        </p>
+
+        {/* ============================================================
          * LAYER 3 — BOTTOM UTILITY
          * ============================================================ */}
         <div className="sm-footer-base sm-rule-t">
@@ -223,10 +241,7 @@ export async function PublicFooter() {
             {t("footer.rights")}
           </p>
           <p className="sm-footer-location">
-            <Church className="sm-footer-location-icon" aria-hidden="true" />
-            <span>
-              {campus.city.toUpperCase()} · {campus.region.toUpperCase()}
-            </span>
+            {campus.city.toUpperCase()} · {campus.region.toUpperCase()}
           </p>
         </div>
       </div>
