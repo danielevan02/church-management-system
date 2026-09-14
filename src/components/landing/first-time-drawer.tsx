@@ -41,7 +41,7 @@ export function FirstTimeDrawer({ whatsappHref }: { whatsappHref: string }) {
             <h2 id="sm-firsttime-title" className="sm-h2">
               {t("title")}
             </h2>
-            <p className="sm-body" style={{ color: "var(--sm-ink-2)" }}>
+            <p className="sm-body" style={{ color: "var(--sm-fg-muted)" }}>
               {t("lead")}
             </p>
           </header>

@@ -185,12 +185,12 @@
  * deficiency.
  *
  * Slots 1 and 3 were swapped when the deployment reseeded from the example
- * teal (#0F766E) to the church's own blue (#0060c0). Slot 3 was already
- * #2a78d6 at hue 213 degrees — three degrees off the new seed — so the brand
+ * teal (#0F766E) to the church's own blue (#0168af). Slot 3 was already
+ * #2a78d6 at hue 261 degrees — seven degrees off the new seed — so the brand
  * hue was in the palette all along, in the wrong slot, while slot 1 held a
  * teal that no longer referred to anything. The swap costs no new colour and
- * keeps chart-1 a *distinct step* from the CTA fill (#0068d0), so a mark can
- * never be mistaken for a control.
+ * keeps chart-1 (tone 50.4) a *distinct step* from the CTA fill (#0c6bb2,
+ * tone 44.0), so a mark can never be mistaken for a control.
  *
  * Both columns are re-validated, not eyeballed, against the card surface each
  * mode actually uses after the reseed (`surface-container-low`: #f1f3ff light,

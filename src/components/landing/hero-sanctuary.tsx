@@ -18,14 +18,32 @@ const VIDEO_SM = "/landing-page/hero-loop-sm.mp4";
 const VIDEO_POSTER = "/landing-page/hero-poster.jpg";
 
 /** Scroll distance, in viewport heights, over which the hero hands off to
- *  section "mengapa": the shadow dissolves, the scrim lifts, and mengapa
- *  slides out from under the hero. */
+ *  section "mengapa": the card's bottom edge retracts and rounds, the scrim
+ *  lifts, and mengapa slides out from under the hero. */
 const EXIT_TRAVEL_VH = 0.6;
 /** How far under the hero section "mengapa" starts tucked before it emerges. */
 const MENGAPA_LIFT_VH = 0.4;
-/** How small the hero card scrubs down to as it hands off. */
-const CARD_SHRINK_SCALE = 0.92;
-/** Bottom corner radius, in px, the card reaches at full shrink. */
+/** How far the card's bottom edge retracts as it hands off, as a fraction of
+ *  hero height.
+ *
+ *  This replaced a uniform `scale` on the card, and the reason is structural
+ *  rather than cosmetic. The card is `width/height: 100%` of its container, so
+ *  a uniform shrink exposes the container on all three open sides — 4% of the
+ *  viewport down each side and 8% underneath at the old 0.92. Down the SIDES
+ *  there is nothing behind the card but container background at hero height,
+ *  so that strip can only ever read as empty space; no value of `scale` avoids
+ *  it. Underneath is different: the schedule section is there, and can be
+ *  revealed.
+ *
+ *  So the retraction is vertical only, and `.sm-worship-section` is pulled up
+ *  by exactly this fraction (`--hero-retract` in the stylesheet) so the card's
+ *  clipped edge lands ON the schedule's top edge rather than short of it. The
+ *  card covers that overlap until the scrub uncovers it, which is why there is
+ *  no gap at any point of the handoff.
+ *
+ *  MUST stay in sync with `--hero-retract`. */
+const CARD_RETRACT_RATIO = 0.08;
+/** Bottom corner radius, in px, the card reaches at full retraction. */
 const CARD_SHRINK_RADIUS = 44;
 /** Quantisation step for that radius, in px. See the `onUpdate` below. */
 const RADIUS_STEP_PX = 4;
@@ -124,8 +142,8 @@ export function HeroSanctuary() {
 
       // 2. Emergence & Reveal, scrubbed to the same scroll range and driven
       // by one ScrollTrigger rather than three: section mengapa starts tucked
-      // under the hero and slides out, the hero's own drop shadow dissolves,
-      // and its scrim lifts — all in lockstep as the hero hands off to the
+      // under the hero and slides out, and its scrim lifts — in lockstep as
+      // the hero hands off to the
       // page. From this point onward, hero and mengapa scroll up together
       // naturally (normal scroll).
       const exitTl = gsap.timeline({
@@ -155,19 +173,12 @@ export function HeroSanctuary() {
         );
       }
       exitTl
-        // The card scrubs smaller and rounds its bottom corners. The shadow is
-        // deliberately NOT animated here — it is static in the stylesheet.
-        // Interpolating a 60px-blur shadow meant re-rasterizing a full-viewport
-        // layer with a playing video in it on every frame, which is the bulk of
-        // the jank; parked in CSS it is rasterized once and the compositor just
-        // scales the result. It stays below the fold at rest and slides into
-        // view on its own as the card lifts, so nothing is lost visually.
-        .fromTo(
-          ".hero-card",
-          { scale: 1 },
-          { scale: CARD_SHRINK_SCALE, ease: "none" },
-          0,
-        )
+        // The card's retraction is NOT a tween: it is driven from the
+        // `onUpdate` below as a stepped `clip-path`, for the same reason the
+        // radius always was. Clipping rather than resizing also matters for
+        // the footage — the plate is `object-fit: cover`, so animating the
+        // card's height would re-crop the video on every frame and read as a
+        // jump-zoom, while a clip leaves the crop untouched.
         // The plate sinks inside the card as the card itself lifts away, so the
         // footage lags the frame rather than moving locked to it.
         .fromTo(
@@ -190,21 +201,31 @@ export function HeroSanctuary() {
       // transform- or opacity-only, i.e. compositor work.
       if (cardEl) {
         let lastRadius = -1;
+        let lastClip = -1;
         exitTl.eventCallback("onUpdate", () => {
-          const stepped =
-            Math.round((exitTl.progress() * CARD_SHRINK_RADIUS) / RADIUS_STEP_PX) *
-            RADIUS_STEP_PX;
-          if (stepped === lastRadius) return;
-          lastRadius = stepped;
-          cardEl.style.setProperty("--hero-card-radius", `${stepped}px`);
+          const p = exitTl.progress();
+          const step = (v: number) => Math.round(v / RADIUS_STEP_PX) * RADIUS_STEP_PX;
+
+          const radius = step(p * CARD_SHRINK_RADIUS);
+          if (radius !== lastRadius) {
+            lastRadius = radius;
+            cardEl.style.setProperty("--hero-card-radius", `${radius}px`);
+          }
+
+          const clip = step(p * root.clientHeight * CARD_RETRACT_RATIO);
+          if (clip !== lastClip) {
+            lastClip = clip;
+            cardEl.style.setProperty("--hero-card-clip", `${clip}px`);
+          }
         });
       }
     }, stage || root);
 
     return () => {
       ctx.revert();
-      // Set outside GSAP's bookkeeping, so `revert()` will not clear it.
+      // Set outside GSAP's bookkeeping, so `revert()` will not clear them.
       cardEl?.style.removeProperty("--hero-card-radius");
+      cardEl?.style.removeProperty("--hero-card-clip");
     };
   }, [reduce]);
 

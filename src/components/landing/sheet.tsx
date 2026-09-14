@@ -121,8 +121,13 @@ export function Sheet({
       className={`sm-sheet sm-sheet-${variant}`}
       aria-labelledby={labelledBy}
       aria-label={labelledBy ? undefined : title}
+      data-lenis-prevent
     >
-      <div ref={panelRef} className="sm-sheet-panel sm-tone-light">
+      <div
+        ref={panelRef}
+        className="sm-sheet-panel sm-tone-light"
+        data-lenis-prevent
+      >
         <button
           type="button"
           onClick={onClose}

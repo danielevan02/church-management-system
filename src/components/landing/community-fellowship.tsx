@@ -35,7 +35,7 @@ export async function CommunityFellowship() {
         </h2>
         <p
           className="sm-opener-lead sm-lead"
-          style={{ color: "var(--sm-ink-2)" }}
+          style={{ color: "var(--sm-fg-muted)" }}
           data-sm-reveal="up"
         >
           {t("lead")}

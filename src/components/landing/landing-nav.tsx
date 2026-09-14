@@ -460,6 +460,7 @@ export function LandingNav({
         aria-label={t("menu")}
         hidden={!open}
         className="sm-menu-panel sm-tone-dark"
+        data-lenis-prevent
       >
         <div className="sm-shell flex h-full min-h-dvh flex-col justify-between py-6">
           <div data-menu-header className="flex items-center justify-between">

@@ -88,7 +88,7 @@ export function GivingPanel({
             </div>
             <div className="flex flex-col gap-2">
               <h3 className="sm-h4">{t("qrisTitle")}</h3>
-              <p className="sm-body" style={{ color: "var(--sm-ink-2)" }}>
+              <p className="sm-body" style={{ color: "var(--sm-fg-muted)" }}>
                 {t("qrisBody")}
               </p>
             </div>

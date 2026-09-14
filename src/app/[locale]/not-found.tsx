@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { Manrope } from "next/font/google";
 
+import { church } from "@/config/church";
 import { Link } from "@/lib/i18n/navigation";
 
 import "@/styles/landing/index.css";
@@ -29,6 +30,7 @@ export default async function NotFound() {
   return (
     <div
       className={`sm-root ${manrope.variable}`}
+      style={{ "--hero-primary": church.primaryColor } as React.CSSProperties}
     >
       <main className="sm-nf sm-tone-dark">
         <p className="sm-label sm-nf-code">{t("notFound.code")}</p>

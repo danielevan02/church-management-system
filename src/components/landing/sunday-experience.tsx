@@ -429,7 +429,7 @@ export function SundayExperience({ whatsappHref }: { whatsappHref: string }) {
                   </p>
                 </div>
 
-                <figure className="sm-chapter-figure sm-figure sm-figure-warm">
+                <figure className="sm-chapter-figure sm-figure sm-figure-tint">
                   <div data-chapter-figure className="sm-chapter-figure-inner">
                     <Image
                       src={c.image}

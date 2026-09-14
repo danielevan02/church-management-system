@@ -118,7 +118,7 @@ export default async function DevotionalArchivePage({
               </h1>
               <p
                 className="sm-opener-lead sm-lead"
-                style={{ color: "var(--sm-ink-2)" }}
+                style={{ color: "var(--sm-fg-muted)" }}
                 data-sm-reveal="up"
               >
                 {t("devotional.archiveLead", { church: church.name })}

@@ -2386,11 +2386,11 @@
         },
         "facilities": {
           "q": "What are the facilities like?",
-          "a": "Restrooms are off the walkway, near the café. The sanctuary is on the ground floor and step-free for wheelchair access. For a nursing room or any other need, mention it to someone at the door and it will be arranged."
+          "a": "Restrooms are off the corridor, near the café. The sanctuary is on the ground floor and step-free for wheelchair access. For a nursing room or any other need, mention it to someone at the door and it will be arranged."
         },
         "late": {
           "q": "What if I am late?",
-          "a": "Just come in. The side door by the walkway stays open through the service, and the back rows are deliberately kept free for exactly this."
+          "a": "Just come in. The side door by the corridor stays open through the service, and the back rows are deliberately kept free for exactly this."
         },
         "language": {
           "q": "What language is the service in?",
@@ -2500,7 +2500,7 @@
       },
       "fellowship": {
         "alt": "Families and young adults talking over coffee in the church café",
-        "caption": "The walkway, after the service",
+        "caption": "The church caf\u00e9, after the service",
         "credit": "The second coffee"
       },
       "nextgen": {
@@ -2575,7 +2575,7 @@
       "label": "After Worship",
       "title": "Fellowship & Community",
       "lead": "Church life does not end when worship concludes. We have many opportunities to gather, know one another, and grow together in faith.",
-      "photoBadge": "Church Walkway",
+      "photoBadge": "Church Caf\u00e9",
       "photoCaption": "A welcoming space for members and families to meet and connect after Sunday service.",
       "photoCredit": "GKJ Tangerang",
       "pillars": {

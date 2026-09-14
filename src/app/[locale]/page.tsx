@@ -199,7 +199,7 @@ export default async function Home() {
                   </h2>
                   <p
                     className="sm-opener-lead sm-lead"
-                    style={{ color: "var(--sm-ink-2)" }}
+                    style={{ color: "var(--sm-fg-muted)" }}
                     data-sm-reveal="up"
                   >
                     {t("devotional.lead")}
@@ -223,12 +223,12 @@ export default async function Home() {
            * SEKOLAH MINGGU & REMAJA
            * ============================================================ */}
           <section
-            className="sm-tone-linen sm-section"
+            className="sm-tone-dark sm-section"
             aria-labelledby="sm-nextgen-title"
           >
             <div className="sm-shell sm-nextgen">
               <figure className="sm-nextgen-figure" data-sm-mask>
-                <div className="sm-nextgen-plate sm-figure sm-figure-warm">
+                <div className="sm-nextgen-plate sm-figure sm-figure-tint">
                   <div className="sm-parallax" data-sm-parallax>
                     <Image
                       src="/landing-page/nextgen.jpeg"
@@ -249,7 +249,7 @@ export default async function Home() {
                 <h2 id="sm-nextgen-title" className="sm-h2" data-sm-split>
                   {t("nextgen.title")}
                 </h2>
-                <p className="sm-body" style={{ color: "var(--sm-ink-2)" }}>
+                <p className="sm-body" style={{ color: "var(--sm-fg-muted)" }}>
                   {t("nextgen.lead")}
                 </p>
 
@@ -260,7 +260,7 @@ export default async function Home() {
                         <dt className="sm-h4">{t(`nextgen.points.${k}.title`)}</dt>
                         <dd
                           className="sm-small"
-                          style={{ color: "var(--sm-ink-2)" }}
+                          style={{ color: "var(--sm-fg-muted)" }}
                         >
                           {t(`nextgen.points.${k}.body`)}
                         </dd>
@@ -300,7 +300,7 @@ export default async function Home() {
                 </h2>
                 <p
                   className="sm-lead max-w-[42ch]"
-                  style={{ color: "var(--sm-ink-2)" }}
+                  style={{ color: "var(--sm-fg-muted)" }}
                   data-sm-reveal="up"
                 >
                   {t("giving.lead")}
@@ -309,7 +309,7 @@ export default async function Home() {
                   <p className="sm-label sm-eyebrow">
                     {t("giving.transparencyLabel")}
                   </p>
-                  <p className="sm-small" style={{ color: "var(--sm-ink-2)" }}>
+                  <p className="sm-small" style={{ color: "var(--sm-fg-muted)" }}>
                     {t("giving.transparency")}
                   </p>
                 </div>

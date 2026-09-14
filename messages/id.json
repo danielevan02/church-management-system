@@ -2386,11 +2386,11 @@
         },
         "facilities": {
           "q": "Fasilitasnya bagaimana?",
-          "a": "Toilet ada di sisi selasar, dekat kafe. Ruang ibadah berada di lantai dasar dan dapat diakses kursi roda tanpa tangga. Untuk ruang menyusui atau kebutuhan khusus lain, sampaikan ke petugas di pintu dan akan disiapkan."
+          "a": "Toilet ada di sisi lorong, dekat kafe. Ruang ibadah berada di lantai dasar dan dapat diakses kursi roda tanpa tangga. Untuk ruang menyusui atau kebutuhan khusus lain, sampaikan ke petugas di pintu dan akan disiapkan."
         },
         "late": {
           "q": "Kalau saya terlambat?",
-          "a": "Masuk saja. Pintu samping dekat selasar tetap terbuka sepanjang ibadah, dan barisan kursi paling belakang memang disisakan untuk itu."
+          "a": "Masuk saja. Pintu samping dekat lorong tetap terbuka sepanjang ibadah, dan barisan kursi paling belakang memang disisakan untuk itu."
         },
         "language": {
           "q": "Ibadahnya berbahasa apa?",
@@ -2494,7 +2494,7 @@
       },
       "fellowship": {
         "alt": "Beberapa keluarga dan kaum muda berbincang sambil minum kopi di kafe gereja",
-        "caption": "Selasar, sesudah ibadah",
+        "caption": "Kafe gereja, sesudah ibadah",
         "credit": "Kopi kedua"
       },
       "nextgen": {
@@ -2569,7 +2569,7 @@
       "label": "Sesudah Ibadah",
       "title": "Persekutuan & Komunitas",
       "lead": "Kehidupan bergereja tidak berhenti setelah ibadah selesai. Kami memiliki berbagai kesempatan untuk bersekutu, saling mengenal, dan bertumbuh bersama.",
-      "photoBadge": "Selasar Gereja",
+      "photoBadge": "Kafe Gereja",
       "photoCaption": "Ruang kebersamaan untuk saling menyapa dan berkenalan seusai ibadah.",
       "photoCredit": "Gereja Kristen Tangerang",
       "pillars": {
