@@ -1566,6 +1566,41 @@
     }
   },
   "announcements": {
+    "aiDraft": {
+      "trigger": "Buat draf dengan AI",
+      "title": "Buat draf pengumuman",
+      "description": "Tulis poin-poin kasar kegiatan, AI akan merapikannya menjadi warta portal dan teks WhatsApp. Draf tidak tersimpan sampai Anda sendiri yang menerbitkannya.",
+      "kindLabel": "Jenis pengumuman",
+      "kinds": {
+        "warta": "Warta jemaat (beberapa kegiatan)",
+        "undangan": "Undangan acara (satu kegiatan)",
+        "singkat": "Pengumuman singkat"
+      },
+      "notesLabel": "Poin-poin dari Anda",
+      "notesPlaceholder": "Contoh:\n- Minggu 21 Sept, ibadah kedua, pelayan firman Pdt. Budi\n- Persekutuan doa Rabu pindah ke ruang serbaguna\n- Pendaftaran retret pemuda dibuka sampai 30 Sept, hubungi sekretariat",
+      "notesHint": "Tulis apa adanya. Detail yang tidak Anda sebutkan tidak akan dikarang oleh AI — akan ditandai sebagai perlu dilengkapi.",
+      "generate": "Buatkan draf",
+      "generating": "Menyusun draf…",
+      "regenerate": "Buat ulang",
+      "apply": "Gunakan draf ini",
+      "appliedToast": "Draf dimasukkan ke form. Periksa dulu, lalu terbitkan.",
+      "resultTitleLabel": "Judul",
+      "tabs": {
+        "body": "Warta portal",
+        "whatsapp": "Teks WhatsApp"
+      },
+      "missingTitle": "Perlu Anda lengkapi",
+      "copy": "Salin teks",
+      "copied": "Teks disalin.",
+      "sendWhatsapp": "Kirim ke WhatsApp",
+      "disclaimer": "Draf dibuat AI. Periksa setiap tanggal, jam, nama, dan nominal sebelum menerbitkan.",
+      "errors": {
+        "rateLimited": "Terlalu banyak permintaan. Coba lagi dalam {seconds} detik.",
+        "unconfigured": "Fitur AI belum dikonfigurasi. Hubungi pengelola sistem.",
+        "copyFailed": "Tidak bisa menyalin otomatis. Sorot teksnya lalu salin manual.",
+        "generic": "Gagal membuat draf. Coba lagi."
+      }
+    },
     "list": {
       "title": "Pengumuman",
       "subtitle": "Total {total} pengumuman.",

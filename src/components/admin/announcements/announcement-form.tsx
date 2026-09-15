@@ -6,6 +6,7 @@ import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
+import { AiDraftDialog } from "@/components/admin/announcements/ai-draft-dialog";
 import { DateTimePicker } from "@/components/shared/date-time-picker";
 import { WysiwygEditor } from "@/components/shared/wysiwyg-editor";
 import { Button } from "@/components/ui/button";
@@ -19,6 +20,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { features } from "@/config/features";
 import { useRouter } from "@/lib/i18n/navigation";
 import {
   announcementInputSchema,
@@ -90,9 +92,21 @@ export function AnnouncementForm({
     });
   }
 
+  function applyDraft(draft: { title: string; body: string }) {
+    form.setValue("title", draft.title, { shouldDirty: true });
+    form.setValue("body", draft.body, { shouldDirty: true });
+    form.clearErrors(["title", "body"]);
+  }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+        {features.aiStaffCopilot && (
+          <div className="flex justify-end">
+            <AiDraftDialog onApply={applyDraft} />
+          </div>
+        )}
+
         <FormField
           control={form.control}
           name="title"

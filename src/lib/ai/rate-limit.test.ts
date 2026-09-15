@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { checkRateLimit, clientIp } from "./rate-limit";
+import { checkRateLimit, checkStaffDraftLimit, clientIp } from "./rate-limit";
 
 /** Each test gets its own bucket — the window store is module-level state. */
 let seq = 0;
@@ -60,6 +60,25 @@ describe("checkRateLimit", () => {
     }
     const fortyFirstWithinTheHour = checkRateLimit(ip);
     expect(fortyFirstWithinTheHour.ok).toBe(false);
+  });
+});
+
+describe("checkStaffDraftLimit", () => {
+  it("keeps its own window, so public traffic cannot throttle staff", () => {
+    const ip = freshIp();
+    for (let i = 0; i < 6; i += 1) checkRateLimit(ip);
+    expect(checkRateLimit(ip).ok).toBe(false);
+
+    // Same string, different bucket.
+    expect(checkStaffDraftLimit(ip).ok).toBe(true);
+  });
+
+  it("allows a real drafting session and stops a stuck retry loop", () => {
+    const userId = `user_${(seq += 1)}`;
+    for (let i = 0; i < 10; i += 1) {
+      expect(checkStaffDraftLimit(userId).ok, `draft ${i + 1}`).toBe(true);
+    }
+    expect(checkStaffDraftLimit(userId).ok).toBe(false);
   });
 });
 

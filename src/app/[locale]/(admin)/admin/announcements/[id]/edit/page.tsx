@@ -15,6 +15,12 @@ import { getAnnouncement } from "@/server/queries/announcements";
 
 import type { AnnouncementInput } from "@/lib/validation/announcement";
 
+/**
+ * The AI drafting action runs on this segment's function, and a structured
+ * generation takes longer than the platform's default budget.
+ */
+export const maxDuration = 60;
+
 export default async function EditAnnouncementPage({
   params,
 }: {

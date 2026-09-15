@@ -10,6 +10,12 @@ import { auth } from "@/lib/auth";
 import { hasAtLeastRole } from "@/lib/permissions";
 import { createAnnouncementAction } from "@/server/actions/announcements/create";
 
+/**
+ * The AI drafting action runs on this segment's function, and a structured
+ * generation takes longer than the platform's default budget.
+ */
+export const maxDuration = 60;
+
 export default async function NewAnnouncementPage() {
   const session = await auth();
   if (!session?.user) redirect("/auth/sign-in");

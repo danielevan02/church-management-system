@@ -1566,6 +1566,41 @@
     }
   },
   "announcements": {
+    "aiDraft": {
+      "trigger": "Draft with AI",
+      "title": "Draft an announcement",
+      "description": "Type your rough points and the AI will shape them into a portal announcement and a WhatsApp message. Nothing is saved until you publish it yourself.",
+      "kindLabel": "Announcement type",
+      "kinds": {
+        "warta": "Weekly bulletin (several items)",
+        "undangan": "Event invitation (single item)",
+        "singkat": "Short notice"
+      },
+      "notesLabel": "Your points",
+      "notesPlaceholder": "Example:\n- Sun 21 Sept, second service, preaching by Rev. Budi\n- Wednesday prayer meeting moves to the multipurpose room\n- Youth retreat sign-ups close 30 Sept, contact the office",
+      "notesHint": "Write it as it comes. Details you leave out will not be invented — they are flagged for you to fill in.",
+      "generate": "Draft it",
+      "generating": "Drafting…",
+      "regenerate": "Draft again",
+      "apply": "Use this draft",
+      "appliedToast": "Draft placed in the form. Review it, then publish.",
+      "resultTitleLabel": "Title",
+      "tabs": {
+        "body": "Portal announcement",
+        "whatsapp": "WhatsApp text"
+      },
+      "missingTitle": "You still need to fill in",
+      "copy": "Copy text",
+      "copied": "Text copied.",
+      "sendWhatsapp": "Send via WhatsApp",
+      "disclaimer": "AI-generated draft. Check every date, time, name and amount before publishing.",
+      "errors": {
+        "rateLimited": "Too many requests. Try again in {seconds} seconds.",
+        "unconfigured": "The AI feature is not configured. Contact your system administrator.",
+        "copyFailed": "Could not copy automatically. Select the text and copy it manually.",
+        "generic": "Could not create the draft. Please try again."
+      }
+    },
     "list": {
       "title": "Announcements",
       "subtitle": "{total} announcement(s) total.",
