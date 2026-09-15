@@ -35,16 +35,47 @@ const manrope = Manrope({
   display: "swap",
 });
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
   const t = await getTranslations("lp.meta");
+  const canonicalUrl =
+    locale === "id" ? `${church.siteUrl}/` : `${church.siteUrl}/${locale}`;
+
   return {
     title: `${church.shortName} — ${t("title")}`,
     description: t("description"),
+    alternates: {
+      canonical: canonicalUrl,
+      languages: {
+        id: `${church.siteUrl}/`,
+        en: `${church.siteUrl}/en`,
+      },
+    },
     openGraph: {
       title: `${church.name}`,
       description: t("description"),
-      images: [{ url: "/landing-page/hero-poster.jpg", width: 1920, height: 1080 }],
+      url: canonicalUrl,
+      siteName: church.name,
+      locale: locale === "id" ? "id_ID" : "en_US",
+      images: [
+        {
+          url: "/landing-page/hero-poster.jpg",
+          width: 1920,
+          height: 1080,
+          alt: `${church.name} — Ruang Ibadah Utama`,
+        },
+      ],
       type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${church.shortName} — ${t("title")}`,
+      description: t("description"),
+      images: ["/landing-page/hero-poster.jpg"],
     },
   };
 }
@@ -53,6 +84,65 @@ export default async function Home() {
   const t = await getTranslations("lp");
   const locale = await getLocale();
   const df = dateFnsLocale(locale);
+
+  /**
+   * Structured data for Local SEO (Schema.org/Church).
+   * Tells search engines our identity, campus location, contacts, and service hours.
+   */
+  const alternateNames = [church.shortName, campus.signage].filter(
+    (name, idx, arr) => Boolean(name) && arr.indexOf(name) === idx && name !== church.name,
+  );
+
+  const churchAddress: Record<string, string> = {
+    "@type": "PostalAddress",
+    addressLocality: campus.city,
+    addressRegion: campus.region,
+    addressCountry: "ID",
+  };
+  if (campus.addressLine) {
+    churchAddress.streetAddress = campus.addressLine;
+  }
+
+  const sameAs = [
+    campus.instagramUrl,
+    campus.youtubeUrl,
+    campus.facebookUrl,
+  ].filter(Boolean);
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Church",
+    "@id": `${church.siteUrl}/#church`,
+    name: church.name,
+    alternateName: alternateNames.length > 0 ? alternateNames : undefined,
+    url: church.siteUrl,
+    logo: `${church.siteUrl}/landing-page/crest-lg.png`,
+    image: [
+      `${church.siteUrl}/landing-page/hero-poster.jpg`,
+      `${church.siteUrl}/landing-page/visit.jpeg`,
+      `${church.siteUrl}/landing-page/nextgen.jpeg`,
+    ],
+    description: t("meta.description"),
+    address: churchAddress,
+    ...(campus.whatsapp ? { telephone: `+${campus.whatsapp}` } : {}),
+    ...(campus.email ? { email: campus.email } : {}),
+    ...(campus.mapsUrl ? { hasMap: campus.mapsUrl } : {}),
+    ...(sameAs.length > 0 ? { sameAs } : {}),
+    openingHoursSpecification: [
+      {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: "https://schema.org/Sunday",
+        opens: "06:30",
+        closes: "12:30",
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: "https://schema.org/Wednesday",
+        opens: "18:30",
+        closes: "21:00",
+      },
+    ],
+  };
 
   /**
    * Whether this deployment has actually shipped a QRIS image.
@@ -104,6 +194,10 @@ export default async function Home() {
       suppressHydrationWarning
     >
       <MotionGate />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
 
       <a href="#utama" className="sm-skip sm-action">
         {t("nav.skip")}

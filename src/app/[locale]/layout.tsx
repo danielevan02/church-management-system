@@ -21,11 +21,12 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(church.siteUrl),
   title: {
     default: church.name,
     template: `%s · ${church.shortName}`,
   },
-  description: `Church Management System for ${church.name}.`,
+  description: `${church.name} (${church.shortName}) — Komunitas bersekutu, bertumbuh dalam iman dan firman Tuhan, serta melayani sesama.`,
 };
 
 export function generateStaticParams() {

@@ -1,9 +1,48 @@
+import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 
 import { BlockSection } from "@/components/m3/block-section";
 import { PageHeader } from "@/components/m3/page-header";
 import { GiveInfoCard } from "@/components/giving/give-info-card";
 import { church } from "@/config/church";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations("publicGive");
+  const path = locale === "id" ? "/give" : `/${locale}/give`;
+  const url = `${church.siteUrl}${path}`;
+  const title = t("title");
+  const description = t("subtitle", { church: church.name });
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: url,
+      languages: {
+        id: `${church.siteUrl}/give`,
+        en: `${church.siteUrl}/en/give`,
+      },
+    },
+    openGraph: {
+      type: "website",
+      title,
+      description,
+      siteName: church.name,
+      url,
+      locale: locale === "id" ? "id_ID" : "en_US",
+    },
+    twitter: {
+      card: "summary",
+      title,
+      description,
+    },
+  };
+}
 
 export default async function PublicGivePage() {
   const t = await getTranslations("publicGive");
