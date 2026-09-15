@@ -2504,14 +2504,14 @@
         "credit": "The second coffee"
       },
       "nextgen": {
-        "alt": "Sunday School children colouring paper doves at a table with their teacher",
-        "caption": "Sunday School, ages 4–6",
+        "alt": "Children and teachers of GKJ Tangerang Sunday School gathered in the classroom",
+        "caption": "GKJ Tangerang Sunday School",
         "credit": "Sunday School Room"
       },
       "visit": {
-        "alt": "A greeter welcoming a family through the church's timber front door",
-        "caption": "The front door, Sunday morning",
-        "credit": "You do not need to know where to go"
+        "alt": "GKJ Tangerang welcoming team greeting worshippers at the church entrance",
+        "caption": "GKJ Tangerang Welcoming Team",
+        "credit": "Main Entrance"
       },
       "detail": {
         "alt": "An open Bible with a crimson ribbon marker beside a ceramic communion cup on linen",
@@ -2634,10 +2634,10 @@
     },
     "notFound": {
       "code": "404",
-      "title": "This page does not exist — but you are still welcome.",
-      "body": "The link may have changed, or we mistyped it. Either way, the service times and the daily devotionals are still where they were.",
-      "home": "Back to the home page",
-      "devotionalCta": "Read a devotional"
+      "title": "Page Not Found",
+      "body": "We're sorry, the page you are looking for could not be found or may have been moved. Please return to the home page or explore our daily devotionals.",
+      "home": "Back to Home",
+      "devotionalCta": "Read Devotionals"
     }
   }
 }

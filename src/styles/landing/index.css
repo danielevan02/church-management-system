@@ -2904,7 +2904,7 @@ html.lenis body {
  * ratio is the source photograph's own, so nothing about the crop changes. */
 .sm-nextgen-plate {
   position: relative;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 16 / 10;
   /* Same family as every other photographic plate on the page. */
   border-radius: 1.25rem;
 }
@@ -3037,27 +3037,28 @@ html.lenis body {
 
 .sm-visit-img {
   object-fit: cover;
-  object-position: 40% center;
+  object-position: center 20%;
 }
 
 @media (min-width: 62rem) {
   .sm-visit-img {
-    object-position: 30% center;
+    object-position: center 20%;
+    transform: translateX(10%);
     -webkit-mask-image: linear-gradient(
       90deg,
       transparent 0%,
-      transparent 4%,
-      rgba(0, 0, 0, 0.4) 14%,
-      rgba(0, 0, 0, 0.85) 22%,
-      black 32%
+      transparent 3%,
+      rgba(0, 0, 0, 0.4) 8%,
+      rgba(0, 0, 0, 0.85) 15%,
+      black 22%
     );
     mask-image: linear-gradient(
       90deg,
       transparent 0%,
-      transparent 4%,
-      rgba(0, 0, 0, 0.4) 14%,
-      rgba(0, 0, 0, 0.85) 22%,
-      black 32%
+      transparent 3%,
+      rgba(0, 0, 0, 0.4) 8%,
+      rgba(0, 0, 0, 0.85) 15%,
+      black 22%
     );
   }
 }
@@ -3082,10 +3083,10 @@ html.lenis body {
       linear-gradient(
         90deg,
         var(--sm-obsidian) 0%,
-        var(--sm-obsidian) 4%,
-        color-mix(in srgb, var(--sm-obsidian) 90%, transparent) 14%,
-        color-mix(in srgb, var(--sm-obsidian) 38%, transparent) 24%,
-        transparent 36%
+        var(--sm-obsidian) 3%,
+        color-mix(in srgb, var(--sm-obsidian) 90%, transparent) 8%,
+        color-mix(in srgb, var(--sm-obsidian) 35%, transparent) 15%,
+        transparent 22%
       ),
       linear-gradient(
         180deg,

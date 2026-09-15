@@ -2498,14 +2498,14 @@
         "credit": "Kopi kedua"
       },
       "nextgen": {
-        "alt": "Anak-anak Sekolah Minggu mewarnai gambar merpati di meja bersama pengajarnya",
-        "caption": "Sekolah Minggu, kelompok usia 4–6",
+        "alt": "Foto bersama anak-anak dan guru Sekolah Minggu GKJ Tangerang di ruang ibadah anak",
+        "caption": "Sekolah Minggu GKJ Tangerang",
         "credit": "Ruang Sekolah Minggu"
       },
       "visit": {
-        "alt": "Seorang penyambut mempersilakan satu keluarga masuk melalui pintu kayu gereja",
-        "caption": "Pintu utama, Minggu pagi",
-        "credit": "Anda tidak perlu tahu harus ke mana"
+        "alt": "Tim penyambut jemaat GKJ Tangerang menyambut kedatangan jemaat di depan pintu gereja",
+        "caption": "Tim Penyambut Jemaat GKJ Tangerang",
+        "credit": "Pintu Masuk Utama"
       },
       "detail": {
         "alt": "Alkitab terbuka dengan pembatas kain merah dan cawan perjamuan dari keramik di atas linen",
@@ -2628,10 +2628,10 @@
     },
     "notFound": {
       "code": "404",
-      "title": "Halaman ini tidak ada — tetapi Anda tetap kami sambut.",
-      "body": "Tautannya mungkin sudah berubah, atau kami salah tulis. Yang jelas jadwal ibadah dan renungan harian masih di tempatnya.",
-      "home": "Kembali ke halaman utama",
-      "devotionalCta": "Baca renungan"
+      "title": "Halaman Tidak Ditemukan",
+      "body": "Mohon maaf, halaman yang Anda cari tidak dapat ditemukan atau telah dipindahkan. Silakan kembali ke halaman utama untuk melihat jadwal ibadah atau membaca renungan hari ini.",
+      "home": "Kembali ke Beranda",
+      "devotionalCta": "Baca Renungan"
     }
   }
 }
