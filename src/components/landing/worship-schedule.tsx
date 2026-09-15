@@ -11,7 +11,7 @@ import {
   type ServiceSlot,
 } from "@/config/campus";
 
-const SANCTUARY_PHOTO = "/landing-page/gathering.jpeg";
+const SANCTUARY_PHOTO = "/landing-page/church.webp";
 
 /**
  * The services listed under one day heading.
@@ -153,9 +153,6 @@ export async function WorshipSchedule() {
                 <span className="sm-worship-photo-badge">
                   {church.shortName}
                 </span>
-                <p className="sm-worship-photo-text">
-                  {t("sanctuaryCaption")}
-                </p>
               </figcaption>
             </figure>
 

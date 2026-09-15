@@ -50,7 +50,7 @@ const RADIUS_STEP_PX = 4;
 /** How far the plate drifts down inside the card, as a fraction of hero
  *  height, while the card scrubs away — the parallax lag. Must stay under
  *  `--hero-plate-overhang` in the stylesheet or the plate's top edge shows. */
-const PLATE_PARALLAX_RATIO = 0.25;
+const PLATE_PARALLAX_RATIO = 0.1;
 
 export function HeroSanctuary() {
   const t = useTranslations("lp.hero");
