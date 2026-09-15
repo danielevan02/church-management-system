@@ -18,7 +18,9 @@ import { ScrollStage } from "@/components/landing/scroll-stage";
 import { SundayExperience } from "@/components/landing/sunday-experience";
 import { WorshipSchedule } from "@/components/landing/worship-schedule";
 import { MotionGate } from "@/components/landing/motion-gate";
+import { ChurchAssistantWidget } from "@/components/ai/church-assistant-widget";
 import { church } from "@/config/church";
+import { features } from "@/config/features";
 import {
   SERVICE_SLOTS,
   campus,
@@ -557,6 +559,8 @@ export default async function Home() {
 
         <PublicFooter />
       </ScrollStage>
+
+      {features.aiAssistant && <ChurchAssistantWidget />}
     </div>
   );
 }

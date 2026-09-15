@@ -2500,7 +2500,7 @@
       },
       "fellowship": {
         "alt": "Families and young adults talking over coffee in the church café",
-        "caption": "The church caf\u00e9, after the service",
+        "caption": "The church café, after the service",
         "credit": "The second coffee"
       },
       "nextgen": {
@@ -2575,7 +2575,7 @@
       "label": "After Worship",
       "title": "Fellowship & Community",
       "lead": "Church life does not end when worship concludes. We have many opportunities to gather, know one another, and grow together in faith.",
-      "photoBadge": "Church Caf\u00e9",
+      "photoBadge": "Church Café",
       "photoCaption": "A welcoming space for members and families to meet and connect after Sunday service.",
       "photoCredit": "GKJ Tangerang",
       "pillars": {
@@ -2638,6 +2638,53 @@
       "body": "We're sorry, the page you are looking for could not be found or may have been moved. Please return to the home page or explore our daily devotionals.",
       "home": "Back to Home",
       "devotionalCta": "Read Devotionals"
+    },
+    "assistant": {
+      "launch": "Open the church assistant",
+      "closeWindow": "Close the church assistant",
+      "teaser": "Ask about services & visiting",
+      "teaserDismiss": "Hide this prompt",
+      "name": "Church Assistant",
+      "tag": "AI",
+      "status": "{church} · answering 24/7",
+      "reset": "Start a new conversation",
+      "roleBot": "Assistant",
+      "roleUser": "You",
+      "greeting": "Welcome to {church}.\n\nI am the church virtual assistant — here to help with service times, directions, planning a first visit, and giving. What can I help you with?",
+      "thinking": "Writing a reply",
+      "openersLabel": "Frequently asked",
+      "openers": {
+        "schedule": {
+          "label": "Sunday service times",
+          "prompt": "Could you share the full Sunday service schedule?"
+        },
+        "firstTime": {
+          "label": "Visiting for the first time",
+          "prompt": "I am visiting this church for the first time — what should I know?"
+        },
+        "portal": {
+          "label": "Member Portal",
+          "prompt": "How do I access the Member Portal and what features are available?"
+        },
+        "children": {
+          "label": "Sunday School & infants",
+          "prompt": "Is there Sunday School for children and a room for infants?"
+        },
+        "giving": {
+          "label": "Bank account & QRIS",
+          "prompt": "Could you share the giving bank account details and the church QRIS?"
+        },
+        "contact": {
+          "label": "Contact the office",
+          "prompt": "Could you share the WhatsApp contact for the church office?"
+        }
+      },
+      "placeholder": "Ask a question…",
+      "send": "Send question",
+      "error": "Sorry, the reply could not be loaded. Please try again in a moment.",
+      "errorRateLimited": "That is a lot of questions in a short time. Please wait a moment and try again.",
+      "errorUnavailable": "The assistant is temporarily unavailable. Please contact the church office for direct help.",
+      "disclaimer": "An AI assistant for {church} information. For pastoral care, please contact a church minister."
     }
   }
 }

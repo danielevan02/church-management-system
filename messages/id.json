@@ -2632,6 +2632,53 @@
       "body": "Mohon maaf, halaman yang Anda cari tidak dapat ditemukan atau telah dipindahkan. Silakan kembali ke halaman utama untuk melihat jadwal ibadah atau membaca renungan hari ini.",
       "home": "Kembali ke Beranda",
       "devotionalCta": "Baca Renungan"
+    },
+    "assistant": {
+      "launch": "Buka asisten jemaat",
+      "closeWindow": "Tutup asisten jemaat",
+      "teaser": "Tanya jadwal & info ibadah",
+      "teaserDismiss": "Sembunyikan ajakan",
+      "name": "Asisten Jemaat",
+      "tag": "AI",
+      "status": "{church} · menjawab 24/7",
+      "reset": "Mulai percakapan baru",
+      "roleBot": "Asisten",
+      "roleUser": "Anda",
+      "greeting": "Syalom, selamat datang di {church}.\n\nSaya asisten virtual gereja — siap membantu Anda seputar jadwal ibadah, lokasi, panduan jemaat baru, maupun persembahan. Ada yang bisa saya bantu?",
+      "thinking": "Sedang menulis jawaban",
+      "openersLabel": "Sering ditanyakan",
+      "openers": {
+        "schedule": {
+          "label": "Jadwal ibadah Minggu",
+          "prompt": "Bisa infokan jadwal lengkap ibadah hari Minggu ini?"
+        },
+        "firstTime": {
+          "label": "Pertama kali datang",
+          "prompt": "Saya baru pertama kali ingin datang ke gereja ini, apa saja panduannya?"
+        },
+        "portal": {
+          "label": "Portal Jemaat",
+          "prompt": "Bagaimana cara mengakses Portal Jemaat dan apa saja fitur di dalamnya?"
+        },
+        "children": {
+          "label": "Sekolah Minggu & bayi",
+          "prompt": "Apakah ada ibadah Sekolah Minggu untuk anak dan ruang bagi bayi?"
+        },
+        "giving": {
+          "label": "Rekening & QRIS",
+          "prompt": "Bisa minta info nomor rekening persembahan dan QRIS gereja?"
+        },
+        "contact": {
+          "label": "Kontak sekretariat",
+          "prompt": "Bisa berikan kontak WhatsApp sekretariat atau pengurus gereja?"
+        }
+      },
+      "placeholder": "Tulis pertanyaan Anda…",
+      "send": "Kirim pertanyaan",
+      "error": "Maaf, jawaban gagal dimuat. Silakan coba lagi sebentar lagi.",
+      "errorRateLimited": "Wah, pertanyaannya cukup banyak dalam waktu singkat. Mohon tunggu sebentar, lalu coba lagi ya.",
+      "errorUnavailable": "Asisten sedang tidak tersedia untuk sementara. Silakan hubungi sekretariat gereja untuk bantuan langsung.",
+      "disclaimer": "Asisten AI untuk informasi {church}. Untuk pendampingan pastoral, silakan hubungi hamba Tuhan gereja."
     }
   }
 }
