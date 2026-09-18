@@ -210,7 +210,13 @@ export default async function Home() {
         <LandingNav />
 
         <main id="utama">
-          <div className="hero-curtain-stage">
+          {/* The `#atas` anchor lives on the STAGE, not on the hero inside it.
+            * The hero is `position: sticky`, and a stuck element reports a rect
+            * top of 0 no matter how far down the page you are — so "back to
+            * top" from the lockup would resolve to a zero-distance scroll and
+            * do nothing. The stage is in normal flow and starts at the same
+            * edge. */}
+          <div id="atas" className="hero-curtain-stage">
             <HeroSanctuary />
             <WorshipSchedule />
           </div>

@@ -48,11 +48,15 @@ export async function WorshipSchedule() {
       aria-labelledby="sm-schedule-heading"
     >
       <div className="sm-shell">
+        {/* `data-sm-start` fires as the masthead crosses the viewport edge
+          * rather than at the usual 88%: this section rises over the hero as a
+          * curtain, so it is on screen well before it reaches the default
+          * mark, and a heading sitting blank while its own panel is being
+          * revealed reads as a failed load. */}
         <header
           className="sm-worship-header"
           data-sm-reveal="fade"
-          data-sm-trigger="#atas"
-          data-sm-start="bottom 58%"
+          data-sm-start="top 97%"
         >
           <p className="sm-worship-kicker">{t("label")}</p>
           <h2 id="sm-schedule-heading" className="sm-worship-title">

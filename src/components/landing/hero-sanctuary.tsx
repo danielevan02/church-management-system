@@ -17,40 +17,32 @@ const VIDEO_LG = "/landing-page/hero-loop.mp4";
 const VIDEO_SM = "/landing-page/hero-loop-sm.mp4";
 const VIDEO_POSTER = "/landing-page/hero-poster.jpg";
 
-/** Scroll distance, in viewport heights, over which the hero hands off to
- *  section "mengapa": the card's bottom edge retracts and rounds, the scrim
- *  lifts, and mengapa slides out from under the hero. */
-const EXIT_TRAVEL_VH = 0.6;
-/** How far under the hero section "mengapa" starts tucked before it emerges. */
-const MENGAPA_LIFT_VH = 0.4;
-/** How far the card's bottom edge retracts as it hands off, as a fraction of
- *  hero height.
+/** Scroll distance, in viewport heights, over which the hero recedes.
  *
- *  This replaced a uniform `scale` on the card, and the reason is structural
- *  rather than cosmetic. The card is `width/height: 100%` of its container, so
- *  a uniform shrink exposes the container on all three open sides — 4% of the
- *  viewport down each side and 8% underneath at the old 0.92. Down the SIDES
- *  there is nothing behind the card but container background at hero height,
- *  so that strip can only ever read as empty space; no value of `scale` avoids
- *  it. Underneath is different: the schedule section is there, and can be
- *  revealed.
+ *  The reveal itself is NOT on this timeline: the hero is `position: sticky`
+ *  and the schedule below it simply scrolls up over it, so the curtain is the
+ *  scroll position and nothing else. It finishes covering the hero after
+ *  exactly one viewport. This timeline only runs what the hero does WHILE that
+ *  happens — shrink, sink, dim — and finishes slightly early so the card has
+ *  settled before the last of it is covered rather than still moving. */
+const EXIT_TRAVEL_VH = 0.88;
+/** What the card scales down to at full recession.
  *
- *  So the retraction is vertical only, and `.sm-worship-section` is pulled up
- *  by exactly this fraction (`--hero-retract` in the stylesheet) so the card's
- *  clipped edge lands ON the schedule's top edge rather than short of it. The
- *  card covers that overlap until the scrub uncovers it, which is why there is
- *  no gap at any point of the handoff.
- *
- *  MUST stay in sync with `--hero-retract`. */
-const CARD_RETRACT_RATIO = 0.08;
-/** Bottom corner radius, in px, the card reaches at full retraction. */
-const CARD_SHRINK_RADIUS = 44;
-/** Quantisation step for that radius, in px. See the `onUpdate` below. */
-const RADIUS_STEP_PX = 4;
-/** How far the plate drifts down inside the card, as a fraction of hero
- *  height, while the card scrubs away — the parallax lag. Must stay under
+ *  Deliberately shallow. Scaling exposes the stage on all four sides, and past
+ *  roughly this much the exposed strip stops reading as depth and starts
+ *  reading as a letterboxed video. The rising schedule covers the bottom side
+ *  from the first frame, which is what makes the remaining three legible as a
+ *  card moving away rather than a layout gap. */
+const CARD_SHRINK_SCALE = 0.92;
+/** How far the plate drifts down inside the card as the hero recedes — the
+ *  parallax lag, so the footage trails its own frame instead of moving locked
+ *  to it. As a fraction of hero height; must stay under
  *  `--hero-plate-overhang` in the stylesheet or the plate's top edge shows. */
 const PLATE_PARALLAX_RATIO = 0.1;
+/** Opacity the scrim and the headline block reach at full recession. The card
+ *  is being covered, so it loses light on the way down as well as size. */
+const SCRIM_PEAK_OPACITY = 0.5;
+const CONTENT_FADE_TO = 0.35;
 
 export function HeroSanctuary() {
   const t = useTranslations("lp.hero");
@@ -93,14 +85,8 @@ export function HeroSanctuary() {
     if (!root || reduce) return;
 
     const stage = (root.closest(".hero-curtain-stage") as HTMLElement | null) || root.parentElement;
-    const nextSectionEl =
-      (stage ? stage.querySelector<HTMLElement>("#ibadah, #mengapa") : null) ||
-      document.getElementById("ibadah") ||
-      document.getElementById("mengapa");
 
     gsap.registerPlugin(ScrollTrigger);
-
-    const cardEl = root.querySelector<HTMLElement>(".hero-card");
 
     const ctx = gsap.context(() => {
       // 1. Entrance Timeline: Headline, nav links, and subtitle/portal button
@@ -140,15 +126,28 @@ export function HeroSanctuary() {
           0.08,
         );
 
-      // 2. Emergence & Reveal, scrubbed to the same scroll range and driven
-      // by one ScrollTrigger rather than three: section mengapa starts tucked
-      // under the hero and slides out, and its scrim lifts — in lockstep as
-      // the hero hands off to the
-      // page. From this point onward, hero and mengapa scroll up together
-      // naturally (normal scroll).
+      // 2. RECESSION, scrubbed against the curtain.
+      //
+      // Nothing here reveals the schedule — the hero is `position: sticky` and
+      // the schedule is the next box in flow with a higher z-index, so it
+      // covers the hero at exactly scroll speed with no tween involved. That
+      // is deliberate: a scrubbed reveal lags a fast flick, and the lag is a
+      // hole between two surfaces that are supposed to be touching.
+      //
+      // This timeline is only what the hero does while being covered: the card
+      // scales back, the footage sinks inside it, and both the scrim and the
+      // headline block lose light. Every property below is transform or
+      // opacity, i.e. compositor work — no frame of this scrub repaints the
+      // video-bearing layer.
       const exitTl = gsap.timeline({
         scrollTrigger: {
-          trigger: root,
+          // The STAGE, not the hero. The hero is sticky, so from any scroll
+          // position past the top it reports a rect that has been displaced by
+          // its own stickiness — and ScrollTrigger resolves `start` from that
+          // rect on every refresh. The stage is in normal flow and shares the
+          // hero's top edge, so it measures the same offset and keeps
+          // measuring it correctly after a resize.
+          trigger: stage || root,
           start: "top top",
           end: () => `+=${window.innerHeight * EXIT_TRAVEL_VH}`,
           // Numeric, not `true`. `scrub: true` pins progress to the raw scroll
@@ -158,81 +157,57 @@ export function HeroSanctuary() {
           // makes GSAP lerp toward the target on rAF instead: one update per
           // painted frame, and the ~0.6s catch-up smooths the gaps.
           scrub: 0.6,
-          // The plate drift and the section lift are both function-based
-          // values measured off the viewport; without this they keep their
-          // first-run numbers after a resize or orientation change.
+          // The plate drift and the end distance are both measured off the
+          // viewport; without this they keep their first-run numbers after a
+          // resize or orientation change.
           invalidateOnRefresh: true,
         },
       });
-      if (nextSectionEl) {
-        exitTl.fromTo(
-          nextSectionEl,
-          { y: () => -window.innerHeight * MENGAPA_LIFT_VH },
-          { y: 0, ease: "none" },
-          0,
-        );
-      }
       exitTl
-        // The card's retraction is NOT a tween: it is driven from the
-        // `onUpdate` below as a stepped `clip-path`, for the same reason the
-        // radius always was. Clipping rather than resizing also matters for
-        // the footage — the plate is `object-fit: cover`, so animating the
-        // card's height would re-crop the video on every frame and read as a
-        // jump-zoom, while a clip leaves the crop untouched.
-        // The plate sinks inside the card as the card itself lifts away, so the
-        // footage lags the frame rather than moving locked to it.
+        .to(".hero-card", { scale: CARD_SHRINK_SCALE, ease: "none" }, 0)
         .fromTo(
           ".hero-plate",
           { y: 0 },
           { y: () => root.clientHeight * PLATE_PARALLAX_RATIO, ease: "none" },
           0,
         )
-        .to("[data-hero-scrim]", { opacity: 0.35, ease: "none" }, 0);
+        .to(
+          "[data-hero-scrim]",
+          { opacity: SCRIM_PEAK_OPACITY, ease: "none" },
+          0,
+        )
+        .to(
+          ".hero-stage-content",
+          { opacity: CONTENT_FADE_TO, ease: "none" },
+          0,
+        );
 
-      // The bottom radius is driven here rather than tweened, and quantised to
-      // 4px steps. `border-radius` is a paint property: every distinct value
-      // re-rasterizes the card's layer, and that layer is a full-viewport box
-      // wrapping a playing video — so tweening it continuously meant a full
-      // repaint on every single frame of the scrub, which is what was left of
-      // the stutter. Stepping it drops that from ~60 repaints to ~11 across the
-      // whole handoff; a 4px difference in corner radius on a moving card is
-      // below the threshold where anyone can see the stepping, so the corners
-      // still read as easing in. Everything else in this timeline is now
-      // transform- or opacity-only, i.e. compositor work.
-      if (cardEl) {
-        let lastRadius = -1;
-        let lastClip = -1;
-        exitTl.eventCallback("onUpdate", () => {
-          const p = exitTl.progress();
-          const step = (v: number) => Math.round(v / RADIUS_STEP_PX) * RADIUS_STEP_PX;
+      // 3. The hero is sticky, so it stays in the layout — and its video stays
+      // playing — for the whole height of the schedule above it, long after
+      // the last pixel of it is visible. Decoding a 1080p loop nobody can see
+      // is the one real cost this mechanism adds over the old one, so: stop it
+      // once the curtain is closed, start it again on the way back up.
+      ScrollTrigger.create({
+        trigger: stage || root,
+        start: () => `top top-=${window.innerHeight}`,
+        end: "max",
+        invalidateOnRefresh: true,
+        onToggle: (self) => {
+          const video = bgVideoRef.current;
+          if (!video || !video.src) return;
+          if (self.isActive) video.pause();
+          else video.play().catch(() => {});
+        },
+      });
 
-          const radius = step(p * CARD_SHRINK_RADIUS);
-          if (radius !== lastRadius) {
-            lastRadius = radius;
-            cardEl.style.setProperty("--hero-card-radius", `${radius}px`);
-          }
-
-          const clip = step(p * root.clientHeight * CARD_RETRACT_RATIO);
-          if (clip !== lastClip) {
-            lastClip = clip;
-            cardEl.style.setProperty("--hero-card-clip", `${clip}px`);
-          }
-        });
-      }
     }, stage || root);
 
-    return () => {
-      ctx.revert();
-      // Set outside GSAP's bookkeeping, so `revert()` will not clear them.
-      cardEl?.style.removeProperty("--hero-card-radius");
-      cardEl?.style.removeProperty("--hero-card-clip");
-    };
+    return () => ctx.revert();
   }, [reduce]);
 
   return (
     <section
       ref={rootRef}
-      id="atas"
       className="hero-container sm-tone-dark"
       aria-label={t("posterAlt")}
     >

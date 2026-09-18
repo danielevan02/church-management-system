@@ -958,21 +958,24 @@ html.lenis body {
  * HERO SANCTUARY (Reference Matching Redesign)
  * ========================================================================== */
 
-/* --- Hero Curtain Stage (Reversed Stacking: Hero on top, lifts like a curtain) --- */
+/* --- Hero Curtain Stage -----------------------------------------------------
+ * The hero STICKS here while the schedule scrolls up over it, so the handoff
+ * is a real curtain: the schedule rises from the bottom of the viewport and
+ * covers a hero that is receding rather than leaving. Both halves live in this
+ * one box so the stacking order between them is decided in one place.
+ * -------------------------------------------------------------------------- */
 .hero-curtain-stage {
   position: relative;
   width: 100%;
-  /* Single source of truth for the handoff overlap. MUST stay in sync with
-   * `CARD_RETRACT_RATIO` in `hero-sanctuary.tsx`, which drives the clip in px
-   * from the hero's measured height. */
-  --hero-retract: 8svh;
-  /* The hero's exit timeline translates `.sm-worship-section` up by 40vh and
-   * scrubs it back to 0. A transform leaves the layout box behind, so while
-   * the section is lifted there is a real 40vh hole between its painted bottom
-   * edge and where `#mengapa` starts. On a fast flick the scrub lags far enough
-   * behind the real scroll position that the hole reaches the viewport, and an
-   * unpainted hole rasterises white. Same obsidian as every surface on both
-   * sides of it, so when it is exposed there is nothing to see. */
+  /* The hero and the schedule are stacked against each other and against
+   * nothing else on the page. Without this their z-indexes resolve in the root
+   * stacking context, where the hero would also paint over every later
+   * section it has no business touching. */
+  isolation: isolate;
+  /* The backstop behind both. The hero card scales away from its container's
+   * edges as it hands off, so the strip it vacates has to be the same obsidian
+   * as every surface on either side of the handoff — an unpainted strip
+   * rasterises white on a fast flick. */
   background: var(--sm-obsidian);
 }
 
@@ -993,7 +996,21 @@ html.lenis body {
   height: 100svh;
   min-height: 100vh;
   min-height: 100svh;
-  z-index: 30;
+  /* Held at the top of the viewport while the schedule scrolls up over it.
+   * Sticky rather than a GSAP pin on purpose: a pin wraps the element in a
+   * spacer whose height the next section then starts BELOW, which is exactly
+   * the overlap this effect needs. Sticky costs no DOM, survives a resize
+   * without a refresh, and still works with JavaScript off.
+   *
+   * Nothing inside may carry the `#atas` anchor as a result — see the note in
+   * `page.tsx`; a stuck element reports a rect top of 0, so scrolling "to" it
+   * from halfway down the page scrolls nowhere. */
+  position: sticky;
+  top: 0;
+  /* BELOW the schedule, which is the whole mechanism. This was `30` when the
+   * hero was the curtain that lifted off the page; now it is the thing being
+   * covered. */
+  z-index: 0;
   /* No clipping here; the card clips its own plate, so nothing else needs it.
    * There is no longer a card shadow to spill past this box either. */
   overflow: visible;
@@ -1002,15 +1019,10 @@ html.lenis body {
   justify-content: center;
   align-items: center;
   color: #ffffff;
-  /* TRANSPARENT, and this is load-bearing. This box is `z-index: 30` and sits
-   * over `.sm-worship-section`, which is pulled up under it by
-   * `--hero-retract`. Painting a background here covers that overlap, so the
-   * card's clip would uncover the CONTAINER rather than the schedule — the
-   * schedule's heading stays hidden behind a flat blue band and the gap comes
-   * straight back, now with the heading cropped by it.
-   *
-   * The backstop lives on `.hero-curtain-stage` instead, which is the parent
-   * of both and therefore paints behind the schedule rather than over it. */
+  /* Transparent: the stage behind it is the backstop, and this box is only the
+   * sticky frame the card recedes inside. Painting it here would work out to
+   * the same obsidian, but it would also be a second full-viewport painted
+   * layer under a sticky one, for nothing. */
   background: transparent;
 }
 
@@ -1023,25 +1035,22 @@ html.lenis body {
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  /* The handoff clips the card's bottom edge upward instead of scaling the
-   * card down. Both the inset and the corner radius live in ONE `clip-path`
-   * rather than in `clip-path` plus `border-radius`: the visible area would
-   * otherwise be the intersection of the two, and `border-radius` rounds the
-   * card at its full height — the part the clip has already removed — so the
-   * corners would simply never be seen.
+  /* The handoff scales this card down a little as the schedule rises over it,
+   * and scale is the ONLY thing that moves. No `clip-path`, no animated
+   * `border-radius`: both are paint properties, and this layer wraps a playing
+   * video, so every distinct value re-rasterised a full-viewport box on every
+   * frame of the scrub. A transform is compositor work — the card recedes for
+   * free.
    *
-   * Both values are stepped in 4px increments by the scroll timeline rather
-   * than tweened, to keep repaints of this (video-bearing) layer down. */
-  clip-path: inset(
-    0 0 var(--hero-card-clip, 0px) 0 round 0 0 var(--hero-card-radius, 0px)
-      var(--hero-card-radius, 0px)
-  );
-  will-change: clip-path;
-  /* No shadow. It existed to give depth under the rounded edge the card used
-   * to lift into; the card no longer shrinks or rounds, so this would just
-   * smudge a dark band onto the top of the section below — a soft version of
-   * the gap that was being removed. Restore it together with
-   * `CARD_SHRINK_SCALE`, not on its own. */
+   * Scaling is also honest now in a way it was not before. It shrinks on all
+   * four sides, and what it exposes down the sides is the stage's obsidian,
+   * read as depth because the card is visibly moving away from the viewer
+   * rather than leaving a gap above a section that should be flush with it. */
+  transform-origin: 50% 50%;
+  will-change: transform;
+  /* No shadow: the card is not floating over the section below any more, it is
+   * being covered by it. The schedule casts the shadow instead — see
+   * `.sm-worship-section`. */
   box-shadow: none;
 }
 
@@ -2418,27 +2427,24 @@ html.lenis body {
   /* Generous top padding provides adequate breathing room below the hero card
    * and fixed navigation bar, while the bottom keeps its normal section rhythm. */
   padding-block: clamp(5.5rem, 12vh, 9rem) clamp(4.5rem, 9vh, 7.5rem);
-  /* Pulled up under the hero by exactly the distance the card's bottom edge
-   * retracts, so the clipped edge lands ON this section's top edge instead of
-   * short of it. The card is opaque and above, so this overlap is invisible
-   * until the scrub uncovers it — which is what makes the reveal gapless.
-   *
-   * Guarded on motion preference: with the hero timeline skipped the card
-   * never retracts, and an unguarded pull-up would leave this section's first
-   * 8% permanently hidden behind it. */
-  margin-top: 0;
+  /* THE CURTAIN. Above the sticky hero inside `.hero-curtain-stage`, so this
+   * section simply scrolls up over a hero that is holding still — no tween
+   * drives the reveal, the scroll position is the reveal. That is what makes
+   * it exact at any scroll speed: there is no scrub to lag behind a fast
+   * flick, and therefore no lag-shaped hole to rasterise white. */
+  z-index: 1;
   overflow: hidden;
-  /* The hero's exit timeline scrubs a `translateY` on this whole section.
-   * Without the promotion Chrome repaints the full section every frame of that
-   * scrub, and on a fast scroll raster loses the race — the lower part of the
-   * section arrives as blank white before it fills in. Promoted, it is
-   * rasterised once and the compositor only moves the result. */
+  /* The one thing that sells the layering. Both surfaces are the same
+   * obsidian, so without a cast edge the panel's top border reads as a seam in
+   * a flat field rather than as one plane passing in front of another. It is
+   * only visible where it falls across the lit hero footage, which is exactly
+   * where it is needed. */
+  box-shadow: 0 -2.5rem 4rem -1rem rgba(0, 0, 0, 0.6);
+  /* A large surface scrolling over a stuck, video-bearing layer: promoted so
+   * the compositor moves a rasterised result instead of repainting the
+   * section every frame. Removing this brings back the white band along the
+   * bottom edge on a fast flick. */
   will-change: transform;
-}
-@media (prefers-reduced-motion: no-preference) {
-  .sm-worship-section {
-    margin-top: calc(var(--hero-retract, 0px) * -1);
-  }
 }
 
 /* --- Masthead ------------------------------------------------------------ */

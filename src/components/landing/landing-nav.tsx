@@ -139,23 +139,45 @@ export function LandingNav({
     }
     gsap.registerPlugin(ScrollTrigger);
 
-    const heroNavEl =
-      document.getElementById("hero-nav-primary") ||
-      document.querySelector<HTMLElement>(".hero-stage-nav-primary");
-    const heroTitleEl = document.querySelector<HTMLElement>(".hero-stage-row-title");
-
-    const isHeroNavVisible =
-      heroNavEl &&
-      window.getComputedStyle(heroNavEl).display !== "none";
-
-    const triggerTarget = isHeroNavVisible
-      ? heroNavEl
-      : heroTitleEl || ".hero-stage-content";
+    /* The bar takes over at the moment the hero's own link column disappears
+     * under the rising schedule — not before, or the page briefly carries two
+     * copies of the same five links.
+     *
+     * The hero is sticky, so its link column holds a fixed position in the
+     * viewport while the schedule rises at scroll speed from the bottom edge.
+     * The curtain's top edge therefore sits at `heroHeight - scrollY`, and it
+     * has swallowed the last link once that is above the column's bottom:
+     *
+     *     scrollY >= heroHeight - columnBottom
+     *
+     * Both terms are measured as a DIFFERENCE between two rects read in the
+     * same frame, which is what makes this safe on a sticky element: whatever
+     * displacement stickiness (or the recession scale) has applied is applied
+     * to both, so it cancels. A single `getBoundingClientRect().top` would
+     * not survive a mid-scroll refresh. `invalidateOnRefresh` re-runs it on
+     * resize, where the hero's height and the column's position both move. */
+    const stageEl = document.querySelector<HTMLElement>(".hero-curtain-stage");
+    const heroEl = document.querySelector<HTMLElement>(".hero-container");
+    /* On narrow viewports the hero's link column is `display: none`; the
+     * headline row is then the last thing of the hero's own worth waiting for. */
+    const heroLinksEl =
+      (() => {
+        const nav = document.getElementById("hero-nav-primary");
+        return nav && window.getComputedStyle(nav).display !== "none" ? nav : null;
+      })() || document.querySelector<HTMLElement>(".hero-stage-row-title");
 
     const stNav = ScrollTrigger.create({
-      trigger: triggerTarget,
-      start: "bottom top",
+      trigger: stageEl || ".hero-stage-content",
+      start: () => {
+        if (!stageEl || !heroEl || !heroLinksEl) return "bottom top";
+        const heroTop = heroEl.getBoundingClientRect().top;
+        const covered =
+          heroEl.offsetHeight -
+          (heroLinksEl.getBoundingClientRect().bottom - heroTop);
+        return `top top-=${Math.max(0, Math.round(covered))}`;
+      },
       end: "max",
+      invalidateOnRefresh: true,
       onToggle: (self) => {
         setCondensed(self.isActive);
         setShowCenterLinks(self.isActive);
